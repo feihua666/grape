@@ -11,5 +11,21 @@
 
     <artifactId>base-rest</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>common-rest</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+    </dependencies>
 
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

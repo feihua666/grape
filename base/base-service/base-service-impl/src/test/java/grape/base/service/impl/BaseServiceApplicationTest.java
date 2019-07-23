@@ -1,7 +1,6 @@
 package grape.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import grape.base.service.api.po.BaseUser;
 import grape.base.service.impl.mapper.BaseUserPoMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
