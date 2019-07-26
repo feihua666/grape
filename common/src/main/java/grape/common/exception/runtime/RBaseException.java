@@ -1,5 +1,6 @@
 package grape.common.exception.runtime;
 
+import grape.common.exception.ExceptionCode;
 import lombok.Data;
 
 /**
@@ -17,7 +18,8 @@ public class RBaseException extends RuntimeException {
     /**
      * 异常代码，如果需要可以赋值异常代码
      */
-    private String code;
+    private ExceptionCode code = ExceptionCode.fail;
+
     public RBaseException(String message, Throwable cause) {
         super(message,cause);
     }
@@ -29,10 +31,10 @@ public class RBaseException extends RuntimeException {
         this.data = data;
     }
     /**
-     * @param message 错误信息
      * @param code    错误代码
+     * @param message 错误信息
      */
-    public RBaseException(String message, String code) {
+    public RBaseException(ExceptionCode code, String message) {
         super(message);
         this.code = code;
     }

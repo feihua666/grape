@@ -2,8 +2,6 @@ package grape.base.service.api.po;
 
 import grape.common.service.po.NormalBasePo;
 import com.baomidou.mybatisplus.annotation.Version;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,7 +12,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yangwei
- * @since 2019-07-23
+ * @since 2019-07-26
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -72,37 +70,6 @@ public class BaseUser extends NormalBasePo {
      * 密码加盐值
      */
     private String salt;
-
-    /**
-     * 删除标记，N=未删除；Y=已删除
-     */
-    @TableLogic
-    private String isDel;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createAt;
-
-    /**
-     * 创建人
-     */
-    private String createBy;
-
-    /**
-     * 修改时间
-     */
-    private LocalDateTime updateAt;
-
-    /**
-     * 修改人
-     */
-    private String updateBy;
-
-    /**
-     * 标记本条数据的更新时间，不使用程序更新
-     */
-    private LocalDateTime modifiedAt;
 
 
 }

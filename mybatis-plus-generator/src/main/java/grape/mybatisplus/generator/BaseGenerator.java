@@ -6,22 +6,35 @@ package grape.mybatisplus.generator;
  * Created at 2019/7/22 18:40
  */
 public class BaseGenerator extends SuperGenerator {
+
+    private static String parentPakage="grape";
+
     public static void main(String[] args) {
 
         BaseGenerator generator = new BaseGenerator();
         generator.setAuthor("yangwei");
         generator.setTableNames("base_user");
+        generator.setTableType(TableType.normal);
 
-        generator.setControllerModulePath("/base/base-rest");
-        generator.setServiceApiModulePath("/base/base-service/base-service-api");
-        generator.setServiceImplModulePath("/base/base-service/base-service-impl");
+        String parentModule = "/base";
+        String restModeule = "/base-rest";
+        String serviceModeule = "/base-service";
+        String serviceApiModule = "/base-service-api";
 
 
-        generator.setControllerPakage("grape.base.rest.mvc");
-        generator.setServicePakage("grape.base.service.api.service");
-        generator.setServiceImplPakage("grape.base.service.impl.impl");
-        generator.setPoPakage("grape.base.service.api.po");
-        generator.setMapperPakage("grape.base.service.impl.mapper");
+        String serviceImplModule = serviceApiModule.replace("-api","-impl");
+
+        generator.setControllerModulePath(parentModule + restModeule);
+        generator.setServiceApiModulePath(parentModule + serviceModeule + serviceApiModule);
+        generator.setServiceImplModulePath(parentModule + serviceModeule + serviceImplModule);
+
+        String serviceApiParentPakage = parentPakage + serviceApiModule.replace("/",".").replace("-",".");
+        String serviceImplParentPakage = parentPakage + serviceImplModule.replace("/",".").replace("-",".");
+        generator.setControllerPakage(parentPakage + restModeule.replace("/",".").replace("-",".") + ".mvc");
+        generator.setServicePakage(serviceApiParentPakage + ".service");
+        generator.setServiceImplPakage(serviceImplParentPakage +".impl");
+        generator.setPoPakage(serviceApiParentPakage + ".po");
+        generator.setMapperPakage(serviceImplParentPakage + ".mapper");
 
         generator.doGenerate();
     }

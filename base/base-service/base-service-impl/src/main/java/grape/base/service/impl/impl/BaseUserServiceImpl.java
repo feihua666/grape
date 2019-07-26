@@ -1,8 +1,9 @@
 package grape.base.service.impl.impl;
 
+import grape.base.service.api.po.BaseUser;
 import grape.base.service.impl.mapper.BaseUserMapper;
 import grape.base.service.api.service.IBaseUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import grape.common.service.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author yangwei
- * @since 2019-07-23
+ * @since 2019-07-24
  */
 @Service
-public class BaseUserServiceImpl extends ServiceImpl<BaseUserMapper, BaseUser> implements IBaseUserService {
+public class BaseUserServiceImpl extends BaseServiceImpl<BaseUserMapper, BaseUser> implements IBaseUserService {
 
 }

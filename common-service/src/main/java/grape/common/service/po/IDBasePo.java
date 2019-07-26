@@ -1,5 +1,7 @@
 package grape.common.service.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 /**
@@ -9,6 +11,6 @@ import lombok.Data;
  */
 @Data
 public class IDBasePo extends BasePo {
-
+    @TableId(value = "id",type = IdType.UUID)
     private String id;
 }

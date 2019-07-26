@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * 数据库持久化po实体基类，带数据创建人、创建时间、更新人、更新时间，所有数据库表对应的一个父类
+ * 数据库持久化po实体基类，带数据创建人、创建时间、更新人、更新时间等，所有数据库表对应的一个父类
+ * 该基类的使用是一般的数据表都包含相关字段
  * Created by yangwei
  * Created at 2019/7/22 15:58
  */

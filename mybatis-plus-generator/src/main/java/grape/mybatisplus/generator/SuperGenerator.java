@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import grape.common.service.po.NormalBasePo;
+import grape.common.service.po.RelBasePo;
+import grape.common.service.po.TreeBasePo;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +22,11 @@ import java.util.List;
  */
 @Data
 public class SuperGenerator {
+
+    public enum TableType {
+        normal,rel,tree
+    }
+
     AutoGenerator mpg = new AutoGenerator();
     private String projectPath;
 
@@ -34,6 +41,8 @@ public class SuperGenerator {
     private String servicePakage;
     private String serviceImplPakage;
     private String mapperPakage;
+    // 表类型，normal正常业务实体表，rel单纯关联表，tree树表
+    private TableType tableType;
 
 
     /**
@@ -125,17 +134,29 @@ public class SuperGenerator {
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass(NormalBasePo.class);
+
+        if(tableType == TableType.normal){
+            strategy.setSuperEntityClass(NormalBasePo.class);
+        }
+        if(tableType == TableType.rel){
+            strategy.setSuperEntityClass(RelBasePo.class);
+        }
+        if(tableType == TableType.tree){
+            strategy.setSuperEntityClass(TreeBasePo.class);
+        }
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         // 公共父类
         strategy.setSuperControllerClass("grape.common.rest.mvc.SuperController");
         // 写于父类中的公共字段
-        //strategy.setSuperEntityColumns("id,create_by,create_at,update_by,update_at".split(","));
+        strategy.setSuperEntityColumns("id,is_del,create_by,create_at,update_by,update_at,modified_at,version".split(","));
         strategy.setInclude(tableNames.split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setEntityTableFieldAnnotationEnable(false);
         strategy.setLogicDeleteFieldName("is_del");
+        strategy.setSuperServiceClass("grape.common.service.IBaseService");
+        strategy.setSuperServiceImplClass("grape.common.service.BaseServiceImpl");
+        strategy.setSuperMapperClass("grape.common.service.IBaseMapper");
         // 乐观锁字段
         strategy.setVersionFieldName("version");
 

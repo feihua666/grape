@@ -1,6 +1,7 @@
 package grape.base.service.api.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import grape.base.service.api.po.BaseUser;
+import grape.common.service.IBaseService;
 
 /**
  * <p>
@@ -8,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author yangwei
- * @since 2019-07-23
+ * @since 2019-07-24
  */
-public interface IBaseUserService extends IService<BaseUser> {
+public interface IBaseUserService extends IBaseService<BaseUser> {
 
 }

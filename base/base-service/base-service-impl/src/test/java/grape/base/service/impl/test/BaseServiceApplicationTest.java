@@ -1,7 +1,8 @@
-package grape.base.service.impl;
+package grape.base.service.impl.test;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import grape.base.service.impl.mapper.BaseUserPoMapper;
+import grape.base.service.api.po.BaseUser;
+import grape.base.service.impl.mapper.BaseUserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,10 +18,10 @@ import java.util.List;
 public class BaseServiceApplicationTest {
 
     @Autowired
-    private BaseUserPoMapper baseUserPoMapper;
+    private BaseUserMapper baseUserMapper;
     @Test
     void contextLoads() {
-        List list = baseUserPoMapper.selectList(new QueryWrapper<BaseUser>().select());
+        List list = baseUserMapper.selectList(new QueryWrapper<BaseUser>().select());
 
         System.out.println(list);
     }

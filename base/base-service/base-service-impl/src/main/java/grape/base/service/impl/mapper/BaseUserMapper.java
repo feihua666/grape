@@ -1,6 +1,7 @@
 package grape.base.service.impl.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import grape.base.service.api.po.BaseUser;
+import grape.common.service.IBaseMapper;
 
 /**
  * <p>
@@ -8,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author yangwei
- * @since 2019-07-23
+ * @since 2019-07-24
  */
-public interface BaseUserMapper extends BaseMapper<BaseUser> {
+public interface BaseUserMapper extends IBaseMapper<BaseUser> {
 
 }
