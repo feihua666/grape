@@ -7,7 +7,10 @@ import grape.common.rest.ControllerTools;
 import grape.common.rest.ResultMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,12 +54,24 @@ public class GlobalExceptionAdvice {
     }
 
     /**
+     * 不支持的媒体类型
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResultMessage handleCBaseException(HttpServletRequest request, HttpMediaTypeNotSupportedException ex) {
+        return createRM(ExceptionCode.fail,ex.getMessage(),null,ex);
+    }
+
+    /**
      * 其它不可预知的异常，通常定义为系统异常
      * @param request
      * @param ex
      * @return
      */
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResultMessage handleException(HttpServletRequest request, Exception ex) {
         // 防止子类的情况
         if(ex instanceof CBaseException){

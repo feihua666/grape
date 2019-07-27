@@ -24,4 +24,7 @@ public class ResultMessage<D> extends BasePojo {
     @ApiModelProperty(value = "数据")
     private D data;
 
+    public String getCode() {
+        return code.getCode();
+    }
 }

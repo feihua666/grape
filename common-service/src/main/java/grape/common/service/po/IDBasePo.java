@@ -1,7 +1,6 @@
 package grape.common.service.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import grape.common.pojo.BasePojo;
 import lombok.Data;
 
 /**
@@ -10,7 +9,15 @@ import lombok.Data;
  * Created at 2019/7/22 15:55
  */
 @Data
-public class IDBasePo extends BasePo {
-    @TableId(value = "id",type = IdType.UUID)
-    private String id;
+public class IDBasePo<T> extends BasePojo {
+
+    /**
+     *
+     * 不存在的id
+     * 这算一个规则吧，用来填充默认值
+     * 所以的id应该不存在的id
+     */
+    public static final Long defaultNotExistId = 0L;
+
+    private T id;
 }

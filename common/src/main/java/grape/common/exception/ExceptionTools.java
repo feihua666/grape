@@ -35,4 +35,13 @@ public class ExceptionTools {
     public static RBaseException dataNotExistRE(String msg){
         return newRE(ExceptionCode.notExist,msg == null ? ExceptionCode.notExist.getMsg() : msg);
     }
+
+    /**
+     * 这个应该是最常用的失败异常
+     * @param msg
+     * @return
+     */
+    public static RBaseException failRE(String msg){
+        return newRE(ExceptionCode.fail,msg == null ? ExceptionCode.fail.getMsg() : msg);
+    }
 }

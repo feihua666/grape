@@ -5,15 +5,15 @@ package grape.common.service.po;
  * Created by yangwei
  * Created at 2019/7/24 17:41
  */
-public class TreeBasePo extends BasePo {
+public class TreeBasePo extends NormalBasePo {
     /**
      * 默认根父级id
      */
-    public static final String defaultRootParentId = "0";
+    public static final Long defaultRootParentId = 0L;
     /**
      * 默认父级id
      */
-    public static final String defaultParentIdX = "0";
+    public static final Long defaultParentIdX = 0L;
 
     /**
      * 默认深度等级从1开始
@@ -31,45 +31,45 @@ public class TreeBasePo extends BasePo {
     /**
      * 直接父级id
      */
-    private String parentId;
+    private Long parentId;
     /**
      * level为1的父级id
      */
-    private String parentId1;
+    private Long parentId1;
     /**
      * level为2的父级id
      */
-    private String parentId2;
+    private Long parentId2;
     /**
      * level为3的父级id
      */
-    private String parentId3;
+    private Long parentId3;
     /**
      * level为4的父级id
      */
-    private String parentId4;
+    private Long parentId4;
     /**
      * level为5的父级id
      */
-    private String parentId5;
+    private Long parentId5;
     /**
      * level为6的父级id
      */
-    private String parentId6;
+    private Long parentId6;
     /**
      * level为7的父级id
      */
-    private String parentId7;
+    private Long parentId7;
     /**
      * level为8的父级id
      */
-    private String parentId8;
+    private Long parentId8;
     /**
      * level为9的父级id
      */
-    private String parentId9;
+    private Long parentId9;
     /**
      * level为10的父级id
      */
-    private String parentId10;
+    private Long parentId10;
 }

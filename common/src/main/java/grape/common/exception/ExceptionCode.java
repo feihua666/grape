@@ -9,11 +9,11 @@ import lombok.Getter;
 @Getter
 public enum ExceptionCode {
 
-    ok("0","","成功"),
-    fail("-1","","失败"),
-    notLogin("-2","","用户未登录"),
-    notExist("-404","","数据不存在"),
-    error("-500","","系统异常");
+    ok("0", "", "成功"),
+    fail("-1", "", "失败"),
+    notLogin("-2", "", "用户未登录"),
+    notExist("-404", "", "数据不存在"),
+    error("-500", "", "系统异常");
 
     // 编码
     private String code;
@@ -21,7 +21,8 @@ public enum ExceptionCode {
     private String internalCode;
     // 原因
     private String msg;
-    ExceptionCode(String code,String internalCode, String msg) {
+
+    ExceptionCode(String code, String internalCode, String msg) {
         this.code = code;
         this.internalCode = internalCode;
         this.msg = msg;

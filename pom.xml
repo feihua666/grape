@@ -5,10 +5,11 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>common</module>
-		<module>base</module>
         <module>mybatis-plus-generator</module>
 		<module>common-service</module>
 		<module>common-rest</module>
+        <module>modules</module>
+		<module>main-one</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -101,6 +102,17 @@
 	</dependencies>
 
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	<repositories>
 		<repository>
 			<id>spring-snapshots</id>

@@ -147,10 +147,11 @@ public class SuperGenerator {
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         // 公共父类
-        strategy.setSuperControllerClass("grape.common.rest.mvc.SuperController");
+        strategy.setSuperControllerClass("grape.common.rest.mvc.BaseController");
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("id,is_del,create_by,create_at,update_by,update_at,modified_at,version".split(","));
         strategy.setInclude(tableNames.split(","));
+        // 连字符
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setEntityTableFieldAnnotationEnable(false);
         strategy.setLogicDeleteFieldName("is_del");

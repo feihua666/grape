@@ -1,5 +1,8 @@
 package grape.common.service.po;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
@@ -14,37 +17,40 @@ import java.util.Date;
  * Created at 2019/7/22 15:58
  */
 @Data
-public class NormalBasePo extends IDBasePo {
+public class NormalBasePo extends IDBasePo<Long> {
 
     /**
-     * 删除标记，N=未删除；Y=已删除
+     * 删除标记，0=未删除；1=已删除
      */
     @TableLogic
-    private String isDel;
+    private Char isDel;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createAt;
+    @TableField(fill = FieldFill.INSERT)
+    private Long createAt;
 
     /**
      * 创建人
      */
-    private String createBy;
+    private Long createBy;
 
     /**
      * 修改时间
      */
-    private LocalDateTime updateAt;
+    @TableField(fill = FieldFill.INSERT)
+    private Long updateAt;
 
     /**
      * 修改人
      */
-    private String updateBy;
+    private Long updateBy;
 
     /**
      * 乐观锁字段
      */
     @Version
+    @TableField(fill = FieldFill.INSERT)
     private Integer version;
 }
