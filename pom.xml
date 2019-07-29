@@ -60,6 +60,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+		<!-- swagger 依赖该库 开始 但 2.2.0.M4 版本的有冲突这里引用一个低版本-->
+		<dependency>
+			<groupId>org.springframework.plugin</groupId>
+			<artifactId>spring-plugin-core</artifactId>
+			<version>1.2.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.plugin</groupId>
+			<artifactId>spring-plugin-metadata</artifactId>
+			<version>1.2.0.RELEASE</version>
+		</dependency>
+		<!-- swagger 依赖该库 结束 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -99,20 +111,13 @@
 			<version>${commons-beanutils.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>grape</groupId>
+			<artifactId>grape-code-fill</artifactId>
+			<version>${grape.version}</version>
+		</dependency>
 	</dependencies>
 
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<fork>true</fork>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	<repositories>
 		<repository>
 			<id>spring-snapshots</id>

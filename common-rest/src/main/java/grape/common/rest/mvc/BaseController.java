@@ -9,10 +9,14 @@ import grape.common.rest.form.BasePageForm;
 import grape.common.rest.vo.BaseVo;
 import grape.common.service.IBaseService;
 import grape.common.service.po.NormalBasePo;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +30,7 @@ import java.util.stream.Collectors;
  * @param <UpdateForm> 更新表单
  * @param <ListForm> 列表查询表单
  */
-public abstract class BaseController<Service extends IBaseService<Po>,Vo extends BaseVo,Po extends NormalBasePo,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
+public abstract class BaseController<Service extends IBaseService<Po>,Vo extends BaseVo,Po extends NormalBasePo<Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
 
     @Autowired
     private Service service;
@@ -36,8 +40,9 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
      * @return
      */
     @PostMapping
+    @ApiOperation("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Vo create(@RequestBody CreateForm cf){
+    public Vo create(@RequestBody @Valid CreateForm cf){
         Po poQuery = this.createFormToPo(cf);
         Po dbPo = service.create(poQuery);
         if (dbPo == null) {
@@ -69,12 +74,17 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Vo deleteById(@PathVariable Long id){
+    public Object deleteById(@PathVariable Long id){
         boolean r = service.removeById(id);
         if (!r) {
+            // 如果删除失败，查询数据库中是否存在
+            if (service.getById(id) == null) {
+                throw ExceptionTools.dataNotExistRE("数据不存在，请刷新后再试");
+            }
             throw ExceptionTools.failRE("删除失败");
         }
-        return null;
+        // 返回一个空数据，如果这里返回null，并不会被GlobalResponseBodyAdvice 统一包装，所以返回一个空对象，并不是null
+        return new Object();
     }
 
     /**
@@ -97,7 +107,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<Vo> listPage(ListForm listForm){
-        Po poQuery = this.listFormToPo(listForm);
+        Po poQuery = this.listPageFormToPo(listForm);
         IPage<Po> page = service.page(new Page(listForm.getCurrent(),listForm.getSize()),new QueryWrapper(poQuery));
         return pagePoToVo(page);
 
@@ -111,7 +121,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
      */
     public abstract Po createFormToPo(CreateForm cf);
     public abstract Po updateFormToPo(UpdateForm uf);
-    public abstract Po listFormToPo(ListForm lf);
+    public abstract Po listPageFormToPo(ListForm lf);
 
     public IPage<Vo> pagePoToVo(IPage page){
         List<Po> records = page.getRecords();

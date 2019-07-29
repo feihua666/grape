@@ -1,14 +1,25 @@
 package grape.base.rest.mvc;
-
-import grape.common.rest.form.BaseForm;
+import grape.common.rest.vo.BaseVo;
+import grape.common.service.po.NormalBasePo;
+import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
- * Created by yangwei
- * Created at 2019/7/27 19:10
+ * <p>
+ * 后台管理系统用户表
+ * </p>
+ *
+ * @author yangwei
+ * @since 2019-07-28
  */
 @Data
-public class CreateForm extends BaseForm {
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+public class BaseUserVo extends BaseVo {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户名，用来登录
@@ -54,4 +65,11 @@ public class CreateForm extends BaseForm {
      * 密码
      */
     private String psw;
+
+    /**
+     * 密码加盐值
+     */
+    private String salt;
+
+
 }

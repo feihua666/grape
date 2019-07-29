@@ -5,7 +5,7 @@ package grape.common.service.po;
  * Created by yangwei
  * Created at 2019/7/24 17:41
  */
-public class TreeBasePo extends NormalBasePo {
+public class TreeBasePo extends NormalBasePo<TreeBasePo> {
     /**
      * 默认根父级id
      */

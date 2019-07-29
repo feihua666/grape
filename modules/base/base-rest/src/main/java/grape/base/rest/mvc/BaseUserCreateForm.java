@@ -1,5 +1,5 @@
-package grape.base.service.api.po;
-
+package grape.base.rest.mvc;
+import grape.common.rest.form.BaseForm;
 import grape.common.service.po.NormalBasePo;
 import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
@@ -12,12 +12,12 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yangwei
- * @since 2019-07-27
+ * @since 2019-07-28
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class BaseUser extends NormalBasePo<BaseUser> {
+public class BaseUserCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 

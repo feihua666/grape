@@ -1,6 +1,7 @@
 package grape.common.exception;
 
 import grape.common.exception.runtime.RBaseException;
+import grape.common.exception.runtime.RDataNotExistException;
 
 /**
  * 异常处理工具类
@@ -32,8 +33,8 @@ public class ExceptionTools {
      * @param msg
      * @return
      */
-    public static RBaseException dataNotExistRE(String msg){
-        return newRE(ExceptionCode.notExist,msg == null ? ExceptionCode.notExist.getMsg() : msg);
+    public static RDataNotExistException dataNotExistRE(String msg){
+        return new RDataNotExistException(ExceptionCode.notExist,msg == null ? ExceptionCode.notExist.getMsg() : msg);
     }
 
     /**

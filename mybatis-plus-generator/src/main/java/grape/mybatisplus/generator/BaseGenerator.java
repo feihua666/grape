@@ -16,7 +16,7 @@ public class BaseGenerator extends SuperGenerator {
         generator.setTableNames("base_user");
         generator.setTableType(TableType.normal);
 
-        String parentModule = "/base";
+        String parentModule = "/modules/base";
         String restModeule = "/base-rest";
         String serviceModeule = "/base-service";
         String serviceApiModule = "/base-service-api";

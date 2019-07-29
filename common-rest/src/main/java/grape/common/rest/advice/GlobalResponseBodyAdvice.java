@@ -9,6 +9,8 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import springfox.documentation.swagger.web.ApiResourceController;
+import springfox.documentation.swagger2.web.Swagger2Controller;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.Arrays;
@@ -23,21 +25,27 @@ import java.util.Arrays;
 @Slf4j
 public class GlobalResponseBodyAdvice implements ResponseBodyAdvice {
 
+    // 禁用哪些类或注解不处理
     private static final Class[] disabledGRM = {
-            DisabledGRM.class
+            DisableGRM.class,
+            ApiResourceController.class, // swagger的controller 这里不拦截
+            Swagger2Controller.class // swagger的controller 这里不拦截
     };
 
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
         AnnotatedElement element = returnType.getAnnotatedElement();
-        return !Arrays.stream(disabledGRM).anyMatch(anno -> anno.isAnnotation() && element.isAnnotationPresent(anno));
+        Class containingClass = returnType.getContainingClass();
+
+        return !Arrays.stream(disabledGRM).anyMatch(anno ->
+                anno.isAnnotation() && (element.isAnnotationPresent(anno) || containingClass !=null && containingClass.isAnnotationPresent(anno) )
+                        || anno.isAssignableFrom(containingClass)
+
+        );
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (body instanceof ResultMessage){
-            return body;
-        }
         return ControllerTools.newRm(body);
     }
 }

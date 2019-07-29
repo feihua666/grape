@@ -1,5 +1,6 @@
 package grape.common.service.po;
 
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import grape.common.pojo.BasePojo;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import lombok.Data;
  * Created at 2019/7/22 15:55
  */
 @Data
-public class IDBasePo<T> extends BasePojo {
+public class IDBasePo<Pk,T extends Model<?>> extends BasePo<T> {
 
     /**
      *
@@ -19,5 +20,5 @@ public class IDBasePo<T> extends BasePojo {
      */
     public static final Long defaultNotExistId = 0L;
 
-    private T id;
+    private Pk id;
 }

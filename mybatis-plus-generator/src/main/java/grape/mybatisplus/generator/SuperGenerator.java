@@ -154,6 +154,7 @@ public class SuperGenerator {
         // 连字符
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setEntityTableFieldAnnotationEnable(false);
+        strategy.setEntitySerialVersionUID(true);
         strategy.setLogicDeleteFieldName("is_del");
         strategy.setSuperServiceClass("grape.common.service.IBaseService");
         strategy.setSuperServiceImplClass("grape.common.service.BaseServiceImpl");
@@ -169,12 +170,68 @@ public class SuperGenerator {
      * @return
      */
     public FileOutConfig controllerFileOutConfig(){
-        return new FileOutConfig("/templates/controller.java.ftl") {
+        return new FileOutConfig("/myTemplates/controller.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
                 return projectPath + controllerModulePath + "/src/main/java/" + mpg.getPackageInfo().getController().replace(".","/")
                         + "/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
+            }
+        };
+    }
+    /**
+     * controller createForm 生成
+     * @return
+     */
+    public FileOutConfig controllerCreateFormFileOutConfig(){
+        return new FileOutConfig("/myTemplates/createForm.java.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return projectPath + controllerModulePath + "/src/main/java/" + mpg.getPackageInfo().getController().replace(".","/")
+                        + "/" + tableInfo.getEntityName() + "CreateForm" + StringPool.DOT_JAVA;
+            }
+        };
+    }
+    /**
+     * controller updateForm 生成
+     * @return
+     */
+    public FileOutConfig controllerUpdateFormFileOutConfig(){
+        return new FileOutConfig("/myTemplates/updateForm.java.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return projectPath + controllerModulePath + "/src/main/java/" + mpg.getPackageInfo().getController().replace(".","/")
+                        + "/" + tableInfo.getEntityName() + "UpdateForm" + StringPool.DOT_JAVA;
+            }
+        };
+    }
+    /**
+     * controller listPageForm 生成
+     * @return
+     */
+    public FileOutConfig controllerListPageFormFileOutConfig(){
+        return new FileOutConfig("/myTemplates/listPageForm.java.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return projectPath + controllerModulePath + "/src/main/java/" + mpg.getPackageInfo().getController().replace(".","/")
+                        + "/" + tableInfo.getEntityName() + "ListPageForm" + StringPool.DOT_JAVA;
+            }
+        };
+    }
+    /**
+     * controller vo 生成
+     * @return
+     */
+    public FileOutConfig controllerVoFileOutConfig(){
+        return new FileOutConfig("/myTemplates/vo.java.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return projectPath + controllerModulePath + "/src/main/java/" + mpg.getPackageInfo().getController().replace(".","/")
+                        + "/" + tableInfo.getEntityName() + "Vo" + StringPool.DOT_JAVA;
             }
         };
     }
@@ -246,6 +303,10 @@ public class SuperGenerator {
         // 自定义controller输出
         if(!StringUtils.isEmpty(controllerModulePath)){
             focList.add(controllerFileOutConfig());
+            focList.add(controllerCreateFormFileOutConfig());
+            focList.add(controllerUpdateFormFileOutConfig());
+            focList.add(controllerListPageFormFileOutConfig());
+            focList.add(controllerVoFileOutConfig());
         }
         // 自定义实体输出
         if(!StringUtils.isEmpty(serviceApiModulePath)){
