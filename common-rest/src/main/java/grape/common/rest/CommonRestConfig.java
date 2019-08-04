@@ -1,6 +1,9 @@
 package grape.common.rest;
 
-import grape.common.rest.advice.GlobalRequestBodyAdvice;
+import org.apache.shiro.realm.Realm;
+import org.apache.shiro.realm.SimpleAccountRealm;
+import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
+import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,5 +16,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan
 public class CommonRestConfig {
+    @Bean
+    public Realm realm() {
+        Realm realm = new SimpleAccountRealm();
+        return realm;
+    }
+    @Bean
+    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
+        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
 
+        return chainDefinition;
+    }
 }
