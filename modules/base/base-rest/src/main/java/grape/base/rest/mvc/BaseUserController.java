@@ -1,7 +1,9 @@
 package grape.base.rest.mvc;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.code.fill.annocations.DomainConvert;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +14,9 @@ import grape.base.rest.mvc.BaseUserListPageForm;
 import grape.base.rest.mvc.BaseUserVo;
 import grape.base.service.api.po.BaseUser;
 import grape.base.service.api.service.IBaseUserService;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 后台管理系统用户表 前端控制器
@@ -26,47 +31,33 @@ import grape.base.service.api.service.IBaseUserService;
 public class BaseUserController extends BaseController<IBaseUserService, BaseUserVo, BaseUser, BaseUserCreateForm,BaseUserUpdateForm,BaseUserListPageForm> {
 
     @Override
+    @DomainConvert(checkNull = false)
+    public BaseUser createFormToPo( BaseUserCreateForm cf) {
+
+        return null;
+    }
+
+    @Override
     @DomainConvert
-    public BaseUser createFormToPo(BaseUserCreateForm cf) {
-        BaseUser baseUser = new BaseUser();
-        baseUser.setUsername(cf.getUsername());
-        baseUser.setNickname(cf.getNickname());
-        baseUser.setGender(cf.getGender());
-        baseUser.setAvatar(cf.getAvatar());
-        baseUser.setSerialNo(cf.getSerialNo());
-        baseUser.setIsLock(cf.getIsLock());
-        baseUser.setOfficeId(cf.getOfficeId());
-        baseUser.setCompanyId(cf.getCompanyId());
-        baseUser.setPsw(cf.getPsw());
-        baseUser.setSalt(cf.getSalt());
-        return baseUser;
-    }
-
-    @Override
     public BaseUser updateFormToPo(BaseUserUpdateForm uf) {
-        BaseUser baseUser = new BaseUser();
-        baseUser.setUsername(uf.getUsername());
-        baseUser.setNickname(uf.getNickname());
-        baseUser.setGender(uf.getGender());
-        baseUser.setAvatar(uf.getAvatar());
-        baseUser.setSerialNo(uf.getSerialNo());
-        baseUser.setIsLock(uf.getIsLock());
-        baseUser.setOfficeId(uf.getOfficeId());
-        baseUser.setCompanyId(uf.getCompanyId());
-        baseUser.setPsw(uf.getPsw());
-        baseUser.setSalt(uf.getSalt());
-
-        return baseUser;
-
+        return null;
     }
 
     @Override
+    @DomainConvert
     public BaseUser listPageFormToPo(BaseUserListPageForm lf) {
         return null;
     }
 
     @Override
+    @DomainConvert
     public BaseUserVo poToVo(BaseUser po) {
         return null;
+    }
+
+    @Override
+    @RequiresPermissions("base:user:listPage")
+    public IPage<BaseUserVo> listPage(BaseUserListPageForm baseUserListPageForm) {
+        return super.listPage(baseUserListPageForm);
     }
 }
