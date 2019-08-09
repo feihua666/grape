@@ -3,9 +3,15 @@ package grape.base.rest.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.code.fill.annocations.DomainConvert;
+import grape.common.rest.advice.DisableGRM;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
 import grape.base.rest.mvc.BaseUserCreateForm;
@@ -16,6 +22,7 @@ import grape.base.service.api.po.BaseUser;
 import grape.base.service.api.service.IBaseUserService;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 
 /**
  * <p>
@@ -27,11 +34,11 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequestMapping("/base-user")
-
+@Api
 public class BaseUserController extends BaseController<IBaseUserService, BaseUserVo, BaseUser, BaseUserCreateForm,BaseUserUpdateForm,BaseUserListPageForm> {
 
     @Override
-    @DomainConvert(checkNull = false)
+    @DomainConvert
     public BaseUser createFormToPo( BaseUserCreateForm cf) {
 
         return null;
@@ -40,7 +47,9 @@ public class BaseUserController extends BaseController<IBaseUserService, BaseUse
     @Override
     @DomainConvert
     public BaseUser updateFormToPo(BaseUserUpdateForm uf) {
+
         return null;
+
     }
 
     @Override
@@ -56,6 +65,7 @@ public class BaseUserController extends BaseController<IBaseUserService, BaseUse
     }
 
     @Override
+    @ApiOperation("用户分页列表")
     @RequiresPermissions("base:user:listPage")
     public IPage<BaseUserVo> listPage(BaseUserListPageForm baseUserListPageForm) {
         return super.listPage(baseUserListPageForm);

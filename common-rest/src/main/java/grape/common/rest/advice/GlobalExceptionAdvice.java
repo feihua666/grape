@@ -8,6 +8,7 @@ import grape.common.exception.runtime.RDataNotExistException;
 import grape.common.rest.ControllerTools;
 import grape.common.rest.ResultMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -111,6 +112,19 @@ public class GlobalExceptionAdvice {
     public ResultMessage handleCBaseException(HttpServletRequest request, MethodArgumentNotValidException ex) {
         String msg = ex.getBindingResult().getFieldError().getDefaultMessage();
         return createRM(ExceptionCode.fail,msg,null,ex);
+    }
+
+    /**
+     * shiro 异常没有权限的异常
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResultMessage handleAuthorizationException(HttpServletRequest request, AuthorizationException ex) {
+
+        return createRM(ExceptionCode.unAuthorized,null,request.getRequestURI().toString(),ex);
     }
     /**
      * 其它不可预知的异常，通常定义为系统异常

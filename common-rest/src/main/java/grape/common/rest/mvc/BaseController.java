@@ -10,6 +10,7 @@ import grape.common.rest.vo.BaseVo;
 import grape.common.service.IBaseService;
 import grape.common.service.po.NormalBasePo;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
@@ -40,7 +41,6 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
      * @return
      */
     @PostMapping
-    @ApiOperation("")
     @ResponseStatus(HttpStatus.CREATED)
     public Vo create(@RequestBody @Valid CreateForm cf){
         Po poQuery = this.createFormToPo(cf);
@@ -105,6 +105,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
     }
 
     @GetMapping("/listPage")
+    @RequiresPermissions("base:user:listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<Vo> listPage(ListForm listForm){
         Po poQuery = this.listPageFormToPo(listForm);

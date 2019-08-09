@@ -116,6 +116,14 @@
 			<groupId>grape</groupId>
 			<artifactId>grape-code-fill</artifactId>
 			<version>${grape.version}</version>
+			<exclusions>
+				<!-- 版本不匹配 swagger中已间接引入，版本为20.0， 而grape-code-fill项目是的auto-service引入了18.0，这里排除掉-->
+				<!-- 使用swagger 中引入的 -->
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guaua</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
