@@ -135,6 +135,7 @@ public class SuperGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
 
+        String superEntityColumns = "id,is_del,create_by,create_at,update_by,update_at,modified_at,version";
         if(tableType == TableType.normal){
             strategy.setSuperEntityClass(NormalBasePo.class);
         }
@@ -142,6 +143,10 @@ public class SuperGenerator {
             strategy.setSuperEntityClass(RelBasePo.class);
         }
         if(tableType == TableType.tree){
+            superEntityColumns += ",level,parent_id";
+            for (int i = 1; i <= 10; i++) {
+                superEntityColumns += ",parent_id"+i;
+            }
             strategy.setSuperEntityClass(TreeBasePo.class);
         }
         strategy.setEntityLombokModel(true);
@@ -149,7 +154,7 @@ public class SuperGenerator {
         // 公共父类
         strategy.setSuperControllerClass("grape.common.rest.mvc.BaseController");
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id,is_del,create_by,create_at,update_by,update_at,modified_at,version".split(","));
+        strategy.setSuperEntityColumns(superEntityColumns.split(","));
         strategy.setInclude(tableNames.split(","));
         // 连字符
         strategy.setControllerMappingHyphenStyle(true);

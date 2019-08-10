@@ -64,4 +64,5 @@ public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
     @TableField(fill = FieldFill.INSERT)
     @FieldFillDefault(insert = defaultDataVersion)
     private Integer version;
+
 }

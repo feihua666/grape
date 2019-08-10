@@ -20,6 +20,7 @@ public @interface FieldFillDefault {
     public static final String VAR_USERID = "[userId]";
 
     // 为空表示不填充
+    // 支持简单类型自动转换，默认值设置都是以字符串设置，会自动转换为对应的类型
     String insert() default "";
     String update() default "";
 }

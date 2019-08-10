@@ -16,8 +16,9 @@ public class BaseGenerator extends SuperGenerator {
         BaseGenerator generator = new BaseGenerator();
         generator.setAuthor("yangwei");
         //generator.setTableNames("base_user");
-        generator.setTableNames("base_user,base_user_auth");
-        generator.setTableType(TableType.normal);
+        //generator.setTableNames("base_user_auth");
+        generator.setTableNames("base_area");
+        generator.setTableType(TableType.tree);
 
         String parentModule = "/modules/base";
         String restModeule = "/base-rest";
