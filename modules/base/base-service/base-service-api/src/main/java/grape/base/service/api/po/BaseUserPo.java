@@ -1,30 +1,33 @@
-package grape.base.rest.mvc;
-import grape.common.rest.vo.BaseVo;
+package grape.base.service.api.po;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import grape.common.service.po.FieldFillDefault;
+import grape.common.service.po.IDBasePo;
 import grape.common.service.po.NormalBasePo;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.Version;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 后台管理系统用户表
+ * 用户表
  * </p>
  *
  * @author yangwei
- * @since 2019-07-28
+ * @since 2019-08-10
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class BaseUserVo extends BaseVo {
+@TableName("base_user")
+public class BaseUserPo extends NormalBasePo<BaseUserPo> {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 用户名，用来登录
-     */
-    private String username;
 
     /**
      * 昵称，姓名
@@ -49,27 +52,28 @@ public class BaseUserVo extends BaseVo {
     /**
      * 锁定状态，0=未锁定；1=锁定
      */
+    @TableField(fill = FieldFill.INSERT)
+    @FieldFillDefault(insert = "0")
     private String isLock;
 
     /**
      * 用户所在机构的id
      */
+    @TableField(fill = FieldFill.INSERT)
+    @FieldFillDefault(insert = defaultNotExistIdStr)
     private Long officeId;
 
     /**
      * 用户所在公司的id，该id也是机构表的一个id，只是类型不同
      */
+    @TableField(fill = FieldFill.INSERT)
+    @FieldFillDefault(insert = defaultNotExistIdStr)
     private Long companyId;
 
-    /**
-     * 密码
-     */
-    private String psw;
 
-    /**
-     * 密码加盐值
-     */
-    private String salt;
-
+    @Override
+    protected Serializable pkVal() {
+        return null;
+    }
 
 }

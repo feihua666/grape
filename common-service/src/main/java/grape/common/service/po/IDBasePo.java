@@ -19,6 +19,7 @@ public class IDBasePo<Pk,T extends Model<?>> extends BasePo<T> {
      * 所以的id应该不存在的id
      */
     public static final Long defaultNotExistId = 0L;
+    public static final String defaultNotExistIdStr = "0";
 
     private Pk id;
 }

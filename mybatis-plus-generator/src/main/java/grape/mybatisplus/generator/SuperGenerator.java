@@ -59,10 +59,10 @@ public class SuperGenerator {
         //  实体属性 Swagger2 注解
         gc.setSwagger2(false);
         gc.setBaseResultMap(true);
-        //gc.setEntityName("%sPo");
+        gc.setEntityName("%sPo");
         gc.setOpen(false);
         gc.setBaseColumnList(true);
-        gc.setActiveRecord(false);
+        gc.setActiveRecord(true);
         return gc;
     }
 

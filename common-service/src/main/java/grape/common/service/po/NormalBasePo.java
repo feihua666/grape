@@ -20,6 +20,8 @@ import java.util.Date;
 @Data
 public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
 
+    public final String defaultDataVersion = "1";
+
     /**
      * 删除标记，0=未删除；1=已删除
      * 该字段不需要自动填充，已被mybatis plus处理
@@ -37,6 +39,8 @@ public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)
+    @FieldFillDefault(insert = FieldFillDefault.VAR_USERID)
     private Long createBy;
 
     /**
@@ -49,6 +53,8 @@ public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
     /**
      * 修改人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @FieldFillDefault(insert = FieldFillDefault.VAR_USERID,update = FieldFillDefault.VAR_USERID)
     private Long updateBy;
 
     /**
@@ -56,6 +62,6 @@ public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
      */
     @Version
     @TableField(fill = FieldFill.INSERT)
-    @FieldFillDefault(insert = "1")
+    @FieldFillDefault(insert = defaultDataVersion)
     private Integer version;
 }

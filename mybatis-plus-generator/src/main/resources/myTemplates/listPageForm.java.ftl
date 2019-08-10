@@ -3,6 +3,8 @@ import grape.common.rest.form.BasePageForm;
 <#list table.importPackages as pkg>
 import ${pkg};
 </#list>
+<#assign swagger2 = true>
+<#assign activeRecord = false>
 <#if swagger2>
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,7 +36,7 @@ import lombok.experimental.Accessors;
 @TableName("${table.name}")
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}分页查询条件对象", description="${table.comment!}")
+@ApiModel(value="${entity}ListPageForm分页查询条件对象", description="${table.comment!}")
 </#if>
 public class ${entity}ListPageForm extends BasePageForm {
 

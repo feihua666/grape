@@ -9,11 +9,7 @@ import grape.common.rest.form.BasePageForm;
 import grape.common.rest.vo.BaseVo;
 import grape.common.service.IBaseService;
 import grape.common.service.po.NormalBasePo;
-import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,7 +101,6 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
     }
 
     @GetMapping("/listPage")
-    @RequiresPermissions("base:user:listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<Vo> listPage(ListForm listForm){
         Po poQuery = this.listPageFormToPo(listForm);
@@ -124,7 +119,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
     public abstract Po updateFormToPo(UpdateForm uf);
     public abstract Po listPageFormToPo(ListForm lf);
 
-    public IPage<Vo> pagePoToVo(IPage page){
+    private IPage<Vo> pagePoToVo(IPage page){
         List<Po> records = page.getRecords();
         if (page != null && !isListEmpty(records)) {
             List<Vo> voList = Arrays.asList();
