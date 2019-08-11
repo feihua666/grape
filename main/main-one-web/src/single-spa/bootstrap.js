@@ -56,8 +56,8 @@ let loadJs = function (){
     let script = document.createElement('script')
     script.src = 'http://localhost:9001/app.js'
     document.body.appendChild(script)
-    import('E:\\git-source\\grape\\common\\common-nav-web\\src\\main.js')
-    import('E:\\git-source\\grape\\common\\common-nav-web\\dist\\js\\app.c3d40d94.js')
+    //import('E:\\git-source\\grape\\common\\common-nav-web\\src\\main.js')
+    //import('E:\\git-source\\grape\\common\\common-nav-web\\dist\\js\\app.c3d40d94.js')
 
 }
 
