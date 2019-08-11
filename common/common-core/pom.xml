@@ -3,34 +3,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>grape</artifactId>
+        <artifactId>common</artifactId>
         <groupId>grape</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>main-one</artifactId>
-    <description>单机运行聚焦模块</description>
+    <artifactId>common-core</artifactId>
 
     <dependencies>
-        <!-- 基础模块 -->
+
         <dependency>
             <groupId>grape</groupId>
-            <artifactId>base-rest</artifactId>
+            <artifactId>common-code-fill</artifactId>
             <version>${grape.version}</version>
+            <exclusions>
+                <!-- 版本不匹配 swagger中已间接引入，版本为20.0， 而grape-code-fill项目是的auto-service引入了18.0，这里排除掉-->
+                <!-- 使用swagger 中引入的 -->
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guaua</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <fork>true</fork>
-                </configuration>
-            </plugin>
-        </plugins>
-
-    </build>
 </project>

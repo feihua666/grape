@@ -4,9 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>grape</groupId>
-    <artifactId>grape-code-fill</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <artifactId>common</artifactId>
+        <groupId>grape</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>common-code-fill</artifactId>
     <description>代码填充，通过注解的方式，在编译前填充代码,注解处理的特性，该项目是一个独立的项目</description>
     <properties>
         <auto-service.version>1.0-rc2</auto-service.version>

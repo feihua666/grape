@@ -29,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>grape</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>common-core</artifactId>
             <version>${grape.version}</version>
         </dependency>
         <dependency>
