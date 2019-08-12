@@ -1,23 +1,20 @@
 package grape.base.rest.mvc;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.code.fill.annocations.PojoConvert;
+import common.code.fill.annocations.PojoConvert;
+import grape.base.service.api.po.BaseAreaPo;
+import grape.base.service.api.service.IBaseAreaService;
+import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.rest.mvc.BaseAreaPoCreateForm;
-import grape.base.rest.mvc.BaseAreaPoUpdateForm;
-import grape.base.rest.mvc.BaseAreaPoListPageForm;
-import grape.base.rest.mvc.BaseAreaPoVo;
-import grape.base.service.api.po.BaseAreaPo;
-import grape.base.service.api.service.IBaseAreaService;
+
+import javax.validation.Valid;
 /**
  * <p>
  * 区域表 前端控制器

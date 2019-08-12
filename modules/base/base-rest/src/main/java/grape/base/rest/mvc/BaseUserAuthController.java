@@ -1,9 +1,9 @@
 package grape.base.rest.mvc;
 
 
+import common.code.fill.annocations.PojoConvert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.code.fill.annocations.PojoConvert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
-import grape.base.rest.mvc.BaseUserAuthPoCreateForm;
-import grape.base.rest.mvc.BaseUserAuthPoUpdateForm;
-import grape.base.rest.mvc.BaseUserAuthPoListPageForm;
-import grape.base.rest.mvc.BaseUserAuthPoVo;
 import grape.base.service.api.po.BaseUserAuthPo;
 import grape.base.service.api.service.IBaseUserAuthService;
 /**

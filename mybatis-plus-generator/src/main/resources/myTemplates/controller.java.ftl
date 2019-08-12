@@ -3,7 +3,7 @@ package ${package.Controller};
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.code.fill.annocations.PojoConvert;
+import common.code.fill.annocations.PojoConvert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -18,10 +18,6 @@ import org.springframework.stereotype.Controller;
 <#if superControllerClassPackage??>
 import ${superControllerClassPackage};
 </#if>
-import ${package.Controller}.${entity}CreateForm;
-import ${package.Controller}.${entity}UpdateForm;
-import ${package.Controller}.${entity}ListPageForm;
-import ${package.Controller}.${entity}Vo;
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
 /**
