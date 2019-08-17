@@ -2,7 +2,14 @@
 //import Vue from 'vue'
 //import VueRouter from 'vue-router'
 import singleSpaConfig from './singleSpa'
-
+import * as singleSpa from 'single-spa'
+import 'import-map-overrides'
+import 'systemjs/dist/system.min'
+import 'systemjs/dist/extras/amd.min'
+import 'systemjs/dist/extras/named-exports.min'
+import 'systemjs/dist/extras/named-register.min'
+import 'systemjs/dist/extras/use-default.min'
+window.mfe = true
 let ssc = singleSpaConfig.concat([{
     name: 'single-spa',
     app: false,
@@ -22,14 +29,6 @@ let mapStr = {imports:{}}
 ssc.forEach(item => {
     mapStr.imports[item.name] = item.url
 })
-import * as singleSpa from 'single-spa'
-import 'import-map-overrides'
-import 'systemjs/dist/system.min'
-import 'systemjs/dist/extras/amd.min'
-import 'systemjs/dist/extras/named-exports.min'
-import 'systemjs/dist/extras/named-register.min'
-import 'systemjs/dist/extras/use-default.min'
-
 const im = document.createElement('script');
 im.type = 'systemjs-importmap';
 im.textContent = JSON.stringify(mapStr)

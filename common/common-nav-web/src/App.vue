@@ -1,31 +1,35 @@
 <template>
-  <div id="navbar-app">
-    <div id="nav">
-      <router-link to="/app1">App1</router-link> |
-      <router-link to="/app2">App21</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <el-container class="width100 height100">
+      <el-header>Header</el-header>
+      <el-container>
+        <el-aside width="200px">Aside</el-aside>
+        <el-container>
+          <el-main>Main</el-main>
+        </el-container>
+      </el-container>
+    </el-container>
 </template>
-
+<script>
+    export default {
+        name: 'app'
+    }
+</script>
+<style scoped>
+</style>
 <style>
-  #navbar-app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
-  #nav {
-    padding: 30px;
-  }
 
-  #nav a {
-    font-weight: bold;
-    color: #2c3e50;
+</style>
+<!-- 全局样式 -->
+<style>
+  html,body{
+    height:100% !important;
+    margin: 0;
+    padding: 0;
   }
-
-  #nav a.router-link-exact-active {
-    color: #42b983;
+  .width100{
+    width: 100%;
+  }
+  .height100{
+    height: 100%;
   }
 </style>
