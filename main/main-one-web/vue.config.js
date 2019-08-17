@@ -1,12 +1,15 @@
 module.exports = {
-    // publicPath: '/common-nav',
     devServer: {
-        port: 9001
+        port: 9000
     },
     chainWebpack: config => {
+        config.module
+            .rule('compile')
+            .parser({
+                system: false
+            })
         config.devServer.set('inline', false)
         config.devServer.set('hot', false)
-        config.externals(['vue', 'vue-router'])
     },
     filenameHashing: false
 }

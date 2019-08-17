@@ -1,7 +1,5 @@
 # common-nav-web
 
-导航项目
-
 ## Project setup
 ```
 npm install
