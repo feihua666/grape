@@ -27,10 +27,12 @@ import java.util.stream.Collectors;
  * @param <UpdateForm> 更新表单
  * @param <ListForm> 列表查询表单
  */
-public abstract class BaseController<Service extends IBaseService<Po>,Vo extends BaseVo,Po extends NormalBasePo<Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
+public abstract class BaseController<Service extends IBaseService<Po>,MapperConverter extends ControllerMapperConverter<Vo,Po,CreateForm,UpdateForm,ListForm>,Vo extends BaseVo,Po extends NormalBasePo<Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
 
     @Autowired
     private Service service;
+    @Autowired
+    private MapperConverter mapperConverter;
     /**
      * 单表添加
      * @param cf
@@ -39,12 +41,12 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Vo create(@RequestBody @Valid CreateForm cf){
-        Po poQuery = this.createFormToPo(cf);
+        Po poQuery =  mapperConverter.createFormToPo(cf);
         Po dbPo = service.create(poQuery);
         if (dbPo == null) {
             throw ExceptionTools.newRE("添加失败");
         }
-        Vo vo = this.poToVo(dbPo);
+        Vo vo = mapperConverter.poToVo(dbPo);
         return queryById(dbPo.getId());
     }
 
@@ -57,7 +59,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
     @ResponseStatus(HttpStatus.OK)
     public Vo queryById(@PathVariable Long id){
         Po dbPo = service.getById(id);
-        Vo vo = this.poToVo(dbPo);
+        Vo vo = mapperConverter.poToVo(dbPo);
         if (vo == null) {
             throw ExceptionTools.dataNotExistRE(null);
         }
@@ -79,8 +81,8 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
             }
             throw ExceptionTools.failRE("删除失败");
         }
-        // 返回一个空数据，如果这里返回null，并不会被GlobalResponseBodyAdvice 统一包装，所以返回一个空对象，并不是null
-        return new Object();
+        // 返回一个空数据，如果这里返回null，并不会被GlobalResponseBodyAdvice 统一包装，所以返回一个空，并不是null
+        return "";
     }
 
     /**
@@ -92,49 +94,31 @@ public abstract class BaseController<Service extends IBaseService<Po>,Vo extends
     @ResponseStatus(HttpStatus.CREATED)
     public Vo update(@PathVariable Long id,@RequestBody UpdateForm uf){
 
-        Po poQuery = updateFormToPo(uf);
+        Po poQuery = mapperConverter.updateFormToPo(uf);
         boolean r = service.updateById(poQuery);
         if (!r) {
             throw ExceptionTools.failRE("更新失败，请刷新数据后再试");
         }
-        return poToVo(service.getById(id));
+        return mapperConverter.poToVo(service.getById(id));
     }
 
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<Vo> listPage(ListForm listForm){
-        Po poQuery = this.listPageFormToPo(listForm);
+        Po poQuery = mapperConverter.listPageFormToPo(listForm);
         IPage<Po> page = service.page(new Page(listForm.getCurrent(),listForm.getSize()),new QueryWrapper(poQuery));
         return pagePoToVo(page);
 
     }
-    /**
-     * 添加数据表单转po
-     * 仅适用于简单的单表对象
-     * 不建议用复制属性工具类，直接set方法更直观，性能好
-     * @param cf
-     * @return
-     */
-    public abstract Po createFormToPo(CreateForm cf);
-    public abstract Po updateFormToPo(UpdateForm uf);
-    public abstract Po listPageFormToPo(ListForm lf);
 
     private IPage<Vo> pagePoToVo(IPage page){
         List<Po> records = page.getRecords();
         if (page != null && !isListEmpty(records)) {
             List<Vo> voList = Arrays.asList();
-            voList = records.stream().map(po ->  poToVo(po)).collect(Collectors.toList());
+            voList = records.stream().map(po ->  mapperConverter.poToVo(po)).collect(Collectors.toList());
             page.setRecords(voList);
             return page;
         }
         return null;
     }
-    /**
-     * po转vo
-     * 仅适用于简单的单表对象
-     * 不建议用复制属性工具类，直接set方法更直观，性能好
-     * @param po
-     * @return 返回响应数据
-     */
-    public abstract Vo poToVo(Po po);
 }

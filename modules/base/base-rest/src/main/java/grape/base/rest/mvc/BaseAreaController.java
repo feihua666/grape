@@ -2,7 +2,6 @@ package grape.base.rest.mvc;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import common.code.fill.annocations.PojoConvert;
 import grape.base.service.api.po.BaseAreaPo;
 import grape.base.service.api.service.IBaseAreaService;
 import grape.common.rest.mvc.BaseController;
@@ -26,7 +25,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/base-area")
 @Api(tags = "区域表")
-public class BaseAreaController extends BaseController<IBaseAreaService, BaseAreaPoVo, BaseAreaPo, BaseAreaPoCreateForm,BaseAreaPoUpdateForm,BaseAreaPoListPageForm> {
+public class BaseAreaController extends BaseController<IBaseAreaService,BaseAreaConMapper, BaseAreaPoVo, BaseAreaPo, BaseAreaPoCreateForm,BaseAreaPoUpdateForm,BaseAreaPoListPageForm> {
 
     // 请在这里添加额外的方法
     //todo
@@ -36,59 +35,32 @@ public class BaseAreaController extends BaseController<IBaseAreaService, BaseAre
 
 
     /************************分割线，以下代码为 区域表 单表专用，自动生成谨慎修改**************************************************/
-    @Override
-    @PojoConvert
-    public BaseAreaPo createFormToPo( BaseAreaPoCreateForm cf) {
-        return null;
-    }
 
-    @Override
-    @PojoConvert
-    public BaseAreaPo updateFormToPo(BaseAreaPoUpdateForm uf) {
-        return null;
-    }
 
-    @Override
-    @PojoConvert
-    public BaseAreaPo listPageFormToPo(BaseAreaPoListPageForm lf) {
-        return null;
-    }
-
-    @Override
-    @PojoConvert
-    public BaseAreaPoVo poToVo(BaseAreaPo po) {
-        return null;
-    }
-
-     @Override
      @ApiOperation("[区域表]单表创建/添加数据")
      @RequiresPermissions("base-area-po:single:create")
      public BaseAreaPoVo create(@RequestBody @Valid BaseAreaPoCreateForm cf) {
          return super.create(cf);
      }
 
-     @Override
      @ApiOperation("[区域表]单表根据ID查询")
      @RequiresPermissions("base-area-po:single:queryById")
      public BaseAreaPoVo queryById(@PathVariable Long id) {
          return super.queryById(id);
      }
 
-     @Override
      @ApiOperation("[区域表]单表根据ID删除")
      @RequiresPermissions("base-area-po:single:deleteById")
      public Object deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 
-     @Override
      @ApiOperation("[区域表]单表根据ID更新")
      @RequiresPermissions("base-area-po:single:updateById")
      public BaseAreaPoVo update(@PathVariable Long id,@RequestBody @Valid BaseAreaPoUpdateForm uf) {
          return super.update(id, uf);
      }
 
-    @Override
     @ApiOperation("[区域表]单表分页列表")
     @RequiresPermissions("base-area-po:single:listPage")
     public IPage<BaseAreaPoVo> listPage(BaseAreaPoListPageForm listPageForm) {

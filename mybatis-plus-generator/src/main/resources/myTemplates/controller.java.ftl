@@ -39,7 +39,7 @@ import ${package.Service}.${table.serviceName};
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
 <#if superControllerClass??>
-public class ${table.controllerName} extends ${superControllerClass}<${table.serviceName}, ${entity}Vo, ${entity}, ${entity}CreateForm,${entity}UpdateForm,${entity}ListPageForm> {
+public class ${table.controllerName} extends ${superControllerClass}<${table.serviceName},${entity}ControllerMapper, ${entity}Vo, ${entity}, ${entity}CreateForm,${entity}UpdateForm,${entity}ListPageForm> {
 <#else>
 public class ${table.controllerName} {
 </#if>
@@ -52,59 +52,31 @@ public class ${table.controllerName} {
 
 
     /************************分割线，以下代码为 ${table.comment!} 单表专用，自动生成谨慎修改**************************************************/
-    @Override
-    @PojoConvert
-    public ${entity} createFormToPo( ${entity}CreateForm cf) {
-        return null;
-    }
 
-    @Override
-    @PojoConvert
-    public ${entity} updateFormToPo(${entity}UpdateForm uf) {
-        return null;
-    }
-
-    @Override
-    @PojoConvert
-    public ${entity} listPageFormToPo(${entity}ListPageForm lf) {
-        return null;
-    }
-
-    @Override
-    @PojoConvert
-    public ${entity}Vo poToVo(${entity} po) {
-        return null;
-    }
-
-     @Override
      @ApiOperation("[${table.comment!}]单表创建/添加数据")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:create")
      public ${entity}Vo create(@RequestBody @Valid ${entity}CreateForm cf) {
          return super.create(cf);
      }
 
-     @Override
      @ApiOperation("[${table.comment!}]单表根据ID查询")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:queryById")
      public ${entity}Vo queryById(@PathVariable Long id) {
          return super.queryById(id);
      }
 
-     @Override
      @ApiOperation("[${table.comment!}]单表根据ID删除")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:deleteById")
      public Object deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 
-     @Override
      @ApiOperation("[${table.comment!}]单表根据ID更新")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:updateById")
      public ${entity}Vo update(@PathVariable Long id,@RequestBody @Valid ${entity}UpdateForm uf) {
          return super.update(id, uf);
      }
 
-    @Override
     @ApiOperation("[${table.comment!}]单表分页列表")
     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:listPage")
     public IPage<${entity}Vo> listPage(${entity}ListPageForm listPageForm) {
