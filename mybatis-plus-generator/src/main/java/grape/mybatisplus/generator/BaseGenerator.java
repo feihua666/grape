@@ -2,6 +2,13 @@ package grape.mybatisplus.generator;
 
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static grape.mybatisplus.generator.SelfFileOutConfig.dot_mvc;
+
 /**
  * base 模块生成
  * Created by yangwei
@@ -10,37 +17,69 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 public class BaseGenerator extends SuperGenerator {
 
     private static String parentPakage="grape";
+    private static String author="author";
+    private static String moduleName="moduleName";
+    private static String tableName="tableName";
+    private static String tableType="tableType";
+    private static String tablePrefix="tablePrefix";
 
     public static void main(String[] args) {
 
         BaseGenerator generator = new BaseGenerator();
-        generator.setAuthor("yangwei");
-        //generator.setTableNames("base_user");
-        //generator.setTableNames("base_user_auth");
-        generator.setTableNames("base_area");
-        generator.setTableType(TableType.tree);
 
         String parentModule = "/modules/base";
         String restModeule = "/base-rest";
         String serviceModeule = "/base-service";
         String serviceApiModule = "/base-service-api";
 
+        for (Map<String, String> stringStringMap : generator.tableConfig()) {
 
-        String serviceImplModule = serviceApiModule.replace("-api","-impl");
 
-        generator.setControllerModulePath(parentModule + restModeule);
-        generator.setServiceApiModulePath(parentModule + serviceModeule + serviceApiModule);
-        generator.setServiceImplModulePath(parentModule + serviceModeule + serviceImplModule);
+            generator.setAuthor(stringStringMap.get(author));
 
-        String serviceApiParentPakage = parentPakage + replace(serviceApiModule);
-        String serviceImplParentPakage = parentPakage + replace(serviceImplModule);
-        generator.setControllerPakage(parentPakage + replace(restModeule) + ".mvc");
-        generator.setServicePakage(serviceApiParentPakage + ".service");
-        generator.setServiceImplPakage(serviceImplParentPakage +".impl");
-        generator.setPoPakage(serviceApiParentPakage + ".po");
-        generator.setMapperPakage(serviceImplParentPakage + ".mapper");
+            generator.setTableName(stringStringMap.get(tableName));
+            generator.setModuleName(stringStringMap.get(moduleName));
+            generator.setTableType(TableType.valueOf(stringStringMap.get(tableType)));
+            //取表名第一组作为前缀
+            generator.setTablePrefix(stringStringMap.get(tablePrefix));
 
-        generator.doGenerate();
+            String serviceImplModule = serviceApiModule.replace("-api","-impl");
+
+
+            generator.setControllerModulePath(parentModule + restModeule);
+            generator.setServiceApiModulePath(parentModule + serviceModeule + serviceApiModule);
+            generator.setServiceImplModulePath(parentModule + serviceModeule + serviceImplModule);
+
+            String serviceApiParentPakage = parentPakage + replace(serviceModeule);
+            String serviceImplParentPakage = serviceApiParentPakage;
+
+
+            generator.setControllerPakage(parentPakage + replace(restModeule) + "." + generator.getModuleName() + dot_mvc);
+            generator.setServicePakage(serviceApiParentPakage + "." + generator.getModuleName() + ".api");
+            generator.setServiceImplPakage(serviceImplParentPakage + "." + generator.getModuleName() + ".impl");
+            generator.setPoPakage(serviceApiParentPakage + "." + generator.getModuleName() + ".po");
+            generator.setMapperPakage(serviceImplParentPakage + "." + generator.getModuleName() + ".mapper");
+
+            generator.doGenerate();
+        }
+
+
+    }
+    public List<Map<String,String>> tableConfig(){
+        String author = "yangwei";
+        String tablePrefix = "base";
+        Map<String, String> tableConfigItem;
+        List<Map<String,String>> tableConfig = new ArrayList<>();
+
+        tableConfigItem = new HashMap<>();
+        tableConfigItem.put(tableName,"base_area");
+        tableConfigItem.put(moduleName,"area");
+        tableConfigItem.put(tableType,TableType.tree.name());
+        tableConfigItem.put(BaseGenerator.tablePrefix,tablePrefix);
+        tableConfigItem.put(BaseGenerator.author,author);
+        tableConfig.add(tableConfigItem);
+
+        return  tableConfig;
     }
 
     /**

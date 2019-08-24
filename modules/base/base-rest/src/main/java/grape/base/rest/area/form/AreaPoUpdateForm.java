@@ -1,10 +1,6 @@
-package grape.base.rest.mvc;
-import grape.common.rest.vo.BaseVo;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
-import grape.common.service.po.TreeBasePo;
-import java.io.Serializable;
+package grape.base.rest.area.form;
+import grape.common.rest.form.BaseForm;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,14 +13,13 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yangwei
- * @since 2019-08-10
+ * @since 2019-08-24
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("base_area")
-@ApiModel(value="BaseAreaPoVo数据响应对象", description="区域表")
-public class BaseAreaPoVo extends BaseVo {
+@ApiModel(value="AreaPoUpdateForm更新表单对象", description="区域表")
+public class AreaPoUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,8 +32,11 @@ public class BaseAreaPoVo extends BaseVo {
     @ApiModelProperty(value = "拼音，简拼，每个字的首字母")
     private String spellSimple;
 
-    @ApiModelProperty(value = "区域类型，字典配置,province=省，city=市，district=区")
-    private String type;
+    @ApiModelProperty(value = "类型，字典id")
+    private Long typeDictId;
+
+    @ApiModelProperty(value = "行政区划id，该id来自国家统计")
+    private Long adminDivisionId;
 
     @ApiModelProperty(value = "经度")
     private String longitude;
@@ -47,7 +45,7 @@ public class BaseAreaPoVo extends BaseVo {
     private String latitude;
 
     @ApiModelProperty(value = "排序,默认按该字段升序排序")
-    private Integer sequence;
+    private Integer seq;
 
 
 }

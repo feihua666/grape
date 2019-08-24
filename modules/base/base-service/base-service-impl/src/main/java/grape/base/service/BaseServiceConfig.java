@@ -1,4 +1,4 @@
-package grape.base.service.impl;
+package grape.base.service;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration()
 @ComponentScan
-@MapperScan("grape.base.service.impl.mapper")
+@MapperScan("grape.base.service.**.mapper")
 public class BaseServiceConfig {
 }

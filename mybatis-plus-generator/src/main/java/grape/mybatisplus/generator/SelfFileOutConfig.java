@@ -21,6 +21,9 @@ import java.util.List;
 @AllArgsConstructor
 public class SelfFileOutConfig {
 
+    public static final String dot_mvc = ".mvc";
+    public static final String path_mvc = "/mvc";
+
     private String projectPath;
 
     private String controllerModulePath;
@@ -48,6 +51,7 @@ public class SelfFileOutConfig {
         // 自定义mapper输出
         if(!StringUtils.isEmpty(serviceImplModulePath)){
             focList.add(mapperFileOutConfig());
+            focList.add(mapperXmlFileOutConfig());
         }
         // 自定义service输出
         if(!StringUtils.isEmpty(serviceApiModulePath)){
@@ -60,6 +64,9 @@ public class SelfFileOutConfig {
         return focList;
     }
 
+    public String controllerProjectPath(){
+        return projectPath + controllerModulePath + "/src/main/java/";
+    }
     /**
      * controller 生成
      * @return
@@ -69,11 +76,12 @@ public class SelfFileOutConfig {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + controllerModulePath + "/src/main/java/" + packageConfig.getController().replace(".","/")
+                return controllerProjectPath() + packageConfig.getController().replace(".","/")
                         + "/" + tableInfo.getControllerName() + StringPool.DOT_JAVA;
             }
         };
     }
+
     /**
      * controller createForm 生成
      * @return
@@ -83,7 +91,7 @@ public class SelfFileOutConfig {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + controllerModulePath + "/src/main/java/" + packageConfig.getController().replace(".","/")
+                return controllerProjectPath() + Utils.controllerFormPath(packageConfig)
                         + "/" + tableInfo.getEntityName() + "CreateForm" + StringPool.DOT_JAVA;
             }
         };
@@ -97,7 +105,7 @@ public class SelfFileOutConfig {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + controllerModulePath + "/src/main/java/" + packageConfig.getController().replace(".","/")
+                return controllerProjectPath() + Utils.controllerFormPath(packageConfig)
                         + "/" + tableInfo.getEntityName() + "UpdateForm" + StringPool.DOT_JAVA;
             }
         };
@@ -111,7 +119,7 @@ public class SelfFileOutConfig {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + controllerModulePath + "/src/main/java/" + packageConfig.getController().replace(".","/")
+                return controllerProjectPath() + Utils.controllerFormPath(packageConfig)
                         + "/" + tableInfo.getEntityName() + "ListPageForm" + StringPool.DOT_JAVA;
             }
         };
@@ -125,7 +133,7 @@ public class SelfFileOutConfig {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + controllerModulePath + "/src/main/java/" + packageConfig.getController().replace(".","/")
+                return controllerProjectPath() + Utils.controllerVoPath(packageConfig)
                         + "/" + tableInfo.getEntityName() + "Vo" + StringPool.DOT_JAVA;
             }
         };
@@ -139,7 +147,7 @@ public class SelfFileOutConfig {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + controllerModulePath + "/src/main/java/" + packageConfig.getController().replace(".","/")
+                return controllerProjectPath() + Utils.controllerMapperConverterPath(packageConfig)
                         + "/" + tableInfo.getEntityName() + "ControllerMapper" + StringPool.DOT_JAVA;
             }
         };
@@ -172,6 +180,21 @@ public class SelfFileOutConfig {
             }
         };
     }
+    /**
+     * mapperXml生成
+     * @return
+     */
+    public FileOutConfig mapperXmlFileOutConfig(){
+        return new FileOutConfig("/templates/mapper.xml.ftl") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return projectPath + serviceImplModulePath + "/src/main/java/" + packageConfig.getMapper().replace(".","/")
+                        + "/" + tableInfo.getXmlName() + StringPool.DOT_XML;
+            }
+        };
+    }
+
     /**
      * service接口生成
      * @return

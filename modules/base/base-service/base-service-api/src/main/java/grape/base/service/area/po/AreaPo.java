@@ -1,4 +1,4 @@
-package grape.base.service.api.po;
+package grape.base.service.area.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -15,13 +15,13 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yangwei
- * @since 2019-08-10
+ * @since 2019-08-24
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("base_area")
-public class BaseAreaPo extends TreeBasePo<BaseAreaPo> {
+public class AreaPo extends TreeBasePo<AreaPo> {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,9 +41,14 @@ public class BaseAreaPo extends TreeBasePo<BaseAreaPo> {
     private String spellSimple;
 
     /**
-     * 区域类型，字典配置,province=省，city=市，district=区
+     * 类型，字典id
      */
-    private String type;
+    private Long typeDictId;
+
+    /**
+     * 行政区划id，该id来自国家统计
+     */
+    private Long adminDivisionId;
 
     /**
      * 经度
@@ -58,7 +63,7 @@ public class BaseAreaPo extends TreeBasePo<BaseAreaPo> {
     /**
      * 排序,默认按该字段升序排序
      */
-    private Integer sequence;
+    private Integer seq;
 
 
     @Override

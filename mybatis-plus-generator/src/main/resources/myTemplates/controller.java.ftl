@@ -3,12 +3,16 @@ package ${package.Controller};
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import common.code.fill.annocations.PojoConvert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
+import ${cfg.formPackage}.${entity}CreateForm;
+import ${cfg.formPackage}.${entity}UpdateForm;
+import ${cfg.formPackage}.${entity}ListPageForm;
+import ${cfg.voPackage}.${entity}Vo;
+import ${cfg.mapperconverterPackage}.${entity}ControllerMapper;
 import org.springframework.web.bind.annotation.RequestBody;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;

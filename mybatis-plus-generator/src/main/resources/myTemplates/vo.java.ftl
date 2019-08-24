@@ -1,8 +1,6 @@
-package ${package.Controller};
+package ${cfg.voPackage};
 import grape.common.rest.vo.BaseVo;
-<#list table.importPackages as pkg>
-import ${pkg};
-</#list>
+
 <#assign swagger2 = true>
 <#assign activeRecord = false>
 <#if swagger2>
@@ -31,9 +29,6 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
     </#if>
 @Accessors(chain = true)
-</#if>
-<#if table.convert>
-@TableName("${table.name}")
 </#if>
 <#if swagger2>
 @ApiModel(value="${entity}Vo数据响应对象", description="${table.comment!}")

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
@@ -14,7 +15,9 @@ import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangwei
@@ -31,9 +34,11 @@ public class SuperGenerator {
     private String projectPath;
 
     private String author;
-    // 多个以逗号分隔，最好一个一个的生成
-    private String tableNames;
+    // 一次只能生成一个表
+    private String tableName;
+    // 模块名称，一个表对应一个模块，方便查找
     private String moduleName;
+    // 表前缀
     private String tablePrefix;
 
     private String controllerModulePath;
@@ -56,15 +61,17 @@ public class SuperGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java");
+        //gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor(author);
         gc.setFileOverride(false);
         //  实体属性 Swagger2 注解
         gc.setSwagger2(false);
         gc.setBaseResultMap(true);
+        // 实体添加持久化后缀标识
         gc.setEntityName("%sPo");
         gc.setOpen(false);
         gc.setBaseColumnList(true);
+        // 说白了就是entity继承一个model带数据的操作
         gc.setActiveRecord(true);
         return gc;
     }
@@ -75,7 +82,6 @@ public class SuperGenerator {
      * @return
      */
     public DataSourceConfig dataSourceConfig(){
-
 
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://localhost/grape?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8");
@@ -93,7 +99,7 @@ public class SuperGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("");
-        pc.setModuleName(moduleName);
+        //pc.setModuleName(moduleName);
         pc.setEntity(poPakage);
         pc.setService(servicePakage);
         pc.setServiceImpl(serviceImplPakage);
@@ -102,7 +108,7 @@ public class SuperGenerator {
         pc.setMapper(mapperPakage);
 
         return pc;
-    }
+    };
 
     /**
      * 自定义配置
@@ -114,8 +120,14 @@ public class SuperGenerator {
             @Override
             public void initMap() {
                 // to do nothing
+                Map<String,Object> map = new HashMap<>();
+                map.put("formPackage",Utils.controllerFormPackage(mpg.getPackageInfo()));
+                map.put("voPackage",Utils.controllerVoPackage(mpg.getPackageInfo()));
+                map.put("mapperconverterPackage",Utils.controllerMapperConverterPackage(mpg.getPackageInfo()));
+                this.setMap(map);
             }
         };
+
         return cfg;
     }
 
@@ -129,7 +141,7 @@ public class SuperGenerator {
         // 不生成xml全部使用单表
         templateConfig.setXml(null);
         templateConfig.setController(null);
-        templateConfig.setEntity(null);
+        templateConfig.setEntity(null); // 默认模板
         templateConfig.setMapper(null);
         templateConfig.setService(null);
         templateConfig.setServiceImpl(null);
@@ -165,11 +177,12 @@ public class SuperGenerator {
 
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns(superEntityColumns.split(","));
-        strategy.setInclude(tableNames.split(","));
+        strategy.setInclude(tableName);
         // 连字符
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setEntityTableFieldAnnotationEnable(false);
         strategy.setEntitySerialVersionUID(true);
+        strategy.setTablePrefix(tablePrefix);
         //strategy.setLogicDeleteFieldName("is_del");
 
         //strategy. setTableFillList()
@@ -178,6 +191,7 @@ public class SuperGenerator {
 
         return strategy;
     }
+
 
     public void doGenerate(){
         // 代码生成器

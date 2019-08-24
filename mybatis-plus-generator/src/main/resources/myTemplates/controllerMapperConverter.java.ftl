@@ -1,9 +1,12 @@
-package grape.base.rest.mvc;
+package ${cfg.mapperconverterPackage};
 
 import ${package.Entity}.${entity};
 import grape.common.rest.mvc.ControllerMapperConverter;
 import org.mapstruct.Mapper;
-
+import ${cfg.formPackage}.${entity}CreateForm;
+import ${cfg.formPackage}.${entity}UpdateForm;
+import ${cfg.formPackage}.${entity}ListPageForm;
+import ${cfg.voPackage}.${entity}Vo;
 /**
  * <p>
  * ${table.comment!} 前端领域模型映射
