@@ -39,16 +39,16 @@ function genActiveRule(routerPrefix) {
 registerMicroApps(
     [
         {
-            name: 'common-nav',
-            entry: '//localhost:9001',
-            render: renderCommonNav,
-            activeRule: () => true
-        },
-        {
             name: 'base',
             entry: '//localhost:9002',
             render,
             activeRule: genActiveRule('/base')
+        },
+        {
+            name: 'common-nav',
+            entry: '//localhost:9001',
+            render: renderCommonNav,
+            activeRule: () => true
         }
     ],
     {
@@ -58,6 +58,9 @@ registerMicroApps(
         beforeMount: [app => {
             console.log('before mount', app);
         }],
+        afterMount: [app => {
+            console.log('after mount', app);
+        }],
         afterUnmount: [app => {
             console.log('after unload', app);
         }]
@@ -66,4 +69,4 @@ registerMicroApps(
 
 runDefaultMountEffects('/common-nav');
 
-start({ prefetch: false, jsSandbox: true });
+start({ prefetch: false, jsSandbox: false });
