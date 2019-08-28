@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="grape.base.service.user.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="grape.base.service.user.po.UserPo">
+    <result column="id" property="id" />
+    <result column="version" property="version" />
+    <result column="create_at" property="createAt" />
+    <result column="create_by" property="createBy" />
+    <result column="update_at" property="updateAt" />
+    <result column="update_by" property="updateBy" />
+    <result column="modified_at" property="modifiedAt" />
+        <result column="nickname" property="nickname" />
+        <result column="gender_dict_id" property="genderDictId" />
+        <result column="avatar" property="avatar" />
+        <result column="serial_no" property="serialNo" />
+        <result column="dept_id" property="deptId" />
+        <result column="is_virtual" property="isVirtual" />
+        <result column="is_lock" property="isLock" />
+        <result column="lock_reason" property="lockReason" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        version,
+        create_at,
+        create_by,
+        update_at,
+        update_by,
+        modified_at,
+        nickname, gender_dict_id, avatar, serial_no, dept_id, is_virtual, is_lock, lock_reason
+    </sql>
+
+</mapper>

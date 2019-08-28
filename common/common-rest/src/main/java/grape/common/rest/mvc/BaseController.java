@@ -38,9 +38,8 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
      * @param cf
      * @return
      */
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Vo create(@RequestBody @Valid CreateForm cf){
+
+    public Vo create(CreateForm cf){
         Po poQuery =  mapperConverter.createFormToPo(cf);
         Po dbPo = service.create(poQuery);
         if (dbPo == null) {
@@ -55,9 +54,8 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
      * @param id
      * @return
      */
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Vo queryById(@PathVariable Long id){
+
+    public Vo queryById(Long id){
         Po dbPo = service.getById(id);
         Vo vo = mapperConverter.poToVo(dbPo);
         if (vo == null) {
@@ -70,9 +68,8 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
      * @param id
      * @return
      */
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Object deleteById(@PathVariable Long id){
+
+    public Object deleteById(Long id){
         boolean r = service.removeById(id);
         if (!r) {
             // 如果删除失败，查询数据库中是否存在
@@ -90,8 +87,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
      * @param uf
      * @return
      */
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+
     public Vo update(@PathVariable Long id,@RequestBody UpdateForm uf){
 
         Po poQuery = mapperConverter.updateFormToPo(uf);
@@ -102,8 +98,6 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
         return mapperConverter.poToVo(service.getById(id));
     }
 
-    @GetMapping("/listPage")
-    @ResponseStatus(HttpStatus.OK)
     public IPage<Vo> listPage(ListForm listForm){
         Po poQuery = mapperConverter.listPageFormToPo(listForm);
         IPage<Po> page = service.page(new Page(listForm.getCurrent(),listForm.getSize()),new QueryWrapper(poQuery));

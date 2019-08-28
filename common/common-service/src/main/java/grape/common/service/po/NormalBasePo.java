@@ -23,13 +23,6 @@ public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
     public final String defaultDataVersion = "1";
 
     /**
-     * 删除标记，0=未删除；1=已删除
-     * 该字段不需要自动填充，已被mybatis plus处理
-     */
-    @TableLogic
-    private Char isDel;
-
-    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

@@ -1,19 +1,17 @@
 package ${package.Controller};
 
-
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import javax.validation.Valid;
-import org.springframework.web.bind.annotation.PathVariable;
 import ${cfg.formPackage}.${entity}CreateForm;
 import ${cfg.formPackage}.${entity}UpdateForm;
 import ${cfg.formPackage}.${entity}ListPageForm;
 import ${cfg.voPackage}.${entity}Vo;
 import ${cfg.mapperconverterPackage}.${entity}ControllerMapper;
-import org.springframework.web.bind.annotation.RequestBody;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
 <#else>
@@ -59,30 +57,40 @@ public class ${table.controllerName} {
 
      @ApiOperation("[${table.comment!}]单表创建/添加数据")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:create")
+     @PostMapping
+     @ResponseStatus(HttpStatus.CREATED)
      public ${entity}Vo create(@RequestBody @Valid ${entity}CreateForm cf) {
          return super.create(cf);
      }
 
      @ApiOperation("[${table.comment!}]单表根据ID查询")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:queryById")
+     @GetMapping("/{id}")
+     @ResponseStatus(HttpStatus.OK)
      public ${entity}Vo queryById(@PathVariable Long id) {
          return super.queryById(id);
      }
 
      @ApiOperation("[${table.comment!}]单表根据ID删除")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:deleteById")
+     @DeleteMapping("/{id}")
+     @ResponseStatus(HttpStatus.NO_CONTENT)
      public Object deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 
      @ApiOperation("[${table.comment!}]单表根据ID更新")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:updateById")
+     @PutMapping("/{id}")
+     @ResponseStatus(HttpStatus.CREATED)
      public ${entity}Vo update(@PathVariable Long id,@RequestBody @Valid ${entity}UpdateForm uf) {
          return super.update(id, uf);
      }
 
     @ApiOperation("[${table.comment!}]单表分页列表")
     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:listPage")
+    @GetMapping("/listPage")
+    @ResponseStatus(HttpStatus.OK)
     public IPage<${entity}Vo> listPage(${entity}ListPageForm listPageForm) {
          return super.listPage(listPageForm);
      }
