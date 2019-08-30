@@ -7,7 +7,9 @@
           <el-header>Header</el-header>
         <el-container>
           <el-main>
-              <div id="app-common-nav-container" v-html="mfeAppContent"></div>
+              <div id="app-common-nav-container-loading" class="width100 height100">
+              <div id="app-common-nav-container" class="width100 height100" v-html="mfeRenderProps.appContent"></div>
+              </div>
           </el-main>
         </el-container>
       </el-container>
@@ -15,18 +17,11 @@
 </template>
 <script>
     import NavMenu from './components/NavMenu'
+    let loadingInst = null
     export default {
         name: 'app',
         components: {
             NavMenu
-        },
-        computed: {
-            mfeAppContent () {
-                if(this.mfeRenderProps){
-                    return this.mfeRenderProps.appContent
-                }
-                return null
-            }
         },
         created () {
             // window.mfe 前缀的属性或方法都是在portal项目设置的全局属性或方法，供微前端子项目使用
@@ -37,19 +32,36 @@
         },
         methods: {
             $_mfeRender (mfeRenderProps){
-                console.log('common-nav-$_mfeRender',mfeRenderProps)
-                this.mfeRenderProps = mfeRenderProps
+                this.mfeRenderProps.appContent = mfeRenderProps.appContent
+                this.mfeRenderProps.loading = mfeRenderProps.loading
             }
         },
         data () {
             return {
-                mfeRenderProps: null
+                mfeRenderProps: {
+                    appContent: null,
+                    loading: false
+                }
             }
         },
         destroyed() {
             // 卸载掉，为避免重复触发
             if (window.mfe) {
                 window.mfe_vue_bus.$off(window.mfe_render_key,this.$_mfeRender)
+            }
+        },
+        watch: {
+            'mfeRenderProps.loading' (val) {
+                if(val) {
+                    loadingInst = this.$loading({
+                        target: '#app-common-nav-container-loading',
+                        text: '应用加载中...'
+                    })
+                }else {
+                    if(loadingInst) {
+                        //loadingInst.close()
+                    }
+                }
             }
         }
     }
