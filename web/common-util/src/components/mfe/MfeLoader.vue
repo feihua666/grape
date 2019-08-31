@@ -1,6 +1,6 @@
 <template>
-  <div :id="loadingId">
-    <div :id="containerId" v-html="mfeRenderProps.appContent"></div>
+  <div :id="loadingId" class="g-width100 g-height100">
+    <div :id="containerId" class="g-width100 g-height100" v-html="mfeRenderProps.appContent"></div>
   </div>
 </template>
 

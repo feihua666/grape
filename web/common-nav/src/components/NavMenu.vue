@@ -1,7 +1,7 @@
 <template>
   <el-menu
           default-active="2"
-          class="height100"
+          class="g-height100"
           active-text-color="#ffd04b">
     <el-submenu index="1">
       <template slot="title">

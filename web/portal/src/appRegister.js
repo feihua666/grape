@@ -1,0 +1,40 @@
+import { registerMicroApps} from 'qiankun';
+import {genActiveRule, render} from "common-util/src/components/mfe";
+
+export default function registApps() {
+
+
+    registerMicroApps(
+        [
+            {
+                name: 'common-nav',
+                entry: '//localhost:9001',
+                render: (renderProps) => {render(renderProps,window.mfe_render_key + 'common')},
+                activeRule: () => true  // 导航项目必须一直渲染不能卸载，否则导致其它子项目挂载不上
+            },
+            {
+                name: 'base',
+                entry: '//localhost:9002',
+                render,
+                activeRule: genActiveRule('/base'),
+                props: {
+                    // 自定义方法在应用千载的时候将dom渲染为空，因为vue在destroy的时候不会清除dom，如果子项目不是vue请考虑具体情况
+                    removeDomAfterUnmount: () => {render({appContent: null,loading: false})}
+                }
+            },
+        ],
+        {
+            beforeLoad: [app => {
+            }],
+            beforeMount: [app => {
+            }],
+            afterMount: [app => {
+            }],
+            afterUnmount: [app => {
+                if (app.props.removeDomAfterUnmount) {
+                    app.props.removeDomAfterUnmount()
+                }
+            }]
+        }
+    )
+}
