@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import {} from 'common-util'
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 // 设置微前端模式
@@ -11,7 +12,7 @@ window.mfe = true
 // 微前端事件总线
 window.mfe_vue_bus = new Vue()
 window.mfe_render_key = 'mfeRender'
-window.mfe_mount_delay = 1000
+window.mfe_mount_delay = 10
 
 const portalIns = new Vue({
         el: '#app-portal',
@@ -66,4 +67,4 @@ registerMicroApps(
 
 //runDefaultMountEffects('/common-nav');
 
-start({ prefetch: true, jsSandbox: true });
+start({ prefetch: false, jsSandbox: true });

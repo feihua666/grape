@@ -59,7 +59,7 @@
                     })
                 }else {
                     if(loadingInst) {
-                        //loadingInst.close()
+                        loadingInst.close()
                     }
                 }
             }

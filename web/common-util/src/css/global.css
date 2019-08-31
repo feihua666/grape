@@ -1,0 +1,12 @@
+/* 微前端公共项目全局样式表 */
+ html,body{
+     height:100% !important;
+     margin: 0;
+     padding: 0;
+ }
+.g-width100{
+    width: 100%;
+}
+.g-height100{
+    height: 100%;
+}
