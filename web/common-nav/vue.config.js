@@ -1,6 +1,6 @@
 let packageName = require('./package.json').name
 module.exports = {
-    // publicPath: '/common-nav',
+    publicPath: '/app-common-nav',
     devServer: {
         port: 9001,
         headers: {

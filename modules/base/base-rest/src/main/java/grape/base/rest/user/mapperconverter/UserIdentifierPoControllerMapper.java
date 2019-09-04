@@ -13,7 +13,7 @@ import grape.base.rest.user.vo.UserIdentifierPoVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-08-27
+ * @since 2019-09-01
  */
 @Mapper(componentModel = "spring")
 public interface UserIdentifierPoControllerMapper extends ControllerMapperConverter<UserIdentifierPoVo, UserIdentifierPo, UserIdentifierPoCreateForm,UserIdentifierPoUpdateForm,UserIdentifierPoListPageForm> {

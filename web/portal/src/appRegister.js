@@ -8,13 +8,13 @@ export default function registApps() {
         [
             {
                 name: 'common-nav',
-                entry: '//localhost:9001',
+                entry: '//localhost:9001/common-nav',
                 render: (renderProps) => {render(renderProps,window.mfe_render_key + 'common')},
                 activeRule: () => true  // 导航项目必须一直渲染不能卸载，否则导致其它子项目挂载不上
             },
             {
                 name: 'base',
-                entry: '//localhost:9002',
+                entry: '//localhost:9002/base',
                 render,
                 activeRule: genActiveRule('/base'),
                 props: {

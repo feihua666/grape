@@ -9,11 +9,11 @@ import grape.common.rest.form.BasePageForm;
 import grape.common.rest.vo.BaseVo;
 import grape.common.service.IBaseService;
 import grape.common.service.po.NormalBasePo;
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,10 +27,13 @@ import java.util.stream.Collectors;
  * @param <UpdateForm> 更新表单
  * @param <ListForm> 列表查询表单
  */
+@Data
 public abstract class BaseController<Service extends IBaseService<Po>,MapperConverter extends ControllerMapperConverter<Vo,Po,CreateForm,UpdateForm,ListForm>,Vo extends BaseVo,Po extends NormalBasePo<Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
 
+    @Getter
     @Autowired
     private Service service;
+    @Getter
     @Autowired
     private MapperConverter mapperConverter;
     /**

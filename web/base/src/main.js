@@ -1,34 +1,38 @@
 import Vue from 'vue'
 import App from './App.vue'
+import VueRouter from 'vue-router'
+import ElementUI from 'element-ui'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import router from './router/router'
+import {tryMount} from "common-util/src/components/mfe";
 
 Vue.config.productionTip = false
+Vue.use(ElementUI)
+Vue.use(VueRouter)
+Vue.use(VueAxios, axios)
 
 let containerId = 'app-base'
-let containerIdSelector = '#' + containerId
 if (!window.mfe) {
-    new Vue({
-        render: h => h(App),
-    }).$mount(containerIdSelector)
+    getInstance().$mount('#' + containerId)
 }
 
-let instance = null;
+
+
+function getInstance() {
+    let instance = new Vue({
+        router,
+        render: h => h(App),
+    });
+    return instance
+}
 
 export async function bootstrap() {
 }
-
+let instance = null;
 export async function mount(props) {
-    instance = new Vue({
-        render: h => h(App),
-    });
-    // 如果dom存在直接挂载
-    if(document.getElementById(containerId)){
-        instance.$mount(containerIdSelector)
-    }else {
-        // 如果dom不存在延迟一秒再挂载，因为该项目依赖common-nav导航，确保导航项目已正确渲染
-        setTimeout(function () {
-            instance.$mount(containerIdSelector)
-        },window.mfe_mount_delay)
-    }
+    instance = getInstance()
+    tryMount(containerId,instance)
 }
 
 export async function unmount() {

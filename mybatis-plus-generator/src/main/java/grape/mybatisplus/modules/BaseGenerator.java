@@ -79,6 +79,11 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_user_identifier","user",TableType.normal,tablePrefix,author);
         // 用户密码表
         commonSet("base_user_pwd","user",TableType.normal,tablePrefix,author);
+        // 字典表
+        commonSet("base_dict","dict",TableType.tree,tablePrefix,author);
+
+        commonSet("base_page","page",TableType.tree,tablePrefix,author);
+        commonSet("base_page_element","page",TableType.tree,tablePrefix,author);
 
         return  tableConfig;
     }

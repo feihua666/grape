@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="grape.base.service.page.mapper.PageElementMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="grape.base.service.page.po.PageElementPo">
+    <result column="id" property="id" />
+    <result column="level" property="level" />
+    <result column="parent_id" property="parentId" />
+    <result column="parent_id1" property="parentId1" />
+    <result column="parent_id2" property="parentId2" />
+    <result column="parent_id3" property="parentId3" />
+    <result column="parent_id4" property="parentId4" />
+    <result column="parent_id5" property="parentId5" />
+    <result column="parent_id6" property="parentId6" />
+    <result column="parent_id7" property="parentId7" />
+    <result column="parent_id8" property="parentId8" />
+    <result column="parent_id9" property="parentId9" />
+    <result column="parent_id10" property="parentId10" />
+    <result column="version" property="version" />
+    <result column="create_at" property="createAt" />
+    <result column="create_by" property="createBy" />
+    <result column="update_at" property="updateAt" />
+    <result column="update_by" property="updateBy" />
+    <result column="modified_at" property="modifiedAt" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="type_dict_id" property="typeDictId" />
+        <result column="field_name" property="fieldName" />
+        <result column="field_default_value" property="fieldDefaultValue" />
+        <result column="field_type_dict_id" property="fieldTypeDictId" />
+        <result column="column_name" property="columnName" />
+        <result column="page_id" property="pageId" />
+        <result column="desc" property="desc" />
+        <result column="seq" property="seq" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        level,
+        parent_id,
+        parent_id1,
+        parent_id2,
+        parent_id3,
+        parent_id4,
+        parent_id5,
+        parent_id6,
+        parent_id7,
+        parent_id8,
+        parent_id9,
+        parent_id10,
+        version,
+        create_at,
+        create_by,
+        update_at,
+        update_by,
+        modified_at,
+        code, name, type_dict_id, field_name, field_default_value, field_type_dict_id, column_name, page_id, desc, seq
+    </sql>
+
+</mapper>

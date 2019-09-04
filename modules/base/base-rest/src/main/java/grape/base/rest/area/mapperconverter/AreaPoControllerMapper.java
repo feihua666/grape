@@ -13,7 +13,7 @@ import grape.base.rest.area.vo.AreaPoVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-08-24
+ * @since 2019-09-01
  */
 @Mapper(componentModel = "spring")
 public interface AreaPoControllerMapper extends ControllerMapperConverter<AreaPoVo, AreaPo, AreaPoCreateForm,AreaPoUpdateForm,AreaPoListPageForm> {

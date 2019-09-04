@@ -1,0 +1,16 @@
+package grape.base.service.page.api;
+
+import grape.base.service.page.po.PagePo;
+import grape.common.service.IBaseService;
+
+/**
+ * <p>
+ * 页面表，用于自动生成页面元素和关联功能菜单 服务类
+ * </p>
+ *
+ * @author yangwei
+ * @since 2019-09-01
+ */
+public interface IPageService extends IBaseService<PagePo> {
+
+}
