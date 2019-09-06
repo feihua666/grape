@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ComponentScan
 public class CommonServiceConfig {
+    /**
+     * mybatis plus 乐观锁插件
+     * @return
+     */
     @Bean
     public OptimisticLockerInterceptor optimisticLockerInterceptor() {
         return new OptimisticLockerInterceptor();

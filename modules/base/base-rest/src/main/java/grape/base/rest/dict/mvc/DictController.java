@@ -7,14 +7,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import javax.validation.Valid;
-import grape.base.rest.dict.form.DictPoCreateForm;
-import grape.base.rest.dict.form.DictPoUpdateForm;
-import grape.base.rest.dict.form.DictPoListPageForm;
-import grape.base.rest.dict.vo.DictPoVo;
-import grape.base.rest.dict.mapperconverter.DictPoControllerMapper;
+import grape.base.rest.dict.form.DictCreateForm;
+import grape.base.rest.dict.form.DictUpdateForm;
+import grape.base.rest.dict.form.DictListPageForm;
+import grape.base.rest.dict.vo.DictVo;
+import grape.base.rest.dict.mapper.DictWebMapper;
 import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
-import grape.base.service.dict.po.DictPo;
+import grape.base.service.dict.po.Dict;
 import grape.base.service.dict.api.IDictService;
 /**
  * <p>
@@ -22,67 +22,59 @@ import grape.base.service.dict.api.IDictService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
 @RestController
 @RequestMapping("/dict")
 @Api(tags = "字典表,提供值与编码映射，用于下拉框或组合选择使用")
-public class DictController extends BaseController<IDictService,DictPoControllerMapper, DictPoVo, DictPo, DictPoCreateForm,DictPoUpdateForm,DictPoListPageForm> {
+public class DictController extends BaseController<IDictService,DictWebMapper, DictVo, Dict, DictCreateForm,DictUpdateForm,DictListPageForm> {
 
     // 请在这里添加额外的方法
     //todo
-    @ApiOperation("[字典表]根据字典组编码查询字典项")
-    @RequiresPermissions("dict-po:single:queryItemByGroupCode")
-    @GetMapping("/group/{code}/item-list")
-    @ResponseStatus(HttpStatus.OK)
-    public DictPoVo queryItemByGroupCode(@PathVariable String code) {
-        //getService().query().getEntity().setCode(code)
-        //return super.queryById(id);
-        return null;
-    }
+
 
 
 
 
     /************************分割线，以下代码为 字典表,提供值与编码映射，用于下拉框或组合选择使用 单表专用，自动生成谨慎修改**************************************************/
 
-     @ApiOperation("[字典表]单表创建/添加数据")
-     @RequiresPermissions("dict-po:single:create")
+     @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表创建/添加数据")
+     @RequiresPermissions("dict:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
-     public DictPoVo create(@RequestBody @Valid DictPoCreateForm cf) {
+     public DictVo create(@RequestBody @Valid DictCreateForm cf) {
          return super.create(cf);
      }
 
-     @ApiOperation("[字典表]单表根据ID查询")
-     @RequiresPermissions("dict-po:single:queryById")
+     @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表根据ID查询")
+     @RequiresPermissions("dict:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public DictPoVo queryById(@PathVariable Long id) {
+     public DictVo queryById(@PathVariable Long id) {
          return super.queryById(id);
      }
 
-     @ApiOperation("[字典表]单表根据ID删除")
-     @RequiresPermissions("dict-po:single:deleteById")
+     @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表根据ID删除")
+     @RequiresPermissions("dict:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public Object deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 
-     @ApiOperation("[字典表]单表根据ID更新")
-     @RequiresPermissions("dict-po:single:updateById")
+     @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表根据ID更新")
+     @RequiresPermissions("dict:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public DictPoVo update(@PathVariable Long id,@RequestBody @Valid DictPoUpdateForm uf) {
+     public DictVo update(@PathVariable Long id,@RequestBody @Valid DictUpdateForm uf) {
          return super.update(id, uf);
      }
 
-    @ApiOperation("[字典表]单表分页列表")
-    @RequiresPermissions("dict-po:single:listPage")
+    @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表分页列表")
+    @RequiresPermissions("dict:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<DictPoVo> listPage(DictPoListPageForm listPageForm) {
+    public IPage<DictVo> listPage(DictListPageForm listPageForm) {
          return super.listPage(listPageForm);
      }
 }

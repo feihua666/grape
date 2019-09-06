@@ -1,6 +1,6 @@
 package grape.base.service.area.mapper;
 
-import grape.base.service.area.po.AreaPo;
+import grape.base.service.area.po.Area;
 import grape.common.service.IBaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseMapper;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface AreaMapper extends IBaseMapper<AreaPo> {
+public interface AreaMapper extends IBaseMapper<Area> {
 
 }

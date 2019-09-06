@@ -1,6 +1,6 @@
 package grape.base.service.dict.mapper;
 
-import grape.base.service.dict.po.DictPo;
+import grape.base.service.dict.po.Dict;
 import grape.common.service.IBaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseMapper;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface DictMapper extends IBaseMapper<DictPo> {
+public interface DictMapper extends IBaseMapper<Dict> {
 
 }

@@ -1,6 +1,6 @@
 package grape.base.service.area.api;
 
-import grape.base.service.area.po.AreaPo;
+import grape.base.service.area.po.Area;
 import grape.common.service.IBaseService;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface IAreaService extends IBaseService<AreaPo> {
+public interface IAreaService extends IBaseService<Area> {
 
 }

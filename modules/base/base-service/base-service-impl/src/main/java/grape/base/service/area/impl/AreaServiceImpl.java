@@ -1,6 +1,6 @@
 package grape.base.service.area.impl;
 
-import grape.base.service.area.po.AreaPo;
+import grape.base.service.area.po.Area;
 import grape.base.service.area.mapper.AreaMapper;
 import grape.base.service.area.api.IAreaService;
 import grape.common.service.BaseServiceImpl;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
 @Service
-public class AreaServiceImpl extends BaseServiceImpl<AreaMapper, AreaPo> implements IAreaService {
+public class AreaServiceImpl extends BaseServiceImpl<AreaMapper, Area> implements IAreaService {
 
 }

@@ -11,7 +11,7 @@ import ${cfg.formPackage}.${entity}CreateForm;
 import ${cfg.formPackage}.${entity}UpdateForm;
 import ${cfg.formPackage}.${entity}ListPageForm;
 import ${cfg.voPackage}.${entity}Vo;
-import ${cfg.mapperconverterPackage}.${entity}ControllerMapper;
+import ${cfg.mapperWebPackage}.${entity}WebMapper;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
 <#else>
@@ -41,7 +41,7 @@ import ${package.Service}.${table.serviceName};
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
 <#if superControllerClass??>
-public class ${table.controllerName} extends ${superControllerClass}<${table.serviceName},${entity}ControllerMapper, ${entity}Vo, ${entity}, ${entity}CreateForm,${entity}UpdateForm,${entity}ListPageForm> {
+public class ${table.controllerName} extends ${superControllerClass}<${table.serviceName},${entity}WebMapper, ${entity}Vo, ${entity}, ${entity}CreateForm,${entity}UpdateForm,${entity}ListPageForm> {
 <#else>
 public class ${table.controllerName} {
 </#if>

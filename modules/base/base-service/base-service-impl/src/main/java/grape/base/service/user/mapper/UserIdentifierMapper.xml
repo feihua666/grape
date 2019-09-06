@@ -3,7 +3,7 @@
 <mapper namespace="grape.base.service.user.mapper.UserIdentifierMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="grape.base.service.user.po.UserIdentifierPo">
+    <resultMap id="BaseResultMap" type="grape.base.service.user.po.UserIdentifier">
     <result column="id" property="id" />
     <result column="version" property="version" />
     <result column="create_at" property="createAt" />

@@ -63,12 +63,12 @@ public class SuperGenerator {
         projectPath = System.getProperty("user.dir");
         //gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor(author);
-        gc.setFileOverride(false);
+        gc.setFileOverride(true);
         //  实体属性 Swagger2 注解
         gc.setSwagger2(false);
         gc.setBaseResultMap(true);
         // 实体添加持久化后缀标识
-        gc.setEntityName("%sPo");
+        //gc.setEntityName("%sPo");
         gc.setOpen(false);
         gc.setBaseColumnList(true);
         // 说白了就是entity继承一个model带数据的操作
@@ -123,7 +123,7 @@ public class SuperGenerator {
                 Map<String,Object> map = new HashMap<>();
                 map.put("formPackage",Utils.controllerFormPackage(mpg.getPackageInfo()));
                 map.put("voPackage",Utils.controllerVoPackage(mpg.getPackageInfo()));
-                map.put("mapperconverterPackage",Utils.controllerMapperConverterPackage(mpg.getPackageInfo()));
+                map.put("mapperWebPackage",Utils.controllerMapperConverterPackage(mpg.getPackageInfo()));
                 this.setMap(map);
             }
         };

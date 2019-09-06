@@ -3,7 +3,7 @@
 <mapper namespace="grape.base.service.page.mapper.PageElementMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="grape.base.service.page.po.PageElementPo">
+    <resultMap id="BaseResultMap" type="grape.base.service.page.po.PageElement">
     <result column="id" property="id" />
     <result column="level" property="level" />
     <result column="parent_id" property="parentId" />
@@ -31,7 +31,7 @@
         <result column="field_type_dict_id" property="fieldTypeDictId" />
         <result column="column_name" property="columnName" />
         <result column="page_id" property="pageId" />
-        <result column="desc" property="desc" />
+        <result column="remark" property="remark" />
         <result column="seq" property="seq" />
     </resultMap>
 
@@ -56,7 +56,7 @@
         update_at,
         update_by,
         modified_at,
-        code, name, type_dict_id, field_name, field_default_value, field_type_dict_id, column_name, page_id, desc, seq
+        code, name, type_dict_id, field_name, field_default_value, field_type_dict_id, column_name, page_id, remark, seq
     </sql>
 
 </mapper>

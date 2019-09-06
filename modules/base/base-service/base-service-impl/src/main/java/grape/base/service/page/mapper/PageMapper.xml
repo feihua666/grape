@@ -3,7 +3,7 @@
 <mapper namespace="grape.base.service.page.mapper.PageMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="grape.base.service.page.po.PagePo">
+    <resultMap id="BaseResultMap" type="grape.base.service.page.po.Page">
     <result column="id" property="id" />
     <result column="level" property="level" />
     <result column="parent_id" property="parentId" />
@@ -25,7 +25,7 @@
     <result column="modified_at" property="modifiedAt" />
         <result column="code" property="code" />
         <result column="name" property="name" />
-        <result column="desc" property="desc" />
+        <result column="remark" property="remark" />
         <result column="seq" property="seq" />
     </resultMap>
 
@@ -50,7 +50,7 @@
         update_at,
         update_by,
         modified_at,
-        code, name, desc, seq
+        code, name, remark, seq
     </sql>
 
 </mapper>

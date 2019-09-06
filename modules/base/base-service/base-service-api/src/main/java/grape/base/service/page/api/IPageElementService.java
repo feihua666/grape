@@ -1,6 +1,6 @@
 package grape.base.service.page.api;
 
-import grape.base.service.page.po.PageElementPo;
+import grape.base.service.page.po.PageElement;
 import grape.common.service.IBaseService;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface IPageElementService extends IBaseService<PageElementPo> {
+public interface IPageElementService extends IBaseService<PageElement> {
 
 }

@@ -1,6 +1,6 @@
 package grape.base.service.user.api;
 
-import grape.base.service.user.po.UserIdentifierPo;
+import grape.base.service.user.po.UserIdentifier;
 import grape.common.service.IBaseService;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface IUserIdentifierService extends IBaseService<UserIdentifierPo> {
+public interface IUserIdentifierService extends IBaseService<UserIdentifier> {
 
 }

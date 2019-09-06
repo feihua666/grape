@@ -1,6 +1,6 @@
 package grape.base.service.dict.impl;
 
-import grape.base.service.dict.po.DictPo;
+import grape.base.service.dict.po.Dict;
 import grape.base.service.dict.mapper.DictMapper;
 import grape.base.service.dict.api.IDictService;
 import grape.common.service.BaseServiceImpl;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
 @Service
-public class DictServiceImpl extends BaseServiceImpl<DictMapper, DictPo> implements IDictService {
+public class DictServiceImpl extends BaseServiceImpl<DictMapper, Dict> implements IDictService {
 
 }

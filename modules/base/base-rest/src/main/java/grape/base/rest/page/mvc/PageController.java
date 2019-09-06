@@ -7,14 +7,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import javax.validation.Valid;
-import grape.base.rest.page.form.PagePoCreateForm;
-import grape.base.rest.page.form.PagePoUpdateForm;
-import grape.base.rest.page.form.PagePoListPageForm;
-import grape.base.rest.page.vo.PagePoVo;
-import grape.base.rest.page.mapperconverter.PagePoControllerMapper;
+import grape.base.rest.page.form.PageCreateForm;
+import grape.base.rest.page.form.PageUpdateForm;
+import grape.base.rest.page.form.PageListPageForm;
+import grape.base.rest.page.vo.PageVo;
+import grape.base.rest.page.mapper.PageWebMapper;
 import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
-import grape.base.service.page.po.PagePo;
+import grape.base.service.page.po.Page;
 import grape.base.service.page.api.IPageService;
 /**
  * <p>
@@ -22,12 +22,12 @@ import grape.base.service.page.api.IPageService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
 @RestController
 @RequestMapping("/page")
 @Api(tags = "页面表，用于自动生成页面元素和关联功能菜单")
-public class PageController extends BaseController<IPageService,PagePoControllerMapper, PagePoVo, PagePo, PagePoCreateForm,PagePoUpdateForm,PagePoListPageForm> {
+public class PageController extends BaseController<IPageService,PageWebMapper, PageVo, Page, PageCreateForm,PageUpdateForm,PageListPageForm> {
 
     // 请在这里添加额外的方法
     //todo
@@ -39,23 +39,23 @@ public class PageController extends BaseController<IPageService,PagePoController
     /************************分割线，以下代码为 页面表，用于自动生成页面元素和关联功能菜单 单表专用，自动生成谨慎修改**************************************************/
 
      @ApiOperation("[页面表，用于自动生成页面元素和关联功能菜单]单表创建/添加数据")
-     @RequiresPermissions("page-po:single:create")
+     @RequiresPermissions("page:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
-     public PagePoVo create(@RequestBody @Valid PagePoCreateForm cf) {
+     public PageVo create(@RequestBody @Valid PageCreateForm cf) {
          return super.create(cf);
      }
 
      @ApiOperation("[页面表，用于自动生成页面元素和关联功能菜单]单表根据ID查询")
-     @RequiresPermissions("page-po:single:queryById")
+     @RequiresPermissions("page:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public PagePoVo queryById(@PathVariable Long id) {
+     public PageVo queryById(@PathVariable Long id) {
          return super.queryById(id);
      }
 
      @ApiOperation("[页面表，用于自动生成页面元素和关联功能菜单]单表根据ID删除")
-     @RequiresPermissions("page-po:single:deleteById")
+     @RequiresPermissions("page:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public Object deleteById(@PathVariable Long id) {
@@ -63,18 +63,18 @@ public class PageController extends BaseController<IPageService,PagePoController
      }
 
      @ApiOperation("[页面表，用于自动生成页面元素和关联功能菜单]单表根据ID更新")
-     @RequiresPermissions("page-po:single:updateById")
+     @RequiresPermissions("page:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public PagePoVo update(@PathVariable Long id,@RequestBody @Valid PagePoUpdateForm uf) {
+     public PageVo update(@PathVariable Long id,@RequestBody @Valid PageUpdateForm uf) {
          return super.update(id, uf);
      }
 
     @ApiOperation("[页面表，用于自动生成页面元素和关联功能菜单]单表分页列表")
-    @RequiresPermissions("page-po:single:listPage")
+    @RequiresPermissions("page:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<PagePoVo> listPage(PagePoListPageForm listPageForm) {
+    public IPage<PageVo> listPage(PageListPageForm listPageForm) {
          return super.listPage(listPageForm);
      }
 }

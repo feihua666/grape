@@ -3,7 +3,7 @@
 <mapper namespace="grape.base.service.area.mapper.AreaMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="grape.base.service.area.po.AreaPo">
+    <resultMap id="BaseResultMap" type="grape.base.service.area.po.Area">
     <result column="id" property="id" />
     <result column="level" property="level" />
     <result column="parent_id" property="parentId" />
@@ -30,6 +30,7 @@
         <result column="admin_division_id" property="adminDivisionId" />
         <result column="longitude" property="longitude" />
         <result column="latitude" property="latitude" />
+        <result column="remark" property="remark" />
         <result column="seq" property="seq" />
     </resultMap>
 
@@ -54,7 +55,7 @@
         update_at,
         update_by,
         modified_at,
-        name, spell, spell_simple, type_dict_id, admin_division_id, longitude, latitude, seq
+        name, spell, spell_simple, type_dict_id, admin_division_id, longitude, latitude, remark, seq
     </sql>
 
 </mapper>

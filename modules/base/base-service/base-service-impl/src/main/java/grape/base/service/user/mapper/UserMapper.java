@@ -1,6 +1,6 @@
 package grape.base.service.user.mapper;
 
-import grape.base.service.user.po.UserPo;
+import grape.base.service.user.po.User;
 import grape.common.service.IBaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseMapper;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface UserMapper extends IBaseMapper<UserPo> {
+public interface UserMapper extends IBaseMapper<User> {
 
 }

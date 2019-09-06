@@ -1,6 +1,6 @@
 package grape.base.service.user.mapper;
 
-import grape.base.service.user.po.UserPwdPo;
+import grape.base.service.user.po.UserPwd;
 import grape.common.service.IBaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseMapper;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface UserPwdMapper extends IBaseMapper<UserPwdPo> {
+public interface UserPwdMapper extends IBaseMapper<UserPwd> {
 
 }

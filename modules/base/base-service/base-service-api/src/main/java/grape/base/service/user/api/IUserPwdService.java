@@ -1,6 +1,6 @@
 package grape.base.service.user.api;
 
-import grape.base.service.user.po.UserPwdPo;
+import grape.base.service.user.po.UserPwd;
 import grape.common.service.IBaseService;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface IUserPwdService extends IBaseService<UserPwdPo> {
+public interface IUserPwdService extends IBaseService<UserPwd> {
 
 }

@@ -12,14 +12,5 @@ import lombok.Data;
 @Data
 public class IDBasePo<Pk,T extends Model<?>> extends BasePo<T> {
 
-    /**
-     *
-     * 不存在的id
-     * 这算一个规则吧，用来填充默认值
-     * 所以的id应该不存在的id
-     */
-    public static final Long defaultNotExistId = 0L;
-    public static final String defaultNotExistIdStr = "0";
-
     private Pk id;
 }

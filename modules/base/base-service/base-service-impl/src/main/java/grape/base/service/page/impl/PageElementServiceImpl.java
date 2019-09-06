@@ -1,6 +1,6 @@
 package grape.base.service.page.impl;
 
-import grape.base.service.page.po.PageElementPo;
+import grape.base.service.page.po.PageElement;
 import grape.base.service.page.mapper.PageElementMapper;
 import grape.base.service.page.api.IPageElementService;
 import grape.common.service.BaseServiceImpl;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
 @Service
-public class PageElementServiceImpl extends BaseServiceImpl<PageElementMapper, PageElementPo> implements IPageElementService {
+public class PageElementServiceImpl extends BaseServiceImpl<PageElementMapper, PageElement> implements IPageElementService {
 
 }

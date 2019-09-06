@@ -35,7 +35,7 @@ public class Utils {
     }
     public static String controllerMapperConverterPath(PackageConfig packageConfig){
 
-        return controllerOtherPath(packageConfig,"/mapperconverter");
+        return controllerOtherPath(packageConfig,"/mapper");
     }
     public static String controllerFormPath(PackageConfig packageConfig){
 

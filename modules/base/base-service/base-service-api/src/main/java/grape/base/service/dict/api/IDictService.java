@@ -1,6 +1,6 @@
 package grape.base.service.dict.api;
 
-import grape.base.service.dict.po.DictPo;
+import grape.base.service.dict.po.Dict;
 import grape.common.service.IBaseService;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface IDictService extends IBaseService<DictPo> {
+public interface IDictService extends IBaseService<Dict> {
 
 }

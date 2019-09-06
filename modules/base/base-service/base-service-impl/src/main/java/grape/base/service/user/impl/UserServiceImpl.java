@@ -1,6 +1,6 @@
 package grape.base.service.user.impl;
 
-import grape.base.service.user.po.UserPo;
+import grape.base.service.user.po.User;
 import grape.base.service.user.mapper.UserMapper;
 import grape.base.service.user.api.IUserService;
 import grape.common.service.BaseServiceImpl;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
 @Service
-public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserPo> implements IUserService {
+public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {
 
 }

@@ -1,6 +1,6 @@
 package grape.base.service.page.mapper;
 
-import grape.base.service.page.po.PagePo;
+import grape.base.service.page.po.Page;
 import grape.common.service.IBaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import grape.common.service.IBaseMapper;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-01
+ * @since 2019-09-06
  */
-public interface PageMapper extends IBaseMapper<PagePo> {
+public interface PageMapper extends IBaseMapper<Page> {
 
 }

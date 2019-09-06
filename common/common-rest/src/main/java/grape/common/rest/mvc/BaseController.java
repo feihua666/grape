@@ -3,6 +3,7 @@ package grape.common.rest.mvc;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import grape.common.LoginUser;
 import grape.common.exception.ExceptionTools;
 import grape.common.rest.form.BaseForm;
 import grape.common.rest.form.BasePageForm;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
  * @param <ListForm> 列表查询表单
  */
 @Data
-public abstract class BaseController<Service extends IBaseService<Po>,MapperConverter extends ControllerMapperConverter<Vo,Po,CreateForm,UpdateForm,ListForm>,Vo extends BaseVo,Po extends NormalBasePo<Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
+public abstract class BaseController<Service extends IBaseService<Po>,MapperConverter extends WebMapper<Vo,Po,CreateForm,UpdateForm,ListForm>,Vo extends BaseVo,Po extends NormalBasePo<Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
 
     @Getter
     @Autowired
@@ -36,12 +37,20 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
     @Getter
     @Autowired
     private MapperConverter mapperConverter;
+
+
+    /**
+     * 获取当前登录用户
+     * @return
+     */
+    protected LoginUser getLoginUser(){
+        return LoginUser.getLoginUser();
+    }
     /**
      * 单表添加
      * @param cf
      * @return
      */
-
     public Vo create(CreateForm cf){
         Po poQuery =  mapperConverter.createFormToPo(cf);
         Po dbPo = service.create(poQuery);

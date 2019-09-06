@@ -3,7 +3,7 @@
 <mapper namespace="grape.base.service.dict.mapper.DictMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="grape.base.service.dict.po.DictPo">
+    <resultMap id="BaseResultMap" type="grape.base.service.dict.po.Dict">
     <result column="id" property="id" />
     <result column="level" property="level" />
     <result column="parent_id" property="parentId" />
@@ -30,8 +30,8 @@
         <result column="is_group" property="isGroup" />
         <result column="is_disable" property="isDisable" />
         <result column="disable_reason" property="disableReason" />
-        <result column="dept_id" property="deptId" />
-        <result column="desc" property="desc" />
+        <result column="comp_id" property="compId" />
+        <result column="remark" property="remark" />
         <result column="seq" property="seq" />
     </resultMap>
 
@@ -56,7 +56,7 @@
         update_at,
         update_by,
         modified_at,
-        code, name, is_system, is_public, is_group, is_disable, disable_reason, dept_id, desc, seq
+        code, name, is_system, is_public, is_group, is_disable, disable_reason, comp_id, remark, seq
     </sql>
 
 </mapper>
