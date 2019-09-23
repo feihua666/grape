@@ -12,5 +12,7 @@ import lombok.Data;
 @Data
 public class IDBasePo<Pk,T extends Model<?>> extends BasePo<T> {
 
+    public static final Long systemUserId = 1L;
+
     private Pk id;
 }

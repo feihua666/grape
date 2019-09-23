@@ -20,34 +20,34 @@ import java.util.Date;
 @Data
 public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
 
-    public final String defaultDataVersion = "1";
+    public static final String PROPERTY_CREATE_AT = "createAt";
+    public static final String PROPERTY_CREATE_BY = "createBy";
+    public static final String PROPERTY_UPDATE_AT = "updateAt";
+    public static final String PROPERTY_UPDATE_BY = "updateBy";
+    public static final String PROPERTY_VERSION = "version";
 
     /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    @FieldFillDefault(insert = FieldFillDefault.VAR_NOW)
     private Long createAt;
 
     /**
      * 创建人
      */
     @TableField(fill = FieldFill.INSERT)
-    @FieldFillDefault(insert = FieldFillDefault.VAR_USERID)
     private Long createBy;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @FieldFillDefault(insert = FieldFillDefault.VAR_NOW,update = FieldFillDefault.VAR_NOW)
+    @TableField(fill = FieldFill.UPDATE)
     private Long updateAt;
 
     /**
      * 修改人
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @FieldFillDefault(insert = FieldFillDefault.VAR_USERID,update = FieldFillDefault.VAR_USERID)
+    @TableField(fill = FieldFill.UPDATE)
     private Long updateBy;
 
     /**
@@ -55,7 +55,6 @@ public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
      */
     @Version
     @TableField(fill = FieldFill.INSERT)
-    @FieldFillDefault(insert = defaultDataVersion)
     private Integer version;
 
 }

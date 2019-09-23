@@ -1,6 +1,9 @@
 import Vue from 'vue'
 //自定义一些微前端属性
 export function installMfe() {
+    if(window.mfe){
+        return
+    }
 // 设置微前端模式
     window.mfe = true
 // 微前端事件总线

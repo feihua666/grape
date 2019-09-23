@@ -1,4 +1,4 @@
-package grape.base.service.impl.test;
+package grape.base.service;
 
 import grape.base.service.dict.api.IDictService;
 import org.junit.jupiter.api.Test;

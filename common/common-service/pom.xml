@@ -32,13 +32,6 @@
             <artifactId>common-core</artifactId>
             <version>${grape.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>plugin</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${java.home}/lib/plugin.jar</systemPath>
-        </dependency>
     </dependencies>
 
 </project>

@@ -27,4 +27,7 @@ public abstract class LoginUser extends BasePojo {
     public static LoginUser getLoginUser(){
         return null;
     }
+    public static void setLoginUser(LoginUser loginUser){
+
+    }
 }

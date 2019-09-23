@@ -1,7 +1,7 @@
 package grape.base.service.page.api;
 
 import grape.base.service.page.po.Page;
-import grape.common.service.IBaseService;
+import grape.common.service.IBaseTreeService;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import grape.common.service.IBaseService;
  * @author yangwei
  * @since 2019-09-06
  */
-public interface IPageService extends IBaseService<Page> {
+public interface IPageService extends IBaseTreeService<Page> {
 
 }

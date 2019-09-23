@@ -168,7 +168,11 @@ public class SuperGenerator {
         }
 
         strategy.setSuperControllerClass("grape.common.rest.mvc.BaseController");
-        strategy.setSuperServiceClass("grape.common.service.IBaseService");
+        if(tableType == TableType.tree){
+            strategy.setSuperServiceClass("grape.common.service.IBaseTreeService");
+        }else {
+            strategy.setSuperServiceClass("grape.common.service.IBaseService");
+        }
         strategy.setSuperServiceImplClass("grape.common.service.BaseServiceImpl");
         strategy.setSuperMapperClass("grape.common.service.IBaseMapper");
 
