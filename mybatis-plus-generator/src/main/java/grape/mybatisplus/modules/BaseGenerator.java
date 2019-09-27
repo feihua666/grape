@@ -81,9 +81,17 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_user_pwd","user",TableType.normal,tablePrefix,author);
         // 字典表
         commonSet("base_dict","dict",TableType.tree,tablePrefix,author);
-
-        commonSet("base_page","page",TableType.tree,tablePrefix,author);
-        commonSet("base_page_element","page",TableType.tree,tablePrefix,author);
+        // 功能表
+        commonSet("base_func","func",TableType.tree,tablePrefix,author);
+        // 功能表
+        commonSet("base_role","role",TableType.tree,tablePrefix,author);
+        commonSet("base_role_func_rel","rolefuncrel",TableType.rel,tablePrefix,author);
+        commonSet("base_user_post_role_rel","userpostrolerel",TableType.rel,tablePrefix,author);
+        commonSet("base_comp","comp",TableType.tree,tablePrefix,author);
+        commonSet("base_dept","dept",TableType.tree,tablePrefix,author);
+        commonSet("base_post","post",TableType.normal,tablePrefix,author);
+        commonSet("base_user_post","userpost",TableType.normal,tablePrefix,author);
+        commonSet("base_user_role_rel","userrolerel",TableType.rel,tablePrefix,author);
 
         return  tableConfig;
     }

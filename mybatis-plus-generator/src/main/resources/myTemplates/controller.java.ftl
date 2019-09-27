@@ -22,6 +22,7 @@ import ${superControllerClassPackage};
 </#if>
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
+import java.util.List;
 /**
  * <p>
  * ${table.comment!} 前端控制器
@@ -75,7 +76,7 @@ public class ${table.controllerName} {
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public Object deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 
@@ -94,5 +95,15 @@ public class ${table.controllerName} {
     public IPage<${entity}Vo> listPage(${entity}ListPageForm listPageForm) {
          return super.listPage(listPageForm);
      }
+
+    <#if cfg.treeTable>
+    @ApiOperation("[菜单功能表]根据父级查询")
+    @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:tree")
+    @GetMapping("/tree")
+    @ResponseStatus(HttpStatus.OK)
+    public List<${entity}Vo> tree( Long parentId) {
+        return super.tree(parentId);
+    }
+    </#if>
 }
 </#if>

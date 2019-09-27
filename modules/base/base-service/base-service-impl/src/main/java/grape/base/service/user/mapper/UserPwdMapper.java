@@ -9,7 +9,7 @@ import grape.common.service.IBaseMapper;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 public interface UserPwdMapper extends IBaseMapper<UserPwd> {
 

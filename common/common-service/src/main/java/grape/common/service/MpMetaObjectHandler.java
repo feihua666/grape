@@ -40,10 +40,10 @@ public class MpMetaObjectHandler implements MetaObjectHandler {
         List<MpFillConfig> config = MpFillConfig.getConfig();
         for (MpFillConfig mpFillConfig : config) {
             if((insert && mpFillConfig.isInsert())|| (!insert && mpFillConfig.isUpdate())){
-                this.setFieldValByName(mpFillConfig.getProperty(),mpFillConfig.getValue(),metaObject);
+                if (this.getFieldValByName(mpFillConfig.getProperty(), metaObject) == null) {
+                    this.setFieldValByName(mpFillConfig.getProperty(),mpFillConfig.getValue(),metaObject);
+                }
             }
         }
     }
-
-
 }

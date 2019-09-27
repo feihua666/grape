@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="grape.base.service.func.mapper.FuncMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        m.id,
+        m.level,
+        m.parent_id,
+        m.parent_id1,
+        m.parent_id2,
+        m.parent_id3,
+        m.parent_id4,
+        m.parent_id5,
+        m.parent_id6,
+        m.parent_id7,
+        m.parent_id8,
+        m.parent_id9,
+        m.parent_id10,
+        m.version,
+        m.create_at,
+        m.create_by,
+        m.update_at,
+        m.update_by,
+        m.code, m.name, m.icon, m.is_disabled, m.disabled_reason, m.url, m.permissions, m.type_dict_id, m.remark, m.seq
+    </sql>
+    <select id="getByRoleId">
+        select
+        <include refid="Base_Column_List"/>
+        from base_func m
+        join base_role_func_rel rfr on rfr.func_id = m.id
+        WHERE rfr.role_id =#{roleId}
+
+    </select>
+
+</mapper>

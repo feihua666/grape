@@ -22,7 +22,7 @@ import grape.base.service.dict.api.IDictService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 @RestController
 @RequestMapping("/dict")
@@ -58,7 +58,7 @@ public class DictController extends BaseController<IDictService,DictWebMapper, D
      @RequiresPermissions("dict:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public Object deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 

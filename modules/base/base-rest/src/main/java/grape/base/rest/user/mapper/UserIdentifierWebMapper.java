@@ -13,7 +13,7 @@ import grape.base.rest.user.vo.UserIdentifierVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 @Mapper(componentModel = "spring")
 public interface UserIdentifierWebMapper extends WebMapper<UserIdentifierVo, UserIdentifier, UserIdentifierCreateForm,UserIdentifierUpdateForm,UserIdentifierListPageForm> {

@@ -22,7 +22,7 @@ import grape.base.service.user.api.IUserPwdService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 @RestController
 @RequestMapping("/user-pwd")
@@ -58,7 +58,7 @@ public class UserPwdController extends BaseController<IUserPwdService,UserPwdWeb
      @RequiresPermissions("user-pwd:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public Object deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 

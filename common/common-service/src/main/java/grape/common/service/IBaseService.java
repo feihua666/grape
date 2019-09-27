@@ -1,14 +1,16 @@
 package grape.common.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import grape.common.service.po.IDBasePo;
 import grape.common.service.po.NormalBasePo;
+import grape.common.tools.ToolService;
 
 /**
  * 所有service接口的父接口，以实现通用功能
  * Created by yangwei
  * Created at 2019/7/23 14:30
  */
-public interface IBaseService<Po extends NormalBasePo> extends IService<Po> {
+public interface IBaseService<Po extends IDBasePo> extends IService<Po>, ToolService {
 
     /**
      * 保存实体，操作同com.baomidou.mybatisplus.extension.service.IService#save(java.lang.Object)

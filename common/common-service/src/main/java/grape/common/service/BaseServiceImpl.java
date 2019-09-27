@@ -1,6 +1,7 @@
 package grape.common.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import grape.common.service.po.IDBasePo;
 import grape.common.service.po.NormalBasePo;
 import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * Created at 2019/7/23 14:32
  */
 @Slf4j
-public class BaseServiceImpl<Mapper extends IBaseMapper<Po>,Po extends NormalBasePo> extends ServiceImpl<Mapper,Po> implements IBaseService<Po> , ToolService {
+public class BaseServiceImpl<Mapper extends IBaseMapper<Po>,Po extends IDBasePo> extends ServiceImpl<Mapper,Po> implements IBaseService<Po> , ToolService {
     @Override
     public Po create(Po entity) {
         boolean r = super.save(entity);

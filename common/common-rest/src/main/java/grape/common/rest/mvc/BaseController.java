@@ -3,18 +3,21 @@ package grape.common.rest.mvc;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import grape.common.LoginUser;
+import grape.common.AbstractLoginUser;
 import grape.common.exception.ExceptionTools;
 import grape.common.rest.form.BaseForm;
 import grape.common.rest.form.BasePageForm;
 import grape.common.rest.vo.BaseVo;
 import grape.common.service.IBaseService;
+import grape.common.service.IBaseTreeService;
+import grape.common.service.po.IDBasePo;
 import grape.common.service.po.NormalBasePo;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
  * @param <ListForm> 列表查询表单
  */
 @Data
-public abstract class BaseController<Service extends IBaseService<Po>,MapperConverter extends WebMapper<Vo,Po,CreateForm,UpdateForm,ListForm>,Vo extends BaseVo,Po extends NormalBasePo<Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
+public abstract class BaseController<Service extends IBaseService<Po>,MapperConverter extends WebMapper<Vo,Po,CreateForm,UpdateForm,ListForm>,Vo extends BaseVo,Po extends IDBasePo<Long,Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm> extends SuperController {
 
     @Getter
     @Autowired
@@ -43,8 +46,8 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
      * 获取当前登录用户
      * @return
      */
-    protected LoginUser getLoginUser(){
-        return LoginUser.getLoginUser();
+    protected AbstractLoginUser getLoginUser(){
+        return AbstractLoginUser.getLoginUser();
     }
     /**
      * 单表添加
@@ -81,17 +84,22 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
      * @return
      */
 
-    public Object deleteById(Long id){
+    public boolean deleteById(Long id){
+        if(service instanceof IBaseTreeService){
+            if (((IBaseTreeService) service).getChildrenCount(id) > 0) {
+                throw ExceptionTools.failRE("删除失败,当前节点下还有子节点");
+            }
+        }
         boolean r = service.removeById(id);
         if (!r) {
             // 如果删除失败，查询数据库中是否存在
             if (service.getById(id) == null) {
                 throw ExceptionTools.dataNotExistRE("数据不存在，请刷新后再试");
             }
-            throw ExceptionTools.failRE("删除失败");
+            throw ExceptionTools.failRE("删除失败，未知原因");
         }
-        // 返回一个空数据，如果这里返回null，并不会被GlobalResponseBodyAdvice 统一包装，所以返回一个空，并不是null
-        return "";
+        // 如果这里返回null，并不会被GlobalResponseBodyAdvice 统一包装
+        return r;
     }
 
     /**
@@ -115,6 +123,29 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
         IPage<Po> page = service.page(new Page(listForm.getCurrent(),listForm.getSize()),new QueryWrapper(poQuery));
         return pagePoToVo(page);
 
+    }
+
+    /**
+     * 树请求
+     * @param parentId
+     * @return
+     */
+    public List<Vo> tree(Long parentId){
+        if(service instanceof IBaseTreeService){
+            List<Po> r = new ArrayList<>();
+            if (parentId == null) {
+                r = ((IBaseTreeService) service).getRoot();
+            }else {
+                r = ((IBaseTreeService) service).getChildren(parentId);
+            }
+            List<Vo> rv = new ArrayList<>(r.size());
+            for (Po po : r) {
+                rv.add(mapperConverter.poToVo(po));
+            }
+            return rv;
+        }else {
+            throw ExceptionTools.failRE("当前操作不支持");
+        }
     }
 
     private IPage<Vo> pagePoToVo(IPage page){

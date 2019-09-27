@@ -4,6 +4,7 @@ package grape.common.tools;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 一个常用工具集合
@@ -30,5 +31,21 @@ public interface ToolService {
      */
     default boolean isListEmpty(List list){
         return list == null || list.isEmpty();
+    }
+    /**
+     * 判断是否为空
+     * @param list
+     * @return true 如果是null或size为0
+     */
+    default boolean isSetEmpty(Set set){
+        return set == null || set.isEmpty();
+    }
+    /**
+     * 判断字符串是否为空
+     * @param str
+     * @return
+     */
+    default boolean isStrEmpty(String str){
+        return StringUtils.isEmpty(str);
     }
 }

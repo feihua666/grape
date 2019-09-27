@@ -1,5 +1,6 @@
 package grape.base.service.user.api;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.user.po.UserPwd;
 import grape.common.service.IBaseService;
 
@@ -9,8 +10,13 @@ import grape.common.service.IBaseService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 public interface IUserPwdService extends IBaseService<UserPwd> {
 
+    default UserPwd getByUserId(Long userId){
+        UserPwd userPwd = new UserPwd();
+        userPwd.setUserId(userId);
+        return getOne(Wrappers.query(userPwd));
+    }
 }

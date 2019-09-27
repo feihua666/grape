@@ -8,7 +8,11 @@ import grape.common.exception.runtime.RDataNotExistException;
 import grape.common.rest.ControllerTools;
 import grape.common.rest.ResultMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -113,7 +117,6 @@ public class GlobalExceptionAdvice {
         String msg = ex.getBindingResult().getFieldError().getDefaultMessage();
         return createRM(ExceptionCode.fail,msg,null,ex);
     }
-
     /**
      * shiro 异常没有权限的异常
      * @param request
@@ -123,8 +126,51 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResultMessage handleAuthorizationException(HttpServletRequest request, AuthorizationException ex) {
-
         return createRM(ExceptionCode.unAuthorized,null,request.getRequestURI().toString(),ex);
+    }
+    /**
+     * shiro 用户未登录异常
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(UnauthenticatedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResultMessage handleAuthorizationException(HttpServletRequest request, UnauthenticatedException ex) {
+        return createRM(ExceptionCode.notLogin,ExceptionCode.notLogin.getMsg(),request.getRequestURI().toString(),ex);
+    }
+    /**
+     * shiro 登录帐号未知异常
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(UnknownAccountException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResultMessage handleUnknownAccountException(HttpServletRequest request, UnknownAccountException ex) {
+        return createRM(ExceptionCode.fail,"帐号不正确",request.getRequestURI().toString(),ex);
+    }
+    /**
+     * shiro 登录密码不正确
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(IncorrectCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResultMessage handleIncorrectCredentialsException(HttpServletRequest request, IncorrectCredentialsException ex) {
+        return createRM(ExceptionCode.fail,"密码不正确",request.getRequestURI().toString(),ex);
+    }
+    /**
+     * shiro 登录帐号已被锁定
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(LockedAccountException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResultMessage handleLockedAccountException(HttpServletRequest request, LockedAccountException ex) {
+        return createRM(ExceptionCode.fail,"帐号已被锁定",request.getRequestURI().toString(),ex);
     }
     /**
      * 其它不可预知的异常，通常定义为系统异常

@@ -63,10 +63,10 @@ public class SuperGenerator {
         projectPath = System.getProperty("user.dir");
         //gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor(author);
-        gc.setFileOverride(true);
+        gc.setFileOverride(false);
         //  实体属性 Swagger2 注解
         gc.setSwagger2(false);
-        gc.setBaseResultMap(true);
+        gc.setBaseResultMap(false);
         // 实体添加持久化后缀标识
         //gc.setEntityName("%sPo");
         gc.setOpen(false);
@@ -124,6 +124,7 @@ public class SuperGenerator {
                 map.put("formPackage",Utils.controllerFormPackage(mpg.getPackageInfo()));
                 map.put("voPackage",Utils.controllerVoPackage(mpg.getPackageInfo()));
                 map.put("mapperWebPackage",Utils.controllerMapperConverterPackage(mpg.getPackageInfo()));
+                map.put("treeTable",tableType == TableType.tree);
                 this.setMap(map);
             }
         };
@@ -152,7 +153,7 @@ public class SuperGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 公共父类
-        String superEntityColumns = "id,is_del,create_by,create_at,update_by,update_at,modified_at,version";
+        String superEntityColumns = "id,is_del,create_by,create_at,update_by,update_at,version";
         if(tableType == TableType.normal){
             strategy.setSuperEntityClass(NormalBasePo.class);
         }

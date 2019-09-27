@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="grape.base.service.role.mapper.RoleMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        level,
+        parent_id,
+        parent_id1,
+        parent_id2,
+        parent_id3,
+        parent_id4,
+        parent_id5,
+        parent_id6,
+        parent_id7,
+        parent_id8,
+        parent_id9,
+        parent_id10,
+        version,
+        create_at,
+        create_by,
+        update_at,
+        update_by,
+        code, name, is_disabled, disabled_reason, remark
+    </sql>
+
+</mapper>

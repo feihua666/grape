@@ -16,6 +16,7 @@ public class TreeBasePo<T extends Model<?>> extends NormalBasePo<T> {
     public static final String COLUMN_PARENT_ID = "parent_id";
     public static final String PROPERTY_PARENT_ID = "parentId";
     public static final String PROPERTY_LEVEL = "level";
+    public static final String COLUMN_LEVEL = "level";
     /**
      * 最大支持深度11级
      */

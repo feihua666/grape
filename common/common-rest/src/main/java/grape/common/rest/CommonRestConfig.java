@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Created by yangwei
@@ -17,17 +19,14 @@ import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 @ComponentScan
-public class CommonRestConfig {
-    @Bean
-    public Realm realm() {
-        Realm realm = new SimpleAccountRealm();
-        return realm;
-    }
+public class CommonRestConfig implements WebMvcConfigurer {
+
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
 
-        chainDefinition.addPathDefinition("/**", "perms");
+        //chainDefinition.addPathDefinition("/**", "perms");
+        //chainDefinition.addPathDefinition("/**", "anon");
         return chainDefinition;
     }
     @Bean
@@ -36,5 +35,14 @@ public class CommonRestConfig {
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator=new DefaultAdvisorAutoProxyCreator();
         defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
         return defaultAdvisorAutoProxyCreator;
+    }
+
+    @Bean
+    public GlobalInterceptor globalInterceptor(){
+        return new GlobalInterceptor();
+    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(globalInterceptor()).addPathPatterns("/**");
     }
 }

@@ -1,10 +1,30 @@
 package grape.base.service.user.impl;
 
-import grape.base.service.user.po.User;
+import grape.base.service.BaseLoginUser;
+import grape.base.service.comp.api.ICompService;
+import grape.base.service.comp.po.Comp;
+import grape.base.service.dept.api.IDeptService;
+import grape.base.service.dept.po.Dept;
+import grape.base.service.role.api.IRoleService;
+import grape.base.service.role.po.Role;
+import grape.base.service.user.api.IUserIdentifierService;
 import grape.base.service.user.mapper.UserMapper;
 import grape.base.service.user.api.IUserService;
+import grape.base.service.user.po.User;
+import grape.base.service.user.po.UserIdentifier;
+import grape.base.service.userpost.api.IUserPostService;
+import grape.base.service.userpost.po.UserPost;
+import grape.base.service.userpostrolerel.api.IUserPostRoleRelService;
+import grape.base.service.userpostrolerel.po.UserPostRoleRel;
+import grape.common.AbstractLoginUser;
+import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.InvalidParamsException;
+import grape.common.exception.runtime.RDataNotExistException;
 import grape.common.service.BaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,9 +32,84 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {
+    @Autowired
+    private IRoleService iRoleService;
+    @Autowired
+    private IDeptService iDeptService;
+    @Autowired
+    private ICompService iCompService;
+    @Autowired
+    private IUserPostService iUserPostService;
+    @Autowired
+    private IUserPostRoleRelService iUserPostRoleRelService;
+    @Autowired
+    private IUserIdentifierService iUserIdentifierService;
 
+    @Override
+    public BaseLoginUser initLoginUserByIdentifier(String identifier) {
+        if (identifier == null) {
+            throw new InvalidParamsException("identifier 不能为空");
+        }
+        BaseLoginUser loginUser = new BaseLoginUser();
+
+        UserIdentifier userIdentifier = iUserIdentifierService.getByIdentifier(identifier);
+        // 基本信息
+        User user = getById(userIdentifier.getUserId());
+        if (user == null) {
+            throw new RDataNotExistException("根据userId="+ userIdentifier.getUserId() +"没有找到用户");
+        }
+        loginUser.setUserId(userIdentifier.getUserId());
+        loginUser.setAvatar(user.getAvatar());
+        loginUser.setNickname(user.getNickname());
+
+        // 部门
+        if (user.getDeptId() != null) {
+            Dept dept = iDeptService.getById(user.getDeptId());
+            loginUser.setDept(dept);
+        }
+        // 公司
+        if (user.getCompId() != null) {
+            Comp comp = iCompService.getById(user.getCompId());
+            loginUser.setComp(comp);
+        }
+
+        // 用户直接关联的角色
+        List<Role> roles = iRoleService.getByUserId(userIdentifier.getUserId());
+        if (!isListEmpty(roles)) {
+            loginUser.setIsSwitchRole(true);
+            // 默认取第一个角色作为初始角色
+            loginUser.setCurrentRole(roles.get(0));
+            loginUser.setRoles(roles);
+        }
+
+        // 担任岗位
+        List<UserPost> userPosts = iUserPostService.getByUserId(userIdentifier.getUserId(),null,true);
+        // 设置所有担任岗位
+        loginUser.setUserPosts(userPosts);
+        if (!isListEmpty(userPosts) && loginUser.getIsSwitchRole() == null) {
+
+            for (UserPost userPost : userPosts) {
+                // 默认选中的岗位
+                if (userPost.getIsMain()) {
+                    loginUser.setCurrentUserPost(userPost);
+                    break;
+                }
+            }
+            // 如果没有主岗位，默认取第一个岗位
+            if (loginUser.getCurrentUserPost() == null) {
+                loginUser.setCurrentUserPost(userPosts.get(0));
+            }
+            UserPostRoleRel userPostRoleRel = iUserPostRoleRelService.getByUserPostId(loginUser.getCurrentUserPost().getId());
+            loginUser.setCurrentUserPostRoleRel(userPostRoleRel);
+            loginUser.setCurrentRole(iRoleService.getById(userPostRoleRel.getRoleId()));
+        }
+
+        loginUser.setUserIdentifier(userIdentifier);
+        loginUser.setIsSuperAdmin(loginUser.getCurrentRole()!=null && AbstractLoginUser.superadminCode.equals(loginUser.getCurrentRole().getCode()) );
+        return loginUser;
+    }
 }

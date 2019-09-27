@@ -20,6 +20,7 @@ public class BaseServiceApplicationTest {
 
     @Test
     public void test(){
+
         System.out.println(iDictService.list());
     }
 }

@@ -1,6 +1,9 @@
 package grape.common.service;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.InvalidParamsException;
+import grape.common.service.dto.TreeNodeDto;
 import grape.common.service.po.TreeBasePo;
 
 import java.util.ArrayList;
@@ -17,6 +20,13 @@ import static grape.common.service.po.TreeBasePo.maxLevel;
  */
 public interface IBaseTreeService<Po extends TreeBasePo> extends IBaseService<Po> {
 
+
+    default List<Po> getRoot(){
+        Map<String,Object> p = new HashMap<>(2);
+        p.put(TreeBasePo.COLUMN_LEVEL,1);
+        p.put(TreeBasePo.COLUMN_PARENT_ID,null);
+        return (List<Po>) listByMap(p);
+    }
     /**
      * 查询子一级节点
      * @param parentId
@@ -30,7 +40,26 @@ public interface IBaseTreeService<Po extends TreeBasePo> extends IBaseService<Po
         p.put(TreeBasePo.COLUMN_PARENT_ID,parentId);
         return (List<Po>) listByMap(p);
     }
-
+    default List<Po> getAllChildren(Long parentId){
+        if (parentId == null) {
+            return null;
+        }
+        Po parent = getById(parentId);
+        if (parent == null) {
+            return null;
+        }
+        Map<String,Object> p = new HashMap<>(1);
+        p.put(TreeBasePo.COLUMN_PARENT_ID + parent.getLevel(),parentId);
+        return (List<Po>) listByMap(p);
+    }
+    default int getChildrenCount(Long parentId){
+        if (parentId == null) {
+            throw new InvalidParamsException("parentId不能为空");
+        }
+        Map<String,Object> p = new HashMap<>(1);
+        p.put(TreeBasePo.COLUMN_PARENT_ID,parentId);
+        return count(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId));
+    }
     /**
      * 查询父级
      * @param id

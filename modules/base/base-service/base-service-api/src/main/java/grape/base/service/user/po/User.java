@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-26
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -44,6 +44,11 @@ public class User extends NormalBasePo<User> {
      * 用户编号，可以做为员工编号
      */
     private String serialNo;
+
+    /**
+     * 公司id，冗余字段，由dept_id对应公司派生
+     */
+    private Long compId;
 
     /**
      * 部门id

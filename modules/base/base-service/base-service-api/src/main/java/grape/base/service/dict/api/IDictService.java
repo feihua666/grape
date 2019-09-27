@@ -1,7 +1,6 @@
 package grape.base.service.dict.api;
 
 import grape.base.service.dict.po.Dict;
-import grape.common.service.IBaseService;
 import grape.common.service.IBaseTreeService;
 
 /**
@@ -10,7 +9,7 @@ import grape.common.service.IBaseTreeService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 public interface IDictService extends IBaseTreeService<Dict> {
 

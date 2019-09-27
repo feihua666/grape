@@ -1,6 +1,6 @@
 package grape.common.service;
 
-import grape.common.LoginUser;
+import grape.common.AbstractLoginUser;
 import grape.common.service.po.IDBasePo;
 import grape.common.service.po.NormalBasePo;
 import grape.common.service.po.TreeBasePo;
@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public class MpFillConfig {
     public static List<MpFillConfig> getConfig(){
         List<MpFillConfig> configDynamic = new ArrayList<>();
         long now = System.currentTimeMillis();
-        LoginUser loginUser = LoginUser.getLoginUser();
+        AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
         long currentUserId = loginUser == null ? IDBasePo.systemUserId : loginUser.getUserId();
         configDynamic.add(new MpFillConfig(NormalBasePo.PROPERTY_CREATE_BY,currentUserId,true,false));
         configDynamic.add(new MpFillConfig(NormalBasePo.PROPERTY_CREATE_AT,now,true,false));

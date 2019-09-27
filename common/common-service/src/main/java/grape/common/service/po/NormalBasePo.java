@@ -18,25 +18,13 @@ import java.util.Date;
  * Created at 2019/7/22 15:58
  */
 @Data
-public class NormalBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
+public class NormalBasePo<T extends Model<?>> extends RelBasePo<T> {
 
     public static final String PROPERTY_CREATE_AT = "createAt";
     public static final String PROPERTY_CREATE_BY = "createBy";
     public static final String PROPERTY_UPDATE_AT = "updateAt";
     public static final String PROPERTY_UPDATE_BY = "updateBy";
     public static final String PROPERTY_VERSION = "version";
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Long createAt;
-
-    /**
-     * 创建人
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Long createBy;
 
     /**
      * 修改时间

@@ -22,7 +22,7 @@ import grape.base.service.area.api.IAreaService;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-06
+ * @since 2019-09-23
  */
 @RestController
 @RequestMapping("/area")
@@ -58,7 +58,7 @@ public class AreaController extends BaseController<IAreaService,AreaWebMapper, A
      @RequiresPermissions("area:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public Object deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable Long id) {
          return super.deleteById(id);
      }
 
