@@ -2,6 +2,7 @@ package grape.base.service.func.mapper;
 
 import grape.base.service.func.po.Func;
 import grape.common.service.IBaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,5 +16,22 @@ import java.util.List;
  */
 public interface FuncMapper extends IBaseMapper<Func> {
 
-    List<Func> getByRoleId(Long roleId);
+    /**
+     * 根据角色id查询角色关联的未被禁用的功能
+     *
+     * @param roleId      必填
+     * @param typeDictIds 选填 如果为null，忽略该条件
+     * @param isDisabled 选填 如果为null，忽略该条件
+     * @return
+     */
+    List<Func> getByRoleId(@Param("roleId") Long roleId, @Param("typeDictIds") List<Long> typeDictIds, @Param("isDisabled")Boolean isDisabled);
+
+    /**
+     * 根据类型查询
+     * @param typeDictIds 字典ids
+     * @param isDisabled 选填 如果为null，忽略该条件
+     * @return
+     */
+    List<Func> getByType( @Param("typeDictIds") List<Long> typeDictIds, @Param("isDisabled")Boolean isDisabled);
+
 }

@@ -1,5 +1,6 @@
 package grape.base.rest.post.mvc;
 
+import grape.base.rest.BaseRestSuperController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @Api(tags = "岗位表")
-public class PostController extends BaseController<IPostService,PostWebMapper, PostVo, Post, PostCreateForm,PostUpdateForm,PostListPageForm> {
+public class PostController extends BaseRestSuperController<IPostService,PostWebMapper, PostVo, Post, PostCreateForm,PostUpdateForm,PostListPageForm> {
 
     // 请在这里添加额外的方法
     //todo

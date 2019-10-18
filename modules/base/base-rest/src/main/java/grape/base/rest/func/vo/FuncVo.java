@@ -1,4 +1,5 @@
 package grape.base.rest.func.vo;
+import grape.common.rest.vo.BaseTreeVo;
 import grape.common.rest.vo.BaseVo;
 
 import io.swagger.annotations.ApiModel;
@@ -9,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 菜单功能表
+ * 菜单功能
  * </p>
  *
  * @author yangwei
@@ -18,16 +19,10 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="FuncVo数据响应对象", description="菜单功能表")
-public class FuncVo extends BaseVo {
+@ApiModel(value="菜单功能数据响应对象")
+public class FuncVo extends BaseTreeVo {
 
     private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "id")
-    private Long id;
-
-    @ApiModelProperty(value = "父级id")
-    private Long parentId;
 
     @ApiModelProperty(value = "编码")
     private String code;
@@ -44,14 +39,17 @@ public class FuncVo extends BaseVo {
     @ApiModelProperty(value = "禁用原因")
     private String disabledReason;
 
-    @ApiModelProperty(value = "地址")
+    @ApiModelProperty(value = "地址，只有类型为page的才有值")
     private String url;
-
-    @ApiModelProperty(value = "shiro权限串，多个以逗号分隔")
-    private String permissions;
 
     @ApiModelProperty(value = "类型,字典id")
     private Long typeDictId;
+
+    @ApiModelProperty(value = "类型,字典编码")
+    private String typeDictCode;
+
+    @ApiModelProperty(value = "类型,字典名称")
+    private String typeDictName;
 
     @ApiModelProperty(value = "描述")
     private String remark;

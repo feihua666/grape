@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户登录标识表
+ * 用户标识数据响应对象
  * </p>
  *
  * @author yangwei
@@ -18,19 +18,25 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="UserIdentifierVo数据响应对象", description="用户登录标识表")
+@ApiModel(value="用户登录标识数据响应对象")
 public class UserIdentifierVo extends BaseVo {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户ID,base_user表的主键")
+    @ApiModelProperty(value = "ID")
+    private Long id;
+
+    @ApiModelProperty(value = "用户ID")
     private Long userId;
 
     @ApiModelProperty(value = "登录标识")
     private String identifier;
 
-    @ApiModelProperty(value = "授权类型,字典id")
+    @ApiModelProperty(value = "登录标识类型,字典id")
     private Long identityTypeDictId;
-
+    @ApiModelProperty(value = "登录标识类型,字典编码")
+    private String identityTypeDictCode;
+    @ApiModelProperty(value = "登录标识类型,字典名称")
+    private String identityTypeDictName;
 
 }

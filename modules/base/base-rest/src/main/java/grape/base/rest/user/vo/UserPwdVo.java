@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="UserPwdVo数据响应对象", description="用户密码表")
+@ApiModel(value="用户密码数据响应对象")
 public class UserPwdVo extends BaseVo {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class UserPwdVo extends BaseVo {
     @ApiModelProperty(value = "密码")
     private String pwd;
 
-    @ApiModelProperty(value = "授权类型,字典id")
+    @ApiModelProperty(value = "盐")
     private String salt;
 
     @ApiModelProperty(value = "密码状态，字典")

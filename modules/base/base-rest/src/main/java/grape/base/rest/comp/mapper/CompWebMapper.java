@@ -1,12 +1,12 @@
 package grape.base.rest.comp.mapper;
 
+import grape.base.rest.comp.form.CompCreateForm;
+import grape.base.rest.comp.form.CompListPageForm;
+import grape.base.rest.comp.form.CompUpdateForm;
+import grape.base.rest.comp.vo.CompVo;
 import grape.base.service.comp.po.Comp;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
-import grape.base.rest.comp.form.CompCreateForm;
-import grape.base.rest.comp.form.CompUpdateForm;
-import grape.base.rest.comp.form.CompListPageForm;
-import grape.base.rest.comp.vo.CompVo;
 /**
  * <p>
  * 部门表 前端领域模型映射

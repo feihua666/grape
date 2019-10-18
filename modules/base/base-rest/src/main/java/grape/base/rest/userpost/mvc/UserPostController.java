@@ -1,5 +1,6 @@
 package grape.base.rest.userpost.mvc;
 
+import grape.base.rest.BaseRestSuperController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/userst")
 @Api(tags = "用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职")
-public class UserPostController extends BaseController<IUserPostService,UserPostWebMapper, UserPostVo, UserPost, UserPostCreateForm,UserPostUpdateForm,UserPostListPageForm> {
+public class UserPostController extends BaseRestSuperController<IUserPostService,UserPostWebMapper, UserPostVo, UserPost, UserPostCreateForm,UserPostUpdateForm,UserPostListPageForm> {
 
     // 请在这里添加额外的方法
     //todo

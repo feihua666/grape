@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户登录标识表
+ * 用户登录标识分页查询表单
  * </p>
  *
  * @author yangwei
@@ -18,18 +18,18 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="UserIdentifierListPageForm分页查询条件对象", description="用户登录标识表")
+@ApiModel(value="用户登录标识分页查询表单")
 public class UserIdentifierListPageForm extends BasePageForm {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户ID,base_user表的主键")
+    @ApiModelProperty(value = "用户ID")
     private Long userId;
 
     @ApiModelProperty(value = "登录标识")
     private String identifier;
 
-    @ApiModelProperty(value = "授权类型,字典id")
+    @ApiModelProperty(value = "登录标识类型,字典id")
     private Long identityTypeDictId;
 
 

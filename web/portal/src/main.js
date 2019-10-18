@@ -18,6 +18,7 @@ const portalIns = new Vue({
         mounted () {
             // 注册应用
             registApps()
+            // 刷新的时候会有问题
             //runDefaultMountEffects('/common-nav');
             start({ prefetch: false, jsSandbox: true });
         }

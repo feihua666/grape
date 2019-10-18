@@ -26,6 +26,20 @@ public class Func extends TreeBasePo<Func> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 功能类型字典组编码
+     */
+    public enum TypeDictGroup{
+        func_type
+    }
+
+    /**
+     * 功能类型字典项编码
+     */
+    public enum TypeDictItem{
+        menu,page
+    }
+
+    /**
      * 编码，用来查询或系统判断
      */
     private String code;

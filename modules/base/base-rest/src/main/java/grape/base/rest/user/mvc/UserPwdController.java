@@ -1,24 +1,25 @@
 package grape.base.rest.user.mvc;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.user.form.UserPwdUpdateForm;
+import grape.base.rest.user.vo.UserPwdVo;
+import grape.base.service.BaseLoginUser;
+import grape.base.service.user.api.IUserPwdService;
+import grape.base.service.user.po.UserPwd;
+import grape.common.exception.runtime.BadRequestException;
+import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.PasswordAndSalt;
+import grape.common.rest.mvc.SuperController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
-import grape.base.rest.user.form.UserPwdCreateForm;
-import grape.base.rest.user.form.UserPwdUpdateForm;
-import grape.base.rest.user.form.UserPwdListPageForm;
-import grape.base.rest.user.vo.UserPwdVo;
-import grape.base.rest.user.mapper.UserPwdWebMapper;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.user.po.UserPwd;
-import grape.base.service.user.api.IUserPwdService;
 /**
  * <p>
- * 用户密码表 前端控制器
+ * 用户密码 前端控制器
  * </p>
  *
  * @author yangwei
@@ -26,9 +27,11 @@ import grape.base.service.user.api.IUserPwdService;
  */
 @RestController
 @RequestMapping("/user-pwd")
-@Api(tags = "用户密码表")
-public class UserPwdController extends BaseController<IUserPwdService,UserPwdWebMapper, UserPwdVo, UserPwd, UserPwdCreateForm,UserPwdUpdateForm,UserPwdListPageForm> {
+@Api(tags = "用户密码相关接口")
+public class UserPwdController extends SuperController {
 
+    @Autowired
+    private IUserPwdService iUserPwdService;
     // 请在这里添加额外的方法
     //todo
 
@@ -38,43 +41,29 @@ public class UserPwdController extends BaseController<IUserPwdService,UserPwdWeb
 
     /************************分割线，以下代码为 用户密码表 单表专用，自动生成谨慎修改**************************************************/
 
-     @ApiOperation("[用户密码表]单表创建/添加数据")
-     @RequiresPermissions("user-pwd:single:create")
-     @PostMapping
+     @ApiOperation("修改密码")
+     @RequiresPermissions("user")
+     @PutMapping("/update")
      @ResponseStatus(HttpStatus.CREATED)
-     public UserPwdVo create(@RequestBody @Valid UserPwdCreateForm cf) {
-         return super.create(cf);
+     public Boolean update(@RequestBody @Valid UserPwdUpdateForm uf) {
+
+         BaseLoginUser loginUser = BaseLoginUser.getLoginUser();
+         UserPwd userPwd = iUserPwdService.getByUserId(loginUser.getUserId());
+         PasswordAndSalt passwordAndSalt = new PasswordAndSalt();
+         passwordAndSalt.setPassword(userPwd.getPwd());
+         passwordAndSalt.setSalt(userPwd.getSalt());
+
+         if (!PasswordAndSalt.validatePassword(uf.getOldPassword(),passwordAndSalt)) {
+             throw new BadRequestException("原密码不正确");
+         }
+         PasswordAndSalt newPs = PasswordAndSalt.entryptPassword(uf.getNewPassword());
+         userPwd.setPwd(newPs.getPassword());
+         userPwd.setSalt(newPs.getSalt());
+         userPwd.setPwdModifiedAt(System.currentTimeMillis());
+         if (!iUserPwdService.updateById(userPwd)) {
+             throw new RBaseException("密码修改失败");
+         }
+         return true;
      }
 
-     @ApiOperation("[用户密码表]单表根据ID查询")
-     @RequiresPermissions("user-pwd:single:queryById")
-     @GetMapping("/{id}")
-     @ResponseStatus(HttpStatus.OK)
-     public UserPwdVo queryById(@PathVariable Long id) {
-         return super.queryById(id);
-     }
-
-     @ApiOperation("[用户密码表]单表根据ID删除")
-     @RequiresPermissions("user-pwd:single:deleteById")
-     @DeleteMapping("/{id}")
-     @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
-         return super.deleteById(id);
-     }
-
-     @ApiOperation("[用户密码表]单表根据ID更新")
-     @RequiresPermissions("user-pwd:single:updateById")
-     @PutMapping("/{id}")
-     @ResponseStatus(HttpStatus.CREATED)
-     public UserPwdVo update(@PathVariable Long id,@RequestBody @Valid UserPwdUpdateForm uf) {
-         return super.update(id, uf);
-     }
-
-    @ApiOperation("[用户密码表]单表分页列表")
-    @RequiresPermissions("user-pwd:single:listPage")
-    @GetMapping("/listPage")
-    @ResponseStatus(HttpStatus.OK)
-    public IPage<UserPwdVo> listPage(UserPwdListPageForm listPageForm) {
-         return super.listPage(listPageForm);
-     }
 }

@@ -1,8 +1,16 @@
 package grape.common.rest.advice;
 
+import cn.hutool.core.annotation.AnnotationUtil;
+import cn.hutool.core.util.ReflectUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.common.rest.ControllerTools;
 import grape.common.rest.ResultMessage;
+import grape.common.rest.vo.BaseVo;
+import grape.common.service.ITransService;
+import grape.common.service.Trans;
+import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -13,7 +21,9 @@ import springfox.documentation.swagger.web.ApiResourceController;
 import springfox.documentation.swagger2.web.Swagger2Controller;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 全局响应格式封装
@@ -23,7 +33,12 @@ import java.util.Arrays;
  */
 @RestControllerAdvice
 @Slf4j
-public class GlobalResponseBodyAdvice implements ResponseBodyAdvice {
+public class GlobalResponseBodyAdvice implements ResponseBodyAdvice, ToolService {
+
+
+    @Autowired(required = false)
+    private List<ITransService> transServices;
+
 
     // 禁用哪些类或注解不处理
     private static final Class[] disabledGRM = {
@@ -46,6 +61,38 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // 翻译支持
+        /*if (!isListEmpty(transServices)){
+            if (body instanceof IPage) {
+                List records = ((IPage) body).getRecords();
+                if (!isListEmpty(records)) {
+                    for (Object record : records) {
+                        trans(record);
+                    }
+                }
+            }else {
+                trans(body);
+            }
+        }*/
         return ControllerTools.newRm(body);
+    }
+
+    private void trans(Object body){
+        // 还可以添加一个TransPower注解用在需要翻译的类上，来标识该类的属性是否需要翻译，来加速性能，暂时未实现
+        for (Field field : ReflectUtil.getFields(body.getClass())) {
+            Trans trans = AnnotationUtil.getAnnotation(field, Trans.class);
+            if (trans != null) {
+                for (ITransService transService : transServices) {
+                    if (transService.support(trans.type())) {
+                        Object fieldValue = ReflectUtil.getFieldValue(body, trans.keyFieldName());
+                        if (fieldValue != null) {
+                            Object transValue = transService.trans(fieldValue);
+                            ReflectUtil.setFieldValue(body,field,transValue);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

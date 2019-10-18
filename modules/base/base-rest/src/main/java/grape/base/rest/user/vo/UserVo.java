@@ -1,6 +1,6 @@
 package grape.base.rest.user.vo;
-import grape.common.rest.vo.BaseVo;
 
+import grape.common.rest.vo.BaseVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,16 +18,24 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="UserVo数据响应对象", description="后台管理用户表")
+@ApiModel(value="用户数据响应对象")
 public class UserVo extends BaseVo {
 
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "用户id")
+    private Long id;
 
     @ApiModelProperty(value = "昵称，姓名")
     private String nickname;
 
     @ApiModelProperty(value = "性别，字典id")
     private Long genderDictId;
+
+    @ApiModelProperty(value = "性别，字典编码")
+    private String genderDictCode;
+    @ApiModelProperty(value = "性别，字典名称")
+    private String genderDictName;
 
     @ApiModelProperty(value = "头像，图片绝对路径")
     private String avatar;
@@ -37,6 +45,15 @@ public class UserVo extends BaseVo {
 
     @ApiModelProperty(value = "部门id")
     private Long deptId;
+
+    @ApiModelProperty(value = "部门名称")
+    private String deptName;
+
+    @ApiModelProperty(value = "公司id")
+    private Long compId;
+
+    @ApiModelProperty(value = "公司名称")
+    private String compName;
 
     @ApiModelProperty(value = "是否虚拟用户，虚拟用户代表不是一个真正存在的用户")
     private Boolean isVirtual;

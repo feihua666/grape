@@ -31,7 +31,10 @@ public class CompVo extends BaseVo {
 
     @ApiModelProperty(value = "类型,字典id")
     private Long typeDictId;
-
+    @ApiModelProperty(value = "类型，字典编码")
+    private String typeDictCode;
+    @ApiModelProperty(value = "类型，字典名称")
+    private String typeDictName;
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")
     private Long masterUserId;
 

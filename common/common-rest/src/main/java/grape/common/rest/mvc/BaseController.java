@@ -7,7 +7,9 @@ import grape.common.AbstractLoginUser;
 import grape.common.exception.ExceptionTools;
 import grape.common.rest.form.BaseForm;
 import grape.common.rest.form.BasePageForm;
+import grape.common.rest.vo.BaseTreeVo;
 import grape.common.rest.vo.BaseVo;
+import grape.common.rest.vo.TreeNodeVo;
 import grape.common.service.IBaseService;
 import grape.common.service.IBaseTreeService;
 import grape.common.service.po.IDBasePo;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +64,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
             throw ExceptionTools.newRE("添加失败");
         }
         Vo vo = mapperConverter.poToVo(dbPo);
-        return queryById(dbPo.getId());
+        return vo;
     }
 
     /**
@@ -76,6 +79,7 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
         if (vo == null) {
             throw ExceptionTools.dataNotExistRE(null);
         }
+        vo = transVo(vo);
         return vo;
     }
     /**
@@ -115,12 +119,17 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
         if (!r) {
             throw ExceptionTools.failRE("更新失败，请刷新数据后再试");
         }
-        return mapperConverter.poToVo(service.getById(id));
+        Vo vo = mapperConverter.poToVo(service.getById(id));
+        vo = transVo(vo);
+        return vo;
     }
 
     public IPage<Vo> listPage(ListForm listForm){
         Po poQuery = mapperConverter.listPageFormToPo(listForm);
         IPage<Po> page = service.page(new Page(listForm.getCurrent(),listForm.getSize()),new QueryWrapper(poQuery));
+        if (page.getTotal() == 0) {
+            throw ExceptionTools.dataNotExistRE("暂无数据");
+        }
         return pagePoToVo(page);
 
     }
@@ -140,22 +149,75 @@ public abstract class BaseController<Service extends IBaseService<Po>,MapperConv
             }
             List<Vo> rv = new ArrayList<>(r.size());
             for (Po po : r) {
-                rv.add(mapperConverter.poToVo(po));
+
+                rv.add(transVo(mapperConverter.poToVo(po)));
             }
             return rv;
         }else {
-            throw ExceptionTools.failRE("当前操作不支持");
+            throw ExceptionTools.failRE("当前操作不支持,没有可用的service");
         }
     }
 
-    private IPage<Vo> pagePoToVo(IPage page){
+    public List<Vo> posToVos(List<Po> pos) {
+        List<Vo> vos = new ArrayList<>(pos.size());
+        for (Po po : pos) {
+            vos.add(transVo(mapperConverter.poToVo(po)));
+        }
+        return vos;
+    }
+
+    public IPage<Vo> pagePoToVo(IPage page){
         List<Po> records = page.getRecords();
         if (page != null && !isListEmpty(records)) {
             List<Vo> voList = Arrays.asList();
-            voList = records.stream().map(po ->  mapperConverter.poToVo(po)).collect(Collectors.toList());
+            voList = records.stream().map(po ->
+                    transVo(mapperConverter.poToVo(po))
+            ).collect(Collectors.toList());
             page.setRecords(voList);
             return page;
         }
-        return null;
+        // 原样返回page
+        return page;
+    }
+
+    /**
+     * list转为树结构
+     * @param list
+     * @param <T>
+     * @return
+     */
+    public <T extends BaseTreeVo> List<TreeNodeVo<T>> listToTree(List<T> list){
+        List<TreeNodeVo<T>> temp = new ArrayList<>();
+        List<TreeNodeVo<T>> result = new ArrayList<>();
+        for (T t : list) {
+            temp.add(new TreeNodeVo<>(t,null));
+        }
+        Iterator<TreeNodeVo<T>> iterator = temp.iterator();
+        while (iterator.hasNext()) {
+            TreeNodeVo<T> next = iterator.next();
+            if (next.getNode().getParentId() == null) {
+                result.add(next);
+                iterator.remove();
+            }
+            for (TreeNodeVo<T> treeNodeVo : temp) {
+                if (next.getNode().getId().equals(treeNodeVo.getNode().getParentId())) {
+                    if (next.getChildren() == null) {
+                        next.setChildren(new ArrayList<>());
+                    }
+                    next.getChildren().add(new TreeNodeVo<>(treeNodeVo.getNode(),null));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 翻译vo的是外键属性，如：字典id换名称
+     * @param vo
+     * @return
+     */
+    public Vo transVo(Vo vo){
+        return vo;
     }
 }

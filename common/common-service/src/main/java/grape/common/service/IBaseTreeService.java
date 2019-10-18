@@ -18,7 +18,7 @@ import static grape.common.service.po.TreeBasePo.maxLevel;
  * Created by yangwei
  * Created at 2019/9/23 11:03
  */
-public interface IBaseTreeService<Po extends TreeBasePo> extends IBaseService<Po> {
+public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseService<Po> {
 
 
     default List<Po> getRoot(){

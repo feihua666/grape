@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 区域表
@@ -23,6 +25,7 @@ public class AreaUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull(message = "区域名称不能为空")
     @ApiModelProperty(value = "区域名称")
     private String name;
 
@@ -31,9 +34,6 @@ public class AreaUpdateForm extends BaseForm {
 
     @ApiModelProperty(value = "拼音，简拼，每个字的首字母")
     private String spellSimple;
-
-    @ApiModelProperty(value = "类型，字典id")
-    private Long typeDictId;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
     private Long adminDivisionId;

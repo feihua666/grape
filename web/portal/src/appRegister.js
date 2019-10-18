@@ -2,8 +2,6 @@ import { registerMicroApps} from 'qiankun';
 import {genActiveRule, render} from "common-util/src/components/mfe";
 
 export default function registApps() {
-
-
     registerMicroApps(
         [
             {

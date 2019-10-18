@@ -6,5 +6,5 @@ package grape.common.rest.vo;
  * Created by yangwei
  * Created at 2019/7/24 19:47
  */
-public class PageBaseVo extends BaseVo {
+public class BasePageVo extends BaseVo {
 }

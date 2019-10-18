@@ -84,8 +84,9 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
             }
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             Set<String> stringPermissions = new HashSet<>();
+            stringPermissions.add("user");
             if (loginUser.getCurrentRole() != null) {
-                List<Func> funcs = iFuncService.getByRoleId(loginUser.getCurrentRole().getId());
+                List<Func> funcs = iFuncService.getByRoleId(loginUser.getCurrentRole().getId(),false);
                 if (!isListEmpty(funcs)) {
                     for (Func func : funcs) {
                         String permissions = func.getPermissions();

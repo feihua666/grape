@@ -7,9 +7,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
- * 部门表
+ * 公司添加表单
  * </p>
  *
  * @author yangwei
@@ -18,17 +20,23 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="CompCreateForm添加表单对象", description="部门表")
+@ApiModel(value="公司添加表单")
 public class CompCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
+    private Long parentId;
+
+    @NotNull(message = "公司编码不能为空")
     @ApiModelProperty(value = "公司编码")
     private String code;
 
+    @NotNull(message = "公司名称不能为空")
     @ApiModelProperty(value = "公司名称")
     private String name;
 
+    @NotNull(message = "公司类型不能为空")
     @ApiModelProperty(value = "类型,字典id")
     private Long typeDictId;
 

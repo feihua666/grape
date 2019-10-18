@@ -34,6 +34,10 @@ public class AreaVo extends BaseVo {
 
     @ApiModelProperty(value = "类型，字典id")
     private Long typeDictId;
+    @ApiModelProperty(value = "类型，字典编码")
+    private String typeDictCode;
+    @ApiModelProperty(value = "类型，字典名称")
+    private String typeDictName;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
     private Long adminDivisionId;

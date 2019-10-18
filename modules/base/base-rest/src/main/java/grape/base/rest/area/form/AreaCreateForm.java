@@ -7,9 +7,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
- * 区域表
+ * 区域添加表单
  * </p>
  *
  * @author yangwei
@@ -18,11 +20,16 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="AreaCreateForm添加表单对象", description="区域表")
+@ApiModel(value="区域添加表单")
 public class AreaCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
+    private Long parentId;
+
+
+    @NotNull(message = "区域名称不能为空")
     @ApiModelProperty(value = "区域名称")
     private String name;
 
@@ -32,6 +39,7 @@ public class AreaCreateForm extends BaseForm {
     @ApiModelProperty(value = "拼音，简拼，每个字的首字母")
     private String spellSimple;
 
+    @NotNull(message = "区域类型不能为空")
     @ApiModelProperty(value = "类型，字典id")
     private Long typeDictId;
 

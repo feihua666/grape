@@ -6,10 +6,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
- * 后台管理用户表
+ * 更新用户基本信息表单
  * </p>
  *
  * @author yangwei
@@ -18,34 +22,21 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="UserUpdateForm更新表单对象", description="后台管理用户表")
+@ApiModel(value="更新用户基本信息表单")
 public class UserUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull(message = "昵称不能为空")
+    @NotEmpty
     @ApiModelProperty(value = "昵称，姓名")
     private String nickname;
 
-    @ApiModelProperty(value = "性别，字典id")
+    @NotNull(message = "性别不能为空")
+    @ApiModelProperty(value = "性别",notes = "通过字典获取，字典组编码为gender")
     private Long genderDictId;
 
-    @ApiModelProperty(value = "头像，图片绝对路径")
-    private String avatar;
-
-    @ApiModelProperty(value = "用户编号，可以做为员工编号")
+    @ApiModelProperty(value = "用户编号",notes = "可以做为员工编号")
     private String serialNo;
-
-    @ApiModelProperty(value = "部门id")
-    private Long deptId;
-
-    @ApiModelProperty(value = "是否虚拟用户，虚拟用户代表不是一个真正存在的用户")
-    private Boolean isVirtual;
-
-    @ApiModelProperty(value = "锁定状态，0=未锁定；1=锁定")
-    private Boolean isLock;
-
-    @ApiModelProperty(value = "锁定原因")
-    private String lockReason;
-
 
 }

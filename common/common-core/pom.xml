@@ -6,25 +6,17 @@
         <artifactId>common</artifactId>
         <groupId>grape</groupId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>common-core</artifactId>
 
     <dependencies>
-
         <dependency>
-            <groupId>grape</groupId>
-            <artifactId>common-code-fill</artifactId>
-            <version>${grape.version}</version>
-            <exclusions>
-                <!-- 版本不匹配 swagger中已间接引入，版本为20.0， 而grape-code-fill项目是的auto-service引入了18.0，这里排除掉-->
-                <!-- 使用swagger 中引入的 -->
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guaua</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool-all.version}</version>
         </dependency>
     </dependencies>
 

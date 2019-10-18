@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  // 子应用加载组件，在主应用中使用
 let loadingInst = null
 export default {
   name: 'MfeLoader',
@@ -31,6 +32,7 @@ export default {
     },
     data () {
         return {
+            // qiankun的render方法参数
             mfeRenderProps: {
                 appContent: null,
                 loading: false

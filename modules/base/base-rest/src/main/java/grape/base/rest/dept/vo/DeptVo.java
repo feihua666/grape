@@ -31,13 +31,18 @@ public class DeptVo extends BaseVo {
 
     @ApiModelProperty(value = "类型,字典id")
     private Long typeDictId;
+    @ApiModelProperty(value = "类型，字典编码")
+    private String typeDictCode;
+    @ApiModelProperty(value = "类型，字典名称")
+    private String typeDictName;
 
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")
     private Long masterUserId;
 
     @ApiModelProperty(value = "公司id")
     private Long compId;
-
+    @ApiModelProperty(value = "公司名称")
+    private String compName;
     @ApiModelProperty(value = "是否虚拟部门")
     private Boolean isVirtual;
 

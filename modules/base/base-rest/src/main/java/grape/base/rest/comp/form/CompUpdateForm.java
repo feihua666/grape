@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 部门表
@@ -23,14 +25,9 @@ public class CompUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "公司编码")
-    private String code;
-
+    @NotNull(message = "公司名称不能为空")
     @ApiModelProperty(value = "公司名称")
     private String name;
-
-    @ApiModelProperty(value = "类型,字典id")
-    private Long typeDictId;
 
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")
     private Long masterUserId;

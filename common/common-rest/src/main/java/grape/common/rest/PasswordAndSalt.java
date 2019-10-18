@@ -3,7 +3,10 @@ package grape.common.rest;
 import grape.common.tools.DigestUtils;
 import grape.common.tools.EncodeUtils;
 import lombok.Data;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.util.ByteSource;
 
 /**
  * 加密后的密码字符串和盐
@@ -42,9 +45,23 @@ public class PasswordAndSalt {
     public static HashedCredentialsMatcher getCredentialsMatcher() {
         HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(HASH_ALGORITHM);
         matcher.setHashIterations(HASH_INTERATIONS);
-
         return matcher;
     }
 
+    /**
+     * 验证密码是否正确
+     * @param tokenPassword 输入的密码
+     * @param ps 数据存储的密码和盐
+     * @return
+     */
+    public static boolean validatePassword(String tokenPassword, PasswordAndSalt ps) {
+        UsernamePasswordToken token = new UsernamePasswordToken();
+        token.setPassword(tokenPassword.toCharArray());
+
+        byte[] _salt = EncodeUtils.decodeHex(ps.getSalt());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(ps,
+                ps.getPassword(), ByteSource.Util.bytes(_salt), "");
+        return getCredentialsMatcher().doCredentialsMatch(token, info);
+    }
 
 }

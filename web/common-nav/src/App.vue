@@ -1,49 +1,21 @@
 <template>
-  <el-container class="g-width100 g-height100">
-      <el-aside width="200px">
-          <NavMenu/>
-      </el-aside>
-      <el-container>
-          <el-header>Header</el-header>
-        <el-container>
-          <el-main>
-              <mfe-loader :loading-id="loadingId"
-                          :container-id="containerId"
-              />
-          </el-main>
-        </el-container>
-      </el-container>
-    </el-container>
+    <router-view></router-view>
 </template>
 <script>
-    import NavMenu from './components/NavMenu'
-    import MfeLoader from 'common-util/src/components/mfe/MfeLoader'
-
     export default {
         name: 'app',
-        components: {
-            NavMenu,
-            MfeLoader
-        },
         created () {
-
+            this.bindLoginBus()
         },
-        methods: {
-
-        },
-        data () {
-            return {
-                loadingId: 'app-common-nav-container-loading',
-                containerId: 'app-common-nav-container'
+        methods:{
+            bindLoginBus(){
+                if (window.mfe) {
+                    window.mfe_vue_bus.$once('login',this.toLogin)
+                }
+            },
+            toLogin(){
+                this.$router.replace('/login')
             }
-        },
-        destroyed() {
-
-        },
-        watch: {
-
         }
     }
 </script>
-<style scoped>
-</style>

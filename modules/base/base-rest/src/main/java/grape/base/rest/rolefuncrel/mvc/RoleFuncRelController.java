@@ -1,5 +1,6 @@
 package grape.base.rest.rolefuncrel.mvc;
 
+import grape.base.rest.BaseRestSuperController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/role-func-rel")
 @Api(tags = "角色菜单功能关系表，多对多")
-public class RoleFuncRelController extends BaseController<IRoleFuncRelService,RoleFuncRelWebMapper, RoleFuncRelVo, RoleFuncRel, RoleFuncRelCreateForm,RoleFuncRelUpdateForm,RoleFuncRelListPageForm> {
+public class RoleFuncRelController extends BaseRestSuperController<IRoleFuncRelService,RoleFuncRelWebMapper, RoleFuncRelVo, RoleFuncRel, RoleFuncRelCreateForm,RoleFuncRelUpdateForm,RoleFuncRelListPageForm> {
 
     // 请在这里添加额外的方法
     //todo

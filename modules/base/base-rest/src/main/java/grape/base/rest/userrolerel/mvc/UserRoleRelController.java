@@ -1,5 +1,6 @@
 package grape.base.rest.userrolerel.mvc;
 
+import grape.base.rest.BaseRestSuperController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user-role-rel")
 @Api(tags = "角色菜单功能关系表，多对多")
-public class UserRoleRelController extends BaseController<IUserRoleRelService,UserRoleRelWebMapper, UserRoleRelVo, UserRoleRel, UserRoleRelCreateForm,UserRoleRelUpdateForm,UserRoleRelListPageForm> {
+public class UserRoleRelController extends BaseRestSuperController<IUserRoleRelService,UserRoleRelWebMapper, UserRoleRelVo, UserRoleRel, UserRoleRelCreateForm,UserRoleRelUpdateForm,UserRoleRelListPageForm> {
 
     // 请在这里添加额外的方法
     //todo

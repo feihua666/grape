@@ -8,6 +8,13 @@ module.exports = {
             '/app-base': {
                 target:  'http://localhost:9002'
             }
+            ,
+            '/api': {
+                target:  'http://localhost:8080',
+                pathRewrite:{
+                    '^/api':''
+                }
+            }
         }
     }
 }

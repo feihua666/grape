@@ -1,30 +1,36 @@
 package grape.base.rest.user.mvc;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.BaseRestSuperController;
+import grape.base.rest.comp.mapper.CompWebMapper;
+import grape.base.rest.dept.mapper.DeptWebMapper;
 import grape.base.rest.setting.shiro.IdentifierPasswordToken;
 import grape.base.rest.user.form.LoginForm;
+import grape.base.rest.user.form.UserCreateForm;
+import grape.base.rest.user.form.UserListPageForm;
+import grape.base.rest.user.form.UserUpdateForm;
+import grape.base.rest.user.mapper.UserWebMapper;
 import grape.base.rest.user.vo.CurrentUserinfoVo;
 import grape.base.rest.user.vo.LoginVo;
+import grape.base.rest.user.vo.UserVo;
 import grape.base.service.BaseLoginUser;
-import grape.base.service.dict.api.IDictService;
+import grape.base.service.comp.po.Comp;
+import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
+import grape.common.exception.ExceptionTools;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import javax.validation.Valid;
-import grape.base.rest.user.form.UserCreateForm;
-import grape.base.rest.user.form.UserUpdateForm;
-import grape.base.rest.user.form.UserListPageForm;
-import grape.base.rest.user.vo.UserVo;
-import grape.base.rest.user.mapper.UserWebMapper;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.user.api.IUserService;
 
 /**
  * <p>
@@ -37,12 +43,15 @@ import grape.base.service.user.api.IUserService;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户相关接口")
-public class UserController extends BaseController<IUserService,UserWebMapper, UserVo, User, UserCreateForm,UserUpdateForm,UserListPageForm> {
+public class UserController extends BaseRestSuperController<IUserService,UserWebMapper, UserVo, User, UserCreateForm,UserUpdateForm,UserListPageForm> {
 
     @Autowired
     private IUserService iUserService;
+
     @Autowired
-    private IDictService iDictService;
+    private CompWebMapper compWebMapper;
+    @Autowired
+    private DeptWebMapper deptWebMapper;
 
 
 
@@ -65,10 +74,13 @@ public class UserController extends BaseController<IUserService,UserWebMapper, U
         // 同时放到session中
         SecurityUtils.getSubject().getSession().setAttribute(BaseLoginUser.loginUserKey,loginUser);
         LoginVo loginVo = new LoginVo();
-        Dict dict = iDictService.getById(loginUser.getUserIdentifier().getIdentityTypeDictId());
-        loginVo.setUserId(loginUser.getUserId());
-        loginVo.setIdentifierType(dict.getCode());
-        loginVo.setIdentifierTypeTxt(dict.getName());
+        loginVo.setId(loginUser.getUserId());
+        loginVo.setIdentityTypeDictId(loginUser.getUserIdentifier().getIdentityTypeDictId());
+        Dict genderDict = getIDictService().getById(loginVo.getIdentityTypeDictId());
+        if (genderDict != null) {
+            loginVo.setIdentityTypeDictCode(genderDict.getCode());
+            loginVo.setIdentityTypeDictName(genderDict.getName());
+        }
         return loginVo;
     }
 
@@ -96,6 +108,12 @@ public class UserController extends BaseController<IUserService,UserWebMapper, U
         if (loginUser.getCurrentUserPost() != null) {
             currentUserinfoVo.setPostId(loginUser.getCurrentUserPost().getPostId());
         }
+        if (loginUser.getComp() != null) {
+            currentUserinfoVo.setCompName(loginUser.getComp().getName());
+        }
+        if (loginUser.getDept() != null) {
+            currentUserinfoVo.setDeptName(loginUser.getDept().getName());
+        }
         return currentUserinfoVo;
     }
 
@@ -105,15 +123,22 @@ public class UserController extends BaseController<IUserService,UserWebMapper, U
 
     /************************分割线，以下代码为 后台管理用户表 单表专用，自动生成谨慎修改**************************************************/
 
-     @ApiOperation("[后台管理用户表]单表创建/添加数据")
+     @ApiOperation(value = "添加用户",notes = "添加用户的基本信息，不包括登录帐号")
      @RequiresPermissions("user:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserVo create(@RequestBody @Valid UserCreateForm cf) {
-         return super.create(cf);
+         User poQuery =  getMapperConverter().createFormToPo(cf);
+         poQuery.setCompId(getDeptById(cf.getDeptId()).getCompId());
+         User dbPo = getService().create(poQuery);
+         if (dbPo == null) {
+             throw ExceptionTools.newRE("添加失败");
+         }
+         UserVo vo = getMapperConverter().poToVo(dbPo);
+         return vo;
      }
 
-     @ApiOperation("[后台管理用户表]单表根据ID查询")
+     @ApiOperation(value = "查询用户",notes = "根据id查询用户")
      @RequiresPermissions("user:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
@@ -121,15 +146,7 @@ public class UserController extends BaseController<IUserService,UserWebMapper, U
          return super.queryById(id);
      }
 
-     @ApiOperation("[后台管理用户表]单表根据ID删除")
-     @RequiresPermissions("user:single:deleteById")
-     @DeleteMapping("/{id}")
-     @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
-         return super.deleteById(id);
-     }
-
-     @ApiOperation("[后台管理用户表]单表根据ID更新")
+     @ApiOperation(value = "更新用户",notes = "更新用户基本信息")
      @RequiresPermissions("user:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
@@ -144,4 +161,22 @@ public class UserController extends BaseController<IUserService,UserWebMapper, U
     public IPage<UserVo> listPage(UserListPageForm listPageForm) {
          return super.listPage(listPageForm);
      }
+
+    @Override
+    public UserVo transVo(UserVo vo) {
+        Dict genderDict = getDictById(vo.getGenderDictId());
+        if (genderDict != null) {
+            vo.setGenderDictCode(genderDict.getCode());
+            vo.setGenderDictName(genderDict.getName());
+        }
+        Dept dept = getDeptById(vo.getDeptId());
+        if (dept != null) {
+            vo.setDeptName(dept.getName());
+        }
+        Comp comp = getCompById(vo.getCompId());
+        if (comp != null) {
+            vo.setCompName(comp.getName());
+        }
+        return vo;
+    }
 }

@@ -23,14 +23,18 @@ public class LoginVo extends BaseVo {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "当前用户登录id")
-    private Long userId;
+    @ApiModelProperty(value = "当前登录用户id")
+    private Long id;
 
-    @ApiModelProperty(value = "登录标识类型，帐号、邮箱、手机号等")
-    private String identifierType;
+    @ApiModelProperty(value = "帐号类型字典id")
+    private Long identityTypeDictId;
 
-    @ApiModelProperty(value = "登录标识类型翻译文本")
-    private String identifierTypeTxt;
+    @ApiModelProperty(value = "帐号类型字典编码")
+    private String identityTypeDictCode;
+
+    @ApiModelProperty(value = "帐号类型字典名称")
+    private String identityTypeDictName;
+
     @ApiModelProperty(value = "授权字符串")
     private String token;
 

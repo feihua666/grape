@@ -22,6 +22,8 @@ import lombok.experimental.Accessors;
 public class DictVo extends BaseVo {
 
     private static final long serialVersionUID = 1L;
+    @ApiModelProperty(value = "id")
+    private Long id;
 
     @ApiModelProperty(value = "数据值")
     private String code;
@@ -46,6 +48,9 @@ public class DictVo extends BaseVo {
 
     @ApiModelProperty(value = "公司id，标识字典归属于哪个公司")
     private Long compId;
+
+    @ApiModelProperty(value = "公司名称")
+    private String compName;
 
     @ApiModelProperty(value = "描述")
     private String remark;

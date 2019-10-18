@@ -10,3 +10,8 @@
 .g-height100{
     height: 100%;
 }
+.g-center-all{
+    display: flex;
+    align-items:center;
+    justify-content:center;
+}

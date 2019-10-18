@@ -7,9 +7,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
- * 用户密码表
+ * 用户密码修改
  * </p>
  *
  * @author yangwei
@@ -18,25 +20,19 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="UserPwdUpdateForm更新表单对象", description="用户密码表")
+@ApiModel(value="修改密码表单")
 public class UserPwdUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户ID,base_user表的主键")
-    private Long userId;
 
-    @ApiModelProperty(value = "密码")
-    private String pwd;
+    @NotNull(message = "原密码不能为空")
+    @ApiModelProperty(value = "原密码")
+    private String oldPassword;
 
-    @ApiModelProperty(value = "授权类型,字典id")
-    private String salt;
-
-    @ApiModelProperty(value = "密码状态，字典")
-    private Long pwdStatusDictId;
-
-    @ApiModelProperty(value = "密码的修改时间")
-    private Long pwdModifiedAt;
+    @NotNull(message = "新密码不能为空")
+    @ApiModelProperty(value = "新密码")
+    private String newPassword;
 
 
 }

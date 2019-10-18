@@ -1,10 +1,10 @@
 <template>
-    <div>xdictdict</div>
+    
 </template>
 
 <script>
     export default {
-        name: "dict"
+        name: "Page"
     }
 </script>
 
