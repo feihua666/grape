@@ -1,15 +1,14 @@
 package grape.base.service.role.impl;
 
-import grape.base.service.role.po.Role;
-import grape.base.service.role.mapper.RoleMapper;
 import grape.base.service.role.api.IRoleService;
+import grape.base.service.role.mapper.RoleMapper;
+import grape.base.service.role.po.Role;
 import grape.base.service.userrolerel.api.IUserRoleRelService;
 import grape.base.service.userrolerel.po.UserRoleRel;
 import grape.common.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -26,12 +25,12 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Autowired
     private IUserRoleRelService iUserRoleRelService;
     @Override
-    public List<Role> getByUserId(Long userId) {
+    public List<Role> getByUserId(String userId) {
         if (userId == null) {
             return null;
         }
         List<UserRoleRel> userRoleRelList = iUserRoleRelService.getByUserId(userId);
-        Set<Long> roleIds = iUserRoleRelService.convertRoleIds(userRoleRelList);
+        Set<String> roleIds = iUserRoleRelService.convertRoleIds(userRoleRelList);
         if (!isSetEmpty(roleIds)) {
             return (List<Role>) listByIds(roleIds);
         }

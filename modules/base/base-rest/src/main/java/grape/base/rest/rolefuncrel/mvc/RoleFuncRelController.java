@@ -1,6 +1,6 @@
 package grape.base.rest.rolefuncrel.mvc;
 
-import grape.base.rest.BaseRestSuperController;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -13,6 +13,7 @@ import grape.base.rest.rolefuncrel.form.RoleFuncRelUpdateForm;
 import grape.base.rest.rolefuncrel.form.RoleFuncRelListPageForm;
 import grape.base.rest.rolefuncrel.vo.RoleFuncRelVo;
 import grape.base.rest.rolefuncrel.mapper.RoleFuncRelWebMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
 import grape.base.service.rolefuncrel.po.RoleFuncRel;
@@ -24,35 +25,34 @@ import java.util.List;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-26
+ * @since 2019-10-22
  */
 @RestController
 @RequestMapping("/role-func-rel")
 @Api(tags = "角色菜单功能关系表，多对多")
-public class RoleFuncRelController extends BaseRestSuperController<IRoleFuncRelService,RoleFuncRelWebMapper, RoleFuncRelVo, RoleFuncRel, RoleFuncRelCreateForm,RoleFuncRelUpdateForm,RoleFuncRelListPageForm> {
+public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFuncRel> {
 
-    // 请在这里添加额外的方法
-    //todo
+    @Autowired
+    private RoleFuncRelWebMapper currentWebMapper;
+    @Autowired
+    private IRoleFuncRelService currentService;
 
 
-
-
-
-    /************************分割线，以下代码为 角色菜单功能关系表，多对多 单表专用，自动生成谨慎修改**************************************************/
 
      @ApiOperation("[角色菜单功能关系表，多对多]单表创建/添加数据")
      @RequiresPermissions("role-func-rel:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public RoleFuncRelVo create(@RequestBody @Valid RoleFuncRelCreateForm cf) {
-         return super.create(cf);
+         RoleFuncRel po = currentWebMapper.formToPo(cf);
+         return super.create(po);
      }
 
      @ApiOperation("[角色菜单功能关系表，多对多]单表根据ID查询")
      @RequiresPermissions("role-func-rel:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public RoleFuncRelVo queryById(@PathVariable Long id) {
+     public RoleFuncRelVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
@@ -60,7 +60,7 @@ public class RoleFuncRelController extends BaseRestSuperController<IRoleFuncRelS
      @RequiresPermissions("role-func-rel:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
@@ -68,8 +68,10 @@ public class RoleFuncRelController extends BaseRestSuperController<IRoleFuncRelS
      @RequiresPermissions("role-func-rel:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public RoleFuncRelVo update(@PathVariable Long id,@RequestBody @Valid RoleFuncRelUpdateForm uf) {
-         return super.update(id, uf);
+     public RoleFuncRelVo update(@PathVariable String id,@RequestBody @Valid RoleFuncRelUpdateForm uf) {
+         RoleFuncRel po = currentWebMapper.formToPo(uf);
+         po.setId(id);
+         return super.update(po);
      }
 
     @ApiOperation("[角色菜单功能关系表，多对多]单表分页列表")
@@ -77,7 +79,8 @@ public class RoleFuncRelController extends BaseRestSuperController<IRoleFuncRelS
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<RoleFuncRelVo> listPage(RoleFuncRelListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+         RoleFuncRel po = currentWebMapper.formToPo(listPageForm);
+         return super.listPage(po,listPageForm);
      }
 
 }

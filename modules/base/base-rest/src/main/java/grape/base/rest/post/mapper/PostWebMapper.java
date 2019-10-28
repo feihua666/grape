@@ -13,9 +13,12 @@ import grape.base.rest.post.vo.PostVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-26
+ * @since 2019-10-22
  */
 @Mapper(componentModel = "spring")
-public interface PostWebMapper extends WebMapper<PostVo, Post, PostCreateForm,PostUpdateForm,PostListPageForm> {
+public interface PostWebMapper extends WebMapper<PostVo, Post> {
 
+    Post formToPo(PostCreateForm f);
+    Post formToPo(PostUpdateForm f);
+    Post formToPo(PostListPageForm f);
 }

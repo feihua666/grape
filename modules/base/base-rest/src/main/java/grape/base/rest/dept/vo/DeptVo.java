@@ -1,4 +1,5 @@
 package grape.base.rest.dept.vo;
+import grape.common.rest.vo.BaseTreeVo;
 import grape.common.rest.vo.BaseVo;
 
 import io.swagger.annotations.ApiModel;
@@ -19,7 +20,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value="DeptVo数据响应对象", description="部门表")
-public class DeptVo extends BaseVo {
+public class DeptVo extends BaseTreeVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,19 +31,24 @@ public class DeptVo extends BaseVo {
     private String name;
 
     @ApiModelProperty(value = "类型,字典id")
-    private Long typeDictId;
+    private String typeDictId;
     @ApiModelProperty(value = "类型，字典编码")
     private String typeDictCode;
     @ApiModelProperty(value = "类型，字典名称")
     private String typeDictName;
 
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")
-    private Long masterUserId;
+    private String masterUserId;
+
+    @ApiModelProperty(value = "负责人名称")
+    private String masterUserName;
 
     @ApiModelProperty(value = "公司id")
-    private Long compId;
+    private String compId;
+
     @ApiModelProperty(value = "公司名称")
     private String compName;
+
     @ApiModelProperty(value = "是否虚拟部门")
     private Boolean isVirtual;
 

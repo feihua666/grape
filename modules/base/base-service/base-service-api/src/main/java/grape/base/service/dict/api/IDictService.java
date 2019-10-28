@@ -1,6 +1,9 @@
 package grape.base.service.dict.api;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.func.po.Func;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.service.IBaseTreeService;
 
 import java.util.List;
@@ -31,4 +34,19 @@ public interface IDictService extends IBaseTreeService<Dict> {
      * @return
      */
     List<Dict> getItemByGroupCode(String groupCode,Boolean isDisabled,List<String> itemCode);
+
+    /**
+     * 判断编码是否已存在
+     * @param code
+     * @return
+     */
+    default boolean existCode(String code){
+        if (isStrEmpty(code)) {
+            throw new InvalidParamsException("code 不能为空");
+        }
+        Dict dict = new Dict();
+        dict.setCode(code);
+        int r = count(Wrappers.query(dict));
+        return r > 0;
+    }
 }

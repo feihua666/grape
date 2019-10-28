@@ -1,13 +1,12 @@
 package grape.base.service.user.po;
 
-import grape.common.service.po.NormalBasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
-import java.io.Serializable;
+import grape.common.service.po.NormalBasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -28,7 +27,7 @@ public class UserPwd extends NormalBasePo<UserPwd> {
     /**
      * 用户ID,base_user表的主键
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 密码
@@ -43,12 +42,12 @@ public class UserPwd extends NormalBasePo<UserPwd> {
     /**
      * 密码状态，字典
      */
-    private Long pwdStatusDictId;
+    private String pwdStatusDictId;
 
     /**
      * 密码的修改时间
      */
-    private Long pwdModifiedAt;
+    private String pwdModifiedAt;
 
 
     @Override

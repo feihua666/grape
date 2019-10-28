@@ -14,14 +14,19 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * controller 异常统一处理类
@@ -171,6 +176,41 @@ public class GlobalExceptionAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResultMessage handleLockedAccountException(HttpServletRequest request, LockedAccountException ex) {
         return createRM(ExceptionCode.fail,"帐号已被锁定",request.getRequestURI().toString(),ex);
+    }
+
+
+    /**
+     * 不支持的请求方法
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ResultMessage handleHttpRequestMethodNotSupportedException(HttpServletRequest request, HttpRequestMethodNotSupportedException ex) {
+        return createRM(ExceptionCode.fail,"不支持的请求方法" + request.getMethod(),request.getRequestURI().toString(),ex);
+    }
+    /**
+     * sql异常，也可能是数据不对导致的sql执行问题
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResultMessage handleSQLException(HttpServletRequest request, DataIntegrityViolationException ex) {
+        return createRM(ExceptionCode.fail,"数据库请求错误" + ex.getCause().getMessage(),request.getRequestURI().toString(),ex);
+    }
+    /**
+     * sql异常，违反数据库约束，如：唯一索引
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResultMessage handleSQLIntegrityConstraintViolationException(HttpServletRequest request, DuplicateKeyException ex) {
+        return createRM(ExceptionCode.fail,"违反数据库约束" + ex.getCause().getMessage(),request.getRequestURI().toString(),ex);
     }
     /**
      * 其它不可预知的异常，通常定义为系统异常

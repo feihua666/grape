@@ -13,9 +13,12 @@ import grape.base.rest.userpostrolerel.vo.UserPostRoleRelVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-26
+ * @since 2019-10-22
  */
 @Mapper(componentModel = "spring")
-public interface UserPostRoleRelWebMapper extends WebMapper<UserPostRoleRelVo, UserPostRoleRel, UserPostRoleRelCreateForm,UserPostRoleRelUpdateForm,UserPostRoleRelListPageForm> {
+public interface UserPostRoleRelWebMapper extends WebMapper<UserPostRoleRelVo, UserPostRoleRel> {
 
+    UserPostRoleRel formToPo(UserPostRoleRelCreateForm f);
+    UserPostRoleRel formToPo(UserPostRoleRelUpdateForm f);
+    UserPostRoleRel formToPo(UserPostRoleRelListPageForm f);
 }

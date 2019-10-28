@@ -27,12 +27,12 @@ public class FuncServiceImpl extends BaseServiceImpl<FuncMapper, Func> implement
     private IDictService iDictService;
 
     @Override
-    public List<Func> getByRoleId(Long roleId,Boolean isDisabled) {
+    public List<Func> getByRoleId(String roleId,Boolean isDisabled) {
         return getBaseMapper().getByRoleId(roleId,null,isDisabled);
     }
 
     @Override
-    public List<Func> getMenuAndPageByRoleId(Long roleId,Boolean isDisabled) {
+    public List<Func> getMenuAndPageByRoleId(String roleId,Boolean isDisabled) {
         List<String> menuAndPage = new ArrayList<>(2);
         menuAndPage.add(Func.TypeDictItem.menu.name());
         menuAndPage.add(Func.TypeDictItem.page.name());

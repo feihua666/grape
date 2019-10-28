@@ -1,13 +1,12 @@
 package grape.base.service.rolefuncrel.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
 import grape.common.service.po.RelBasePo;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -28,12 +27,12 @@ public class RoleFuncRel extends RelBasePo<RoleFuncRel> {
     /**
      * 角色id
      */
-    private Long roleId;
+    private String roleId;
 
     /**
      * 用户id
      */
-    private Long funcId;
+    private String funcId;
 
 
     @Override

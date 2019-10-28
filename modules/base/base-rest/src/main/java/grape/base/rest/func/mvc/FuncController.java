@@ -1,11 +1,14 @@
 package grape.base.rest.func.mvc;
 
 import grape.base.rest.BaseRestSuperController;
+import grape.base.rest.func.form.FuncEnableForm;
 import grape.base.service.BaseLoginUser;
-import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.po.Dict;
 import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.InvalidParamsException;
+import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.vo.TreeNodeVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -13,18 +16,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import grape.base.rest.func.form.FuncCreateForm;
 import grape.base.rest.func.form.FuncUpdateForm;
 import grape.base.rest.func.form.FuncListPageForm;
 import grape.base.rest.func.vo.FuncVo;
 import grape.base.rest.func.mapper.FuncWebMapper;
 import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
 import grape.base.service.func.po.Func;
 import grape.base.service.func.api.IFuncService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 /**
  * <p>
@@ -37,49 +40,94 @@ import java.util.List;
 @RestController
 @RequestMapping("/func")
 @Api(tags = "功能相关接口")
-public class FuncController extends BaseRestSuperController<IFuncService,FuncWebMapper, FuncVo, Func, FuncCreateForm,FuncUpdateForm,FuncListPageForm> {
-
-    // 请在这里添加额外的方法
-    //todo
+public class FuncController extends BaseRestSuperController<FuncVo, Func> {
 
 
+    @Autowired
+    private FuncWebMapper funcWebMapper;
+    @Autowired
+    private IFuncService iFuncService;
 
 
-
-    /************************分割线，以下代码为 菜单功能表 单表专用，自动生成谨慎修改**************************************************/
-
+    /**
+     * 功能添加
+     * @param cf
+     * @return
+     */
      @ApiOperation("添加功能")
      @RequiresPermissions("func:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public FuncVo create(@RequestBody @Valid FuncCreateForm cf) {
-         return super.create(cf);
+         // code 唯一检查
+         if (iFuncService.existCode(cf.getCode())) {
+             throw new RBaseException("编码已存在");
+         }
+         Func func = funcWebMapper.formToPo(cf);
+         func.setIsDisabled(false);
+         return super.create(func);
      }
 
-     @ApiOperation("根据id查询功能")
+    /**
+     * 根据id查询功能，用于编辑回显或查看详情
+     * @param id
+     * @return
+     */
+     @ApiOperation(value = "根据id查询功能",notes = "用于更新初始化值或查看详情")
      @RequiresPermissions("func:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public FuncVo queryById(@PathVariable Long id) {
+     public FuncVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
+    /**
+     * 删除功能
+     * @param id
+     * @return
+     */
      @ApiOperation("删除功能")
      @RequiresPermissions("func:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
+    /**
+     * 更新功能
+     * @param id
+     * @param uf
+     * @return
+     */
      @ApiOperation("更新功能")
      @RequiresPermissions("func:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public FuncVo update(@PathVariable Long id,@RequestBody @Valid FuncUpdateForm uf) {
-         return super.update(id, uf);
+     public FuncVo update(@PathVariable String id,@RequestBody @Valid FuncUpdateForm uf) {
+         Func func = funcWebMapper.formToPo(uf);
+         func.setId(id);
+         return super.update(func);
      }
 
+    /**
+     * 启用或禁用功能，禁用后导航项目不再展示，赐予的权限也不会被分配
+     * @param id
+     * @param form
+     * @return
+     */
+    @ApiOperation("启用或禁用功能")
+    @RequiresPermissions("func:single:enable")
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FuncVo enable(@PathVariable String id, @RequestBody @Valid FuncEnableForm form) {
+        Func func = new Func();
+        func.setId(id);
+        func.setIsDisabled(form.getDisabled());
+        func.setVersion(form.getVersion());
+        func.setDisabledReason(form.getDisabledReason());
+        return super.update(func);
+    }
     /**
      * 用于后台管理列表页面
      * @param listPageForm
@@ -90,15 +138,33 @@ public class FuncController extends BaseRestSuperController<IFuncService,FuncWeb
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<FuncVo> listPage(FuncListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+        Func func = funcWebMapper.formToPo(listPageForm);
+         return super.listPage(func,listPageForm);
      }
 
-    @ApiOperation(value = "功能树")
-    @RequiresPermissions("func:single:tree")
+    /**
+     * 检查树结构是否完整
+     * @return
+     */
+    @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
+    @RequiresPermissions("func:single:checkTreeStruct")
+    @GetMapping("/tree/check/struct")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean checkTreeStruct() {
+        return super.checkTreeStruct();
+    }
+    /**
+     * 懒加载树，只能一级一级钻取加载，目前用于功能的树组件
+     * @param parentId
+     * @return
+     */
+    @ApiOperation(value = "功能树",notes = "主要用于选择上级")
+    @RequiresPermissions("func:single:getByParentId")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<FuncVo> tree( Long parentId) {
-        return super.tree(parentId);
+    public List<TreeNodeVo<FuncVo>> tree(String parentId) {
+        List<FuncVo> r = super.getByParentId(parentId);
+        return super.listToTreeNodeVo(r);
     }
 
     /**
@@ -117,9 +183,9 @@ public class FuncController extends BaseRestSuperController<IFuncService,FuncWeb
             List<String> menuAndPage = new ArrayList<>(2);
             menuAndPage.add(Func.TypeDictItem.menu.name());
             menuAndPage.add(Func.TypeDictItem.page.name());
-            funcList = getService().getByTypes(menuAndPage,false);
+            funcList = iFuncService.getByTypes(menuAndPage,false);
         }else{
-            funcList = getService().getMenuAndPageByRoleId(loginUser.getCurrentRole().getId(),false);
+            funcList = iFuncService.getMenuAndPageByRoleId(loginUser.getCurrentRole().getId(),false);
         }
         if (isListEmpty(funcList)) {
             throw ExceptionTools.dataNotExistRE("暂无数据");
@@ -141,6 +207,10 @@ public class FuncController extends BaseRestSuperController<IFuncService,FuncWeb
             vo.setTypeDictName(dict.getName());
         }
 
+        Func parent = getService().getById(vo.getParentId());
+        if (parent != null) {
+            vo.setParentName(parent.getName());
+        }
         return vo;
     }
 }

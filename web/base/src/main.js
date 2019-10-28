@@ -5,8 +5,9 @@ import ElementUI from 'element-ui'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import router from './router/router'
-import {tryMount} from "common-util/src/components/mfe";
+import {tryMount} from "common-util/src/components/mfe"
 import bus from 'common-util/src/components/bus/index.js'
+import 'element-ui/lib/theme-chalk/index.css'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueRouter)

@@ -13,9 +13,12 @@ import grape.base.rest.userpost.vo.UserPostVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-26
+ * @since 2019-10-22
  */
 @Mapper(componentModel = "spring")
-public interface UserPostWebMapper extends WebMapper<UserPostVo, UserPost, UserPostCreateForm,UserPostUpdateForm,UserPostListPageForm> {
+public interface UserPostWebMapper extends WebMapper<UserPostVo, UserPost> {
 
+    UserPost formToPo(UserPostCreateForm f);
+    UserPost formToPo(UserPostUpdateForm f);
+    UserPost formToPo(UserPostListPageForm f);
 }

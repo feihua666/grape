@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * <p>
- * 部门表
+ * 公司更新表单
  * </p>
  *
  * @author yangwei
@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="CompUpdateForm更新表单对象", description="部门表")
+@ApiModel(value="公司更新表单对象")
 public class CompUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class CompUpdateForm extends BaseForm {
     @ApiModelProperty(value = "公司名称")
     private String name;
 
-    @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")
+    @ApiModelProperty(value = "负责人用户id",notes = "该id可用来填充审批人")
     private Long masterUserId;
 
     @ApiModelProperty(value = "是否虚拟公司")

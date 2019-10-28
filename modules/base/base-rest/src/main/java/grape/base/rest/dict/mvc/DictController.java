@@ -1,9 +1,12 @@
 package grape.base.rest.dict.mvc;
 
 import grape.base.rest.BaseRestSuperController;
+import grape.base.rest.dict.form.DictEnableForm;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.vo.TreeNodeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +38,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/dict")
 @Api(tags = "字典相关接口")
-public class DictController extends BaseRestSuperController<IDictService,DictWebMapper, DictVo, Dict, DictCreateForm,DictUpdateForm,DictListPageForm> {
+public class DictController extends BaseRestSuperController<DictVo, Dict> {
 
-    // 请在这里添加额外的方法
-    //todo
+    @Autowired
+    private DictWebMapper dictWebMapper;
+    @Autowired
+    private IDictService iDictService;
 
+    /**
+     * 获取字典组下的字典项
+     * @param groupCode
+     * @return
+     */
     @ApiOperation("根据字典组编码查询字典项")
     @RequiresPermissions("dict:items:queryItemsByGroupCode")
     @GetMapping("/items/{groupCode}")
@@ -53,54 +63,131 @@ public class DictController extends BaseRestSuperController<IDictService,DictWeb
     }
 
 
-
-    /************************分割线，以下代码为 字典表,提供值与编码映射，用于下拉框或组合选择使用 单表专用，自动生成谨慎修改**************************************************/
-
+    /**
+     * 添加字典
+     * @param cf
+     * @return
+     */
      @ApiOperation("添加字典")
      @RequiresPermissions("dict:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public DictVo create(@RequestBody @Valid DictCreateForm cf) {
-         return super.create(cf);
+         // code 唯一检查
+         if (iDictService.existCode(cf.getCode())) {
+             throw new RBaseException("编码已存在");
+         }
+         if (cf.getIsGroup()) {
+             // 字典项下面不允许添加字典组
+             if(!isStrEmpty(cf.getParentId())){
+                 Dict dictParent = iDictService.getById(cf.getParentId());
+                 if(!dictParent.getIsGroup()){
+                     throw new RBaseException("字典组不能作为字典项的子节点");
+                 }
+             }
+         }else {
+             // 字典项只能在字典组下面
+             if(isStrEmpty(cf.getParentId())){
+                 throw new RBaseException("字典项只能为字典组的子节点");
+             }else {
+                 Dict dictParent = iDictService.getById(cf.getParentId());
+                 if(!dictParent.getIsGroup()){
+                     throw new RBaseException("字典项只能为字典组的子节点");
+                 }
+             }
+         }
+
+         Dict dict = dictWebMapper.formToPo(cf);
+         return super.create(dict);
      }
 
-     @ApiOperation("根据id查询字典")
+     @ApiOperation(value = "根据id查询字典",notes = "主要用于字典更新")
      @RequiresPermissions("dict:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public DictVo queryById(@PathVariable Long id) {
+     public DictVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
-     @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表根据ID删除")
+     @ApiOperation(value = "字典删除",notes = "字典下有子节点不能删除")
      @RequiresPermissions("dict:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
-     @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表根据ID更新")
+     @ApiOperation("字典更新")
      @RequiresPermissions("dict:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public DictVo update(@PathVariable Long id,@RequestBody @Valid DictUpdateForm uf) {
-         return super.update(id, uf);
+     public DictVo update(@PathVariable String id,@RequestBody @Valid DictUpdateForm uf) {
+         Dict dict = dictWebMapper.formToPo(uf);
+         dict.setId(id);
+         return super.update(dict);
      }
 
-    @ApiOperation("[字典表,提供值与编码映射，用于下拉框或组合选择使用]单表分页列表")
+    @ApiOperation("分页查询字典")
     @RequiresPermissions("dict:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<DictVo> listPage(DictListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+        Dict dict = dictWebMapper.formToPo(listPageForm);
+         return super.listPage(dict,listPageForm);
      }
 
+    /**
+     * 检查树结构是否完整
+     * @return
+     */
+    @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
+    @RequiresPermissions("dict:single:checkTreeStruct")
+    @GetMapping("/tree/check/struct")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean checkTreeStruct() {
+        return super.checkTreeStruct();
+    }
+    /**
+     * 懒加载树，只能一级一级钻取加载，目前用于功能的树组件
+     * @param parentId
+     * @return
+     */
+    @ApiOperation(value = "功能树",notes = "主要用于选择上级")
+    @RequiresPermissions("dict:single:getByParentId")
+    @GetMapping("/tree")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TreeNodeVo<DictVo>> tree(String parentId) {
+        List<DictVo> r = super.getByParentId(parentId);
+        return super.listToTreeNodeVo(r);
+    }
+    /**
+     * 启用或禁用功能，禁用后导航项目不再展示，赐予的权限也不会被分配
+     * @param id
+     * @param form
+     * @return
+     */
+    @ApiOperation("启用或禁用功能")
+    @RequiresPermissions("dict:single:enable")
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DictVo enable(@PathVariable String id, @RequestBody @Valid DictEnableForm form) {
+        Dict dict = new Dict();
+        dict.setId(id);
+        dict.setIsDisabled(form.getDisabled());
+        dict.setVersion(form.getVersion());
+        dict.setDisabledReason(form.getDisabledReason());
+        return super.update(dict);
+    }
     @Override
     public DictVo transVo(DictVo vo) {
         Comp comp = getCompById(vo.getCompId());
         if (comp != null) {
             vo.setCompName(comp.getName());
+        }
+
+        Dict parent = getService().getById(vo.getParentId());
+        if (parent != null) {
+            vo.setParentName(parent.getName());
         }
         return vo;
     }

@@ -21,7 +21,7 @@ public abstract class AbstractLoginUser extends BasePojo {
     public static final String superadminCode = "superadmin";
 
     // 用户id
-    private Long userId;
+    private String userId;
 
     private String nickname;
 

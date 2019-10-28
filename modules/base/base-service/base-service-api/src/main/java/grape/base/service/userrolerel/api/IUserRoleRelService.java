@@ -24,7 +24,7 @@ public interface IUserRoleRelService extends IBaseService<UserRoleRel> {
      * @param userId
      * @return
      */
-    default List<UserRoleRel> getByUserId(Long userId){
+    default List<UserRoleRel> getByUserId(String userId){
         if (userId == null) {
             return null;
         }
@@ -38,7 +38,7 @@ public interface IUserRoleRelService extends IBaseService<UserRoleRel> {
      * @param roleId
      * @return
      */
-    default List<UserRoleRel> getByRole(Long roleId){
+    default List<UserRoleRel> getByRole(String roleId){
         if (roleId == null) {
             return null;
         }
@@ -46,9 +46,9 @@ public interface IUserRoleRelService extends IBaseService<UserRoleRel> {
         userRoleRel.setRoleId(roleId);
         return list(Wrappers.query(userRoleRel));
     }
-    default Set<Long> convertRoleIds(List<UserRoleRel> userRoleRels){
+    default Set<String> convertRoleIds(List<UserRoleRel> userRoleRels){
         if (!isListEmpty(userRoleRels)) {
-            Set<Long> roleIds = new HashSet<>(userRoleRels.size());
+            Set<String> roleIds = new HashSet<>(userRoleRels.size());
             for (UserRoleRel userRoleRel : userRoleRels) {
                 roleIds.add(userRoleRel.getRoleId());
             }
@@ -56,9 +56,9 @@ public interface IUserRoleRelService extends IBaseService<UserRoleRel> {
         }
         return null;
     }
-    default Set<Long> convertUserIds(List<UserRoleRel> userRoleRels){
+    default Set<String> convertUserIds(List<UserRoleRel> userRoleRels){
         if (!isListEmpty(userRoleRels)) {
-            Set<Long> userIds = new HashSet<>(userRoleRels.size());
+            Set<String> userIds = new HashSet<>(userRoleRels.size());
             for (UserRoleRel userRoleRel : userRoleRels) {
                 userIds.add(userRoleRel.getUserId());
             }

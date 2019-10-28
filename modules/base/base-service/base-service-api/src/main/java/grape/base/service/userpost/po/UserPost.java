@@ -1,13 +1,12 @@
 package grape.base.service.userpost.po;
 
-import grape.common.service.po.NormalBasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
-import java.io.Serializable;
+import grape.common.service.po.NormalBasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -28,27 +27,27 @@ public class UserPost extends NormalBasePo<UserPost> {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 公司id，冗余字段，由dept_id派生，
      */
-    private Long compId;
+    private String compId;
 
     /**
      * 部门id
      */
-    private Long deptId;
+    private String deptId;
 
     /**
      * 岗位id
      */
-    private Long postId;
+    private String postId;
 
     /**
      * 职级id
      */
-    private Long jobLevelId;
+    private String jobLevelId;
 
     /**
      * 是否有效

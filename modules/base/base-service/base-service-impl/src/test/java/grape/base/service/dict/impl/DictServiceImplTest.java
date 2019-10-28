@@ -24,7 +24,7 @@ class DictServiceImplTest {
         dict.setName("测试");
         dict.setIsSystem(false);
         dict.setIsPublic(true);
-        dict.setIsDisable(false);
+        dict.setIsDisabled(false);
         dict.setIsGroup(false);
         dict.setSeq(10);
         boolean insert = iDictService.save(dict);
@@ -36,12 +36,12 @@ class DictServiceImplTest {
     }
     @Test
     public void testGetChildren(){
-        List<Dict> children = iDictService.getChildren(1L);
+        List<Dict> children = iDictService.getChildren("1");
         Assert.assertTrue(children.size() > 0);
     }
     @Test
     public void testGetChildrenCount(){
-        int r = iDictService.getChildrenCount(1L);
+        int r = iDictService.getChildrenCount("1");
         Assert.assertTrue(r > 0);
     }
     @Test
@@ -51,7 +51,7 @@ class DictServiceImplTest {
         dict.setName("测试");
         dict.setIsSystem(false);
         dict.setIsPublic(true);
-        dict.setIsDisable(false);
+        dict.setIsDisabled(false);
         dict.setIsGroup(false);
         dict.setSeq(10);
         boolean insert = iDictService.save(dict);
@@ -62,7 +62,7 @@ class DictServiceImplTest {
         dictChild.setName("测试子节点");
         dictChild.setIsSystem(false);
         dictChild.setIsPublic(true);
-        dictChild.setIsDisable(false);
+        dictChild.setIsDisabled(false);
         dictChild.setIsGroup(false);
         dictChild.setSeq(10);
         dictChild = iDictService.createChild(dictChild,dict.getId());

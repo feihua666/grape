@@ -1,5 +1,7 @@
 package grape.common.rest.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import grape.common.pojo.BasePojo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,10 +12,10 @@ import lombok.Data;
  * Created at 2019/7/24 18:25
  */
 @Data
-public class BaseTreeVo extends BaseVo {
-    @ApiModelProperty(value = "id")
-    private Long id;
+public class BaseTreeVo extends BaseIdVo<String> {
 
     @ApiModelProperty(value = "父级id")
-    private Long parentId;
+    private String parentId;
+    @ApiModelProperty(value = "父级名称")
+    private String parentName;
 }

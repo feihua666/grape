@@ -14,7 +14,7 @@ import grape.common.service.IBaseService;
  */
 public interface IUserPostRoleRelService extends IBaseService<UserPostRoleRel> {
 
-    default UserPostRoleRel getByUserPostId(Long userPostId){
+    default UserPostRoleRel getByUserPostId(String userPostId){
         if (userPostId == null) {
             return null;
         }

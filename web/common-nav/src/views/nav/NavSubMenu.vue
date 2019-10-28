@@ -1,6 +1,7 @@
 <template>
   <el-submenu :index="index(item.node)">
     <template slot="title">
+      <i v-if="item.node.icon" :class="item.node.icon"></i>
       <span>{{item.node.name}}</span>
     </template>
     <template v-if="item.children && item.children.length > 0">

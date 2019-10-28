@@ -1,13 +1,12 @@
 package grape.base.service.user.po;
 
-import grape.common.service.po.NormalBasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
-import java.io.Serializable;
+import grape.common.service.po.NormalBasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -48,12 +47,12 @@ public class User extends NormalBasePo<User> {
     /**
      * 公司id，冗余字段，由dept_id对应公司派生
      */
-    private Long compId;
+    private String compId;
 
     /**
      * 部门id
      */
-    private Long deptId;
+    private String deptId;
 
     /**
      * 是否虚拟用户，虚拟用户代表不是一个真正存在的用户

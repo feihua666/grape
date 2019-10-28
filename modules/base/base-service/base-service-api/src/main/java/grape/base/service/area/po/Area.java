@@ -1,13 +1,12 @@
 package grape.base.service.area.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
 import grape.common.service.po.TreeBasePo;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -43,12 +42,12 @@ public class Area extends TreeBasePo<Area> {
     /**
      * 类型，字典id
      */
-    private Long typeDictId;
+    private String typeDictId;
 
     /**
      * 行政区划id，该id来自国家统计
      */
-    private Long adminDivisionId;
+    private String adminDivisionId;
 
     /**
      * 经度

@@ -43,20 +43,19 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户相关接口")
-public class UserController extends BaseRestSuperController<IUserService,UserWebMapper, UserVo, User, UserCreateForm,UserUpdateForm,UserListPageForm> {
+public class UserController extends BaseRestSuperController<UserVo, User> {
 
     @Autowired
     private IUserService iUserService;
 
+    @Autowired
+    private UserWebMapper userWebMapper;
     @Autowired
     private CompWebMapper compWebMapper;
     @Autowired
     private DeptWebMapper deptWebMapper;
 
 
-
-    // 请在这里添加额外的方法
-    //todo
 
     /**
      * 后台管理用户登录入口
@@ -128,7 +127,7 @@ public class UserController extends BaseRestSuperController<IUserService,UserWeb
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserVo create(@RequestBody @Valid UserCreateForm cf) {
-         User poQuery =  getMapperConverter().createFormToPo(cf);
+         User poQuery =  userWebMapper.formToPo(cf);
          poQuery.setCompId(getDeptById(cf.getDeptId()).getCompId());
          User dbPo = getService().create(poQuery);
          if (dbPo == null) {
@@ -142,7 +141,7 @@ public class UserController extends BaseRestSuperController<IUserService,UserWeb
      @RequiresPermissions("user:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public UserVo queryById(@PathVariable Long id) {
+     public UserVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
@@ -150,8 +149,10 @@ public class UserController extends BaseRestSuperController<IUserService,UserWeb
      @RequiresPermissions("user:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public UserVo update(@PathVariable Long id,@RequestBody @Valid UserUpdateForm uf) {
-         return super.update(id, uf);
+     public UserVo update(@PathVariable String id,@RequestBody @Valid UserUpdateForm uf) {
+         User user = userWebMapper.formToPo(uf);
+         user.setId(id);
+         return super.update(user);
      }
 
     @ApiOperation("[后台管理用户表]单表分页列表")
@@ -159,7 +160,8 @@ public class UserController extends BaseRestSuperController<IUserService,UserWeb
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserVo> listPage(UserListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+        User user = userWebMapper.formToPo(listPageForm);
+         return super.listPage(user,listPageForm);
      }
 
     @Override

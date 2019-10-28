@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IUserPostService extends IBaseService<UserPost> {
 
-    default List<UserPost> getByUserId(Long userId,Boolean isMain,Boolean isEffect){
+    default List<UserPost> getByUserId(String userId,Boolean isMain,Boolean isEffect){
         if (userId == null) {
             return null;
         }

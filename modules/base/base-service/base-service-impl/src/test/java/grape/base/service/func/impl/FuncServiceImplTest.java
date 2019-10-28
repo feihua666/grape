@@ -23,7 +23,7 @@ class FuncServiceImplTest {
         func.setCode("test");
         func.setName("测试");
         func.setIsDisabled(false);
-        func.setTypeDictId(1l);
+        func.setTypeDictId("11");
         func.setSeq(10);
         boolean insert = iFuncService.save(func);
         Assert.assertTrue(insert);

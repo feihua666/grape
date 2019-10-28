@@ -1,13 +1,12 @@
 package grape.base.service.dept.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
 import grape.common.service.po.TreeBasePo;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -38,17 +37,17 @@ public class Dept extends TreeBasePo<Dept> {
     /**
      * 类型,字典id
      */
-    private Long typeDictId;
+    private String typeDictId;
 
     /**
      * 负责人用户id，该id可用来填充审批人
      */
-    private Long masterUserId;
+    private String masterUserId;
 
     /**
      * 公司id
      */
-    private Long compId;
+    private String compId;
 
     /**
      * 是否虚拟部门

@@ -1,27 +1,28 @@
 package grape.base.rest.comp.mvc;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.BaseRestSuperController;
-import grape.base.service.dict.api.IDictService;
+import grape.base.rest.comp.form.CompCreateForm;
+import grape.base.rest.comp.form.CompListPageForm;
+import grape.base.rest.comp.form.CompUpdateForm;
+import grape.base.rest.comp.mapper.CompWebMapper;
+import grape.base.rest.comp.vo.CompVo;
+import grape.base.service.comp.api.ICompService;
+import grape.base.service.comp.po.Comp;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.user.po.User;
+import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.vo.TreeNodeVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import javax.validation.Valid;
-import grape.base.rest.comp.form.CompCreateForm;
-import grape.base.rest.comp.form.CompUpdateForm;
-import grape.base.rest.comp.form.CompListPageForm;
-import grape.base.rest.comp.vo.CompVo;
-import grape.base.rest.comp.mapper.CompWebMapper;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.comp.po.Comp;
-import grape.base.service.comp.api.ICompService;
 import java.util.List;
 /**
  * <p>
@@ -34,30 +35,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/comp")
 @Api(tags = "公司相关接口")
-public class CompController extends BaseRestSuperController<ICompService,CompWebMapper, CompVo, Comp, CompCreateForm,CompUpdateForm,CompListPageForm> {
+public class CompController extends BaseRestSuperController<CompVo, Comp> {
 
-    // 请在这里添加额外的方法
-    //todo
+    @Autowired
+    private CompWebMapper compWebMapper;
+    @Autowired
+    private ICompService iCompService;
 
-
-
-
-
-    /************************分割线，以下代码为 部门表 单表专用，自动生成谨慎修改**************************************************/
 
      @ApiOperation("添加公司")
      @RequiresPermissions("comp:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public CompVo create(@RequestBody @Valid CompCreateForm cf) {
-         return super.create(cf);
+
+         // code 唯一检查
+         if (iCompService.existCode(cf.getCode())) {
+             throw new RBaseException("编码已存在");
+         }
+         Comp comp = compWebMapper.formToPo(cf);
+         return create(comp);
      }
 
      @ApiOperation("根据id查询公司")
      @RequiresPermissions("comp:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public CompVo queryById(@PathVariable Long id) {
+     public CompVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
@@ -65,27 +69,42 @@ public class CompController extends BaseRestSuperController<ICompService,CompWeb
      @RequiresPermissions("comp:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public CompVo update(@PathVariable Long id,@RequestBody @Valid CompUpdateForm uf) {
-         return super.update(id, uf);
+     public CompVo update(@PathVariable String id,@RequestBody @Valid CompUpdateForm uf) {
+         Comp poQuery = compWebMapper.formToPo(uf);
+         poQuery.setId(id);
+         return update(poQuery);
      }
 
     @ApiOperation("公司分页查询")
     @RequiresPermissions("comp:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<CompVo> listPage(CompListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+    public IPage<CompVo> listPage(CompListPageForm listForm) {
+        Comp poQuery = compWebMapper.formToPo(listForm);
+        return listPage(poQuery, listForm);
      }
+    /**
+     * 检查树结构是否完整
+     * @return
+     */
+    @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
+    @RequiresPermissions("comp:single:checkTreeStruct")
+    @GetMapping("/tree/check/struct")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean checkTreeStruct() {
+        return super.checkTreeStruct();
+    }
 
     @ApiOperation("公司树")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "父级id,不传获取根节点",name ="parentId",paramType = "query")
     })
-    @RequiresPermissions("comp:single:tree")
+    @RequiresPermissions("comp:single:getByParentId")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<CompVo> tree( Long parentId) {
-        return super.tree(parentId);
+    public  List<TreeNodeVo<CompVo>> tree(String parentId) {
+        List<CompVo> compVos = super.getByParentId(parentId);
+        return super.listToTreeNodeVo(compVos);
     }
 
     @Override
@@ -94,6 +113,14 @@ public class CompController extends BaseRestSuperController<ICompService,CompWeb
         if (dict != null) {
             vo.setTypeDictCode(dict.getCode());
             vo.setTypeDictName(dict.getName());
+        }
+        User user = getUserById(vo.getMasterUserId());
+        if (user != null) {
+            vo.setMasterUserName(user.getNickname());
+        }
+        Comp parent = getCompById(vo.getParentId());
+        if (parent != null) {
+            vo.setParentName(parent.getName());
         }
         return vo;
     }

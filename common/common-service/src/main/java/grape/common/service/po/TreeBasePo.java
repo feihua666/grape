@@ -17,6 +17,8 @@ public class TreeBasePo<T extends Model<?>> extends NormalBasePo<T> {
     public static final String PROPERTY_PARENT_ID = "parentId";
     public static final String PROPERTY_LEVEL = "level";
     public static final String COLUMN_LEVEL = "level";
+    // 初始最顶级深度是1
+    public static final int INIT_LEVEL = 1;
     /**
      * 最大支持深度11级
      */
@@ -29,46 +31,46 @@ public class TreeBasePo<T extends Model<?>> extends NormalBasePo<T> {
     /**
      * 直接父级id
      */
-    private Long parentId;
+    private String parentId;
     /**
      * level为1的父级id
      */
-    private Long parentId1;
+    private String parentId1;
     /**
      * level为2的父级id
      */
-    private Long parentId2;
+    private String parentId2;
     /**
      * level为3的父级id
      */
-    private Long parentId3;
+    private String parentId3;
     /**
      * level为4的父级id
      */
-    private Long parentId4;
+    private String parentId4;
     /**
      * level为5的父级id
      */
-    private Long parentId5;
+    private String parentId5;
     /**
      * level为6的父级id
      */
-    private Long parentId6;
+    private String parentId6;
     /**
      * level为7的父级id
      */
-    private Long parentId7;
+    private String parentId7;
     /**
      * level为8的父级id
      */
-    private Long parentId8;
+    private String parentId8;
     /**
      * level为9的父级id
      */
-    private Long parentId9;
+    private String parentId9;
     /**
      * level为10的父级id
      */
-    private Long parentId10;
+    private String parentId10;
 
 }

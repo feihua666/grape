@@ -1,5 +1,6 @@
 package ${package.Controller};
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,6 +13,7 @@ import ${cfg.formPackage}.${entity}UpdateForm;
 import ${cfg.formPackage}.${entity}ListPageForm;
 import ${cfg.voPackage}.${entity}Vo;
 import ${cfg.mapperWebPackage}.${entity}WebMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
 <#else>
@@ -42,33 +44,32 @@ import java.util.List;
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
 <#if superControllerClass??>
-public class ${table.controllerName} extends ${superControllerClass}<${table.serviceName},${entity}WebMapper, ${entity}Vo, ${entity}, ${entity}CreateForm,${entity}UpdateForm,${entity}ListPageForm> {
+public class ${table.controllerName} extends ${superControllerClass}<${entity}Vo, ${entity}> {
 <#else>
 public class ${table.controllerName} {
 </#if>
 
-    // 请在这里添加额外的方法
-    //todo
+    @Autowired
+    private ${entity}WebMapper currentWebMapper;
+    @Autowired
+    private ${table.serviceName} currentService;
 
 
-
-
-
-    /************************分割线，以下代码为 ${table.comment!} 单表专用，自动生成谨慎修改**************************************************/
 
      @ApiOperation("[${table.comment!}]单表创建/添加数据")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public ${entity}Vo create(@RequestBody @Valid ${entity}CreateForm cf) {
-         return super.create(cf);
+         ${entity} po = currentWebMapper.formToPo(cf);
+         return super.create(po);
      }
 
      @ApiOperation("[${table.comment!}]单表根据ID查询")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public ${entity}Vo queryById(@PathVariable Long id) {
+     public ${entity}Vo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
@@ -76,7 +77,7 @@ public class ${table.controllerName} {
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
@@ -84,8 +85,10 @@ public class ${table.controllerName} {
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public ${entity}Vo update(@PathVariable Long id,@RequestBody @Valid ${entity}UpdateForm uf) {
-         return super.update(id, uf);
+     public ${entity}Vo update(@PathVariable String id,@RequestBody @Valid ${entity}UpdateForm uf) {
+         ${entity} po = currentWebMapper.formToPo(uf);
+         po.setId(id);
+         return super.update(po);
      }
 
     @ApiOperation("[${table.comment!}]单表分页列表")
@@ -93,7 +96,8 @@ public class ${table.controllerName} {
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<${entity}Vo> listPage(${entity}ListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+         ${entity} po = currentWebMapper.formToPo(listPageForm);
+         return super.listPage(po,listPageForm);
      }
 
     <#if cfg.treeTable>
@@ -101,7 +105,7 @@ public class ${table.controllerName} {
     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:tree")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<${entity}Vo> tree( Long parentId) {
+    public List<${entity}Vo> tree( String parentId) {
         return super.tree(parentId);
     }
     </#if>

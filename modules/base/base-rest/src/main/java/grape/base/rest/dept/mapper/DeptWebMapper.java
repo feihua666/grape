@@ -16,6 +16,8 @@ import org.mapstruct.Mapper;
  * @since 2019-09-26
  */
 @Mapper(componentModel = "spring")
-public interface DeptWebMapper extends WebMapper<DeptVo, Dept, DeptCreateForm,DeptUpdateForm,DeptListPageForm> {
-
+public interface DeptWebMapper extends WebMapper<DeptVo, Dept> {
+    Dept formToPo(DeptCreateForm f);
+    Dept formToPo(DeptListPageForm f);
+    Dept formToPo(DeptUpdateForm f);
 }

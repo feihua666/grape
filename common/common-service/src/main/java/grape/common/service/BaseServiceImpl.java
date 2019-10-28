@@ -14,7 +14,7 @@ import java.io.Serializable;
  * Created at 2019/7/23 14:32
  */
 @Slf4j
-public class BaseServiceImpl<Mapper extends IBaseMapper<Po>,Po extends IDBasePo<Long,Po>> extends ServiceImpl<Mapper,Po> implements IBaseService<Po> , ToolService {
+public class BaseServiceImpl<Mapper extends IBaseMapper<Po>,Po extends IDBasePo<String,Po>> extends ServiceImpl<Mapper,Po> implements IBaseService<Po> , ToolService {
     @Override
     public Po create(Po entity) {
         boolean r = super.save(entity);

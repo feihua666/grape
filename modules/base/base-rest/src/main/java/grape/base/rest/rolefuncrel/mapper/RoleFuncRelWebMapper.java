@@ -13,9 +13,12 @@ import grape.base.rest.rolefuncrel.vo.RoleFuncRelVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-26
+ * @since 2019-10-22
  */
 @Mapper(componentModel = "spring")
-public interface RoleFuncRelWebMapper extends WebMapper<RoleFuncRelVo, RoleFuncRel, RoleFuncRelCreateForm,RoleFuncRelUpdateForm,RoleFuncRelListPageForm> {
+public interface RoleFuncRelWebMapper extends WebMapper<RoleFuncRelVo, RoleFuncRel> {
 
+    RoleFuncRel formToPo(RoleFuncRelCreateForm f);
+    RoleFuncRel formToPo(RoleFuncRelUpdateForm f);
+    RoleFuncRel formToPo(RoleFuncRelListPageForm f);
 }

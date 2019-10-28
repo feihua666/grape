@@ -21,5 +21,5 @@ public interface IRoleService extends IBaseTreeService<Role> {
      * @param userId
      * @return
      */
-    List<Role> getByUserId(Long userId);
+    List<Role> getByUserId(String userId);
 }

@@ -34,7 +34,7 @@ public interface ToolService {
     }
     /**
      * 判断是否为空
-     * @param list
+     * @param set
      * @return true 如果是null或size为0
      */
     default boolean isSetEmpty(Set set){
@@ -47,5 +47,14 @@ public interface ToolService {
      */
     default boolean isStrEmpty(String str){
         return StringUtils.isEmpty(str);
+    }
+
+    /**
+     * 是否任何一个为空
+     * @param str
+     * @return
+     */
+    default boolean isStrAnyEmpty(String ...str){
+        return StringUtils.isAnyEmpty(str);
     }
 }

@@ -13,17 +13,17 @@ import lombok.Data;
  * Created at 2019/7/24 18:03
  */
 @Data
-public class RelBasePo<T extends Model<?>> extends IDBasePo<Long,T> {
+public class RelBasePo<T extends Model<?>> extends IDBasePo<String,T> {
 
     /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private Long createAt;
+    private String createAt;
 
     /**
      * 创建人
      */
     @TableField(fill = FieldFill.INSERT)
-    private Long createBy;
+    private String createBy;
 }

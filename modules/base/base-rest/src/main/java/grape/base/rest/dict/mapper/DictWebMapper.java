@@ -13,9 +13,12 @@ import grape.base.rest.dict.vo.DictVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-23
+ * @since 2019-10-22
  */
 @Mapper(componentModel = "spring")
-public interface DictWebMapper extends WebMapper<DictVo, Dict, DictCreateForm,DictUpdateForm,DictListPageForm> {
+public interface DictWebMapper extends WebMapper<DictVo, Dict> {
 
+    Dict formToPo(DictCreateForm f);
+    Dict formToPo(DictUpdateForm f);
+    Dict formToPo(DictListPageForm f);
 }

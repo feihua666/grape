@@ -1,5 +1,6 @@
 package grape.base.rest.userpostrolerel.mvc;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,6 +13,7 @@ import grape.base.rest.userpostrolerel.form.UserPostRoleRelUpdateForm;
 import grape.base.rest.userpostrolerel.form.UserPostRoleRelListPageForm;
 import grape.base.rest.userpostrolerel.vo.UserPostRoleRelVo;
 import grape.base.rest.userpostrolerel.mapper.UserPostRoleRelWebMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
@@ -23,35 +25,34 @@ import java.util.List;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-26
+ * @since 2019-10-22
  */
 @RestController
 @RequestMapping("/userst-role-rel")
 @Api(tags = "用户岗位与角色关系表,决定了用户的功能")
-public class UserPostRoleRelController extends BaseController<IUserPostRoleRelService,UserPostRoleRelWebMapper, UserPostRoleRelVo, UserPostRoleRel, UserPostRoleRelCreateForm,UserPostRoleRelUpdateForm,UserPostRoleRelListPageForm> {
+public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo, UserPostRoleRel> {
 
-    // 请在这里添加额外的方法
-    //todo
+    @Autowired
+    private UserPostRoleRelWebMapper currentWebMapper;
+    @Autowired
+    private IUserPostRoleRelService currentService;
 
 
-
-
-
-    /************************分割线，以下代码为 用户岗位与角色关系表,决定了用户的功能 单表专用，自动生成谨慎修改**************************************************/
 
      @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表创建/添加数据")
      @RequiresPermissions("user-post-role-rel:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostRoleRelVo create(@RequestBody @Valid UserPostRoleRelCreateForm cf) {
-         return super.create(cf);
+         UserPostRoleRel po = currentWebMapper.formToPo(cf);
+         return super.create(po);
      }
 
      @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表根据ID查询")
      @RequiresPermissions("user-post-role-rel:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public UserPostRoleRelVo queryById(@PathVariable Long id) {
+     public UserPostRoleRelVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
@@ -59,7 +60,7 @@ public class UserPostRoleRelController extends BaseController<IUserPostRoleRelSe
      @RequiresPermissions("user-post-role-rel:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
@@ -67,8 +68,10 @@ public class UserPostRoleRelController extends BaseController<IUserPostRoleRelSe
      @RequiresPermissions("user-post-role-rel:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public UserPostRoleRelVo update(@PathVariable Long id,@RequestBody @Valid UserPostRoleRelUpdateForm uf) {
-         return super.update(id, uf);
+     public UserPostRoleRelVo update(@PathVariable String id,@RequestBody @Valid UserPostRoleRelUpdateForm uf) {
+         UserPostRoleRel po = currentWebMapper.formToPo(uf);
+         po.setId(id);
+         return super.update(po);
      }
 
     @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表分页列表")
@@ -76,7 +79,8 @@ public class UserPostRoleRelController extends BaseController<IUserPostRoleRelSe
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserPostRoleRelVo> listPage(UserPostRoleRelListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+         UserPostRoleRel po = currentWebMapper.formToPo(listPageForm);
+         return super.listPage(po,listPageForm);
      }
 
 }

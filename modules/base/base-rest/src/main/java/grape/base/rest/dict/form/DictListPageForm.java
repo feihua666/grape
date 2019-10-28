@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 字典表,提供值与编码映射，用于下拉框或组合选择使用
+ * 字典数据分页查询对象
  * </p>
  *
  * @author yangwei
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="DictListPageForm分页查询条件对象", description="字典表,提供值与编码映射，用于下拉框或组合选择使用")
+@ApiModel(value="字典分页查询条件对象")
 public class DictListPageForm extends BasePageForm {
 
     private static final long serialVersionUID = 1L;
@@ -29,29 +29,22 @@ public class DictListPageForm extends BasePageForm {
     @ApiModelProperty(value = "标签名")
     private String name;
 
-    @ApiModelProperty(value = "是否为系统字典，一般系统字典代码中会做判断，不能修改或删除")
+    @ApiModelProperty(value = "是否为系统字典")
     private Boolean isSystem;
 
-    @ApiModelProperty(value = "是否为公共字典，如果为公共字典不限制使用，否则按相应数据权限查询")
+    @ApiModelProperty(value = "是否为公共字典")
     private Boolean isPublic;
 
-    @ApiModelProperty(value = "是否为字典组，不是字典组就是字典项目，没有其它的")
+    @ApiModelProperty(value = "是否为字典组")
     private Boolean isGroup;
 
     @ApiModelProperty(value = "是否禁用")
     private Boolean isDisable;
 
-    @ApiModelProperty(value = "禁用原因")
-    private String disableReason;
-
-    @ApiModelProperty(value = "公司id，标识字典归属于哪个公司")
+    @ApiModelProperty(value = "公司id")
     private Long compId;
 
-    @ApiModelProperty(value = "描述")
-    private String remark;
-
-    @ApiModelProperty(value = "排序,默认按该字段升序排序")
-    private Integer seq;
-
+    @ApiModelProperty(value = "父id")
+    private Long parentId;
 
 }

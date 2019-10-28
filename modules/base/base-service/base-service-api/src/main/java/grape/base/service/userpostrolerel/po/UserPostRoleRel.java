@@ -1,13 +1,12 @@
 package grape.base.service.userpostrolerel.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
 import grape.common.service.po.RelBasePo;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -28,12 +27,12 @@ public class UserPostRoleRel extends RelBasePo<UserPostRoleRel> {
     /**
      * 用户岗位表id
      */
-    private Long userPostId;
+    private String userPostId;
 
     /**
      * 角色id
      */
-    private Long roleId;
+    private String roleId;
 
 
     @Override

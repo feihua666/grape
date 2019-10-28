@@ -26,7 +26,7 @@ public class CompCreateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
-    private Long parentId;
+    private String parentId;
 
     @NotNull(message = "公司编码不能为空")
     @ApiModelProperty(value = "公司编码")
@@ -37,7 +37,7 @@ public class CompCreateForm extends BaseForm {
     private String name;
 
     @NotNull(message = "公司类型不能为空")
-    @ApiModelProperty(value = "类型,字典id")
+    @ApiModelProperty(value = "类型,字典id",notes = "字典组编码comp_type")
     private Long typeDictId;
 
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")

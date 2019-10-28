@@ -15,3 +15,12 @@
     align-items:center;
     justify-content:center;
 }
+.g-align-center{
+    text-align: center;
+}
+.g-align-right{
+    text-align: right;
+}
+.g-block{
+    display: block !important;
+}

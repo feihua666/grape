@@ -16,6 +16,9 @@ import org.mapstruct.Mapper;
  * @since 2019-09-26
  */
 @Mapper(componentModel = "spring")
-public interface CompWebMapper extends WebMapper<CompVo, Comp, CompCreateForm,CompUpdateForm,CompListPageForm> {
+public interface CompWebMapper extends WebMapper<CompVo, Comp> {
 
+    Comp formToPo(CompCreateForm f);
+    Comp formToPo(CompListPageForm f);
+    Comp formToPo(CompUpdateForm f);
 }

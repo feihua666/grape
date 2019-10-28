@@ -1,11 +1,16 @@
 <template>
     <el-select class="g-width100"
-            :disabled="disabled"
+               ref="elSelect"
+               filterable
+               :disabled="disabled"
+               :readonly="readonly"
             v-model="localValue"
+               :placeholder="placeholder"
             v-on:focus="handleFocus($event)"
             v-on:blur="handleBlur($event)"
             v-on:change="emitChange"
-            v-on:input="emitInput">
+            v-on:input="emitInput"
+    >
         <el-option label="请选择" :value="empty" v-if="showEmpty"></el-option>
         <el-option
                 v-for="item in dictItems"
@@ -24,6 +29,10 @@
             value: {
                 required: true
             },
+            placeholder:{
+                type: String,
+                default: '请选择'
+            },
             // 是否显示请选择
             showEmpty: {
                 type: Boolean,
@@ -35,10 +44,14 @@
                 required: true
             },
             // 是否禁用
-            disabled: {
-                type: Boolean,
-                default: false
-            }
+        disabled:{
+            type:Boolean,
+            default:false
+        },
+        readonly:{
+            type:Boolean,
+            default:false
+        }
         },
         data () {
             return {
@@ -49,6 +62,9 @@
         },
         mounted () {
             this.getDictItemByGroupCode(this.groupCode)
+            if(this.localValue){
+                this.$emit('dictCode', this.getItemCodeById(this.localValue))
+            }
         },
         methods: {
             handleFocus (event) {
@@ -59,9 +75,21 @@
             },
             emitChange (val) {
                 this.$emit('change', val)
+                this.$emit('dictCode', this.getItemCodeById(val))
             },
             emitInput (val) {
                 this.$emit('input', val)
+                this.$emit('dictCode', this.getItemCodeById(val))
+            },
+            getItemCodeById(id){
+                let code = ''
+                this.dictItems.forEach(item => {
+                    if(item.id == id){
+                        code = item.code
+                        return false
+                    }
+                })
+                return code
             },
             // 加载字典
             getDictItemByGroupCode (groupCode) {

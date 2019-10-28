@@ -59,7 +59,7 @@ public class UserPwdController extends SuperController {
          PasswordAndSalt newPs = PasswordAndSalt.entryptPassword(uf.getNewPassword());
          userPwd.setPwd(newPs.getPassword());
          userPwd.setSalt(newPs.getSalt());
-         userPwd.setPwdModifiedAt(System.currentTimeMillis());
+         userPwd.setPwdModifiedAt(System.currentTimeMillis() + "");
          if (!iUserPwdService.updateById(userPwd)) {
              throw new RBaseException("密码修改失败");
          }

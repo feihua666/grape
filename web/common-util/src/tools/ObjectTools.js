@@ -15,9 +15,7 @@ export function cloneSimple(obj,ignoreEmpty = false) {
     let temp = {}
     for(let key in obj){
         let oldValue = obj[key]
-        if(ignoreEmpty && oldValue == ''){
-
-        }else {
+        if(!(ignoreEmpty && oldValue == '')){
             temp[key] = oldValue
         }
     }

@@ -25,18 +25,20 @@ public class NormalBasePo<T extends Model<?>> extends RelBasePo<T> {
     public static final String PROPERTY_UPDATE_AT = "updateAt";
     public static final String PROPERTY_UPDATE_BY = "updateBy";
     public static final String PROPERTY_VERSION = "version";
+    // 初始版本默认值
+    public static final int INIT_VERSION = 1;
 
     /**
      * 修改时间
      */
     @TableField(fill = FieldFill.UPDATE)
-    private Long updateAt;
+    private String updateAt;
 
     /**
      * 修改人
      */
     @TableField(fill = FieldFill.UPDATE)
-    private Long updateBy;
+    private String updateBy;
 
     /**
      * 乐观锁字段

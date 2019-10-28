@@ -1,8 +1,6 @@
 package grape.base.rest.area.mvc;
 
 import grape.base.rest.BaseRestSuperController;
-import grape.base.rest.comp.vo.CompVo;
-import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,7 +18,6 @@ import grape.base.rest.area.form.AreaListPageForm;
 import grape.base.rest.area.vo.AreaVo;
 import grape.base.rest.area.mapper.AreaWebMapper;
 import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
 import grape.base.service.area.po.Area;
 import grape.base.service.area.api.IAreaService;
 
@@ -37,30 +34,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/area")
 @Api(tags = "区域相关接口")
-public class AreaController extends BaseRestSuperController<IAreaService,AreaWebMapper, AreaVo, Area, AreaCreateForm,AreaUpdateForm,AreaListPageForm> {
+public class AreaController extends BaseRestSuperController<AreaVo, Area> {
 
-    // 请在这里添加额外的方法
-    //todo
+    @Autowired
+    private AreaWebMapper areaWebMapper;
+    @Autowired
+    private IAreaService iAreaService;
 
 
 
-
-
-    /************************分割线，以下代码为 区域表 单表专用，自动生成谨慎修改**************************************************/
 
      @ApiOperation("添加区域")
      @RequiresPermissions("area:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public AreaVo create(@RequestBody @Valid AreaCreateForm cf) {
-         return super.create(cf);
+         Area area = areaWebMapper.formToPo(cf);
+         return create(area);
      }
 
      @ApiOperation("根据id查询区域")
      @RequiresPermissions("area:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public AreaVo queryById(@PathVariable Long id) {
+     public AreaVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
@@ -68,27 +65,30 @@ public class AreaController extends BaseRestSuperController<IAreaService,AreaWeb
      @RequiresPermissions("area:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public AreaVo update(@PathVariable Long id,@RequestBody @Valid AreaUpdateForm uf) {
-         return super.update(id, uf);
+     public AreaVo update(@PathVariable String id,@RequestBody @Valid AreaUpdateForm uf) {
+         Area poQuery = areaWebMapper.formToPo(uf);
+         poQuery.setId(id);
+         return update(poQuery);
      }
 
     @ApiOperation("区域分页查询")
     @RequiresPermissions("area:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<AreaVo> listPage(AreaListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+    public IPage<AreaVo> listPage(AreaListPageForm listForm) {
+        Area poQuery = areaWebMapper.formToPo(listForm);
+        return listPage(poQuery,listForm);
      }
 
     @ApiOperation("区域树")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "父级id,不传获取根节点",name = "parentId")
     })
-    @RequiresPermissions("area:single:tree")
+    @RequiresPermissions("area:single:getByParentId")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<AreaVo> tree(Long parentId) {
-        return super.tree(parentId);
+    public List<AreaVo> getByParentId(String parentId) {
+        return super.getByParentId(parentId);
     }
 
     @Override

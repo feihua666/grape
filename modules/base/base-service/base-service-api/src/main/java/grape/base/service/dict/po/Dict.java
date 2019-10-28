@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-23
+ * @since 2019-10-28
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -53,17 +53,17 @@ public class Dict extends TreeBasePo<Dict> {
     /**
      * 是否禁用
      */
-    private Boolean isDisable;
+    private Boolean isDisabled;
 
     /**
      * 禁用原因
      */
-    private String disableReason;
+    private String disabledReason;
 
     /**
      * 公司id，标识字典归属于哪个公司
      */
-    private Long compId;
+    private String compId;
 
     /**
      * 描述

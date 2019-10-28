@@ -1,6 +1,8 @@
 package grape.base.service.func.api;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.func.po.Func;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.service.IBaseTreeService;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public interface IFuncService extends IBaseTreeService<Func> {
      * @param isDisabled null 忽略该条件
      * @return
      */
-    List<Func> getByRoleId(Long roleId,Boolean isDisabled);
+    List<Func> getByRoleId(String roleId,Boolean isDisabled);
 
     /**
      * 根据角色id查询角色关联的功能,只包含类型是菜单和页面的功能
@@ -29,7 +31,7 @@ public interface IFuncService extends IBaseTreeService<Func> {
      * @param isDisabled null 忽略该条件
      * @return
      */
-    List<Func> getMenuAndPageByRoleId(Long roleId,Boolean isDisabled);
+    List<Func> getMenuAndPageByRoleId(String roleId,Boolean isDisabled);
 
     /**
      * 根据类型编码查询
@@ -38,4 +40,19 @@ public interface IFuncService extends IBaseTreeService<Func> {
      * @return
      */
     List<Func> getByTypes(List<String> typeCode,Boolean isDisabled);
+
+    /**
+     * 判断编码是否已存在
+     * @param code
+     * @return
+     */
+    default boolean existCode(String code){
+        if (isStrEmpty(code)) {
+            throw new InvalidParamsException("code 不能为空");
+        }
+        Func func = new Func();
+        func.setCode(code);
+        int r = count(Wrappers.query(func));
+        return r > 0;
+    }
 }

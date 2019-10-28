@@ -1,13 +1,12 @@
 package grape.base.service.user.po;
 
-import grape.common.service.po.NormalBasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
-import java.io.Serializable;
+import grape.common.service.po.NormalBasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -28,7 +27,7 @@ public class UserIdentifier extends NormalBasePo<UserIdentifier> {
     /**
      * 用户ID,base_user表的主键
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 登录标识
@@ -38,7 +37,7 @@ public class UserIdentifier extends NormalBasePo<UserIdentifier> {
     /**
      * 授权类型,字典id
      */
-    private Long identityTypeDictId;
+    private String identityTypeDictId;
 
 
     @Override

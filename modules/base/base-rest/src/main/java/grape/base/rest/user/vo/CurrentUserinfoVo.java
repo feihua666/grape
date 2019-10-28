@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 public class CurrentUserinfoVo extends BaseVo {
 
     @ApiModelProperty(value = "当前登录用户id")
-    private Long id;
+    private String id;
     @ApiModelProperty(value = "当前登录昵称")
     private String nickname;
     @ApiModelProperty(value = "头像地址，绝对地址")
@@ -27,18 +27,18 @@ public class CurrentUserinfoVo extends BaseVo {
     private Boolean isSwitchRole;
 
     @ApiModelProperty(value = "所属公司id")
-    private Long compId;
+    private String compId;
     @ApiModelProperty(value = "所属公司名称")
     private String  compName;
 
     @ApiModelProperty(value = "所属部门id")
-    private Long deptId;
+    private String deptId;
     @ApiModelProperty(value = "所属部门名称")
     private String deptName;
 
     @ApiModelProperty(value = "当前使用的角色id")
-    private Long roleId;
+    private String roleId;
     @ApiModelProperty(value = "当前使用的岗位id,如果是切换角色，该值为空")
-    private Long postId;
+    private String postId;
 
 }

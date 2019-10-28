@@ -9,6 +9,6 @@ import java.io.Serializable;
  * Created by yangwei
  * Created at 2017/8/22 10:23
  */
-@Data
+
 public class BasePojo implements Serializable {
 }

@@ -1,6 +1,6 @@
 package grape.base.rest.post.mvc;
 
-import grape.base.rest.BaseRestSuperController;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -13,6 +13,7 @@ import grape.base.rest.post.form.PostUpdateForm;
 import grape.base.rest.post.form.PostListPageForm;
 import grape.base.rest.post.vo.PostVo;
 import grape.base.rest.post.mapper.PostWebMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
 import grape.base.service.post.po.Post;
@@ -24,35 +25,34 @@ import java.util.List;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-26
+ * @since 2019-10-22
  */
 @RestController
 @RequestMapping("/post")
 @Api(tags = "岗位表")
-public class PostController extends BaseRestSuperController<IPostService,PostWebMapper, PostVo, Post, PostCreateForm,PostUpdateForm,PostListPageForm> {
+public class PostController extends BaseController<PostVo, Post> {
 
-    // 请在这里添加额外的方法
-    //todo
+    @Autowired
+    private PostWebMapper currentWebMapper;
+    @Autowired
+    private IPostService currentService;
 
 
-
-
-
-    /************************分割线，以下代码为 岗位表 单表专用，自动生成谨慎修改**************************************************/
 
      @ApiOperation("[岗位表]单表创建/添加数据")
      @RequiresPermissions("post:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public PostVo create(@RequestBody @Valid PostCreateForm cf) {
-         return super.create(cf);
+         Post po = currentWebMapper.formToPo(cf);
+         return super.create(po);
      }
 
      @ApiOperation("[岗位表]单表根据ID查询")
      @RequiresPermissions("post:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public PostVo queryById(@PathVariable Long id) {
+     public PostVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
@@ -60,7 +60,7 @@ public class PostController extends BaseRestSuperController<IPostService,PostWeb
      @RequiresPermissions("post:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
@@ -68,8 +68,10 @@ public class PostController extends BaseRestSuperController<IPostService,PostWeb
      @RequiresPermissions("post:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public PostVo update(@PathVariable Long id,@RequestBody @Valid PostUpdateForm uf) {
-         return super.update(id, uf);
+     public PostVo update(@PathVariable String id,@RequestBody @Valid PostUpdateForm uf) {
+         Post po = currentWebMapper.formToPo(uf);
+         po.setId(id);
+         return super.update(po);
      }
 
     @ApiOperation("[岗位表]单表分页列表")
@@ -77,7 +79,8 @@ public class PostController extends BaseRestSuperController<IPostService,PostWeb
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<PostVo> listPage(PostListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+         Post po = currentWebMapper.formToPo(listPageForm);
+         return super.listPage(po,listPageForm);
      }
 
 }

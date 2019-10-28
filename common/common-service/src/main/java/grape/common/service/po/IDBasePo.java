@@ -1,7 +1,8 @@
 package grape.common.service.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import grape.common.pojo.BasePojo;
 import lombok.Data;
 
 /**
@@ -11,8 +12,9 @@ import lombok.Data;
  */
 @Data
 public class IDBasePo<Pk,T extends Model<?>> extends BasePo<T> {
-
-    public static final Long systemUserId = 1L;
-
+    public static final String PROPERTY_ID = "id";
+    public static final String COLUMN_ID = "id";
+    public static final String systemUserId = "1";
+    @TableId(type = IdType.ID_WORKER_STR)
     private Pk id;
 }

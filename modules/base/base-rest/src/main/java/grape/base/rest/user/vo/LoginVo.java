@@ -24,10 +24,10 @@ public class LoginVo extends BaseVo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "当前登录用户id")
-    private Long id;
+    private String id;
 
     @ApiModelProperty(value = "帐号类型字典id")
-    private Long identityTypeDictId;
+    private String identityTypeDictId;
 
     @ApiModelProperty(value = "帐号类型字典编码")
     private String identityTypeDictCode;

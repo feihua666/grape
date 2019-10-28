@@ -26,7 +26,7 @@ public class DictServiceImpl extends BaseServiceImpl<DictMapper, Dict> implement
     public List<Dict> getItemByGroupCode(String groupCode, Boolean isDisabled) {
         Dict dict = new Dict();
         dict.setCode(groupCode);
-        dict.setIsDisable(isDisabled);
+        dict.setIsDisabled(isDisabled);
         Dict groupDict = getOne(Wrappers.query(dict));
         if (groupDict != null) {
             dict.setCode(null);

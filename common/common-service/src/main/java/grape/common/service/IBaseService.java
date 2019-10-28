@@ -2,7 +2,6 @@ package grape.common.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import grape.common.service.po.IDBasePo;
-import grape.common.service.po.NormalBasePo;
 import grape.common.tools.ToolService;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.List;
  * Created by yangwei
  * Created at 2019/7/23 14:30
  */
-public interface IBaseService<Po extends IDBasePo<Long,Po>> extends IService<Po>, ToolService {
+public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, ToolService {
 
     /**
      * 保存实体，操作同com.baomidou.mybatisplus.extension.service.IService#save(java.lang.Object)
@@ -24,11 +23,11 @@ public interface IBaseService<Po extends IDBasePo<Long,Po>> extends IService<Po>
      */
     Po create(Po entity);
 
-    default List<Long> convertIds(List<Po> pos){
+    default List<String> convertIds(List<Po> pos){
         if (!isListEmpty(pos)) {
-            List<Long> ids = new ArrayList<>(pos.size());
+            List<String> ids = new ArrayList<>(pos.size());
             for (Po po : pos) {
-                ids.add(po.getId());
+                ids.add(po.getId().toString());
             }
         }
         return null;

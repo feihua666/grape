@@ -1,13 +1,12 @@
 package grape.base.service.post.po;
 
-import grape.common.service.po.NormalBasePo;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.Version;
-import java.io.Serializable;
+import grape.common.service.po.NormalBasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -53,12 +52,12 @@ public class Post extends NormalBasePo<Post> {
     /**
      * 类型，字典id
      */
-    private Long typeDictId;
+    private String typeDictId;
 
     /**
      * 部门id
      */
-    private Long deptId;
+    private String deptId;
 
     /**
      * 描述

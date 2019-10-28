@@ -16,6 +16,9 @@ import ${cfg.voPackage}.${entity}Vo;
  * @since ${date}
  */
 @Mapper(componentModel = "spring")
-public interface ${entity}WebMapper extends WebMapper<${entity}Vo, ${entity}, ${entity}CreateForm,${entity}UpdateForm,${entity}ListPageForm> {
+public interface ${entity}WebMapper extends WebMapper<${entity}Vo, ${entity}> {
 
+    ${entity} formToPo(${entity}CreateForm f);
+    ${entity} formToPo(${entity}UpdateForm f);
+    ${entity} formToPo(${entity}ListPageForm f);
 }

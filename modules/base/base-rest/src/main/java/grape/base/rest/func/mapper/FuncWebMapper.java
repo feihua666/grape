@@ -13,9 +13,12 @@ import grape.base.rest.func.vo.FuncVo;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-23
+ * @since 2019-10-22
  */
 @Mapper(componentModel = "spring")
-public interface FuncWebMapper extends WebMapper<FuncVo, Func, FuncCreateForm,FuncUpdateForm,FuncListPageForm> {
+public interface FuncWebMapper extends WebMapper<FuncVo, Func> {
 
+    Func formToPo(FuncCreateForm f);
+    Func formToPo(FuncUpdateForm f);
+    Func formToPo(FuncListPageForm f);
 }

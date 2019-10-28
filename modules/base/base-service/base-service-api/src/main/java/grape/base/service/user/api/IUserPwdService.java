@@ -14,7 +14,7 @@ import grape.common.service.IBaseService;
  */
 public interface IUserPwdService extends IBaseService<UserPwd> {
 
-    default UserPwd getByUserId(Long userId){
+    default UserPwd getByUserId(String userId){
         UserPwd userPwd = new UserPwd();
         userPwd.setUserId(userId);
         return getOne(Wrappers.query(userPwd));

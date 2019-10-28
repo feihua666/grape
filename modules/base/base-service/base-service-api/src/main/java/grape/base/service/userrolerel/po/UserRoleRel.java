@@ -28,12 +28,12 @@ public class UserRoleRel extends RelBasePo<UserRoleRel> {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 角色id
      */
-    private Long roleId;
+    private String roleId;
 
 
     @Override

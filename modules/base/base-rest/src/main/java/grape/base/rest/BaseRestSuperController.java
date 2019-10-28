@@ -6,15 +6,10 @@ import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
-import grape.common.rest.form.BaseForm;
-import grape.common.rest.form.BasePageForm;
+import grape.base.service.user.api.IUserService;
+import grape.base.service.user.po.User;
 import grape.common.rest.mvc.BaseController;
-import grape.common.rest.mvc.WebMapper;
-import grape.common.rest.vo.BaseVo;
-import grape.common.service.IBaseService;
 import grape.common.service.po.IDBasePo;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,8 +19,8 @@ import java.io.Serializable;
  * base rest 项目通过controller通用基类，主要提供一些公共service注入
  */
 
-public class BaseRestSuperController<Service extends IBaseService<Po>,MapperConverter extends WebMapper<Vo,Po,CreateForm,UpdateForm,ListForm>,Vo extends BaseVo,Po extends IDBasePo<Long,Po>,CreateForm extends BaseForm, UpdateForm extends BaseForm, ListForm extends BasePageForm>
-        extends BaseController<Service,MapperConverter, Vo, Po, CreateForm,UpdateForm,ListForm> {
+public class BaseRestSuperController<Vo,Po extends IDBasePo<?,?>>
+        extends BaseController<Vo, Po> {
     @Getter
     @Autowired
     private IDictService iDictService;
@@ -35,6 +30,8 @@ public class BaseRestSuperController<Service extends IBaseService<Po>,MapperConv
     @Getter
     @Autowired(required = false)
     private ICompService iCompService;
+    @Autowired
+    private IUserService iUserService;
 
     /**
      * 获取公司
@@ -68,6 +65,18 @@ public class BaseRestSuperController<Service extends IBaseService<Po>,MapperConv
     public Dept getDeptById(Serializable id){
         if (iDeptService != null) {
             return iDeptService.getById(id);
+        }
+        return null;
+    }
+
+    /**
+     * 获取部门
+     * @param id
+     * @return
+     */
+    public User getUserById(Serializable id){
+        if (iUserService != null) {
+            return iUserService.getById(id);
         }
         return null;
     }

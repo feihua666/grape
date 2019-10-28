@@ -24,7 +24,7 @@ public interface FuncMapper extends IBaseMapper<Func> {
      * @param isDisabled 选填 如果为null，忽略该条件
      * @return
      */
-    List<Func> getByRoleId(@Param("roleId") Long roleId, @Param("typeDictIds") List<Long> typeDictIds, @Param("isDisabled")Boolean isDisabled);
+    List<Func> getByRoleId(@Param("roleId") String roleId, @Param("typeDictIds") List<String> typeDictIds, @Param("isDisabled")Boolean isDisabled);
 
     /**
      * 根据类型查询
@@ -32,6 +32,6 @@ public interface FuncMapper extends IBaseMapper<Func> {
      * @param isDisabled 选填 如果为null，忽略该条件
      * @return
      */
-    List<Func> getByType( @Param("typeDictIds") List<Long> typeDictIds, @Param("isDisabled")Boolean isDisabled);
+    List<Func> getByType( @Param("typeDictIds") List<String> typeDictIds, @Param("isDisabled")Boolean isDisabled);
 
 }

@@ -7,13 +7,13 @@ import grape.base.rest.dept.form.DeptListPageForm;
 import grape.base.rest.dept.form.DeptUpdateForm;
 import grape.base.rest.dept.mapper.DeptWebMapper;
 import grape.base.rest.dept.vo.DeptVo;
-import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
-import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
-import grape.common.rest.mvc.BaseController;
+import grape.base.service.user.po.User;
+import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.vo.TreeNodeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -34,63 +34,80 @@ import java.util.List;
 @RestController
 @RequestMapping("/dept")
 @Api(tags = "部门相关接口")
-public class DeptController extends BaseRestSuperController<IDeptService,DeptWebMapper, DeptVo, Dept, DeptCreateForm,DeptUpdateForm,DeptListPageForm> {
-
-    // 请在这里添加额外的方法
-    //todo
+public class DeptController extends BaseRestSuperController<DeptVo, Dept> {
 
 
+    @Autowired
+    private DeptWebMapper deptWebMapper;
+    @Autowired
+    private IDeptService iDeptService;
 
 
-
-    /************************分割线，以下代码为 部门表 单表专用，自动生成谨慎修改**************************************************/
-
-     @ApiOperation("[部门表]单表创建/添加数据")
+     @ApiOperation("添加部门")
      @RequiresPermissions("dept:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public DeptVo create(@RequestBody @Valid DeptCreateForm cf) {
-         return super.create(cf);
+         // code 唯一检查
+         if (iDeptService.existCode(cf.getCode())) {
+             throw new RBaseException("编码已存在");
+         }
+         Dept dept = deptWebMapper.formToPo(cf);
+         return super.create(dept);
      }
 
-     @ApiOperation("[部门表]单表根据ID查询")
+     @ApiOperation("根据id查询部门")
      @RequiresPermissions("dept:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
-     public DeptVo queryById(@PathVariable Long id) {
+     public DeptVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
-     @ApiOperation("[部门表]单表根据ID删除")
+     @ApiOperation("删除部门")
      @RequiresPermissions("dept:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable Long id) {
+     public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
-     @ApiOperation("[部门表]单表根据ID更新")
+     @ApiOperation("更新部门")
      @RequiresPermissions("dept:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
-     public DeptVo update(@PathVariable Long id,@RequestBody @Valid DeptUpdateForm uf) {
-         return super.update(id, uf);
+     public DeptVo update(@PathVariable String id,@RequestBody @Valid DeptUpdateForm uf) {
+         Dept dept = deptWebMapper.formToPo(uf);
+         dept.setId(id);
+         return super.update(dept);
      }
 
-    @ApiOperation("[部门表]单表分页列表")
+    @ApiOperation("分页查询部门")
     @RequiresPermissions("dept:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<DeptVo> listPage(DeptListPageForm listPageForm) {
-         return super.listPage(listPageForm);
+        Dept dept = deptWebMapper.formToPo(listPageForm);
+         return super.listPage(dept,listPageForm);
      }
+    /**
+     * 检查树结构是否完整
+     * @return
+     */
+    @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
+    @RequiresPermissions("dept:single:checkTreeStruct")
+    @GetMapping("/tree/check/struct")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean checkTreeStruct() {
+        return super.checkTreeStruct();
+    }
 
-    @ApiOperation("[菜单功能表]根据父级查询")
-    @RequiresPermissions("dept:single:tree")
+    @ApiOperation("部门树")
+    @RequiresPermissions("dept:single:getByParentId")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<DeptVo> tree( Long parentId) {
-        return super.tree(parentId);
+    public List<TreeNodeVo<DeptVo>> tree(String parentId) {
+        return super.listToTreeNodeVo(super.getByParentId(parentId));
     }
 
     @Override
@@ -104,6 +121,11 @@ public class DeptController extends BaseRestSuperController<IDeptService,DeptWeb
         if (comp != null) {
             vo.setCompName(comp.getName());
         }
+        User user = getUserById(vo.getMasterUserId());
+        if (user != null) {
+            vo.setMasterUserName(user.getNickname());
+        }
+
         return vo;
     }
 }

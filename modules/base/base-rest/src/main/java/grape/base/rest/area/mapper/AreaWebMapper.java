@@ -16,5 +16,9 @@ import grape.base.rest.area.vo.AreaVo;
  * @since 2019-09-23
  */
 @Mapper(componentModel = "spring")
-public interface AreaWebMapper extends WebMapper<AreaVo, Area, AreaCreateForm,AreaUpdateForm,AreaListPageForm> {
+public interface AreaWebMapper extends WebMapper<AreaVo, Area> {
+
+    Area formToPo(AreaCreateForm f);
+    Area formToPo(AreaListPageForm f);
+    Area formToPo(AreaUpdateForm f);
 }

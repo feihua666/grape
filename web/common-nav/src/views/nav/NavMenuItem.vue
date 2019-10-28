@@ -1,6 +1,7 @@
 <template>
   <el-menu-item :index="index(item.node)">
           <span slot="title">
+              <i v-if="item.node.icon" :class="item.node.icon"></i>
             <router-link class="router-link" v-if="item.node.typeDictCode == 'page'" :to="getUrl(item)">{{item.node.name}}</router-link>
             <template v-else>{{item.node.name}}</template>
           </span>
