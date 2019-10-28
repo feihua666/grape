@@ -55,6 +55,18 @@ const router = new VueRouter({
         {
             path: '/dept/deptEdit/:id',
             component: () => import('@/views/dept/DeptEdit.vue')
+        },
+        {
+            path: '/user',
+            component: () => import('@/views/user/User.vue')
+        },
+        {
+            path: '/user/userAdd',
+            component: () => import('@/views/user/UserAdd.vue')
+        },
+        {
+            path: '/user/userEdit/:id',
+            component: () => import('@/views/user/UserEdit.vue')
         }
     ]
 })

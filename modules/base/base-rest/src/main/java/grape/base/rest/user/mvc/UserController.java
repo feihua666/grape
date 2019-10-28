@@ -117,11 +117,6 @@ public class UserController extends BaseRestSuperController<UserVo, User> {
     }
 
 
-
-
-
-    /************************分割线，以下代码为 后台管理用户表 单表专用，自动生成谨慎修改**************************************************/
-
      @ApiOperation(value = "添加用户",notes = "添加用户的基本信息，不包括登录帐号")
      @RequiresPermissions("user:single:create")
      @PostMapping
@@ -155,7 +150,7 @@ public class UserController extends BaseRestSuperController<UserVo, User> {
          return super.update(user);
      }
 
-    @ApiOperation("[后台管理用户表]单表分页列表")
+    @ApiOperation("分页查询用户")
     @RequiresPermissions("user:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)

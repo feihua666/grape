@@ -1,6 +1,6 @@
 package grape.base.rest.user.vo;
 
-import grape.common.rest.vo.BaseVo;
+import grape.common.rest.vo.BaseIdVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,18 +19,18 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value="用户数据响应对象")
-public class UserVo extends BaseVo {
+public class UserVo extends BaseIdVo<String> {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户id")
-    private Long id;
+    private String id;
 
     @ApiModelProperty(value = "昵称，姓名")
     private String nickname;
 
     @ApiModelProperty(value = "性别，字典id")
-    private Long genderDictId;
+    private String genderDictId;
 
     @ApiModelProperty(value = "性别，字典编码")
     private String genderDictCode;
@@ -44,13 +44,13 @@ public class UserVo extends BaseVo {
     private String serialNo;
 
     @ApiModelProperty(value = "部门id")
-    private Long deptId;
+    private String deptId;
 
     @ApiModelProperty(value = "部门名称")
     private String deptName;
 
     @ApiModelProperty(value = "公司id")
-    private Long compId;
+    private String compId;
 
     @ApiModelProperty(value = "公司名称")
     private String compName;

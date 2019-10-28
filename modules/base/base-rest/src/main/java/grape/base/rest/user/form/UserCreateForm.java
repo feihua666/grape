@@ -27,14 +27,13 @@ public class UserCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message = "昵称不能为空")
-    @NotEmpty
+    @NotEmpty(message = "昵称不能为空")
     @ApiModelProperty(value = "昵称，姓名")
     private String nickname;
 
-    @NotNull(message = "性别不能为空")
+    @NotEmpty(message = "性别不能为空")
     @ApiModelProperty(value = "性别",notes = "通过字典获取，字典组编码为gender")
-    private Long genderDictId;
+    private String genderDictId;
 
     @URL(message = "头像必须是一个http开头的绝对路径")
     @ApiModelProperty(value = "头像",notes = "图片绝对路径")
@@ -43,18 +42,11 @@ public class UserCreateForm extends BaseForm {
     @ApiModelProperty(value = "用户编号",notes = "可以做为员工编号")
     private String serialNo;
 
-    @NotNull(message = "部门不能为空")
+    @NotEmpty(message = "部门不能为空")
     @ApiModelProperty(value = "部门id")
-    private Long deptId;
+    private String deptId;
 
     @ApiModelProperty(value = "是否虚拟用户",notes = "虚拟用户代表不是一个真正存在的用户")
     private Boolean isVirtual;
-
-    @ApiModelProperty(value = "锁定状态")
-    private Boolean isLock;
-
-    @ApiModelProperty(value = "锁定原因",notes = "锁定状态为true时，必填")
-    private String lockReason;
-
 
 }
