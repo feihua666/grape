@@ -1,6 +1,11 @@
 package grape.base.rest.post.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.BaseRestSuperController;
+import grape.base.rest.post.form.PostEnableForm;
+import grape.base.service.dept.po.Dept;
+import grape.base.service.dict.po.Dict;
+import grape.common.exception.runtime.RBaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,8 +34,8 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/post")
-@Api(tags = "岗位表")
-public class PostController extends BaseController<PostVo, Post> {
+@Api(tags = "岗位相关接口")
+public class PostController extends BaseRestSuperController<PostVo, Post> {
 
     @Autowired
     private PostWebMapper currentWebMapper;
@@ -39,16 +44,21 @@ public class PostController extends BaseController<PostVo, Post> {
 
 
 
-     @ApiOperation("[岗位表]单表创建/添加数据")
+     @ApiOperation("添加岗位")
      @RequiresPermissions("post:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public PostVo create(@RequestBody @Valid PostCreateForm cf) {
+         // code 唯一检查
+         if (currentService.existCode(cf.getCode())) {
+             throw new RBaseException("编码已存在");
+         }
          Post po = currentWebMapper.formToPo(cf);
+         po.setIsDisabled(false);
          return super.create(po);
      }
 
-     @ApiOperation("[岗位表]单表根据ID查询")
+     @ApiOperation("根据id查询岗位")
      @RequiresPermissions("post:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
@@ -56,7 +66,7 @@ public class PostController extends BaseController<PostVo, Post> {
          return super.queryById(id);
      }
 
-     @ApiOperation("[岗位表]单表根据ID删除")
+     @ApiOperation("删除岗位")
      @RequiresPermissions("post:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -64,7 +74,7 @@ public class PostController extends BaseController<PostVo, Post> {
          return super.deleteById(id);
      }
 
-     @ApiOperation("[岗位表]单表根据ID更新")
+     @ApiOperation("更新岗位")
      @RequiresPermissions("post:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
@@ -74,7 +84,7 @@ public class PostController extends BaseController<PostVo, Post> {
          return super.update(po);
      }
 
-    @ApiOperation("[岗位表]单表分页列表")
+    @ApiOperation("分页查询岗位")
     @RequiresPermissions("post:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
@@ -82,5 +92,36 @@ public class PostController extends BaseController<PostVo, Post> {
          Post po = currentWebMapper.formToPo(listPageForm);
          return super.listPage(po,listPageForm);
      }
+    /**
+     * 启用或禁用
+     * @param id
+     * @param form
+     * @return
+     */
+    @ApiOperation("启用或禁用")
+    @RequiresPermissions("dict:single:enable")
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostVo enable(@PathVariable String id, @RequestBody @Valid PostEnableForm form) {
+        Post post = new Post();
+        post.setId(id);
+        post.setIsDisabled(form.getDisabled());
+        post.setVersion(form.getVersion());
+        post.setDisabledReason(form.getDisabledReason());
+        return super.update(post);
+    }
+    @Override
+    public PostVo transVo(PostVo postVo) {
+        Dict dict = getDictById(postVo.getTypeDictId());
+        if (dict != null) {
+            postVo.setTypeDictCode(dict.getCode());
+            postVo.setTypeDictName(dict.getName());
+        }
+        Dept dept = getDeptById(postVo.getDeptId());
+        if (dept != null) {
+            postVo.setDeptName(dept.getName());
+        }
 
+        return postVo;
+    }
 }

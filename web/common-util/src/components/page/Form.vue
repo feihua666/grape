@@ -5,6 +5,7 @@
              ref="dynamicValidateForm"
              label-width="100px"
              v-loading="loading"
+             @submit.native.prevent
     >
         <template v-for="(item, index) in formItems">
             <el-form-item
@@ -65,12 +66,20 @@
                            :active-text="item.element.switch ? item.element.switch.activeText: '是'"
                            :inactive-text="item.element.switch ? item.element.switch.inactiveText: '否'"
                 >
+
                 </el-switch>
+                <Select v-else-if="item.element.type == 'select'"
+                        v-model="form[getFieldName(item)]"
+                        :disabled="item.element.disabled"
+                        :url="item.element.select.url"
+                        :props="item.element.select.props"
+                ></Select>
                 <template v-else-if="item.element.type == 'button'">
                     <el-button v-if="isObject(item.element.button)"
                                :type="item.element.button.buttonType || aiButtonStyle(item.element.button.label).type || 'primary'"
                                :icon="item.element.button.buttonIcon || aiButtonStyle(item.element.button.label).icon "
                                @click="buttonClick(item.element.button)"
+                               :native-type="item.element.button.action == 'submit' ? 'submit': null"
                                :loading="buttonLoading[item.element.button.action] || item.element.button.loading"
                     >{{item.element.button.label}}</el-button>
                     <template v-else-if="isArray(item.element.button)">
@@ -78,6 +87,7 @@
                                    :type="buttonItem.buttonType || aiButtonStyle(buttonItem.label).type || 'primary'"
                                    :icon="buttonItem.buttonIcon || aiButtonStyle(buttonItem.label).icon "
                                    @click="buttonClick(buttonItem)"
+                                   :native-type="buttonItem.action == 'submit' ? 'submit': null"
                                    :loading="buttonLoading[buttonItem.action] || buttonItem.loading"
                         >{{buttonItem.label}}</el-button>
                     </template>
@@ -144,6 +154,7 @@
     import {isObject,cloneSimple,copyPropSimple,getValue,hasPropSimple} from '../../tools/ObjectTools.js'
     import InputSelectTree from '../../components/common/InputSelectTree.vue'
     import InputSelectIcon from '../../components/common/InputSelectIcon.vue'
+    import Select from '../../components/common/Select.vue'
 
     import {aiButtonStyle} from "../../tools/StyleTools.js"
     export default {
@@ -151,6 +162,7 @@
         components:{
             SelectDict,
             InputSelectIcon,
+            Select,
             InputSelectTree
         },
         props:{
@@ -335,7 +347,7 @@
                 }
                 this.$refs['dynamicValidateForm'].validate((valid) => {
                     if (valid) {
-                            let tempForm = cloneSimple(this.form,true)
+                        let tempForm = cloneSimple(this.form,true)
                             if(pageQuery){
                                 tempForm = copyPropSimple(tempForm,pageQuery)
                             }

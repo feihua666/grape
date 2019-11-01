@@ -1,5 +1,5 @@
 package ${cfg.formPackage};
-import grape.common.rest.form.BaseForm;
+import grape.common.rest.form.BaseUpdateForm;
 
 <#assign swagger2 = true>
 <#assign activeRecord = false>
@@ -12,7 +12,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 </#if>
-
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 /**
  * <p>
  * ${table.comment!}
@@ -31,9 +32,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}UpdateForm更新表单对象", description="${table.comment!}")
+@ApiModel(value="${table.comment!}更新表单对象")
 </#if>
-public class ${entity}UpdateForm extends BaseForm {
+public class ${entity}UpdateForm extends BaseUpdateForm {
 
 <#if entitySerialVersionUID>
     private static final long serialVersionUID = 1L;
@@ -43,7 +44,8 @@ public class ${entity}UpdateForm extends BaseForm {
     <#if field.keyFlag>
         <#assign keyPropertyName="${field.propertyName}"/>
     </#if>
-
+    <#if field.propertyType == "String"><#assign nullValid="NotEmpty"/><#else><#assign nullValid="NotNull"/></#if>
+    @${nullValid}(message="${field.comment}不能为空")
     <#if field.comment!?length gt 0>
         <#if swagger2>
     @ApiModelProperty(value = "${field.comment}")
@@ -82,6 +84,7 @@ public class ${entity}UpdateForm extends BaseForm {
     @TableLogic
     </#if>
     private ${field.propertyType} ${field.propertyName};
+
 </#list>
 <#------------  END 字段循环遍历  ---------->
 

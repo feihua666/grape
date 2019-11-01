@@ -7,9 +7,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
- * 角色表
+ * 角色添加表单对象
  * </p>
  *
  * @author yangwei
@@ -18,22 +21,22 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="RoleCreateForm添加表单对象", description="角色表")
+@ApiModel(value="角色添加表单对象")
 public class RoleCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+
+    @ApiModelProperty(value = "父级id")
+    private String parentId;
+
+    @NotEmpty(message = "编码不能为空")
     @ApiModelProperty(value = "角色编码")
     private String code;
 
+    @NotEmpty(message = "名称不能为空")
     @ApiModelProperty(value = "角色名称")
     private String name;
-
-    @ApiModelProperty(value = "是否禁用")
-    private Boolean isDisabled;
-
-    @ApiModelProperty(value = "禁用原因")
-    private String disabledReason;
 
     @ApiModelProperty(value = "描述")
     private String remark;

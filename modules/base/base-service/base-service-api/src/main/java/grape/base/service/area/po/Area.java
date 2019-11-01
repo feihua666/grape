@@ -1,12 +1,13 @@
 package grape.base.service.area.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.baomidou.mybatisplus.annotation.Version;
 import grape.common.service.po.TreeBasePo;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 
 /**
  * <p>
@@ -14,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-23
+ * @since 2019-11-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -30,14 +31,19 @@ public class Area extends TreeBasePo<Area> {
     private String name;
 
     /**
-     * 拼音，全拼
+     * 第一个字的首字母
      */
-    private String spell;
+    private String spellFirst;
 
     /**
      * 拼音，简拼，每个字的首字母
      */
     private String spellSimple;
+
+    /**
+     * 拼音，全拼
+     */
+    private String spell;
 
     /**
      * 类型，字典id

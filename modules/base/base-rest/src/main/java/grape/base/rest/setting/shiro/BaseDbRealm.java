@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -128,10 +129,7 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
         IdentifierPasswordToken token = ((IdentifierPasswordToken) authcToken);
         UserIdentifier userIdentifier = iUserIdentifierService.getByIdentifier(token.getUsername());
 
-        if(userIdentifier == null){
-            return null;
-        }
-        return userIdentifier.getUserId();
+        return userIdentifier == null ? null : userIdentifier.getUserId();
     }
 
     @Override

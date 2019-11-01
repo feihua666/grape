@@ -1,4 +1,5 @@
 package grape.base.rest.area.vo;
+import grape.common.rest.vo.BaseTreeVo;
 import grape.common.rest.vo.BaseVo;
 
 import io.swagger.annotations.ApiModel;
@@ -18,8 +19,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="AreaVo数据响应对象", description="区域表")
-public class AreaVo extends BaseVo {
+@ApiModel(value="区域数据响应对象")
+public class AreaVo extends BaseTreeVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,6 +29,9 @@ public class AreaVo extends BaseVo {
 
     @ApiModelProperty(value = "拼音，全拼")
     private String spell;
+
+    @ApiModelProperty(value = "拼音，首字母")
+    private String spellFirst;
 
     @ApiModelProperty(value = "拼音，简拼，每个字的首字母")
     private String spellSimple;

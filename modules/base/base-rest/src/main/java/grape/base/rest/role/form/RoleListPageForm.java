@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 角色表
+ * 角色分页查询条件对象
  * </p>
  *
  * @author yangwei
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="RoleListPageForm分页查询条件对象", description="角色表")
+@ApiModel(value="角色分页查询条件对象")
 public class RoleListPageForm extends BasePageForm {
 
     private static final long serialVersionUID = 1L;
@@ -32,11 +32,8 @@ public class RoleListPageForm extends BasePageForm {
     @ApiModelProperty(value = "是否禁用")
     private Boolean isDisabled;
 
-    @ApiModelProperty(value = "禁用原因")
-    private String disabledReason;
-
-    @ApiModelProperty(value = "描述")
-    private String remark;
+    @ApiModelProperty(value = "父级id")
+    private String parentId;
 
 
 }

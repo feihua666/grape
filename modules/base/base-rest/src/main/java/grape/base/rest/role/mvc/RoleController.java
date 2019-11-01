@@ -1,6 +1,9 @@
 package grape.base.rest.role.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.role.form.RoleEnableForm;
+import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.vo.TreeNodeVo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
@@ -28,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/role")
-@Api(tags = "角色表")
+@Api(tags = "角色相关接口")
 public class RoleController extends BaseController<RoleVo, Role> {
 
     @Autowired
@@ -38,16 +41,20 @@ public class RoleController extends BaseController<RoleVo, Role> {
 
 
 
-     @ApiOperation("[角色表]单表创建/添加数据")
+     @ApiOperation("添加角色")
      @RequiresPermissions("role:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public RoleVo create(@RequestBody @Valid RoleCreateForm cf) {
+         // code 唯一检查
+         if (currentService.existCode(cf.getCode())) {
+             throw new RBaseException("编码已存在");
+         }
          Role po = currentWebMapper.formToPo(cf);
          return super.create(po);
      }
 
-     @ApiOperation("[角色表]单表根据ID查询")
+     @ApiOperation("根据ID查询角色")
      @RequiresPermissions("role:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
@@ -55,7 +62,7 @@ public class RoleController extends BaseController<RoleVo, Role> {
          return super.queryById(id);
      }
 
-     @ApiOperation("[角色表]单表根据ID删除")
+     @ApiOperation("删除角色")
      @RequiresPermissions("role:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -63,7 +70,7 @@ public class RoleController extends BaseController<RoleVo, Role> {
          return super.deleteById(id);
      }
 
-     @ApiOperation("[角色表]单表根据ID更新")
+     @ApiOperation("更新角色")
      @RequiresPermissions("role:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
@@ -73,7 +80,7 @@ public class RoleController extends BaseController<RoleVo, Role> {
          return super.update(po);
      }
 
-    @ApiOperation("[角色表]单表分页列表")
+    @ApiOperation("分页查询角色")
     @RequiresPermissions("role:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
@@ -81,12 +88,52 @@ public class RoleController extends BaseController<RoleVo, Role> {
          Role po = currentWebMapper.formToPo(listPageForm);
          return super.listPage(po,listPageForm);
      }
+    /**
+     * 检查树结构是否完整
+     * @return
+     */
+    @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
+    @RequiresPermissions("role:single:checkTreeStruct")
+    @GetMapping("/tree/check/struct")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean checkTreeStruct() {
+        return super.checkTreeStruct();
+    }
 
-    @ApiOperation("[菜单功能表]根据父级查询")
+    /**
+     * 启用或禁用
+     * @param id
+     * @param form
+     * @return
+     */
+    @ApiOperation("启用或禁用")
+    @RequiresPermissions("dict:single:enable")
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public RoleVo enable(@PathVariable String id, @RequestBody @Valid RoleEnableForm form) {
+        Role role = new Role();
+        role.setId(id);
+        role.setIsDisabled(form.getDisabled());
+        role.setVersion(form.getVersion());
+        role.setDisabledReason(form.getDisabledReason());
+        return super.update(role);
+    }
+    @ApiOperation("角色树")
     @RequiresPermissions("role:single:getByParentId")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<RoleVo> getByParentId(String parentId) {
-        return super.getByParentId(parentId);
+    public List<TreeNodeVo<RoleVo>> tree(String parentId) {
+        return super.listToTreeNodeVo(super.getByParentId(parentId));
+    }
+
+    @Override
+    public RoleVo transVo(RoleVo roleVo) {
+
+        Role role = getService().getById(roleVo.getParentId());
+        if (role != null) {
+            roleVo.setParentName(role.getName());
+        }
+
+        return roleVo;
     }
 }

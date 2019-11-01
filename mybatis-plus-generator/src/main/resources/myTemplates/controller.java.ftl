@@ -25,6 +25,9 @@ import ${superControllerClassPackage};
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
 import java.util.List;
+<#if cfg.treeTable>
+import grape.common.rest.vo.TreeNodeVo;
+</#if>
 /**
  * <p>
  * ${table.comment!} 前端控制器
@@ -39,7 +42,7 @@ import java.util.List;
 @Controller
 </#if>
 @RequestMapping("<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen?replace('-po', '' )}<#else>${table.entityPath}</#if>")
-@Api(tags = "${table.comment!}")
+@Api(tags = "${table.comment!}相关接口")
 <#if kotlin>
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
@@ -56,7 +59,7 @@ public class ${table.controllerName} {
 
 
 
-     @ApiOperation("[${table.comment!}]单表创建/添加数据")
+     @ApiOperation("添加${table.comment!}")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
@@ -65,7 +68,7 @@ public class ${table.controllerName} {
          return super.create(po);
      }
 
-     @ApiOperation("[${table.comment!}]单表根据ID查询")
+     @ApiOperation("根据ID查询${table.comment!}")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
@@ -73,7 +76,7 @@ public class ${table.controllerName} {
          return super.queryById(id);
      }
 
-     @ApiOperation("[${table.comment!}]单表根据ID删除")
+     @ApiOperation("删除${table.comment!}")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -81,7 +84,7 @@ public class ${table.controllerName} {
          return super.deleteById(id);
      }
 
-     @ApiOperation("[${table.comment!}]单表根据ID更新")
+     @ApiOperation("更新${table.comment!}")
      @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
@@ -91,7 +94,7 @@ public class ${table.controllerName} {
          return super.update(po);
      }
 
-    @ApiOperation("[${table.comment!}]单表分页列表")
+    @ApiOperation("分页查询${table.comment!}")
     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
@@ -101,12 +104,12 @@ public class ${table.controllerName} {
      }
 
     <#if cfg.treeTable>
-    @ApiOperation("[菜单功能表]根据父级查询")
+    @ApiOperation("${table.comment!}树")
     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:tree")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<${entity}Vo> tree( String parentId) {
-        return super.tree(parentId);
+    public List<TreeNodeVo<${entity}Vo>> tree( String parentId) {
+        return super.listToTreeNodeVo(super.getByParentId(parentId));
     }
     </#if>
 }

@@ -1,4 +1,5 @@
 package grape.base.rest.post.vo;
+import grape.common.rest.vo.BaseIdVo;
 import grape.common.rest.vo.BaseVo;
 
 import io.swagger.annotations.ApiModel;
@@ -9,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 岗位表
+ * 岗位数据响应对象
  * </p>
  *
  * @author yangwei
@@ -18,8 +19,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="PostVo数据响应对象", description="岗位表")
-public class PostVo extends BaseVo {
+@ApiModel(value="岗位数据响应对象")
+public class PostVo extends BaseIdVo<String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,17 +33,26 @@ public class PostVo extends BaseVo {
     @ApiModelProperty(value = "是否禁用")
     private Boolean isDisabled;
 
-    @ApiModelProperty(value = "禁用原因")
+    @ApiModelProperty(value = "启用/禁用原因")
     private String disabledReason;
 
     @ApiModelProperty(value = "是否公共")
     private Boolean isPublic;
 
     @ApiModelProperty(value = "类型，字典id")
-    private Long typeDictId;
+    private String typeDictId;
+
+    @ApiModelProperty(value = "类型，字典编码")
+    private String typeDictCode;
+
+    @ApiModelProperty(value = "类型，字典名称")
+    private String typeDictName;
 
     @ApiModelProperty(value = "部门id")
-    private Long deptId;
+    private String deptId;
+
+    @ApiModelProperty(value = "部门名称")
+    private String deptName;
 
     @ApiModelProperty(value = "描述")
     private String remark;

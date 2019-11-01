@@ -12,7 +12,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 </#if>
-
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 /**
  * <p>
  * ${table.comment!}
@@ -31,7 +32,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}CreateForm添加表单对象", description="${table.comment!}")
+@ApiModel(value="${table.comment!}添加表单对象")
 </#if>
 public class ${entity}CreateForm extends BaseForm {
 
@@ -43,7 +44,8 @@ public class ${entity}CreateForm extends BaseForm {
     <#if field.keyFlag>
         <#assign keyPropertyName="${field.propertyName}"/>
     </#if>
-
+    <#if field.propertyType == "String"><#assign nullValid="NotEmpty"/><#else><#assign nullValid="NotNull"/></#if>
+    @${nullValid}(message="${field.comment}不能为空")
     <#if field.comment!?length gt 0>
         <#if swagger2>
     @ApiModelProperty(value = "${field.comment}")
@@ -82,6 +84,7 @@ public class ${entity}CreateForm extends BaseForm {
     @TableLogic
     </#if>
     private ${field.propertyType} ${field.propertyName};
+
 </#list>
 <#------------  END 字段循环遍历  ---------->
 

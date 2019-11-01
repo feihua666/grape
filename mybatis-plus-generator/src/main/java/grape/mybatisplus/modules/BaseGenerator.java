@@ -92,6 +92,8 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_post","post",TableType.normal,tablePrefix,author);
         commonSet("base_user_post","userpost",TableType.normal,tablePrefix,author);
         commonSet("base_user_role_rel","userrolerel",TableType.rel,tablePrefix,author);
+        commonSet("base_job","job",TableType.normal,tablePrefix,author);
+        commonSet("base_job_level","joblevel",TableType.normal,tablePrefix,author);
 
         return  tableConfig;
     }

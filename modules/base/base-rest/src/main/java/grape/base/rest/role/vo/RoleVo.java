@@ -1,4 +1,5 @@
 package grape.base.rest.role.vo;
+import grape.common.rest.vo.BaseTreeVo;
 import grape.common.rest.vo.BaseVo;
 
 import io.swagger.annotations.ApiModel;
@@ -9,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 角色表
+ * 角色数据响应对象
  * </p>
  *
  * @author yangwei
@@ -18,8 +19,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="RoleVo数据响应对象", description="角色表")
-public class RoleVo extends BaseVo {
+@ApiModel(value="角色数据响应对象")
+public class RoleVo extends BaseTreeVo {
 
     private static final long serialVersionUID = 1L;
 

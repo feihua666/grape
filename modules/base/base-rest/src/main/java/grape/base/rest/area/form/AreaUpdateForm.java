@@ -20,20 +20,17 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="AreaUpdateForm更新表单对象", description="区域表")
+@ApiModel(value="区域更新表单对象")
 public class AreaUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
+    private Long parentId;
+
     @NotNull(message = "区域名称不能为空")
     @ApiModelProperty(value = "区域名称")
     private String name;
-
-    @ApiModelProperty(value = "拼音，全拼")
-    private String spell;
-
-    @ApiModelProperty(value = "拼音，简拼，每个字的首字母")
-    private String spellSimple;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
     private Long adminDivisionId;

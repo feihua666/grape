@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}ListPageForm分页查询条件对象", description="${table.comment!}")
+@ApiModel(value="${table.comment!}分页查询条件对象")
 </#if>
 public class ${entity}ListPageForm extends BasePageForm {
 

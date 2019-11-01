@@ -28,19 +28,12 @@ public class AreaCreateForm extends BaseForm {
     @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
     private Long parentId;
 
-
     @NotNull(message = "区域名称不能为空")
     @ApiModelProperty(value = "区域名称")
     private String name;
 
-    @ApiModelProperty(value = "拼音，全拼")
-    private String spell;
-
-    @ApiModelProperty(value = "拼音，简拼，每个字的首字母")
-    private String spellSimple;
-
     @NotNull(message = "区域类型不能为空")
-    @ApiModelProperty(value = "类型，字典id")
+    @ApiModelProperty(value = "类型，字典id",notes = "字典组编码area_type")
     private Long typeDictId;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")

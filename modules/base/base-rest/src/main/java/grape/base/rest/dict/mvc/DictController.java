@@ -98,6 +98,7 @@ public class DictController extends BaseRestSuperController<DictVo, Dict> {
          }
 
          Dict dict = dictWebMapper.formToPo(cf);
+         dict.setIsDisabled(false);
          return super.create(dict);
      }
 
@@ -161,12 +162,12 @@ public class DictController extends BaseRestSuperController<DictVo, Dict> {
         return super.listToTreeNodeVo(r);
     }
     /**
-     * 启用或禁用功能，禁用后导航项目不再展示，赐予的权限也不会被分配
+     * 启用或禁用
      * @param id
      * @param form
      * @return
      */
-    @ApiOperation("启用或禁用功能")
+    @ApiOperation("启用或禁用")
     @RequiresPermissions("dict:single:enable")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)

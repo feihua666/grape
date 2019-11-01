@@ -1,5 +1,5 @@
 package ${cfg.voPackage};
-import grape.common.rest.vo.BaseVo;
+import grape.common.rest.vo.BaseIdVo;
 
 <#assign swagger2 = true>
 <#assign activeRecord = false>
@@ -31,9 +31,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}Vo数据响应对象", description="${table.comment!}")
+@ApiModel(value="${entity}Vo数据响应对象")
 </#if>
-public class ${entity}Vo extends BaseVo {
+public class ${entity}Vo extends BaseIdVo<String> {
 
 <#if entitySerialVersionUID>
     private static final long serialVersionUID = 1L;

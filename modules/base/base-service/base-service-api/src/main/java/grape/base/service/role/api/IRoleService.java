@@ -1,6 +1,8 @@
 package grape.base.service.role.api;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.role.po.Role;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.service.IBaseTreeService;
 
 import java.util.List;
@@ -22,4 +24,19 @@ public interface IRoleService extends IBaseTreeService<Role> {
      * @return
      */
     List<Role> getByUserId(String userId);
+
+    /**
+     * 判断编码是否已存在
+     * @param code
+     * @return
+     */
+    default boolean existCode(String code){
+        if (isStrEmpty(code)) {
+            throw new InvalidParamsException("code 不能为空");
+        }
+        Role role = new Role();
+        role.setCode(code);
+        int r = count(Wrappers.query(role));
+        return r > 0;
+    }
 }

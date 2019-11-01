@@ -98,6 +98,10 @@
                         label:'系统字典'
                     },
                     {
+                        prop: 'isGroup',
+                        label:'字典组'
+                    },
+                    {
                         prop: 'seq',
                         label:'排序'
                     }

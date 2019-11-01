@@ -1,15 +1,17 @@
 package grape.base.rest.role.form;
-import grape.common.rest.form.BaseForm;
 
+import grape.common.rest.form.BaseUpdateForm;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * <p>
- * 角色表
+ * 角色更新表单对象
  * </p>
  *
  * @author yangwei
@@ -18,22 +20,15 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="RoleUpdateForm更新表单对象", description="角色表")
-public class RoleUpdateForm extends BaseForm {
+@ApiModel(value="角色更新表单对象")
+public class RoleUpdateForm extends BaseUpdateForm {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "角色编码")
-    private String code;
 
+    @NotEmpty(message = "名称不能为空")
     @ApiModelProperty(value = "角色名称")
     private String name;
-
-    @ApiModelProperty(value = "是否禁用")
-    private Boolean isDisabled;
-
-    @ApiModelProperty(value = "禁用原因")
-    private String disabledReason;
 
     @ApiModelProperty(value = "描述")
     private String remark;

@@ -1,8 +1,11 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost/grape?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://39.104.146.45/grape?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: root
+    password: jlks82lsUH@@
 logging:
   level:
-    root: debug
+    root: trace
+baidu:
+  map:
+    ak: 69a5a1e7260cd2cd298c33666e436530

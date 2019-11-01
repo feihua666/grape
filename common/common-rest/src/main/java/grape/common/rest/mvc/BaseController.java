@@ -156,6 +156,10 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
         return pagePoToVo(page);
 
     }
+    public List<Vo> list(Po poQuery){
+        List list = service.list(new QueryWrapper(poQuery));
+        return posToVos(list);
+    }
     /**
      * 根据父id请求
      * @param parentId

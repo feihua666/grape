@@ -23,9 +23,6 @@ public class UserVo extends BaseIdVo<String> {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户id")
-    private String id;
-
     @ApiModelProperty(value = "昵称，姓名")
     private String nickname;
 

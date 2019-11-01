@@ -67,6 +67,66 @@ const router = new VueRouter({
         {
             path: '/user/userEdit/:id',
             component: () => import('@/views/user/UserEdit.vue')
+        },
+        {
+            path: '/role',
+            component: () => import('@/views/role/Role.vue')
+        },
+        {
+            path: '/role/roleAdd',
+            component: () => import('@/views/role/RoleAdd.vue')
+        },
+        {
+            path: '/role/roleEdit/:id',
+            component: () => import('@/views/role/RoleEdit.vue')
+        },
+        {
+            path: '/post',
+            component: () => import('@/views/post/Post.vue')
+        },
+        {
+            path: '/post/postAdd',
+            component: () => import('@/views/post/PostAdd.vue')
+        },
+        {
+            path: '/post/postEdit/:id',
+            component: () => import('@/views/post/PostEdit.vue')
+        },
+        {
+            path: '/job',
+            component: () => import('@/views/job/Job.vue')
+        },
+        {
+            path: '/job/jobAdd',
+            component: () => import('@/views/job/JobAdd.vue')
+        },
+        {
+            path: '/job/jobEdit/:id',
+            component: () => import('@/views/job/JobEdit.vue')
+        },
+        {
+            path: '/joblevel',
+            component: () => import('@/views/joblevel/Joblevel.vue')
+        },
+        {
+            path: '/joblevel/joblevelAdd',
+            component: () => import('@/views/joblevel/JoblevelAdd.vue')
+        },
+        {
+            path: '/joblevel/joblevelEdit/:id',
+            component: () => import('@/views/joblevel/JoblevelEdit.vue')
+        },
+        {
+            path: '/area',
+            component: () => import('@/views/area/Area.vue')
+        },
+        {
+            path: '/area/areaAdd',
+            component: () => import('@/views/area/AreaAdd.vue')
+        },
+        {
+            path: '/area/areaEdit/:id',
+            component: () => import('@/views/area/AreaEdit.vue')
         }
     ]
 })
