@@ -82,6 +82,10 @@
                         label:'父级'
                     },
                     {
+                        prop: 'typeDictName',
+                        label:'类型'
+                    },
+                    {
                         prop: 'longitude',
                         label:'经度'
                     },

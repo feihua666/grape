@@ -17,7 +17,7 @@
                     <el-scrollbar wrapStyle="max-height:500px;">
                         <el-checkbox-group v-model="toolbarMore.checkedItems">
                             <template v-for="(column,index) in columns">
-                                <div style="margin-top: 15px;"></div>
+                                <div style="margin-top: 15px;" :key="index"></div>
                                 <el-checkbox  :label="column.prop" :key="index" class="g-block"
                                              :disabled="toolbarMore.checkedItems.length == 1 && toolbarMore.checkedItems.indexOf(column.prop) >=0"
                                 >{{column.label}}</el-checkbox>
@@ -360,7 +360,7 @@
                     return button.label(this.currentRow)
                 }
                 if(button.disabled_label !== undefined){
-                    if(isButtonDisabled(button)){
+                    if(this.isButtonDisabled(button)){
                         return button.disabled_label
                     }
                 }

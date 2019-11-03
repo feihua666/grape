@@ -16,5 +16,4 @@ import java.util.Map;
  */
 public interface AreaMapper extends IBaseMapper<Area> {
 
-    List<Map<String, Object>> selectCopys(@Param("id")String id, @Param("parentId") String parentId);
 }

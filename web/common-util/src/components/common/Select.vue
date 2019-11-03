@@ -89,6 +89,9 @@
             getDataByUrl (url) {
                 this.axios.get(url).then(res => {
                     this.data = res.data.data
+                    this.$nextTick(()=>{
+                        this.$refs.elSelect.setSelected()
+                    })
                 })
             }
         },

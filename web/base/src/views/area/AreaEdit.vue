@@ -42,7 +42,7 @@
                             label: '类型',
                             type: 'selectDict',
                             selectDict:{
-                                groupCode: 'areaType'
+                                groupCode: 'area_type'
                             },
                             required: true
                         }

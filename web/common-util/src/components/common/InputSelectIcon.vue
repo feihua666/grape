@@ -8,12 +8,12 @@
                 <div>
                     <div>element</div>
                     <ul class="icon-list">
-                        <li  v-for="item in elementIcons" @click="elementClick(item)" :class="item === localValue ? 'selected' : ''"><span><i :class="item"></i><span class="icon-name">{{item}}</span></span></li>
+                        <li  v-for="(item ,index) in elementIcons" :key="index" @click="elementClick(item)" :class="item === localValue ? 'selected' : ''"><span><i :class="item"></i><span class="icon-name">{{item}}</span></span></li>
                     </ul>
                     <template  v-if="bootstrap">
                         <div>bootstrap</div>
                         <ul class="bs-glyphicons-list">
-                            <li v-for="item in bootstrapIcons" @click="bootstrapClick(item)" :class="item === localValue ? 'selected' : ''"> <span :class="item" aria-hidden="true" style="top:0;"></span> <span class="glyphicon-class">{{item}}</span> </li>
+                            <li v-for="(item ,index) in bootstrapIcons" :key="index" @click="bootstrapClick(item)" :class="item === localValue ? 'selected' : ''"> <span :class="item" aria-hidden="true" style="top:0;"></span> <span class="glyphicon-class">{{item}}</span> </li>
                         </ul>
                     </template>
 
@@ -43,7 +43,9 @@
   export default {
     name: 'InputSelectIcon',
     props: {
-      value: '',
+      value: {
+          required: true
+      },
         placeholder:{
           type: String
         },
