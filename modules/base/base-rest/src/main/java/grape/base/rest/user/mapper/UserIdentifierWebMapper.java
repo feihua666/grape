@@ -7,6 +7,8 @@ import grape.base.rest.user.form.UserIdentifierCreateForm;
 import grape.base.rest.user.form.UserIdentifierUpdateForm;
 import grape.base.rest.user.form.UserIdentifierListPageForm;
 import grape.base.rest.user.vo.UserIdentifierVo;
+import org.mapstruct.ReportingPolicy;
+
 /**
  * <p>
  * 用户登录标识表 前端领域模型映射
@@ -15,7 +17,7 @@ import grape.base.rest.user.vo.UserIdentifierVo;
  * @author yangwei
  * @since 2019-10-22
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserIdentifierWebMapper extends WebMapper<UserIdentifierVo, UserIdentifier> {
 
     UserIdentifier formToPo(UserIdentifierCreateForm f);

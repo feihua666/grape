@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 树关系实体基类
@@ -11,6 +12,7 @@ import lombok.Data;
  * Created at 2019/7/24 17:41
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class TreeBasePo<T extends Model<?>> extends NormalBasePo<T> {
 
     public static final String COLUMN_PARENT_ID = "parent_id";

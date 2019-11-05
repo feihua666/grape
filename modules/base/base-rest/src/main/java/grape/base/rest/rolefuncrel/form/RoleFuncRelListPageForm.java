@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="RoleFuncRelListPageForm分页查询条件对象", description="角色菜单功能关系表，多对多")
 public class RoleFuncRelListPageForm extends BasePageForm {
@@ -24,10 +25,10 @@ public class RoleFuncRelListPageForm extends BasePageForm {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "角色id")
-    private Long roleId;
+    private String roleId;
 
     @ApiModelProperty(value = "用户id")
-    private Long funcId;
+    private String funcId;
 
 
 }

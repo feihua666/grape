@@ -1,6 +1,7 @@
 package grape.base.rest.area.form;
 import grape.common.rest.form.BaseForm;
 
+import grape.common.rest.form.BaseUpdateForm;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,22 +19,23 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="区域更新表单对象")
-public class AreaUpdateForm extends BaseForm {
+public class AreaUpdateForm extends BaseUpdateForm {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
-    private Long parentId;
+    private String parentId;
 
     @NotNull(message = "区域名称不能为空")
     @ApiModelProperty(value = "区域名称")
     private String name;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
-    private Long adminDivisionId;
+    private String adminDivisionId;
 
     @ApiModelProperty(value = "经度")
     private String longitude;

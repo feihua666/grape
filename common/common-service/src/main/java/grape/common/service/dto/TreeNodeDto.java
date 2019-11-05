@@ -2,6 +2,7 @@ package grape.common.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * Created at 2019/9/24 16:53
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @AllArgsConstructor
 public class TreeNodeDto<T> extends BaseDto {
     private T node;

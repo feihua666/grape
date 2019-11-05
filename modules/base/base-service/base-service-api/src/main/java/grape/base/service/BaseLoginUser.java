@@ -8,6 +8,7 @@ import grape.base.service.userpost.po.UserPost;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.common.AbstractLoginUser;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * Created at 2019/9/26 10:17
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BaseLoginUser extends AbstractLoginUser {
 
     // 用户登录的帐号信息

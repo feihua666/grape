@@ -2,6 +2,7 @@ package grape.common.rest.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 带有分页的表单
@@ -9,6 +10,7 @@ import lombok.Data;
  * Created at 2019/7/27 16:25
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BasePageForm extends BaseForm {
     /**
      * 请求页码

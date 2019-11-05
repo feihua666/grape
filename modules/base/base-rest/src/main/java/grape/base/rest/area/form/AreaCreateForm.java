@@ -18,7 +18,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="区域添加表单")
 public class AreaCreateForm extends BaseForm {
@@ -26,7 +27,7 @@ public class AreaCreateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
-    private Long parentId;
+    private String parentId;
 
     @NotNull(message = "区域名称不能为空")
     @ApiModelProperty(value = "区域名称")
@@ -34,10 +35,10 @@ public class AreaCreateForm extends BaseForm {
 
     @NotNull(message = "区域类型不能为空")
     @ApiModelProperty(value = "类型，字典id",notes = "字典组编码area_type")
-    private Long typeDictId;
+    private String typeDictId;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
-    private Long adminDivisionId;
+    private String adminDivisionId;
 
     @ApiModelProperty(value = "经度")
     private String longitude;

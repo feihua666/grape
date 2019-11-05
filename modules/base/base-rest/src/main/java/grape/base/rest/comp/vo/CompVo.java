@@ -17,7 +17,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="CompVo数据响应对象", description="部门表")
 public class CompVo extends BaseTreeVo {
@@ -31,7 +32,7 @@ public class CompVo extends BaseTreeVo {
     private String name;
 
     @ApiModelProperty(value = "类型,字典id")
-    private Long typeDictId;
+    private String typeDictId;
     @ApiModelProperty(value = "类型，字典编码")
     private String typeDictCode;
     @ApiModelProperty(value = "类型，字典名称")

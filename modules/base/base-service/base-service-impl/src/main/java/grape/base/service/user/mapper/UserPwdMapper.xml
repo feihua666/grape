@@ -10,7 +10,6 @@
     <result column="create_by" property="createBy" />
     <result column="update_at" property="updateAt" />
     <result column="update_by" property="updateBy" />
-    <result column="modified_at" property="modifiedAt" />
         <result column="user_id" property="userId" />
         <result column="pwd" property="pwd" />
         <result column="salt" property="salt" />
@@ -26,7 +25,6 @@
         create_by,
         update_at,
         update_by,
-        modified_at,
         user_id, pwd, salt, pwd_status_dict_id, pwd_modified_at
     </sql>
 

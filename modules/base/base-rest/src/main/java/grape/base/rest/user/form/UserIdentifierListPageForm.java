@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="用户登录标识分页查询表单")
 public class UserIdentifierListPageForm extends BasePageForm {
@@ -24,13 +25,13 @@ public class UserIdentifierListPageForm extends BasePageForm {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户ID")
-    private Long userId;
+    private String userId;
 
     @ApiModelProperty(value = "登录标识")
     private String identifier;
 
     @ApiModelProperty(value = "登录标识类型,字典id")
-    private Long identityTypeDictId;
+    private String identityTypeDictId;
 
 
 }

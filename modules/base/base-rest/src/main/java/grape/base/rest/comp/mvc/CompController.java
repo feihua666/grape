@@ -65,6 +65,14 @@ public class CompController extends BaseRestSuperController<CompVo, Comp> {
          return super.queryById(id);
      }
 
+    @ApiOperation("删除公司")
+    @RequiresPermissions("comp:single:deleteById")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public boolean deleteById(@PathVariable String id) {
+        return super.deleteById(id);
+    }
+
      @ApiOperation("更新公司")
      @RequiresPermissions("comp:single:updateById")
      @PutMapping("/{id}")

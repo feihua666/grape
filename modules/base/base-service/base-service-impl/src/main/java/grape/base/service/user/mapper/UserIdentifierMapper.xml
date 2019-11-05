@@ -10,7 +10,6 @@
     <result column="create_by" property="createBy" />
     <result column="update_at" property="updateAt" />
     <result column="update_by" property="updateBy" />
-    <result column="modified_at" property="modifiedAt" />
         <result column="user_id" property="userId" />
         <result column="identifier" property="identifier" />
         <result column="identity_type_dict_id" property="identityTypeDictId" />
@@ -24,7 +23,6 @@
         create_by,
         update_at,
         update_by,
-        modified_at,
         user_id, identifier, identity_type_dict_id
     </sql>
 

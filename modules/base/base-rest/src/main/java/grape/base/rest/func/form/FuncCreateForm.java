@@ -19,7 +19,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="FuncCreateForm添加表单对象", description="菜单功能表")
 public class FuncCreateForm extends BaseForm {
@@ -35,7 +36,7 @@ public class FuncCreateForm extends BaseForm {
     private String name;
 
     @ApiModelProperty(value = "父id",notes = "不填写为根节点")
-    private Long parentId;
+    private String parentId;
 
     @ApiModelProperty(value = "图标")
     private String icon;
@@ -48,7 +49,7 @@ public class FuncCreateForm extends BaseForm {
 
     @NotNull(message = "类型不能为空")
     @ApiModelProperty(value = "类型,字典id",notes = "字典组编码 func_type")
-    private Long typeDictId;
+    private String typeDictId;
 
     @ApiModelProperty(value = "描述")
     private String remark;

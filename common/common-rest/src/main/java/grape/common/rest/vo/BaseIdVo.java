@@ -2,6 +2,7 @@ package grape.common.rest.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 所有返回数据的json数据带id的包装基类
@@ -9,6 +10,7 @@ import lombok.Data;
  * Created at 2019/7/24 18:25
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BaseIdVo<Pk> extends BaseVo {
     @ApiModelProperty(value = "id",notes = "主键")
     private Pk id;

@@ -8,6 +8,8 @@ import grape.base.rest.job.form.JobCreateForm;
 import grape.base.rest.job.form.JobUpdateForm;
 import grape.base.rest.job.form.JobListPageForm;
 import grape.base.rest.job.vo.JobVo;
+import org.mapstruct.ReportingPolicy;
+
 /**
  * <p>
  * 职务表 前端领域模型映射
@@ -16,7 +18,7 @@ import grape.base.rest.job.vo.JobVo;
  * @author yangwei
  * @since 2019-10-29
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface JobWebMapper extends WebMapper<JobVo, Job> {
 
     Job formToPo(JobCreateForm f);

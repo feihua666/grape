@@ -3,6 +3,7 @@ package grape.common.tools;
 import grape.common.pojo.BasePojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Created at 2019/11/1 9:24
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class PinyinDto extends BasePojo {
 
 

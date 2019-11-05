@@ -24,7 +24,7 @@ public class BaiduMapTool {
      * }}
      */
     public static Map<String,Object> getGeo(String address,String ak){
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<String, Object>();
         params.put("address", address);
         params.put("output", "json");
         params.put("ak", ak);

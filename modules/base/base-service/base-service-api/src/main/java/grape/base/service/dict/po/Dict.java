@@ -18,7 +18,8 @@ import lombok.experimental.Accessors;
  * @since 2019-10-28
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @TableName("base_dict")
 public class Dict extends TreeBasePo<Dict> {

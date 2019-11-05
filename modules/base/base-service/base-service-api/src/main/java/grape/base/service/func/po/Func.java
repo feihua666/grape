@@ -17,7 +17,8 @@ import java.io.Serializable;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @TableName("base_func")
 public class Func extends TreeBasePo<Func> {

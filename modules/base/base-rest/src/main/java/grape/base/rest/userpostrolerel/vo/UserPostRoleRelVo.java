@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="UserPostRoleRelVo数据响应对象", description="用户岗位与角色关系表,决定了用户的功能")
 public class UserPostRoleRelVo extends BaseVo {
@@ -24,10 +25,10 @@ public class UserPostRoleRelVo extends BaseVo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户岗位表id")
-    private Long userPostId;
+    private String userPostId;
 
     @ApiModelProperty(value = "角色id")
-    private Long roleId;
+    private String roleId;
 
 
 }

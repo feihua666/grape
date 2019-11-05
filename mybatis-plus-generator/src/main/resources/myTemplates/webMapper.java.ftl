@@ -7,6 +7,7 @@ import ${cfg.formPackage}.${entity}CreateForm;
 import ${cfg.formPackage}.${entity}UpdateForm;
 import ${cfg.formPackage}.${entity}ListPageForm;
 import ${cfg.voPackage}.${entity}Vo;
+import org.mapstruct.ReportingPolicy;
 /**
  * <p>
  * ${table.comment!} 前端领域模型映射
@@ -15,7 +16,7 @@ import ${cfg.voPackage}.${entity}Vo;
  * @author ${author}
  * @since ${date}
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ${entity}WebMapper extends WebMapper<${entity}Vo, ${entity}> {
 
     ${entity} formToPo(${entity}CreateForm f);

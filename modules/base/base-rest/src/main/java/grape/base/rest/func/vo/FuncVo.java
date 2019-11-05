@@ -17,7 +17,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="菜单功能数据响应对象")
 public class FuncVo extends BaseTreeVo {
@@ -43,7 +44,7 @@ public class FuncVo extends BaseTreeVo {
     private String url;
 
     @ApiModelProperty(value = "类型,字典id")
-    private Long typeDictId;
+    private String typeDictId;
 
     @ApiModelProperty(value = "类型,字典编码")
     private String typeDictCode;

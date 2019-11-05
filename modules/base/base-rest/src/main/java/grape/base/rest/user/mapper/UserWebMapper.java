@@ -7,6 +7,8 @@ import grape.base.rest.user.form.UserCreateForm;
 import grape.base.rest.user.form.UserUpdateForm;
 import grape.base.rest.user.form.UserListPageForm;
 import grape.base.rest.user.vo.UserVo;
+import org.mapstruct.ReportingPolicy;
+
 /**
  * <p>
  * 后台管理用户表 前端领域模型映射
@@ -15,7 +17,7 @@ import grape.base.rest.user.vo.UserVo;
  * @author yangwei
  * @since 2019-10-22
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserWebMapper extends WebMapper<UserVo, User> {
 
     User formToPo(UserCreateForm f);

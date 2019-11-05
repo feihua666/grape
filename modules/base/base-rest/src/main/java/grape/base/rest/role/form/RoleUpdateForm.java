@@ -18,7 +18,8 @@ import javax.validation.constraints.NotEmpty;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="角色更新表单对象")
 public class RoleUpdateForm extends BaseUpdateForm {

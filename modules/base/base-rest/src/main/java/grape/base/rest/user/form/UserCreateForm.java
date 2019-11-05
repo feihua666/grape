@@ -20,7 +20,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="添加用户基本信息表单")
 public class UserCreateForm extends BaseForm {

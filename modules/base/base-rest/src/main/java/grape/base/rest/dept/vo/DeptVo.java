@@ -17,7 +17,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="DeptVo数据响应对象", description="部门表")
 public class DeptVo extends BaseTreeVo {

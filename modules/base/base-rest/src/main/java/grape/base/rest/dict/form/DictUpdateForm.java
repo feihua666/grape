@@ -19,7 +19,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="字典更新表单对象")
 public class DictUpdateForm extends BaseUpdateForm {
@@ -31,7 +32,7 @@ public class DictUpdateForm extends BaseUpdateForm {
     private String name;
 
     @ApiModelProperty(value = "父id",notes = "如果该节点下还有子节点，不允许修改该值，也就是说只允许移动叶子节点")
-    private Long parentId;
+    private String parentId;
 
     @ApiModelProperty(value = "描述")
     private String remark;

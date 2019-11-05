@@ -17,7 +17,8 @@ import java.io.Serializable;
  * @since 2019-09-27
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @TableName("base_user_post")
 public class UserPost extends NormalBasePo<UserPost> {

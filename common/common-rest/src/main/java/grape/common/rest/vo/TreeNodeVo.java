@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Created at 2019/9/24 16:55
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @AllArgsConstructor
 @ApiModel(value="展示树节点")
 public class TreeNodeVo<T extends BaseVo> extends BaseIdVo<String> {

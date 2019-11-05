@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="用户分页查询条件对象")
 public class UserListPageForm extends BasePageForm {
@@ -27,12 +28,12 @@ public class UserListPageForm extends BasePageForm {
     private String nickname;
 
     @ApiModelProperty(value = "性别，字典id")
-    private Long genderDictId;
+    private String genderDictId;
 
     @ApiModelProperty(value = "用户编号，可以做为员工编号")
     private String serialNo;
 
     @ApiModelProperty(value = "部门id")
-    private Long deptId;
+    private String deptId;
 
 }

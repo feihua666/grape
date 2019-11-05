@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-10-29
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="职务分页查询条件对象")
 public class JobListPageForm extends BasePageForm {

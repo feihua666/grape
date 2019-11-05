@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="用户数据响应对象")
 public class UserVo extends BaseIdVo<String> {

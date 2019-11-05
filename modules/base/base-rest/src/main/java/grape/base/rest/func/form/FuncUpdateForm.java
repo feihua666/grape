@@ -20,7 +20,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="功能更新表单对象")
 public class FuncUpdateForm extends BaseUpdateForm {

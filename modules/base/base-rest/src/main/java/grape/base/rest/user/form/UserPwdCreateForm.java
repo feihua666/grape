@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-10-22
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="UserPwdCreateForm添加表单对象", description="用户密码表")
 public class UserPwdCreateForm extends BaseForm {
@@ -33,7 +34,7 @@ public class UserPwdCreateForm extends BaseForm {
     private String salt;
 
     @ApiModelProperty(value = "密码状态，字典")
-    private Long pwdStatusDictId;
+    private String pwdStatusDictId;
 
     @ApiModelProperty(value = "密码的修改时间")
     private String pwdModifiedAt;

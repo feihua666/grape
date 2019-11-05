@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import grape.common.pojo.BasePojo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 树的vo
@@ -12,6 +13,7 @@ import lombok.Data;
  * Created at 2019/7/24 18:25
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BaseTreeVo extends BaseIdVo<String> {
 
     @ApiModelProperty(value = "父级id")

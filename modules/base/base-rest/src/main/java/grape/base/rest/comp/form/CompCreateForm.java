@@ -18,7 +18,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="公司添加表单")
 public class CompCreateForm extends BaseForm {
@@ -38,10 +39,10 @@ public class CompCreateForm extends BaseForm {
 
     @NotNull(message = "公司类型不能为空")
     @ApiModelProperty(value = "类型,字典id",notes = "字典组编码comp_type")
-    private Long typeDictId;
+    private String typeDictId;
 
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")
-    private Long masterUserId;
+    private String masterUserId;
 
     @ApiModelProperty(value = "是否虚拟公司")
     private Boolean isVirtual;

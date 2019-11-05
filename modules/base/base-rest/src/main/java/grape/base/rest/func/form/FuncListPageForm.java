@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="FuncListPageForm分页查询条件对象", description="菜单功能表")
 public class FuncListPageForm extends BasePageForm {
@@ -24,7 +25,7 @@ public class FuncListPageForm extends BasePageForm {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "父id")
-    private Long parentId;
+    private String parentId;
 
     @ApiModelProperty(value = "编码，精准查询")
     private String code;
@@ -36,6 +37,6 @@ public class FuncListPageForm extends BasePageForm {
     private Boolean isDisabled;
 
     @ApiModelProperty(value = "类型,字典id")
-    private Long typeDictId;
+    private String typeDictId;
 
 }

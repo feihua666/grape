@@ -17,7 +17,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="区域数据响应对象")
 public class AreaVo extends BaseTreeVo {
@@ -37,14 +38,14 @@ public class AreaVo extends BaseTreeVo {
     private String spellSimple;
 
     @ApiModelProperty(value = "类型，字典id")
-    private Long typeDictId;
+    private String typeDictId;
     @ApiModelProperty(value = "类型，字典编码")
     private String typeDictCode;
     @ApiModelProperty(value = "类型，字典名称")
     private String typeDictName;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
-    private Long adminDivisionId;
+    private String adminDivisionId;
 
     @ApiModelProperty(value = "经度")
     private String longitude;

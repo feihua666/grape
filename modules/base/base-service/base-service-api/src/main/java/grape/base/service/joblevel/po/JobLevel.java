@@ -18,7 +18,8 @@ import lombok.experimental.Accessors;
  * @since 2019-10-31
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @TableName("base_job_level")
 public class JobLevel extends NormalBasePo<JobLevel> {

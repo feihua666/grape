@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="公司分页查询表单")
 public class CompListPageForm extends BasePageForm {
@@ -30,6 +31,6 @@ public class CompListPageForm extends BasePageForm {
     private String name;
 
     @ApiModelProperty(value = "类型,字典id")
-    private Long typeDictId;
+    private String typeDictId;
 
 }

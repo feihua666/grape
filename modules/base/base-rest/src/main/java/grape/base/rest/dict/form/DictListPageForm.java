@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="字典分页查询条件对象")
 public class DictListPageForm extends BasePageForm {
@@ -42,9 +43,9 @@ public class DictListPageForm extends BasePageForm {
     private Boolean isDisable;
 
     @ApiModelProperty(value = "公司id")
-    private Long compId;
+    private String compId;
 
     @ApiModelProperty(value = "父id")
-    private Long parentId;
+    private String parentId;
 
 }

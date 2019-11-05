@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="区域分页查询表单")
 public class AreaListPageForm extends BasePageForm {
@@ -27,9 +28,9 @@ public class AreaListPageForm extends BasePageForm {
     private String name;
 
     @ApiModelProperty(value = "类型，字典id")
-    private Long typeDictId;
+    private String typeDictId;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
-    private Long adminDivisionId;
+    private String adminDivisionId;
 
 }

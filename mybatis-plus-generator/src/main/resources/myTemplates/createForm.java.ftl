@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 <#if entityLombokModel>
 @Data
     <#if superEntityClass??>
-@EqualsAndHashCode(callSuper = true)
+
     <#else>
 @EqualsAndHashCode(callSuper = false)
     </#if>

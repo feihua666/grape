@@ -12,7 +12,8 @@ import lombok.experimental.Accessors;
  * Created at 2019/9/27 15:56
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="当前登录用户信息")
 public class CurrentUserinfoVo extends BaseVo {

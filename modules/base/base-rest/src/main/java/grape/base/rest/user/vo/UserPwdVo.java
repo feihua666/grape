@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="用户密码数据响应对象")
 public class UserPwdVo extends BaseVo {
@@ -24,7 +25,7 @@ public class UserPwdVo extends BaseVo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户ID,base_user表的主键")
-    private Long userId;
+    private String userId;
 
     @ApiModelProperty(value = "密码")
     private String pwd;
@@ -33,10 +34,10 @@ public class UserPwdVo extends BaseVo {
     private String salt;
 
     @ApiModelProperty(value = "密码状态，字典")
-    private Long pwdStatusDictId;
+    private String pwdStatusDictId;
 
     @ApiModelProperty(value = "密码的修改时间")
-    private Long pwdModifiedAt;
+    private String pwdModifiedAt;
 
 
 }

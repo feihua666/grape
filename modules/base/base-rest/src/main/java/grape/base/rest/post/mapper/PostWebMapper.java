@@ -7,6 +7,8 @@ import grape.base.rest.post.form.PostCreateForm;
 import grape.base.rest.post.form.PostUpdateForm;
 import grape.base.rest.post.form.PostListPageForm;
 import grape.base.rest.post.vo.PostVo;
+import org.mapstruct.ReportingPolicy;
+
 /**
  * <p>
  * 岗位表 前端领域模型映射
@@ -15,7 +17,7 @@ import grape.base.rest.post.vo.PostVo;
  * @author yangwei
  * @since 2019-10-22
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PostWebMapper extends WebMapper<PostVo, Post> {
 
     Post formToPo(PostCreateForm f);

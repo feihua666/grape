@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="部门分页查询条件对象")
 public class DeptListPageForm extends BasePageForm {
@@ -30,13 +31,13 @@ public class DeptListPageForm extends BasePageForm {
     private String name;
 
     @ApiModelProperty(value = "类型,字典id")
-    private Long typeDictId;
+    private String typeDictId;
 
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")
-    private Long masterUserId;
+    private String masterUserId;
 
     @ApiModelProperty(value = "公司id")
-    private Long compId;
+    private String compId;
 
     @ApiModelProperty(value = "是否虚拟部门")
     private Boolean isVirtual;

@@ -2,6 +2,7 @@ package grape.common.exception.runtime;
 
 import grape.common.exception.ExceptionCode;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 未检查异常基类
@@ -13,6 +14,7 @@ import lombok.Data;
  * Created at 2018/1/26 15:38
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class RBaseException extends RuntimeException {
     /**
      * 异常数据

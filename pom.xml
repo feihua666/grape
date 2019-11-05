@@ -158,5 +158,14 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-
+	<build>
+	<resources>
+		<resource>
+			<directory>${basedir}/src/main/java</directory>
+			<includes>
+				<include>**/*Mapper.xml</include>
+			</includes>
+		</resource>
+	</resources>
+	</build>
 </project>

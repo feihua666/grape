@@ -22,7 +22,6 @@
     <result column="create_by" property="createBy" />
     <result column="update_at" property="updateAt" />
     <result column="update_by" property="updateBy" />
-    <result column="modified_at" property="modifiedAt" />
         <result column="code" property="code" />
         <result column="name" property="name" />
         <result column="is_system" property="isSystem" />
@@ -55,7 +54,6 @@
         create_by,
         update_at,
         update_by,
-        modified_at,
         code, name, is_system, is_public, is_group, is_disable, disable_reason, comp_id, remark, seq
     </sql>
 

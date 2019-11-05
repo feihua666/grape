@@ -16,6 +16,7 @@ import grape.common.service.IBaseTreeService;
 import grape.common.service.po.IDBasePo;
 import grape.common.service.po.TreeBasePo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ import java.util.List;
  * @param <Po> po
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperController {
 
     @Autowired

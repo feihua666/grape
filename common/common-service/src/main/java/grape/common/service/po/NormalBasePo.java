@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.Date;
  * Created at 2019/7/22 15:58
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class NormalBasePo<T extends Model<?>> extends RelBasePo<T> {
 
     public static final String PROPERTY_CREATE_AT = "createAt";

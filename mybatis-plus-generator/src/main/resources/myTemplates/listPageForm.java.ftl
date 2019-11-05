@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 <#if entityLombokModel>
 @Data
     <#if superEntityClass??>
-@EqualsAndHashCode(callSuper = true)
+
     <#else>
 @EqualsAndHashCode(callSuper = false)
     </#if>

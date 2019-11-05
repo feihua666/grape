@@ -12,6 +12,7 @@ import grape.common.service.po.NormalBasePo;
 import grape.common.service.po.RelBasePo;
 import grape.common.service.po.TreeBasePo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Map;
  * Created at 2019/7/22 18:39
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class SuperGenerator {
 
     public enum TableType {

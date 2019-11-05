@@ -7,6 +7,8 @@ import grape.base.rest.comp.vo.CompVo;
 import grape.base.service.comp.po.Comp;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
+
 /**
  * <p>
  * 部门表 前端领域模型映射
@@ -15,7 +17,7 @@ import org.mapstruct.Mapper;
  * @author yangwei
  * @since 2019-09-26
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CompWebMapper extends WebMapper<CompVo, Comp> {
 
     Comp formToPo(CompCreateForm f);

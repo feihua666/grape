@@ -18,7 +18,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="公司更新表单对象")
 public class CompUpdateForm extends BaseForm {
@@ -30,7 +31,7 @@ public class CompUpdateForm extends BaseForm {
     private String name;
 
     @ApiModelProperty(value = "负责人用户id",notes = "该id可用来填充审批人")
-    private Long masterUserId;
+    private String masterUserId;
 
     @ApiModelProperty(value = "是否虚拟公司")
     private Boolean isVirtual;

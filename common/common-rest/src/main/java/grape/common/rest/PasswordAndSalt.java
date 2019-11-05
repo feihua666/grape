@@ -1,8 +1,10 @@
 package grape.common.rest;
 
-import grape.common.tools.DigestUtils;
-import grape.common.tools.EncodeUtils;
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.digest.Digester;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -13,6 +15,7 @@ import org.apache.shiro.util.ByteSource;
  * Created by yw on 2016/1/13.
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class PasswordAndSalt {
     public static final String HASH_ALGORITHM = "SHA-1";
     public static final int HASH_INTERATIONS = 1024;
@@ -30,11 +33,14 @@ public class PasswordAndSalt {
      */
     public static PasswordAndSalt entryptPassword(String plainPassword) {
         PasswordAndSalt ps = new PasswordAndSalt();
-        byte[] salt = DigestUtils.generateSalt(SALT_SIZE);
-        ps.setSalt(EncodeUtils.encodeHex(salt));
+        byte[] salt = RandomUtil.randomBytes(SALT_SIZE);
 
-        byte[] hashPassword = DigestUtils.sha1(plainPassword.getBytes(), salt, HASH_INTERATIONS);
-        ps.setPassword(EncodeUtils.encodeHex(hashPassword));
+        ps.setSalt(new String(HexUtil.encodeHex(salt)));
+        Digester sha1 = new Digester(HASH_ALGORITHM);
+        sha1.setDigestCount(HASH_INTERATIONS);
+        sha1.setSalt(salt);
+        byte[] hashPassword = sha1.digest(plainPassword.getBytes());
+        ps.setPassword(new String(HexUtil.encodeHex(hashPassword)));
         return ps;
     }
     /**
@@ -58,7 +64,7 @@ public class PasswordAndSalt {
         UsernamePasswordToken token = new UsernamePasswordToken();
         token.setPassword(tokenPassword.toCharArray());
 
-        byte[] _salt = EncodeUtils.decodeHex(ps.getSalt());
+        byte[] _salt = HexUtil.decodeHex(ps.getSalt());
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(ps,
                 ps.getPassword(), ByteSource.Util.bytes(_salt), "");
         return getCredentialsMatcher().doCredentialsMatch(token, info);

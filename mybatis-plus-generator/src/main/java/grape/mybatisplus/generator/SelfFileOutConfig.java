@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * Created at 2019/8/22 9:08
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @AllArgsConstructor
 public class SelfFileOutConfig {
 

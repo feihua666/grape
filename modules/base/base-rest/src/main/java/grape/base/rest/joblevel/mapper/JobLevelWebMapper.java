@@ -7,6 +7,8 @@ import grape.base.rest.joblevel.form.JobLevelCreateForm;
 import grape.base.rest.joblevel.form.JobLevelUpdateForm;
 import grape.base.rest.joblevel.form.JobLevelListPageForm;
 import grape.base.rest.joblevel.vo.JobLevelVo;
+import org.mapstruct.ReportingPolicy;
+
 /**
  * <p>
  * 职务级别表 前端领域模型映射
@@ -15,7 +17,7 @@ import grape.base.rest.joblevel.vo.JobLevelVo;
  * @author yangwei
  * @since 2019-10-31
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface JobLevelWebMapper extends WebMapper<JobLevelVo, JobLevel> {
 
     JobLevel formToPo(JobLevelCreateForm f);

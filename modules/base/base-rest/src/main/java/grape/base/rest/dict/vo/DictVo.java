@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-23
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="字典数据响应对象")
 public class DictVo extends BaseTreeVo {
@@ -45,7 +46,7 @@ public class DictVo extends BaseTreeVo {
     private String disabledReason;
 
     @ApiModelProperty(value = "公司id",notes = "标识字典归属于哪个公司")
-    private Long compId;
+    private String compId;
 
     @ApiModelProperty(value = "公司名称")
     private String compName;

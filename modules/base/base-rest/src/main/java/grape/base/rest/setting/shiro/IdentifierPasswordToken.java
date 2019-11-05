@@ -1,6 +1,7 @@
 package grape.base.rest.setting.shiro;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.shiro.authc.UsernamePasswordToken;
 
 /**
@@ -8,6 +9,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
  * Created by yw on 2016/1/15.
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class IdentifierPasswordToken extends UsernamePasswordToken {
 
 

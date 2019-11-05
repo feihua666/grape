@@ -3,6 +3,7 @@ package grape.common;
 import grape.common.pojo.BasePojo;
 import grape.common.tools.ThreadContext;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Singular;
 import lombok.experimental.Accessors;
 import org.mapstruct.ap.shaded.freemarker.template.utility.SecurityUtilities;
@@ -13,6 +14,7 @@ import org.mapstruct.ap.shaded.freemarker.template.utility.SecurityUtilities;
  * Created at 2019/9/6 17:54
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Accessors(chain = true)
 public abstract class AbstractLoginUser extends BasePojo {
 

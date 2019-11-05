@@ -17,7 +17,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-10-31
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="职务级别添加表单对象")
 public class JobLevelCreateForm extends BaseForm {

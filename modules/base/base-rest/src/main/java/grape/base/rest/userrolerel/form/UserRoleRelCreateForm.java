@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-27
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="UserRoleRelCreateForm添加表单对象", description="角色菜单功能关系表，多对多")
 public class UserRoleRelCreateForm extends BaseForm {
@@ -24,10 +25,10 @@ public class UserRoleRelCreateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户id")
-    private Long userId;
+    private String userId;
 
     @ApiModelProperty(value = "角色id")
-    private Long roleId;
+    private String roleId;
 
 
 }

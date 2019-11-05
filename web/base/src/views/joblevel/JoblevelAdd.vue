@@ -36,7 +36,7 @@
                             name: 'jobId'
                         },
                         element:{
-                            label: '类型',
+                            label: '职务',
                             type: 'select',
                             select:{
                                 url:'/job/list'

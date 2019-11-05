@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="UserPostVo数据响应对象", description="用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职")
 public class UserPostVo extends BaseVo {
@@ -24,19 +25,19 @@ public class UserPostVo extends BaseVo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户id")
-    private Long userId;
+    private String userId;
 
     @ApiModelProperty(value = "公司id，冗余字段，由dept_id派生，")
-    private Long compId;
+    private String compId;
 
     @ApiModelProperty(value = "部门id")
-    private Long deptId;
+    private String deptId;
 
     @ApiModelProperty(value = "岗位id")
-    private Long postId;
+    private String postId;
 
     @ApiModelProperty(value = "职级id")
-    private Long jobLevelId;
+    private String jobLevelId;
 
     @ApiModelProperty(value = "是否有效")
     private Boolean isEffect;
@@ -45,7 +46,7 @@ public class UserPostVo extends BaseVo {
     private String ineffectReason;
 
     @ApiModelProperty(value = "生效的时间")
-    private Long effcetAt;
+    private String effcetAt;
 
     @ApiModelProperty(value = "是否主岗")
     private Boolean isMain;

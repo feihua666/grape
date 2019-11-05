@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import grape.common.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 单纯关系表实体基类
@@ -13,6 +14,7 @@ import lombok.Data;
  * Created at 2019/7/24 18:03
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class RelBasePo<T extends Model<?>> extends IDBasePo<String,T> {
 
     /**

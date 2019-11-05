@@ -16,7 +16,8 @@ import lombok.experimental.Accessors;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="岗位分页查询条件对象")
 public class PostListPageForm extends BasePageForm {
@@ -30,6 +31,6 @@ public class PostListPageForm extends BasePageForm {
     private String name;
 
     @ApiModelProperty(value = "部门id")
-    private Long deptId;
+    private String deptId;
 
 }

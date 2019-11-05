@@ -87,6 +87,14 @@ public class AreaController extends BaseRestSuperController<AreaVo, Area> {
          return super.queryById(id);
      }
 
+    @ApiOperation("删除区域")
+    @RequiresPermissions("area:single:deleteById")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public boolean deleteById(@PathVariable String id) {
+        return super.deleteById(id);
+    }
+
      @ApiOperation("更新区域")
      @RequiresPermissions("area:single:updateById")
      @PutMapping("/{id}")

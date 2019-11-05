@@ -1,6 +1,7 @@
 package grape.common.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 受检查的异常基类
@@ -9,6 +10,7 @@ import lombok.Data;
  * Created at 2019/7/18 18:01
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class CBaseException extends Exception {
     /**
      * 异常数据

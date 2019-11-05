@@ -18,7 +18,8 @@ import lombok.experimental.Accessors;
  * @since 2019-11-01
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @TableName("base_area")
 public class Area extends TreeBasePo<Area> {

@@ -3,6 +3,7 @@ package grape.common.rest.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * Created at 2019/7/23 13:17
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BaseUpdateForm extends BaseForm {
 
     @ApiModelProperty(value = "版本",notes = "根据信息数据原样返回")

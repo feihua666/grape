@@ -19,7 +19,8 @@ import javax.validation.constraints.NotNull;
  * @since 2019-09-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=false)
+
 @Accessors(chain = true)
 @ApiModel(value="部门添加表单对象")
 public class DeptCreateForm extends BaseForm {

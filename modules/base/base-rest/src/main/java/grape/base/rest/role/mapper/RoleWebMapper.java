@@ -7,6 +7,8 @@ import grape.base.rest.role.form.RoleCreateForm;
 import grape.base.rest.role.form.RoleUpdateForm;
 import grape.base.rest.role.form.RoleListPageForm;
 import grape.base.rest.role.vo.RoleVo;
+import org.mapstruct.ReportingPolicy;
+
 /**
  * <p>
  * 角色表 前端领域模型映射
@@ -15,7 +17,7 @@ import grape.base.rest.role.vo.RoleVo;
  * @author yangwei
  * @since 2019-10-22
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleWebMapper extends WebMapper<RoleVo, Role> {
 
     Role formToPo(RoleCreateForm f);

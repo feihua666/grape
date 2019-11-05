@@ -2,6 +2,8 @@ package grape.mybatisplus.modules;
 
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import grape.mybatisplus.generator.SuperGenerator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +17,8 @@ import static grape.mybatisplus.generator.SelfFileOutConfig.dot_mvc;
  * Created by yangwei
  * Created at 2019/7/22 18:40
  */
+@Data
+@EqualsAndHashCode(callSuper=false)
 public class BaseGenerator extends SuperGenerator {
 
     private static String parentPakage="grape";
