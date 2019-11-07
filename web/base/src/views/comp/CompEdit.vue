@@ -2,6 +2,7 @@
     <Form
           :form-items="formItems"
           :form-item-value="formData"
+          :loading="formLoading"
     ></Form>
 </template>
 
@@ -114,6 +115,7 @@
         methods:{
             // 根据id获取数据
             getData(id){
+                this.formLoading = true
                 this.axios.get('/comp/' + id).then(res => {
                     let data = res.data.data
                     data.parentId__label = data.parentName
@@ -128,6 +130,8 @@
                     }else {
                         this.$message.error('数据加载失败')
                     }
+                }).finally(()=>{
+                    this.formLoading = false
                 })
             }
         }

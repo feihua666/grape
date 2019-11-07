@@ -30,11 +30,11 @@ public class PostUpdateForm extends BaseUpdateForm {
 
 
     @NotEmpty(message = "名称不能为空")
-    @ApiModelProperty(value = "岗位名称")
+    @ApiModelProperty(value = "岗位名称",required = true)
     private String name;
 
     @NotNull(message = "是否公共不能为空")
-    @ApiModelProperty(value = "是否公共")
+    @ApiModelProperty(value = "是否公共",required = true)
     private Boolean isPublic;
 
     @ApiModelProperty(value = "类型，字典id",notes = "字典组编码post_type")

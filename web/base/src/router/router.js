@@ -127,6 +127,18 @@ const router = new VueRouter({
         {
             path: '/area/areaEdit/:id',
             component: () => import('@/views/area/AreaEdit.vue')
+        },
+        {
+            path: '/paramconfig',
+            component: () => import('@/views/paramconfig/Paramconfig.vue')
+        },
+        {
+            path: '/paramconfig/paramconfigAdd',
+            component: () => import('@/views/paramconfig/ParamconfigAdd.vue')
+        },
+        {
+            path: '/paramconfig/paramconfigEdit/:id',
+            component: () => import('@/views/paramconfig/ParamconfigEdit.vue')
         }
     ]
 })

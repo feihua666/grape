@@ -26,9 +26,8 @@ public class RoleUpdateForm extends BaseUpdateForm {
 
     private static final long serialVersionUID = 1L;
 
-
     @NotEmpty(message = "名称不能为空")
-    @ApiModelProperty(value = "角色名称")
+    @ApiModelProperty(value = "角色名称",required = true)
     private String name;
 
     @ApiModelProperty(value = "描述")

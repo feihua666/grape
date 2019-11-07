@@ -28,15 +28,15 @@ public class JobCreateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "编码不能为空")
-    @ApiModelProperty(value = "职务编码")
+    @ApiModelProperty(value = "职务编码",required = true)
     private String code;
 
     @NotEmpty(message = "名称不能为空")
-    @ApiModelProperty(value = "职务名称")
+    @ApiModelProperty(value = "职务名称",required = true)
     private String name;
 
     @NotNull(message = "是否公共不能为空")
-    @ApiModelProperty(value = "是否公共")
+    @ApiModelProperty(value = "是否公共",required = true)
     private Boolean isPublic;
 
     @ApiModelProperty(value = "类型，字典id",notes = "字典组编码job_type")

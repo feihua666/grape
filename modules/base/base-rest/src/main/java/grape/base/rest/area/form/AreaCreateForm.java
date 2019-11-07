@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -29,12 +30,12 @@ public class AreaCreateForm extends BaseForm {
     @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
     private String parentId;
 
-    @NotNull(message = "区域名称不能为空")
-    @ApiModelProperty(value = "区域名称")
+    @NotEmpty(message = "区域名称不能为空")
+    @ApiModelProperty(value = "区域名称",required = true)
     private String name;
 
-    @NotNull(message = "区域类型不能为空")
-    @ApiModelProperty(value = "类型，字典id",notes = "字典组编码area_type")
+    @NotEmpty(message = "区域类型不能为空")
+    @ApiModelProperty(value = "类型，字典id",notes = "字典组编码area_type",required = true)
     private String typeDictId;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
@@ -49,7 +50,8 @@ public class AreaCreateForm extends BaseForm {
     @ApiModelProperty(value = "描述、备注")
     private String remark;
 
-    @ApiModelProperty(value = "排序,默认按该字段升序排序")
+    @NotNull(message = "排序不能为空")
+    @ApiModelProperty(value = "排序,默认按该字段升序排序",required = true)
     private Integer seq;
 
 

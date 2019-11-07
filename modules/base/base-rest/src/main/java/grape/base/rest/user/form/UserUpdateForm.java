@@ -28,13 +28,12 @@ public class UserUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message = "昵称不能为空")
-    @NotEmpty
-    @ApiModelProperty(value = "昵称，姓名")
+    @NotEmpty(message = "昵称不能为空")
+    @ApiModelProperty(value = "昵称，姓名",required = true)
     private String nickname;
 
-    @NotNull(message = "性别不能为空")
-    @ApiModelProperty(value = "性别",notes = "通过字典获取，字典组编码为gender")
+    @NotEmpty(message = "性别不能为空")
+    @ApiModelProperty(value = "性别",notes = "通过字典获取，字典组编码为gender",required = true)
     private String genderDictId;
 
     @ApiModelProperty(value = "用户编号",notes = "可以做为员工编号")

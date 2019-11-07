@@ -23,11 +23,7 @@ import lombok.experimental.Accessors;
  */
 <#if entityLombokModel>
 @Data
-    <#if superEntityClass??>
-
-    <#else>
 @EqualsAndHashCode(callSuper = false)
-    </#if>
 @Accessors(chain = true)
 </#if>
 <#if swagger2>

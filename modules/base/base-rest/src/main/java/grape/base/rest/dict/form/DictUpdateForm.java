@@ -28,7 +28,7 @@ public class DictUpdateForm extends BaseUpdateForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "名称不能为空")
-    @ApiModelProperty(value = "标签名/字典名称")
+    @ApiModelProperty(value = "标签名/字典名称",required = true)
     private String name;
 
     @ApiModelProperty(value = "父id",notes = "如果该节点下还有子节点，不允许修改该值，也就是说只允许移动叶子节点")

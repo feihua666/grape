@@ -26,11 +26,11 @@ public class JobLevelUpdateForm extends BaseUpdateForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message="职务级别名称不能为空")
-    @ApiModelProperty(value = "职务级别名称")
+    @ApiModelProperty(value = "职务级别名称",required = true)
     private String name;
 
     @NotEmpty(message="描述不能为空")
-    @ApiModelProperty(value = "描述")
+    @ApiModelProperty(value = "描述",required = true)
     private String remark;
 
 

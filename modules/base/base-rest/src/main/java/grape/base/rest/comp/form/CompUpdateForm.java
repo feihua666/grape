@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -26,8 +27,8 @@ public class CompUpdateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message = "公司名称不能为空")
-    @ApiModelProperty(value = "公司名称")
+    @NotEmpty(message = "公司名称不能为空")
+    @ApiModelProperty(value = "公司名称",required = true)
     private String name;
 
     @ApiModelProperty(value = "负责人用户id",notes = "该id可用来填充审批人")

@@ -29,11 +29,11 @@ public class UserCreateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "昵称不能为空")
-    @ApiModelProperty(value = "昵称，姓名")
+    @ApiModelProperty(value = "昵称，姓名",required = true)
     private String nickname;
 
     @NotEmpty(message = "性别不能为空")
-    @ApiModelProperty(value = "性别",notes = "通过字典获取，字典组编码为gender")
+    @ApiModelProperty(value = "性别",notes = "通过字典获取，字典组编码为gender",required = true)
     private String genderDictId;
 
     @URL(message = "头像必须是一个http开头的绝对路径")
@@ -44,7 +44,7 @@ public class UserCreateForm extends BaseForm {
     private String serialNo;
 
     @NotEmpty(message = "部门不能为空")
-    @ApiModelProperty(value = "部门id")
+    @ApiModelProperty(value = "部门id",required = true)
     private String deptId;
 
     @ApiModelProperty(value = "是否虚拟用户",notes = "虚拟用户代表不是一个真正存在的用户")

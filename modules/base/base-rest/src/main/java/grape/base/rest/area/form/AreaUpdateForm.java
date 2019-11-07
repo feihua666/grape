@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -27,11 +28,11 @@ public class AreaUpdateForm extends BaseUpdateForm {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
+    @ApiModelProperty(value = "上级id")
     private String parentId;
 
-    @NotNull(message = "区域名称不能为空")
-    @ApiModelProperty(value = "区域名称")
+    @NotEmpty(message = "区域名称不能为空")
+    @ApiModelProperty(value = "区域名称",required = true)
     private String name;
 
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
@@ -46,7 +47,8 @@ public class AreaUpdateForm extends BaseUpdateForm {
     @ApiModelProperty(value = "描述、备注")
     private String remark;
 
-    @ApiModelProperty(value = "排序,默认按该字段升序排序")
+    @NotNull(message = "排序不能为空")
+    @ApiModelProperty(value = "排序,默认按该字段升序排序",required = true)
     private Integer seq;
 
 

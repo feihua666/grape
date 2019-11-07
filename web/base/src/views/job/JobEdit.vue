@@ -2,6 +2,7 @@
     <Form
           :form-items="formItems"
           :form-item-value="formData"
+          :loading="formLoading"
     ></Form>
 </template>
 
@@ -95,6 +96,7 @@
         methods:{
             // 根据id获取数据
             getData(id){
+                this.formLoading = true
                 this.axios.get('/job/' + id).then(res => {
                     let data = res.data.data
                     this.formData = data
@@ -108,6 +110,8 @@
                     }else {
                         this.$message.error('数据加载失败')
                     }
+                }).finally(()=>{
+                    this.formLoading = false
                 })
             }
         }

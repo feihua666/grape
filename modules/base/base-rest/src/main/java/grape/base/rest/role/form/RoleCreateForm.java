@@ -32,11 +32,11 @@ public class RoleCreateForm extends BaseForm {
     private String parentId;
 
     @NotEmpty(message = "编码不能为空")
-    @ApiModelProperty(value = "角色编码")
+    @ApiModelProperty(value = "角色编码",required = true)
     private String code;
 
     @NotEmpty(message = "名称不能为空")
-    @ApiModelProperty(value = "角色名称")
+    @ApiModelProperty(value = "角色名称",required = true)
     private String name;
 
     @ApiModelProperty(value = "描述")

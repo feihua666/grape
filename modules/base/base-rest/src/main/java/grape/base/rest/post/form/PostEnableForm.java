@@ -28,11 +28,11 @@ public class PostEnableForm extends BaseUpdateForm {
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "启用/禁用状态不能为空")
-    @ApiModelProperty(value = "编码")
+    @ApiModelProperty(value = "编码",required = true)
     private Boolean disabled;
 
     @NotEmpty(message = "原因不能为空")
-    @ApiModelProperty(value = "启用/禁用原因")
+    @ApiModelProperty(value = "启用/禁用原因",required = true)
     private String disabledReason;
 
 

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -29,16 +30,16 @@ public class CompCreateForm extends BaseForm {
     @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
     private String parentId;
 
-    @NotNull(message = "公司编码不能为空")
-    @ApiModelProperty(value = "公司编码")
+    @NotEmpty(message = "公司编码不能为空")
+    @ApiModelProperty(value = "公司编码",required = true)
     private String code;
 
-    @NotNull(message = "公司名称不能为空")
-    @ApiModelProperty(value = "公司名称")
+    @NotEmpty(message = "公司名称不能为空")
+    @ApiModelProperty(value = "公司名称",required = true)
     private String name;
 
-    @NotNull(message = "公司类型不能为空")
-    @ApiModelProperty(value = "类型,字典id",notes = "字典组编码comp_type")
+    @NotEmpty(message = "公司类型不能为空")
+    @ApiModelProperty(value = "类型,字典id",notes = "字典组编码comp_type",required = true)
     private String typeDictId;
 
     @ApiModelProperty(value = "负责人用户id，该id可用来填充审批人")

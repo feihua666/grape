@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -27,12 +28,12 @@ public class UserPwdUpdateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
 
-    @NotNull(message = "原密码不能为空")
-    @ApiModelProperty(value = "原密码")
+    @NotEmpty(message = "原密码不能为空")
+    @ApiModelProperty(value = "原密码",required = true)
     private String oldPassword;
 
-    @NotNull(message = "新密码不能为空")
-    @ApiModelProperty(value = "新密码")
+    @NotEmpty(message = "新密码不能为空")
+    @ApiModelProperty(value = "新密码",required = true)
     private String newPassword;
 
 

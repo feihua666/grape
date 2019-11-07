@@ -23,15 +23,11 @@ import lombok.experimental.Accessors;
  */
 <#if entityLombokModel>
 @Data
-    <#if superEntityClass??>
-
-    <#else>
 @EqualsAndHashCode(callSuper = false)
-    </#if>
 @Accessors(chain = true)
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}Vo数据响应对象")
+@ApiModel(value="${table.comment!}数据响应对象")
 </#if>
 public class ${entity}Vo extends BaseIdVo<String> {
 

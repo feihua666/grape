@@ -24,11 +24,7 @@ import javax.validation.constraints.NotNull;
  */
 <#if entityLombokModel>
 @Data
-    <#if superEntityClass??>
-
-    <#else>
 @EqualsAndHashCode(callSuper = false)
-    </#if>
 @Accessors(chain = true)
 </#if>
 <#if swagger2>

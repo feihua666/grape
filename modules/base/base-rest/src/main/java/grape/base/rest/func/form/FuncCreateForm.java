@@ -28,11 +28,11 @@ public class FuncCreateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "编码不能为空")
-    @ApiModelProperty(value = "编码")
+    @ApiModelProperty(value = "编码",required = true)
     private String code;
 
     @NotEmpty(message = "名称不能为空")
-    @ApiModelProperty(value = "名称")
+    @ApiModelProperty(value = "名称",required = true)
     private String name;
 
     @ApiModelProperty(value = "父id",notes = "不填写为根节点")
@@ -47,8 +47,8 @@ public class FuncCreateForm extends BaseForm {
     @ApiModelProperty(value = "shiro权限串，多个以逗号分隔")
     private String permissions;
 
-    @NotNull(message = "类型不能为空")
-    @ApiModelProperty(value = "类型,字典id",notes = "字典组编码 func_type")
+    @NotEmpty(message = "类型不能为空")
+    @ApiModelProperty(value = "类型,字典id",notes = "字典组编码 func_type",required = true)
     private String typeDictId;
 
     @ApiModelProperty(value = "描述")

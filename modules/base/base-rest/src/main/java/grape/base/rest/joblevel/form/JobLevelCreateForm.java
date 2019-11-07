@@ -26,15 +26,15 @@ public class JobLevelCreateForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message="职务级别编码不能为空")
-    @ApiModelProperty(value = "职务级别编码")
+    @ApiModelProperty(value = "职务级别编码",required = true)
     private String code;
     
     @NotEmpty(message="职务级别名称不能为空")
-    @ApiModelProperty(value = "职务级别名称")
+    @ApiModelProperty(value = "职务级别名称",required = true)
     private String name;
     
     @NotEmpty(message="职务id不能为空")
-    @ApiModelProperty(value = "职务ID")
+    @ApiModelProperty(value = "职务ID",required = true)
     private String jobId;
 
     @ApiModelProperty(value = "描述")

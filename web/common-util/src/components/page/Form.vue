@@ -74,6 +74,9 @@
                         :url="item.element.select.url"
                         :props="item.element.select.props"
                 ></Select>
+                <template v-else-if="item.element.type == 'txt'">
+                    {{form[getFieldName(item)]}}
+                </template>
                 <template v-else-if="item.element.type == 'button'">
                     <el-button v-if="isObject(item.element.button)"
                                :type="item.element.button.buttonType || aiButtonStyle(item.element.button.label).type || 'primary'"

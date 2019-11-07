@@ -27,9 +27,9 @@ public class LoginForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "帐号不能为空")
-    @ApiModelProperty(value = "帐号、邮箱、手机号等")
+    @ApiModelProperty(value = "帐号、邮箱、手机号等",required = true)
     private String username;
     @NotNull(message = "密码不能为空")
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty(value = "密码",required = true)
     private String password;
 }

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * <p>
  * 用户密码表
@@ -19,25 +21,13 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper=false)
 
 @Accessors(chain = true)
-@ApiModel(value="UserPwdCreateForm添加表单对象", description="用户密码表")
+@ApiModel(value="用户密码添加表单对象",description = "密码只能添加一次，如果已存在不会再添加")
 public class UserPwdCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户ID,base_user表的主键")
-    private String userId;
-
-    @ApiModelProperty(value = "密码")
+    @NotEmpty(message = "密码不能为空")
+    @ApiModelProperty(value = "密码",required = true)
     private String pwd;
-
-    @ApiModelProperty(value = "授权类型,字典id")
-    private String salt;
-
-    @ApiModelProperty(value = "密码状态，字典")
-    private String pwdStatusDictId;
-
-    @ApiModelProperty(value = "密码的修改时间")
-    private String pwdModifiedAt;
-
 
 }
