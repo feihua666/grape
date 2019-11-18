@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class BaseDbRealm extends AuthorizingRealm implements ToolService {
@@ -61,7 +62,6 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
         if(user.getIsLock()){
             throw new LockedAccountException();
         }
-
 
         UserPwd userPwd = iUserPwdService.getByUserId(userIdentifier.getUserId());
         byte[] salt = Hex.decode(userPwd.getSalt());
@@ -103,6 +103,10 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
                 // 角色
                 Set<String> stringRoles = new HashSet<>(1);
                 stringRoles.add(loginUser.getCurrentRole().getCode());
+                if (!isListEmpty(loginUser.getRoles())) {
+                    List<String> roleCodes = loginUser.getRoles().stream().map(role -> role.getCode()).collect(Collectors.toList());
+                    stringRoles.addAll(roleCodes);
+                }
             }
             return info;
         }else {

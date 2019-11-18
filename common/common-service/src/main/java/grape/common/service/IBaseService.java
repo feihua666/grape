@@ -1,5 +1,8 @@
 package grape.common.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
 import grape.common.service.po.IDBasePo;
 import grape.common.tools.ToolService;
@@ -31,5 +34,13 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
             }
         }
         return null;
+    }
+
+    default IPage<Po> page(IPage<Po> page, Po query){
+        return page(page, Wrappers.query(query));
+    }
+
+    default List<Po> list(Po query){
+        return list(Wrappers.query(query));
     }
 }

@@ -155,7 +155,7 @@ public class SuperGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 公共父类
-        String superEntityColumns = "id,is_del,create_by,create_at,update_by,update_at,version";
+        String superEntityColumns = "id,create_by,create_at,update_by,update_at,version";
         if(tableType == TableType.normal){
             strategy.setSuperEntityClass(NormalBasePo.class);
         }

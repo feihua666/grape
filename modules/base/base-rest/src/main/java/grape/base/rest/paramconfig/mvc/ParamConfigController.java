@@ -3,29 +3,26 @@ package grape.base.rest.paramconfig.mvc;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.convert.ConvertException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.base.rest.BaseRestSuperController;
-import grape.base.rest.dict.form.DictEnableForm;
+import grape.base.rest.paramconfig.form.ParamConfigCreateForm;
 import grape.base.rest.paramconfig.form.ParamConfigEnableForm;
+import grape.base.rest.paramconfig.form.ParamConfigListPageForm;
+import grape.base.rest.paramconfig.form.ParamConfigUpdateForm;
+import grape.base.rest.paramconfig.mapper.ParamConfigWebMapper;
+import grape.base.rest.paramconfig.vo.ParamConfigVo;
+import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.paramconfig.api.IParamConfigService;
+import grape.base.service.paramconfig.po.ParamConfig;
 import grape.common.exception.runtime.RBaseException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.paramconfig.form.ParamConfigCreateForm;
-import grape.base.rest.paramconfig.form.ParamConfigUpdateForm;
-import grape.base.rest.paramconfig.form.ParamConfigListPageForm;
-import grape.base.rest.paramconfig.vo.ParamConfigVo;
-import grape.base.rest.paramconfig.mapper.ParamConfigWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.paramconfig.po.ParamConfig;
-import grape.base.service.paramconfig.api.IParamConfigService;
-import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 /**
  * <p>
  * 参数配置表 前端控制器
@@ -37,13 +34,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/paramconfig")
 @Api(tags = "参数配置相关接口")
-public class ParamConfigController extends BaseRestSuperController<ParamConfigVo, ParamConfig> {
+public class ParamConfigController extends BaseController<ParamConfigVo, ParamConfig> {
 
     @Autowired
     private ParamConfigWebMapper currentWebMapper;
     @Autowired
     private IParamConfigService currentService;
-
+    @Autowired
+    private IDictService iDictService;
 
 
      @ApiOperation("添加参数配置")
@@ -71,7 +69,7 @@ public class ParamConfigController extends BaseRestSuperController<ParamConfigVo
      * @return
      */
     private void checkTypeAndValueMatch(String value,String valueTypeDictId){
-        Dict dict = getIDictService().getById(valueTypeDictId);
+        Dict dict = iDictService.getById(valueTypeDictId);
         try {
             Convert.convertByClassName(dict.getCode(), value);
         } catch (ConvertException e) {
@@ -135,7 +133,7 @@ public class ParamConfigController extends BaseRestSuperController<ParamConfigVo
     }
     @Override
     public ParamConfigVo transVo(ParamConfigVo paramConfigVo) {
-        Dict dict = getDictById(paramConfigVo.getValueTypeDictId());
+        Dict dict = iDictService.getById(paramConfigVo.getValueTypeDictId());
         if (dict != null) {
             paramConfigVo.setValueTypeDictCode(dict.getCode());
             paramConfigVo.setValueTypeDictName(dict.getName());

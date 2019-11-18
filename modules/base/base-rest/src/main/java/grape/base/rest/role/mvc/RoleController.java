@@ -1,25 +1,25 @@
 package grape.base.rest.role.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.role.form.RoleCreateForm;
 import grape.base.rest.role.form.RoleEnableForm;
+import grape.base.rest.role.form.RoleListPageForm;
+import grape.base.rest.role.form.RoleUpdateForm;
+import grape.base.rest.role.mapper.RoleWebMapper;
+import grape.base.rest.role.vo.RoleVo;
+import grape.base.service.role.api.IRoleService;
+import grape.base.service.role.po.Role;
 import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.vo.TreeNodeVo;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.role.form.RoleCreateForm;
-import grape.base.rest.role.form.RoleUpdateForm;
-import grape.base.rest.role.form.RoleListPageForm;
-import grape.base.rest.role.vo.RoleVo;
-import grape.base.rest.role.mapper.RoleWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.role.po.Role;
-import grape.base.service.role.api.IRoleService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 /**
  * <p>
@@ -32,7 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 @Api(tags = "角色相关接口")
-public class RoleController extends BaseController<RoleVo, Role> {
+public class RoleController extends BaseTreeController<RoleVo, Role> {
 
     @Autowired
     private RoleWebMapper currentWebMapper;
@@ -107,7 +107,7 @@ public class RoleController extends BaseController<RoleVo, Role> {
      * @return
      */
     @ApiOperation("启用或禁用")
-    @RequiresPermissions("dict:single:enable")
+    @RequiresPermissions("role:single:enable")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public RoleVo enable(@PathVariable String id, @RequestBody @Valid RoleEnableForm form) {

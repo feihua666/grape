@@ -1,29 +1,28 @@
 package grape.base.rest.job.mvc;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.base.rest.BaseRestSuperController;
+import grape.base.rest.job.form.JobCreateForm;
 import grape.base.rest.job.form.JobListForm;
+import grape.base.rest.job.form.JobListPageForm;
+import grape.base.rest.job.form.JobUpdateForm;
+import grape.base.rest.job.mapper.JobWebMapper;
+import grape.base.rest.job.vo.JobVo;
+import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
+import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.job.api.IJobService;
+import grape.base.service.job.po.Job;
 import grape.common.exception.runtime.RBaseException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.job.form.JobCreateForm;
-import grape.base.rest.job.form.JobUpdateForm;
-import grape.base.rest.job.form.JobListPageForm;
-import grape.base.rest.job.vo.JobVo;
-import grape.base.rest.job.mapper.JobWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.job.po.Job;
-import grape.base.service.job.api.IJobService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 /**
  * <p>
@@ -36,14 +35,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/job")
 @Api(tags = "职务相关接口")
-public class JobController extends BaseRestSuperController<JobVo, Job> {
+public class JobController extends BaseController<JobVo, Job> {
 
     @Autowired
     private JobWebMapper currentWebMapper;
     @Autowired
     private IJobService currentService;
-
-
+    @Autowired
+    private IDictService iDictService;
+    @Autowired
+    private IDeptService iDeptService;
 
      @ApiOperation("添加职务")
      @RequiresPermissions("job:single:create")
@@ -109,12 +110,12 @@ public class JobController extends BaseRestSuperController<JobVo, Job> {
 
     @Override
     public JobVo transVo(JobVo jobVo) {
-        Dict dict = getDictById(jobVo.getTypeDictId());
+        Dict dict = iDictService.getById(jobVo.getTypeDictId());
         if (dict != null) {
             jobVo.setTypeDictCode(dict.getCode());
             jobVo.setTypeDictName(dict.getName());
         }
-        Dept dept = getDeptById(jobVo.getDeptId());
+        Dept dept = iDeptService.getById(jobVo.getDeptId());
         if (dept != null) {
             jobVo.setDeptName(dept.getName());
         }

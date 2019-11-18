@@ -38,10 +38,17 @@
         type: String,
         required:true
       },
-        label:{
-          type: String,
-            default: 'name'
-        }
+      label:{
+        type: String,
+          default: 'name'
+      },
+        // 选中的id
+      checkedKeys: {
+        type: Array,
+          default: function () {
+              return []
+          }
+      }
     },
     data () {
       return {
@@ -55,11 +62,17 @@
           children: 'children',
           label: this.getLabel,
           isLeaf: this.isLeaf
-        }
+        },
+          // 记录所有已加载的主键
+        loadedKeys:[],
+        localCheckedKeys: this.checkedKeys
       }
     },
     mounted () {
         this.loadTreeData()
+        if(this.localCheckedKeys.length > 0){
+            this.setCheckedKeys(this.localCheckedKeys)
+        }
     },
     methods: {
         isLeaf(data,node){
@@ -67,6 +80,9 @@
         },
         getLabel(data,node){
             return data.node[this.label]
+        },
+        dataArrayToKeys(dataArray){
+            return dataArray.map((item)=> item.node.id)
         },
       // 树过滤匹配
       treeFilterNode (value, data) {
@@ -89,38 +105,50 @@
       treeRefreshBtnClick () {
         this.loadTreeData()
       },
-        loadChildren(node,resolve){
-            if(!node.data){
-                return
-            }
-            let params = {parentId: node.data.id}
-            this.axios.get(this.dataUrl,{params:params})
-                .then(function (response) {
-                    let content = response.data.data
-                    resolve(content)
-                })
-                .catch(function (error) {
-                    resolve([])
-                    if(error.response){
-                        if(error.response.status != 404){
-                            this.$message.error(error.response.data.msg)
-                        }
-                    }else{
-                        self.$message.error('请求失败,未知错误')
-                    }
-                })
-        },
+      loadChildren(node,resolve){
+          if(!node.data){
+              return
+          }
+          this.$emit('lazyLoadingBegin', node.data)
+          let params = {parentId: node.data.id}
+          this.axios.get(this.dataUrl,{params:params})
+              .then( (response)=> {
+                  let content = response.data.data
+                  this.loadedKeys = this.loadedKeys.concat(this.dataArrayToKeys(content))
+                  resolve(content)
+                  this.$emit('lazyLoadingEnd', node.data,content)
+              })
+              .catch( (error)=> {
+                  resolve([])
+                  this.$emit('lazyLoadingEnd', node.data,[])
+                  if(error.response){
+                      if(error.response.status != 404){
+                          this.$message.error(error.response.data.msg)
+                      }
+                  }else{
+
+                      this.$message.error('请求失败,未知错误')
+                  }
+              }).finally(()=>{
+
+          })
+      },
       // 加载树数据
       loadTreeData () {
         let self = this
         self.treeLoading = true
-          let params = {}
+        let params = {}
         this.axios.get(this.dataUrl,{params:params})
-          .then(function (response) {
+          .then( (response)=> {
             let content = response.data.data
+              this.loadedKeys = this.loadedKeys.concat(this.dataArrayToKeys(content))
             self.treeData = content
+              // 如果没有一个父节点，默认展开
+              if(content.length == 1 && content[0].hasChildren){
+                  this.defaultExpandedKeys.push(content[0].node.id)
+              }
           })
-          .catch(function (error) {
+          .catch( (error)=> {
               self.treeData = []
               if(error.response){
                   if(error.response.status != 404){
@@ -139,6 +167,12 @@
       getCheckedKeys () {
         return this.$refs.tree.getCheckedKeys()
       },
+        getUncheckedKeys () {
+            let checkedKeys = this.getCheckedKeys()
+            return this.loadedKeys.filter((item)=>{
+                return checkedKeys.indexOf(item) < 0
+            })
+        },
       setCheckedNodes (nodes) {
         this.$refs.tree.setCheckedNodes(nodes)
       },
@@ -149,6 +183,12 @@
       getHalfCheckedKeys () {
         return this.$refs.tree.getHalfCheckedKeys()
       },
+        getAllUncheckedKeys () {
+            let checkedKeys = this.getAllCheckedKeys()
+            return this.loadedKeys.filter((item)=>{
+                return checkedKeys.indexOf(item) < 0
+            })
+        },
       getAllCheckedKeys () {
         let checkedKeys = this.getCheckedKeys()
         let halfCheckedKeys = this.getHalfCheckedKeys()
@@ -160,7 +200,12 @@
       // 左边树过滤筛选
       treeFilterText (val) {
         this.$refs.tree.filter(val)
-      }
+      },
+        checkedKeys (val){
+          this.localCheckedKeys = val
+            this.setCheckedKeys(this.localCheckedKeys)
+
+        }
     }
   }
 </script>

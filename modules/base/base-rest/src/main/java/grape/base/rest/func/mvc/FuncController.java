@@ -1,32 +1,29 @@
 package grape.base.rest.func.mvc;
 
-import grape.base.rest.BaseRestSuperController;
-import grape.base.rest.func.form.FuncEnableForm;
-import grape.base.service.BaseLoginUser;
-import grape.base.service.dict.po.Dict;
-import grape.common.exception.ExceptionTools;
-import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.vo.TreeNodeVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.func.form.FuncCreateForm;
+import grape.base.rest.func.form.FuncEnableForm;
+import grape.base.rest.func.form.FuncListPageForm;
+import grape.base.rest.func.form.FuncUpdateForm;
+import grape.base.rest.func.mapper.FuncWebMapper;
+import grape.base.rest.func.vo.FuncVo;
+import grape.base.service.BaseLoginUser;
+import grape.base.service.dict.api.IDictService;
+import grape.base.service.dict.po.Dict;
+import grape.base.service.func.api.IFuncService;
+import grape.base.service.func.po.Func;
+import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.mvc.BaseTreeController;
+import grape.common.rest.vo.TreeNodeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import grape.base.rest.func.form.FuncCreateForm;
-import grape.base.rest.func.form.FuncUpdateForm;
-import grape.base.rest.func.form.FuncListPageForm;
-import grape.base.rest.func.vo.FuncVo;
-import grape.base.rest.func.mapper.FuncWebMapper;
-import org.springframework.web.bind.annotation.RestController;
-import grape.base.service.func.po.Func;
-import grape.base.service.func.api.IFuncService;
-
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -40,14 +37,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/func")
 @Api(tags = "功能相关接口")
-public class FuncController extends BaseRestSuperController<FuncVo, Func> {
+public class FuncController extends BaseTreeController<FuncVo, Func> {
 
 
     @Autowired
     private FuncWebMapper funcWebMapper;
     @Autowired
     private IFuncService iFuncService;
-
+    @Autowired
+    private IDictService iDictService;
 
     /**
      * 功能添加
@@ -201,7 +199,7 @@ public class FuncController extends BaseRestSuperController<FuncVo, Func> {
     }
     @Override
     public FuncVo transVo(FuncVo vo) {
-        Dict dict = getDictById(vo.getTypeDictId());
+        Dict dict = iDictService.getById(vo.getTypeDictId());
         if (dict != null) {
             vo.setTypeDictCode(dict.getCode());
             vo.setTypeDictName(dict.getName());

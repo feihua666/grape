@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * @since 2019-11-05
  */
 @Data
-
+@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="参数配置分页查询条件对象")
 public class ParamConfigListPageForm extends BasePageForm {

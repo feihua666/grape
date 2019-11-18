@@ -1,6 +1,9 @@
 package grape.base.rest.rolefuncrel.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.rolefuncrel.form.*;
+import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.RDataNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,9 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import javax.validation.Valid;
-import grape.base.rest.rolefuncrel.form.RoleFuncRelCreateForm;
-import grape.base.rest.rolefuncrel.form.RoleFuncRelUpdateForm;
-import grape.base.rest.rolefuncrel.form.RoleFuncRelListPageForm;
+
 import grape.base.rest.rolefuncrel.vo.RoleFuncRelVo;
 import grape.base.rest.rolefuncrel.mapper.RoleFuncRelWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import grape.common.rest.mvc.BaseController;
 import grape.base.service.rolefuncrel.po.RoleFuncRel;
 import grape.base.service.rolefuncrel.api.IRoleFuncRelService;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 角色菜单功能关系表，多对多 前端控制器
@@ -28,8 +31,8 @@ import java.util.List;
  * @since 2019-10-22
  */
 @RestController
-@RequestMapping("/role-func-rel")
-@Api(tags = "角色菜单功能关系表，多对多")
+@RequestMapping("/rolefuncrel")
+@Api(tags = "角色功能关系相关接口")
 public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFuncRel> {
 
     @Autowired
@@ -37,50 +40,71 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
     @Autowired
     private IRoleFuncRelService currentService;
 
-
-
-     @ApiOperation("[角色菜单功能关系表，多对多]单表创建/添加数据")
-     @RequiresPermissions("role-func-rel:single:create")
-     @PostMapping
+     @ApiOperation("角色分配功能")
+     @RequiresPermissions("rolefuncrel:single:roleAssignFunc")
+     @PostMapping("/role/assign/func")
      @ResponseStatus(HttpStatus.CREATED)
-     public RoleFuncRelVo create(@RequestBody @Valid RoleFuncRelCreateForm cf) {
-         RoleFuncRel po = currentWebMapper.formToPo(cf);
-         return super.create(po);
+     public Boolean roleAssignFunc(@RequestBody @Valid RoleAssignFuncForm cf) {
+         currentService.roleAssignFunc(cf.getRoleId(),cf.getCheckedFuncIds(),cf.getUncheckedFuncIds(),cf.getIsLazyLoad());
+         return true;
      }
 
-     @ApiOperation("[角色菜单功能关系表，多对多]单表根据ID查询")
-     @RequiresPermissions("role-func-rel:single:queryById")
-     @GetMapping("/{id}")
+     @ApiOperation("根据角色ID查询功能id")
+     @RequiresPermissions("rolefuncrel:single:queryByRoleId")
+     @GetMapping("/role/{roleId}")
      @ResponseStatus(HttpStatus.OK)
-     public RoleFuncRelVo queryById(@PathVariable String id) {
-         return super.queryById(id);
+     public List<String> queryByRoleId(@PathVariable String roleId) {
+         List<RoleFuncRel> roleAssignFunc = currentService.getRoleAssignFunc(roleId);
+         if (roleAssignFunc == null) {
+             ExceptionTools.dataNotExistRE("数据不存在");
+         }
+
+         return roleAssignFunc.stream().map(item -> item.getFuncId()).collect(Collectors.toList());
      }
 
-     @ApiOperation("[角色菜单功能关系表，多对多]单表根据ID删除")
-     @RequiresPermissions("role-func-rel:single:deleteById")
-     @DeleteMapping("/{id}")
+     @ApiOperation("清空角色下的所有功能")
+     @RequiresPermissions("rolefuncrel:single:deleteByRoleId")
+     @DeleteMapping("/role/{roleId}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable String id) {
-         return super.deleteById(id);
+     public Boolean deleteByRoleId(@PathVariable String roleId) {
+         boolean b = currentService.removeByRoleId(roleId);
+         if (!b) {
+             throw ExceptionTools.failRE("删除失败，可能要删除的数据不存在，请刷新数据再试");
+         }
+         return b;
      }
 
-     @ApiOperation("[角色菜单功能关系表，多对多]单表根据ID更新")
-     @RequiresPermissions("role-func-rel:single:updateById")
-     @PutMapping("/{id}")
-     @ResponseStatus(HttpStatus.CREATED)
-     public RoleFuncRelVo update(@PathVariable String id,@RequestBody @Valid RoleFuncRelUpdateForm uf) {
-         RoleFuncRel po = currentWebMapper.formToPo(uf);
-         po.setId(id);
-         return super.update(po);
-     }
 
-    @ApiOperation("[角色菜单功能关系表，多对多]单表分页列表")
-    @RequiresPermissions("role-func-rel:single:listPage")
-    @GetMapping("/listPage")
+    @ApiOperation("功能分配角色")
+    @RequiresPermissions("rolefuncrel:single:funcAssignRole")
+    @PostMapping("/func/assign/role")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Boolean funcAssignRole(@RequestBody @Valid FuncAssignRoleForm cf) {
+        currentService.funcAssignRole(cf.getFuncId(),cf.getCheckedRoleIds(),cf.getUncheckedRoleIds(),cf.getIsLazyLoad());
+        return true;
+    }
+
+    @ApiOperation("根据功能ID查询")
+    @RequiresPermissions("rolefuncrel:single:queryByFuncId")
+    @GetMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<RoleFuncRelVo> listPage(RoleFuncRelListPageForm listPageForm) {
-         RoleFuncRel po = currentWebMapper.formToPo(listPageForm);
-         return super.listPage(po,listPageForm);
-     }
+    public List<String> queryByFuncId(@PathVariable String funcId) {
+        List<RoleFuncRel> roleAssignFunc = currentService.getFuncAssignRole(funcId);
+        if (roleAssignFunc == null) {
+            ExceptionTools.dataNotExistRE("数据不存在");
+        }
+        return roleAssignFunc.stream().map(item -> item.getFuncId()).collect(Collectors.toList());
+    }
 
+    @ApiOperation("清空功能下的所有角色")
+    @RequiresPermissions("rolefuncrel:single:deleteByFuncId")
+    @DeleteMapping("/func/{funcId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Boolean deleteByFuncId(@PathVariable String funcId) {
+        boolean b = currentService.removeByFuncId(funcId);
+        if (!b) {
+            throw ExceptionTools.failRE("删除失败，可能要删除的数据不存在，请刷新数据再试");
+        }
+        return b;
+    }
 }

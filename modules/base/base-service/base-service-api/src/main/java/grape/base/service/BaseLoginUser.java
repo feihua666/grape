@@ -4,6 +4,7 @@ import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.role.po.Role;
 import grape.base.service.user.po.UserIdentifier;
+import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.userpost.po.UserPost;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.common.AbstractLoginUser;
@@ -28,19 +29,24 @@ public class BaseLoginUser extends AbstractLoginUser {
     private Boolean isSuperAdmin;
     // 是否切换角色true=切换角色，false=切换岗位
     private Boolean isSwitchRole;
-    // 用户所属公司,由dept派生
+    // 用户所属公司
     private Comp comp;
     // 用户所属部门,用户表的部门并不是担任岗位的部门
     private Dept dept;
-    // 用户担任岗位,正在使用的岗位
+    // 用户担任岗位,正在使用的岗位关系
     private UserPost currentUserPost;
+    // 用户担任岗位,正在使用的岗位关系对应实体
+    private UserPostInfo currentUserPostInfo;
+
     // 用户担任岗位对应的角色关系
     private UserPostRoleRel currentUserPostRoleRel;
     // 当前正在使用的角色，isSwitchRole=false时由currentUserPostRoleRel派生，isSwitchRole=true时由用户角色关系派生
     private Role currentRole;
     // 用户担任的所有岗位关系
     private List<UserPost> userPosts;
-    // 用户的可用角色
+    // 用户担任的所有岗位关系对应实体
+    private List<UserPostInfo> userPostInfos;
+    // 用户的可用角色，用户角色关系而来
     private List<Role> roles;
 
 

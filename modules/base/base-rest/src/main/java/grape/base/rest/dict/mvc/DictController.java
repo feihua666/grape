@@ -1,30 +1,28 @@
 package grape.base.rest.dict.mvc;
 
-import grape.base.rest.BaseRestSuperController;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.dict.form.DictCreateForm;
 import grape.base.rest.dict.form.DictEnableForm;
+import grape.base.rest.dict.form.DictListPageForm;
+import grape.base.rest.dict.form.DictUpdateForm;
+import grape.base.rest.dict.mapper.DictWebMapper;
+import grape.base.rest.dict.vo.DictVo;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
+import grape.base.service.dict.api.IDictService;
+import grape.base.service.dict.po.Dict;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.vo.TreeNodeVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.dict.form.DictCreateForm;
-import grape.base.rest.dict.form.DictUpdateForm;
-import grape.base.rest.dict.form.DictListPageForm;
-import grape.base.rest.dict.vo.DictVo;
-import grape.base.rest.dict.mapper.DictWebMapper;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.dict.po.Dict;
-import grape.base.service.dict.api.IDictService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -38,13 +36,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/dict")
 @Api(tags = "字典相关接口")
-public class DictController extends BaseRestSuperController<DictVo, Dict> {
+public class DictController extends BaseTreeController<DictVo, Dict> {
 
     @Autowired
     private DictWebMapper dictWebMapper;
     @Autowired
     private IDictService iDictService;
-
+    @Autowired
+    private ICompService iCompService;
     /**
      * 获取字典组下的字典项
      * @param groupCode
@@ -55,7 +54,7 @@ public class DictController extends BaseRestSuperController<DictVo, Dict> {
     @GetMapping("/items/{groupCode}")
     @ResponseStatus(HttpStatus.OK)
     public List<DictVo> queryItemsByGroupCode(@PathVariable String groupCode) {
-        List<Dict> items = getIDictService().getItemByGroupCode(groupCode, false);
+        List<Dict> items = iDictService.getItemByGroupCode(groupCode, false);
         if (isListEmpty(items)) {
             throw ExceptionTools.dataNotExistRE("字典组编码" + groupCode + "对应的字典项不存在");
         }
@@ -181,7 +180,7 @@ public class DictController extends BaseRestSuperController<DictVo, Dict> {
     }
     @Override
     public DictVo transVo(DictVo vo) {
-        Comp comp = getCompById(vo.getCompId());
+        Comp comp = iCompService.getById(vo.getCompId());
         if (comp != null) {
             vo.setCompName(comp.getName());
         }

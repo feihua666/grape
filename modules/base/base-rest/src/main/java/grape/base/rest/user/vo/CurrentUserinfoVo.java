@@ -1,11 +1,15 @@
 package grape.base.rest.user.vo;
 
+import grape.base.rest.post.vo.PostVo;
+import grape.base.rest.role.vo.RoleVo;
 import grape.common.rest.vo.BaseVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * Created by yangwei
@@ -38,8 +42,23 @@ public class CurrentUserinfoVo extends BaseVo {
     private String deptName;
 
     @ApiModelProperty(value = "当前使用的角色id")
-    private String roleId;
+    private String currentRoleId;
+    @ApiModelProperty(value = "当前使用的角色编码")
+    private String currentRoleCode;
+    @ApiModelProperty(value = "当前使用的角色名称")
+    private String currentRoleName;
+
+    @ApiModelProperty(value = "可切换的角色们")
+    private List<RoleVo> roles;
+
     @ApiModelProperty(value = "当前使用的岗位id,如果是切换角色，该值为空")
-    private String postId;
+    private String currentPostId;
+    @ApiModelProperty(value = "当前使用的岗位编码,如果是切换角色，该值为空")
+    private String currentPostCode;
+    @ApiModelProperty(value = "当前使用的岗位名称,如果是切换角色，该值为空")
+    private String currentPostName;
+
+    @ApiModelProperty(value = "可切换的岗位们")
+    private List<PostVo> posts;
 
 }

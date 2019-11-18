@@ -1,12 +1,13 @@
 package grape.base.service.userpost.po;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import grape.common.service.po.NormalBasePo;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.baomidou.mybatisplus.annotation.Version;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 
 /**
  * <p>
@@ -14,11 +15,10 @@ import java.io.Serializable;
  * </p>
  *
  * @author yangwei
- * @since 2019-09-27
+ * @since 2019-11-18
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
-
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("base_user_post")
 public class UserPost extends NormalBasePo<UserPost> {
@@ -46,6 +46,11 @@ public class UserPost extends NormalBasePo<UserPost> {
     private String postId;
 
     /**
+     * 职务id，冗余字段，由job_level_id对应的job派生
+     */
+    private String jobId;
+
+    /**
      * 职级id
      */
     private String jobLevelId;
@@ -63,7 +68,7 @@ public class UserPost extends NormalBasePo<UserPost> {
     /**
      * 生效的时间
      */
-    private Long effcetAt;
+    private String effcetAt;
 
     /**
      * 是否主岗

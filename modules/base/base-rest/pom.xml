@@ -22,5 +22,10 @@
             <artifactId>base-service-impl</artifactId>
             <version>${grape.version}</version>
         </dependency>
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>mq-service-impl</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
     </dependencies>
 </project>

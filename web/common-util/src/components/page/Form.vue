@@ -14,12 +14,14 @@
                     :key="index"
                     :prop="getFieldName(item)"
                     :rules="getRules(item)"
+
             >
                 <el-input v-if="item.element.type == 'text'"
                           v-model="form[getFieldName(item)]"
                           :placeholder="item.element.placeholder"
                           :disabled="item.element.disabled"
                           :readonly="item.element.readonly"
+                          :title="getTitle(item)"
                           clearable>
                 </el-input>
                 <el-input v-else-if="item.element.type == 'textarea'"
@@ -84,6 +86,7 @@
                                @click="buttonClick(item.element.button)"
                                :native-type="item.element.button.action == 'submit' ? 'submit': null"
                                :loading="buttonLoading[item.element.button.action] || item.element.button.loading"
+                               :title="getTitle(item.element.button)"
                     >{{item.element.button.label}}</el-button>
                     <template v-else-if="isArray(item.element.button)">
                         <el-button v-for="(buttonItem,index) in item.element.button" :key="index"
@@ -92,6 +95,7 @@
                                    @click="buttonClick(buttonItem)"
                                    :native-type="buttonItem.action == 'submit' ? 'submit': null"
                                    :loading="buttonLoading[buttonItem.action] || buttonItem.loading"
+                                   :title="getTitle(buttonItem)"
                         >{{buttonItem.label}}</el-button>
                     </template>
                 </template>
@@ -242,6 +246,17 @@
                     min: 1,
                     max: 100
                 }
+            },
+            getTitle(item){
+                if(item){
+                    if(item.title){
+                        return item.title
+                    }
+                    if(item.element && item.element.title){
+                        return item.element.title
+                    }
+                }
+                return null
             },
             getFormItemValueByName(name){
                 if(this.formItemValue){

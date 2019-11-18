@@ -66,7 +66,7 @@
                                     action: 'submit',
                                     requestMethod:'get',
                                     url: '/role/listPage',
-                                    label: '查询'
+                                    label: '查询',
                                 },
                                 {
                                     action: 'reset',
@@ -130,6 +130,13 @@
                         position:'more',
                         disabledOnMissingSelect:true,
                         label:'添加子节点'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/role/assignFunc/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label:'分配功能'
                     }
                 ]
             }

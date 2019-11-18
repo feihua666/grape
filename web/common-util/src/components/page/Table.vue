@@ -9,7 +9,7 @@
                 <el-button  size="mini" icon="el-icon-refresh" title="刷新当前数据" :loading="localLoading" @click="toolbarRefreshClick"></el-button>
                 <template>
                 <!-- 表格的列，可选择性显示隐藏列 -->
-                <el-button size="mini" icon="el-icon-more"  title="显示/隐藏列" v-popover:selectPopover></el-button>
+                <el-button size="mini" icon="el-icon-s-grid"  title="显示/隐藏列" v-popover:selectPopover></el-button>
                 <el-popover
                         ref="selectPopover"
                         placement="bottom"
@@ -17,10 +17,11 @@
                     <el-scrollbar wrapStyle="max-height:500px;">
                         <el-checkbox-group v-model="toolbarMore.checkedItems">
                             <template v-for="(column,index) in columns">
-                                <div style="margin-top: 15px;" :key="index"></div>
-                                <el-checkbox  :label="column.prop" :key="index" class="g-block"
+                                <div style="margin-top: 15px;" :key="index">
+                                <el-checkbox  :label="column.prop" class="g-block"
                                              :disabled="toolbarMore.checkedItems.length == 1 && toolbarMore.checkedItems.indexOf(column.prop) >=0"
                                 >{{column.label}}</el-checkbox>
+                                </div>
                             </template>
 
                         </el-checkbox-group>

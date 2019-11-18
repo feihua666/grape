@@ -33,6 +33,10 @@ const router = new VueRouter({
             component: () => import('@/views/func/FuncEdit.vue')
         },
         {
+            path: '/func/assignRole/:id',
+            component: () => import('@/views/func/AssignRole.vue')
+        },
+        {
             path: '/comp',
             component: () => import('@/views/comp/Comp.vue')
         },
@@ -79,6 +83,10 @@ const router = new VueRouter({
         {
             path: '/role/roleEdit/:id',
             component: () => import('@/views/role/RoleEdit.vue')
+        },
+        {
+            path: '/role/assignFunc/:id',
+            component: () => import('@/views/role/AssignFunc.vue')
         },
         {
             path: '/post',

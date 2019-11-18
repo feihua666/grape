@@ -151,6 +151,13 @@
                         position:'more',
                         disabledOnMissingSelect:true,
                         label:'添加子节点'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/func/assignRole/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label:'分配角色'
                     }
                 ]
             }

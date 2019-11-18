@@ -1,7 +1,6 @@
 package grape.base.rest.comp.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.base.rest.BaseRestSuperController;
 import grape.base.rest.comp.form.CompCreateForm;
 import grape.base.rest.comp.form.CompListPageForm;
 import grape.base.rest.comp.form.CompUpdateForm;
@@ -9,9 +8,12 @@ import grape.base.rest.comp.mapper.CompWebMapper;
 import grape.base.rest.comp.vo.CompVo;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
+import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.vo.TreeNodeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+
 /**
  * <p>
  * 公司 前端控制器
@@ -35,13 +39,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/comp")
 @Api(tags = "公司相关接口")
-public class CompController extends BaseRestSuperController<CompVo, Comp> {
+public class CompController extends BaseTreeController<CompVo, Comp> {
 
     @Autowired
     private CompWebMapper compWebMapper;
     @Autowired
     private ICompService iCompService;
-
+    @Autowired
+    private IDictService iDictService;
+    @Autowired
+    private IUserService iUserService;
 
      @ApiOperation("添加公司")
      @RequiresPermissions("comp:single:create")
@@ -117,19 +124,16 @@ public class CompController extends BaseRestSuperController<CompVo, Comp> {
 
     @Override
     public CompVo transVo(CompVo vo) {
-        Dict dict = getDictById(vo.getTypeDictId());
-        if (dict != null) {
-            vo.setTypeDictCode(dict.getCode());
-            vo.setTypeDictName(dict.getName());
-        }
-        User user = getUserById(vo.getMasterUserId());
-        if (user != null) {
-            vo.setMasterUserName(user.getNickname());
-        }
-        Comp parent = getCompById(vo.getParentId());
-        if (parent != null) {
-            vo.setParentName(parent.getName());
-        }
+        Dict dict = iDictService.getById(vo.getTypeDictId());
+        vo.setTypeDictCode(Optional.ofNullable(dict).map(d -> d.getCode()).orElse(null));
+        vo.setTypeDictName(Optional.ofNullable(dict).map(d -> d.getName()).orElse(null));
+
+        User user = iUserService.getById(vo.getMasterUserId());
+        vo.setMasterUserName(Optional.ofNullable(user).map(d -> d.getNickname()).orElse(null));
+
+        Comp parent = iCompService.getById(vo.getParentId());
+        vo.setParentName(Optional.ofNullable(parent).map(d -> d.getName()).orElse(null));
+
         return vo;
     }
 }

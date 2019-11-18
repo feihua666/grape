@@ -1,18 +1,21 @@
 package grape.base.rest.dept.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.base.rest.BaseRestSuperController;
 import grape.base.rest.dept.form.DeptCreateForm;
 import grape.base.rest.dept.form.DeptListPageForm;
 import grape.base.rest.dept.form.DeptUpdateForm;
 import grape.base.rest.dept.mapper.DeptWebMapper;
 import grape.base.rest.dept.vo.DeptVo;
+import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
+import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.vo.TreeNodeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+
 /**
  * <p>
  * 部门 前端控制器
@@ -34,14 +39,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/dept")
 @Api(tags = "部门相关接口")
-public class DeptController extends BaseRestSuperController<DeptVo, Dept> {
+public class DeptController extends BaseTreeController<DeptVo, Dept> {
 
 
     @Autowired
     private DeptWebMapper deptWebMapper;
     @Autowired
     private IDeptService iDeptService;
-
+    @Autowired
+    private ICompService iCompService;
+    @Autowired
+    private IDictService iDictService;
+    @Autowired
+    private IUserService iUserService;
 
      @ApiOperation("添加部门")
      @RequiresPermissions("dept:single:create")
@@ -112,19 +122,16 @@ public class DeptController extends BaseRestSuperController<DeptVo, Dept> {
 
     @Override
     public DeptVo transVo(DeptVo vo) {
-        Dict dict = getDictById(vo.getTypeDictId());
-        if (dict != null) {
-            vo.setTypeDictCode(dict.getCode());
-            vo.setTypeDictName(dict.getName());
-        }
-        Comp comp = getCompById(vo.getCompId());
-        if (comp != null) {
-            vo.setCompName(comp.getName());
-        }
-        User user = getUserById(vo.getMasterUserId());
-        if (user != null) {
-            vo.setMasterUserName(user.getNickname());
-        }
+        Dict dict = iDictService.getById(vo.getTypeDictId());
+        vo.setTypeDictCode(Optional.ofNullable(dict).map(d -> d.getCode()).orElse(null));
+        vo.setTypeDictName(Optional.ofNullable(dict).map(d -> d.getName()).orElse(null));
+
+        Comp comp = iCompService.getById(vo.getCompId());
+        vo.setCompName(Optional.ofNullable(comp).map(d -> d.getName()).orElse(null));
+
+        User user = iUserService.getById(vo.getMasterUserId());
+        vo.setMasterUserName(Optional.ofNullable(user).map(d -> d.getNickname()).orElse(null));
+
 
         return vo;
     }

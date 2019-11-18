@@ -19,6 +19,13 @@
             <artifactId>base-rest</artifactId>
             <version>${grape.version}</version>
         </dependency>
+
+        <!--  mq -->
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>mq-service-impl</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

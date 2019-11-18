@@ -1,29 +1,28 @@
 package grape.base.rest.post.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.base.rest.BaseRestSuperController;
+import grape.base.rest.post.form.PostCreateForm;
 import grape.base.rest.post.form.PostEnableForm;
+import grape.base.rest.post.form.PostListPageForm;
+import grape.base.rest.post.form.PostUpdateForm;
+import grape.base.rest.post.mapper.PostWebMapper;
+import grape.base.rest.post.vo.PostVo;
+import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
+import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.post.api.IPostService;
+import grape.base.service.post.po.Post;
 import grape.common.exception.runtime.RBaseException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.post.form.PostCreateForm;
-import grape.base.rest.post.form.PostUpdateForm;
-import grape.base.rest.post.form.PostListPageForm;
-import grape.base.rest.post.vo.PostVo;
-import grape.base.rest.post.mapper.PostWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.post.po.Post;
-import grape.base.service.post.api.IPostService;
-import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 /**
  * <p>
  * 岗位表 前端控制器
@@ -35,14 +34,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @Api(tags = "岗位相关接口")
-public class PostController extends BaseRestSuperController<PostVo, Post> {
+public class PostController extends BaseController<PostVo, Post> {
 
     @Autowired
     private PostWebMapper currentWebMapper;
     @Autowired
     private IPostService currentService;
-
-
+    @Autowired
+    private IDictService iDictService;
+    @Autowired
+    private IDeptService iDeptService;
 
      @ApiOperation("添加岗位")
      @RequiresPermissions("post:single:create")
@@ -112,12 +113,12 @@ public class PostController extends BaseRestSuperController<PostVo, Post> {
     }
     @Override
     public PostVo transVo(PostVo postVo) {
-        Dict dict = getDictById(postVo.getTypeDictId());
+        Dict dict = iDictService.getById(postVo.getTypeDictId());
         if (dict != null) {
             postVo.setTypeDictCode(dict.getCode());
             postVo.setTypeDictName(dict.getName());
         }
-        Dept dept = getDeptById(postVo.getDeptId());
+        Dept dept = iDeptService.getById(postVo.getDeptId());
         if (dept != null) {
             postVo.setDeptName(dept.getName());
         }

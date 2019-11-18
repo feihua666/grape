@@ -1,9 +1,11 @@
 package grape.base.service.userpost.api;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.userpost.po.UserPost;
 import grape.common.service.IBaseService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,4 +32,6 @@ public interface IUserPostService extends IBaseService<UserPost> {
         }
         return list(Wrappers.query(userPost));
     }
+     UserPostInfo getUserPostInfo(UserPost userPost);
+     List<UserPostInfo> getUserPostInfos(List<UserPost> userPosts);
 }

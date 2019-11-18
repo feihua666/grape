@@ -1,12 +1,10 @@
 package grape.common;
 
 import grape.common.pojo.BasePojo;
-import grape.common.tools.ThreadContext;
+import grape.common.tools.ThreadContextTool;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Singular;
 import lombok.experimental.Accessors;
-import org.mapstruct.ap.shaded.freemarker.template.utility.SecurityUtilities;
 
 /**
  * 当前登录用户封装对象
@@ -31,9 +29,9 @@ public abstract class AbstractLoginUser extends BasePojo {
     private String avatar;
 
     public static   AbstractLoginUser getLoginUser(){
-        return (AbstractLoginUser) ThreadContext.get(loginUserKey);
+        return (AbstractLoginUser) ThreadContextTool.get(loginUserKey);
     }
     public static void setLoginUser(AbstractLoginUser loginUser){
-        ThreadContext.put(loginUserKey,loginUser);
+        ThreadContextTool.put(loginUserKey,loginUser);
     }
 }

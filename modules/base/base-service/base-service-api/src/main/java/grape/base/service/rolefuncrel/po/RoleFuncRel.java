@@ -2,6 +2,7 @@ package grape.base.service.rolefuncrel.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import grape.common.service.po.RelBasePo;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,7 +19,6 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-
 @Accessors(chain = true)
 @TableName("base_role_func_rel")
 public class RoleFuncRel extends RelBasePo<RoleFuncRel> {

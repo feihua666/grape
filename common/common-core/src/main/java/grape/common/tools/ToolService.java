@@ -1,6 +1,7 @@
 package grape.common.tools;
 
 
+import grape.common.exception.runtime.InvalidParamsException;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -63,6 +64,16 @@ public interface ToolService {
      */
     default boolean isStrAnyEmpty(String ...str){
         return StringUtils.isAnyEmpty(str);
+    }
+
+    /**
+     * 是否以某个字符串开始
+     * @param str
+     * @param prefix
+     * @return
+     */
+    default boolean isStrStart(String str,String prefix){
+        return StringUtils.startsWith(str,prefix);
     }
 
     /**
@@ -129,5 +140,22 @@ public interface ToolService {
         }
 
         return pinyinDto;
+    }
+
+
+    default public void assertParamNotNull(Object obj,String exceptionMsg){
+        if(obj == null){
+            throw new InvalidParamsException(exceptionMsg);
+        }
+    }
+    default public void assertParamNotEmpty(String obj,String exceptionMsg){
+        if(isStrEmpty(obj)){
+            throw new InvalidParamsException(exceptionMsg);
+        }
+    }
+    default public void assertListNotEmpty(List obj,String exceptionMsg){
+        if(isListEmpty(obj)){
+            throw new InvalidParamsException(exceptionMsg);
+        }
     }
 }
