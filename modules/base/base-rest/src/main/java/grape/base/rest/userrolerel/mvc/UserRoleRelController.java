@@ -1,35 +1,35 @@
 package grape.base.rest.userrolerel.mvc;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.userrolerel.form.RoleAssignUserForm;
+import grape.base.rest.userrolerel.form.UserAssignRoleForm;
+import grape.base.rest.userrolerel.mapper.UserRoleRelWebMapper;
+import grape.base.rest.userrolerel.vo.UserRoleRelVo;
+import grape.base.service.userrolerel.api.IUserRoleRelService;
+import grape.base.service.userrolerel.po.UserRoleRel;
+import grape.common.exception.ExceptionTools;
+import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.userrolerel.form.UserRoleRelCreateForm;
-import grape.base.rest.userrolerel.form.UserRoleRelUpdateForm;
-import grape.base.rest.userrolerel.form.UserRoleRelListPageForm;
-import grape.base.rest.userrolerel.vo.UserRoleRelVo;
-import grape.base.rest.userrolerel.mapper.UserRoleRelWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.userrolerel.po.UserRoleRel;
-import grape.base.service.userrolerel.api.IUserRoleRelService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
- * 角色菜单功能关系表，多对多 前端控制器
+ * 用户角色关系表，多对多 前端控制器
  * </p>
  *
  * @author yangwei
  * @since 2019-10-22
  */
 @RestController
-@RequestMapping("/user-role-rel")
-@Api(tags = "角色菜单功能关系表，多对多")
+@RequestMapping("/userrolerel")
+@Api(tags = "用户角色关系相关接口")
 public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRoleRel> {
 
     @Autowired
@@ -38,49 +38,71 @@ public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRol
     private IUserRoleRelService currentService;
 
 
+    @ApiOperation("用户分配角色")
+    @RequiresPermissions("userrolerel:single:userAssignRole")
+    @PostMapping("/user/assign/role")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Boolean userAssignRole(@RequestBody @Valid UserAssignRoleForm cf) {
+        currentService.userAssignRole(cf.getUserId(),cf.getCheckedRoleIds(),cf.getUncheckedRoleIds(),cf.getIsLazyLoad());
+        return true;
+    }
 
-     @ApiOperation("[角色菜单功能关系表，多对多]单表创建/添加数据")
-     @RequiresPermissions("user-role-rel:single:create")
-     @PostMapping
-     @ResponseStatus(HttpStatus.CREATED)
-     public UserRoleRelVo create(@RequestBody @Valid UserRoleRelCreateForm cf) {
-         UserRoleRel po = currentWebMapper.formToPo(cf);
-         return super.create(po);
-     }
-
-     @ApiOperation("[角色菜单功能关系表，多对多]单表根据ID查询")
-     @RequiresPermissions("user-role-rel:single:queryById")
-     @GetMapping("/{id}")
-     @ResponseStatus(HttpStatus.OK)
-     public UserRoleRelVo queryById(@PathVariable String id) {
-         return super.queryById(id);
-     }
-
-     @ApiOperation("[角色菜单功能关系表，多对多]单表根据ID删除")
-     @RequiresPermissions("user-role-rel:single:deleteById")
-     @DeleteMapping("/{id}")
-     @ResponseStatus(HttpStatus.NO_CONTENT)
-     public boolean deleteById(@PathVariable String id) {
-         return super.deleteById(id);
-     }
-
-     @ApiOperation("[角色菜单功能关系表，多对多]单表根据ID更新")
-     @RequiresPermissions("user-role-rel:single:updateById")
-     @PutMapping("/{id}")
-     @ResponseStatus(HttpStatus.CREATED)
-     public UserRoleRelVo update(@PathVariable String id,@RequestBody @Valid UserRoleRelUpdateForm uf) {
-         UserRoleRel po = currentWebMapper.formToPo(uf);
-         po.setId(id);
-         return super.update(po);
-     }
-
-    @ApiOperation("[角色菜单功能关系表，多对多]单表分页列表")
-    @RequiresPermissions("user-role-rel:single:listPage")
-    @GetMapping("/listPage")
+    @ApiOperation("根据用户ID查询已分配的角色id")
+    @RequiresPermissions("userrolerel:single:queryByUserId")
+    @GetMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<UserRoleRelVo> listPage(UserRoleRelListPageForm listPageForm) {
-         UserRoleRel po = currentWebMapper.formToPo(listPageForm);
-         return super.listPage(po,listPageForm);
-     }
+    public List<String> queryByUserId(@PathVariable String userId) {
+        List<UserRoleRel> rels = currentService.getByUserId(userId);
+        if (rels == null) {
+            ExceptionTools.dataNotExistRE("数据不存在");
+        }
 
+        return rels.stream().map(item -> item.getRoleId()).collect(Collectors.toList());
+    }
+
+    @ApiOperation("清空用户下的所有角色")
+    @RequiresPermissions("userrolerel:single:deleteByUserId")
+    @DeleteMapping("/user/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Boolean deleteByUserId(@PathVariable String userId) {
+        boolean b = currentService.removeByUserId(userId);
+        if (!b) {
+            throw ExceptionTools.failRE("删除失败，可能要删除的数据不存在，请刷新数据再试");
+        }
+        return b;
+    }
+
+
+    @ApiOperation("角色分配用户")
+    @RequiresPermissions("userrolerel:single:roleAssignUser")
+    @PostMapping("/role/assign/user")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Boolean roleAssignUser(@RequestBody @Valid RoleAssignUserForm cf) {
+        currentService.roleAssignUser(cf.getRoleId(),cf.getCheckedUserIds(),cf.getUncheckedUserIds(),cf.getIsLazyLoad());
+        return true;
+    }
+
+    @ApiOperation("根据角色id查询已分配的用户id")
+    @RequiresPermissions("userrolerel:single:queryByRoleId")
+    @GetMapping("/role/{roleId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> queryByRoleId(@PathVariable String roleId) {
+        List<UserRoleRel> rels = currentService.getByRoleId(roleId);
+        if (rels == null) {
+            ExceptionTools.dataNotExistRE("数据不存在");
+        }
+        return rels.stream().map(item -> item.getUserId()).collect(Collectors.toList());
+    }
+
+    @ApiOperation("清空角色下的所有用户")
+    @RequiresPermissions("userrolerel:single:deleteByRoleId")
+    @DeleteMapping("/role/{roleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Boolean deleteByRoleId(@PathVariable String roleId) {
+        boolean b = currentService.removeByRoleId(roleId);
+        if (!b) {
+            throw ExceptionTools.failRE("删除失败，可能要删除的数据不存在，请刷新数据再试");
+        }
+        return b;
+    }
 }

@@ -1,4 +1,4 @@
-package grape.base.rest.rolefuncrel.form;
+package grape.base.rest.userrolerel.form;
 
 import grape.common.rest.form.BaseForm;
 import io.swagger.annotations.ApiModel;
@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <p>
- * 功能分配角色
+ * 角色分配用户
  * </p>
  *
  * @author yangwei
@@ -22,20 +22,20 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Accessors(chain = true)
-@ApiModel(value="功能分配角色表单对象")
-public class FuncAssignRoleForm extends BaseForm {
+@ApiModel(value="角色分配用户表单对象")
+public class RoleAssignUserForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @NotEmpty(message = "功能id不能为空")
-    @ApiModelProperty(value = "功能id")
-    private String funcId;
+    @NotEmpty(message = "角色id不能为空")
+    @ApiModelProperty(value = "角色id")
+    private String roleId;
 
-    @ApiModelProperty(value = "选择的角色id")
-    private List<String> checkedRoleIds;
+    @ApiModelProperty(value = "选择的用户id")
+    private List<String> checkedUserIds;
 
-    @ApiModelProperty(value = "未选择的角色id",notes = "如果为懒加载请传该值")
-    private List<String> uncheckedRoleIds;
+    @ApiModelProperty(value = "未选择的用户id",notes = "如果为懒加载请传该值")
+    private List<String> uncheckedUserIds;
 
     @NotNull(message = "是否为懒加载不能为空")
     @ApiModelProperty(value = "页面可选择的数据是否为懒加载")

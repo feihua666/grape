@@ -1,12 +1,9 @@
 package grape.base.rest.rolefuncrel.mvc;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.rolefuncrel.form.*;
 import grape.common.exception.ExceptionTools;
-import grape.common.exception.runtime.RDataNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,17 +46,17 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
          return true;
      }
 
-     @ApiOperation("根据角色ID查询功能id")
+     @ApiOperation("根据角色ID查询已分配的功能id")
      @RequiresPermissions("rolefuncrel:single:queryByRoleId")
      @GetMapping("/role/{roleId}")
      @ResponseStatus(HttpStatus.OK)
      public List<String> queryByRoleId(@PathVariable String roleId) {
-         List<RoleFuncRel> roleAssignFunc = currentService.getRoleAssignFunc(roleId);
-         if (roleAssignFunc == null) {
+         List<RoleFuncRel> rels = currentService.getByRoleId(roleId);
+         if (rels == null) {
              ExceptionTools.dataNotExistRE("数据不存在");
          }
 
-         return roleAssignFunc.stream().map(item -> item.getFuncId()).collect(Collectors.toList());
+         return rels.stream().map(item -> item.getFuncId()).collect(Collectors.toList());
      }
 
      @ApiOperation("清空角色下的所有功能")
@@ -84,16 +81,16 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
         return true;
     }
 
-    @ApiOperation("根据功能ID查询")
+    @ApiOperation("根据功能ID查询已分配的功能id")
     @RequiresPermissions("rolefuncrel:single:queryByFuncId")
     @GetMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByFuncId(@PathVariable String funcId) {
-        List<RoleFuncRel> roleAssignFunc = currentService.getFuncAssignRole(funcId);
-        if (roleAssignFunc == null) {
+        List<RoleFuncRel> rels = currentService.getByFuncId(funcId);
+        if (rels == null) {
             ExceptionTools.dataNotExistRE("数据不存在");
         }
-        return roleAssignFunc.stream().map(item -> item.getFuncId()).collect(Collectors.toList());
+        return rels.stream().map(item -> item.getFuncId()).collect(Collectors.toList());
     }
 
     @ApiOperation("清空功能下的所有角色")

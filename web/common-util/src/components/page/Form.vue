@@ -85,7 +85,7 @@
                                :icon="item.element.button.buttonIcon || aiButtonStyle(item.element.button.label).icon "
                                @click="buttonClick(item.element.button)"
                                :native-type="item.element.button.action == 'submit' ? 'submit': null"
-                               :loading="buttonLoading[item.element.button.action] || item.element.button.loading"
+                               :loading="localButtonLoading[item.element.button.code] || item.element.button.loading"
                                :title="getTitle(item.element.button)"
                     >{{item.element.button.label}}</el-button>
                     <template v-else-if="isArray(item.element.button)">
@@ -94,7 +94,7 @@
                                    :icon="buttonItem.buttonIcon || aiButtonStyle(buttonItem.label).icon "
                                    @click="buttonClick(buttonItem)"
                                    :native-type="buttonItem.action == 'submit' ? 'submit': null"
-                                   :loading="buttonLoading[buttonItem.action] || buttonItem.loading"
+                                   :loading="localButtonLoading[buttonItem.code] || buttonItem.loading"
                                    :title="getTitle(buttonItem)"
                         >{{buttonItem.label}}</el-button>
                     </template>
@@ -203,7 +203,14 @@
             loading:{
                 type: Boolean,
                 default:false
-            }
+            },
+            // 自定义按钮的loading状态，key为按钮的code,值为Boolean类型
+            buttonLoading:{
+                type: Object,
+                default:function () {
+                    return {}
+                }
+            },
         },
         computed:{
         },
@@ -224,9 +231,7 @@
             return {
                 form,
                 // 按钮loading 状态 submit为formItems.element.button.action的值，标识是哪个按钮
-                buttonLoading:{
-                    //submit: false
-                },
+                localButtonLoading:this.buttonLoading,
                 // 分页对象,只针对submit
                 pageQuery:null
             }
@@ -369,7 +374,7 @@
                             if(pageQuery){
                                 tempForm = copyPropSimple(tempForm,pageQuery)
                             }
-                            this.$set(this.buttonLoading,button.action,true)
+                            this.$set(this.localButtonLoading,button.code,true)
                             if(this.submitBusKey){
                                 this.$bus.$emit(this.submitBusKey ,{dataType:'loading',loading: true})
                             }
@@ -411,7 +416,7 @@
                                     this.$message.error('请求失败,未知错误')
                                 }
                             }).finally(()=>{
-                                this.$set(this.buttonLoading,button.action,false)
+                                this.$set(this.localButtonLoading,button.code,false)
                                 if(this.submitBusKey){
                                     this.$bus.$emit(this.submitBusKey ,{dataType:'loading',loading: false})
                                 }
@@ -441,6 +446,10 @@
                         this.form[key] = val[key]
                     }
                 }
+            },
+            // 这里没有处理每一个属性的loading状态，但一般都是一个按钮操作不太影响
+            buttonLoading(val){
+                this.localButtonLoading = val
             }
         }
     }

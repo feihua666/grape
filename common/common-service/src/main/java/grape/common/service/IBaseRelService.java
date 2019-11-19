@@ -22,28 +22,32 @@ public interface IBaseRelService<Po extends IDBasePo<?,?>> extends IBaseService<
      * 关系处理
      * @param mainId 主id，如：如果是角色分配功能，则为角色id
      * @param checkedIds 已选择的被分配的id
-     * @param uncheckeIds 未选择的被分配的id，如果页面为懒加载该参数必须传，否则认为全选
+     * @param uncheckeIds 未选择的被分配的id
      * @param isLazyLoad 标识页面的可选择数据是否为懒加载，如果不是懒加载会清空主id已绑定的所有数据
      */
     default void removeAssignRel(String mainId, List<String> checkedIds, List<String> uncheckeIds,Boolean isLazyLoad, SFunction<Po,?> main, SFunction<Po,?> other){
 
         assertParamNotEmpty(mainId,"mainId is not empty");
 
-        if ((isLazyLoad!=null && isLazyLoad) || (isListEmpty(checkedIds) && isListEmpty(uncheckeIds))) {
+        // 懒加载或都未选择数据，则清空
+        if ((isLazyLoad!=null && !isLazyLoad) || (isListEmpty(checkedIds) && isListEmpty(uncheckeIds))) {
             // 先删除
             remove(Wrappers.<Po>lambdaQuery().eq(main,mainId));
         }else {
             List<String> removedIds = new ArrayList<>();
-            if(isListEmpty(checkedIds)){
+            if(!isListEmpty(checkedIds)){
                 removedIds.addAll(checkedIds);
             }
-            if(isListEmpty(uncheckeIds)){
+            if(!isListEmpty(uncheckeIds)){
                 removedIds.addAll(uncheckeIds);
             }
 
-            remove(Wrappers.<Po>lambdaQuery()
-                    .eq(main, mainId)
-                    .in(other, removedIds));
+            if(!isListEmpty(removedIds)){
+                remove(Wrappers.<Po>lambdaQuery()
+                        .eq(main, mainId)
+                        .in(other, removedIds));
+            }
+
         }
 
     }

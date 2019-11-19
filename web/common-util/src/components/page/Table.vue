@@ -38,6 +38,7 @@
                                :type="button.buttonType || aiButtonStyle(button).type || 'primary'"
                                :icon="button.buttonIcon || aiButtonStyle(button).icon"
                                size="mini"
+                               :loading="buttonLoading[button.code]"
                                :key="index">{{operationButtonLabel(button)}}</el-button>
                 </template>
 
@@ -53,6 +54,7 @@
                                 v-for="(button,index) in moreOperations"
                                 :disabled="isButtonDisabled(button)"
                                 :command="button"
+                                :loading="localButtonLoading[button.code]"
                                 :key="index"
                         >{{operationButtonLabel(button)}}</el-dropdown-item>
                     </el-dropdown-menu>
@@ -69,6 +71,8 @@
                     :empty-text="localEmptyText"
                     highlight-current-row
                     @current-change="handleCurrentChange"
+                    @selection-change="handleSelectionChange"
+                    ref="table"
             >
                 <template v-for="(column,index) in columns">
                     <!-- 加一个默认全部显示的 toolbarMore.checkedItems.length == 0 条件为避免闪屏-->
@@ -79,6 +83,8 @@
                             :label="column.label"
                             :width="column.width"
                             :formatter="formatter"
+                            :show-overflow-tooltip="!!column.tooltip"
+                            :type="column.type"
                     >
                     </el-table-column>
                 </template>
@@ -132,6 +138,11 @@
             data:{
 
             },
+            // 主键属性
+            keyProp:{
+                type: String,
+                default: 'id'
+            },
             // data为url有效
             queryParams:{
                 type:Object,
@@ -166,6 +177,13 @@
                 type: Array,
                 default: null
             },
+            // 自定义按钮的loading状态，key为按钮的code,值为Boolean类型
+            buttonLoading:{
+                type: Object,
+                default:function () {
+                    return {}
+                }
+            },
             operationMoreButtonType:{
                 type: String,
                 default: 'primary'
@@ -183,6 +201,17 @@
             uniqueLabel:{
                 type:[String,Function],
                 default: null
+            },
+            // 多选的默认选中值
+            checkedKeys:{
+                type: Array,
+                default: function () {
+                    return []
+                }
+            },
+            // 也可以指定一个默认选中的url，一般情况下两个只能选一种
+            checkedKeysUrl:{
+                type: String
             }
         },
         computed:{
@@ -216,12 +245,17 @@
             if(this.localData){
                 this.init(this.localData)
             }
+            // 加载选中的值
+
+            this.getCheckedData()
+
             this.busInit()
         },
         data() {
             return {
                 localEmptyText: this.emptyText,
                 localData: this.data,
+                // 真正的数据表格数据
                 tableData:[],
                 localLoading: this.loading,
                 // 分页
@@ -231,9 +265,13 @@
                     size:10,
                     total: 0
                 },
+                localButtonLoading: this.buttonLoading,
                 localQueryParams:this.queryParams,
                 // 当前选中的行
                 currentRow: null,
+                // 多选选中的行
+                multipleSelection: null,
+                localCheckedKeys: this.checkedKeys,
                 toolbarMore:{
                     isIndeterminate: false,
                     checkAll: false,
@@ -273,6 +311,16 @@
                 if(this.formSubmitBusKey){
                     this.$bus.$on(this.formSubmitBusKey,this.handleFormSubmitBus)
                 }
+            },
+            // 多选设置选中
+            setChecked(checkedKeys){
+                this.$nextTick(() => {
+                    this.tableData.forEach(row => {
+                        if(checkedKeys.indexOf(row[this.keyProp]) >=0){
+                            this.$refs.table.toggleRowSelection(row,true);
+                        }
+                    });
+                })
             },
             // 处理表单请求数据
             handleFormSubmitBus(obj){
@@ -352,6 +400,9 @@
             handleCurrentChange(val) {
                 this.currentRow = val
             },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
             toolbarRefreshClick(){
                 // 刷新默认加载当前页数据，如果有分页的话，如果没有分页只是多个分页参数，也不影响
                 this.handlePageChange()
@@ -420,7 +471,7 @@
                         break
                     }
                     case 'delete':{
-                        this.doDelete(url)
+                        this.doDelete(url,button)
                         break
                     }
                     case 'exportTableExcel':{
@@ -443,10 +494,11 @@
               }
               return r
             },
-            doDelete(url){
+            doDelete(url,button){
                 this.$confirm('确定要删除'+ this.getUniqueLabel() +'吗, 是否继续?', '提示', {
                     type: 'warning'
                 }).then(() => {
+                    this.$set(this.localButtonLoading,button.code,true)
                     this.axios.delete(url)
                         .then(res => {
                             this.$message.success('删除成功')
@@ -463,7 +515,9 @@
                             }else {
                                 this.$message.error('删除失败，请刷新数据再试')
                             }
-                        })
+                        }).finally(()=>{
+                        this.$set(this.localButtonLoading,button.code,true)
+                    })
                 })
             },
             toolbarMoreCheckAll(){
@@ -475,7 +529,35 @@
             },
             aiButtonStyle(button){
                 return aiButtonStyle(this.operationButtonLabel(button))
-            }
+            },
+            // 多选，获取选中的行
+            getCheckedRows(){
+                return this.multipleSelection
+            },
+            getUncheckedRows(){
+                let checkedKeys = this.getCheckedKeys()
+                return this.tableData.filter(item => checkedKeys.indexOf(item[this.keyProp]) < 0)
+            },
+            getCheckedKeys(){
+                return this.multipleSelection.map(item => item[this.keyProp])
+            },
+            getUncheckedKeys(){
+                let checkedKeys = this.getCheckedKeys()
+               return this.tableData.filter(item => checkedKeys.indexOf(item[this.keyProp])< 0).map(item => item[this.keyProp])
+            },
+            clearSelection(){
+                this.$refs.table.clearSelection()
+            },
+            // 加载多选选中的值
+            getCheckedData(){
+                if(!this.checkedKeysUrl) return
+                this.axios.get(this.checkedKeysUrl)
+                    .then((res) => {
+                        this.localCheckedKeys = res.data.data
+                    }).catch(error=>{
+                    this.localCheckedKeys = []
+                })
+            },
         },
         watch:{
             loading(val){
@@ -484,6 +566,19 @@
             data(val){
                 this.localData = val
                 this.init(this.localData)
+            },
+            tableData(val){
+                this.setChecked(this.localCheckedKeys)
+            },
+            localCheckedKeys(val){
+                this.setChecked(val)
+            },
+            checkedKeys(val){
+                this.localCheckedKeys = val
+            },
+            // 这里没有处理每一个属性的loading状态，但一般都是一个按钮操作不太影响
+            buttonLoading(val){
+                this.localButtonLoading = val
             }
         }
     }

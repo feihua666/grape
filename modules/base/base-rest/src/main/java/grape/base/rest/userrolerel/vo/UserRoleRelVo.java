@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 角色菜单功能关系表，多对多
+ * 用户角色关系表，多对多
  * </p>
  *
  * @author yangwei

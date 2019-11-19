@@ -63,6 +63,7 @@
                             type: 'button',
                             button:[
                                 {
+                                    code: 'query',
                                     action: 'submit',
                                     requestMethod:'get',
                                     url: '/role/listPage',
@@ -137,6 +138,13 @@
                         position:'more',
                         disabledOnMissingSelect:true,
                         label:'分配功能'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/role/assignUser/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label:'分配用户'
                     }
                 ]
             }

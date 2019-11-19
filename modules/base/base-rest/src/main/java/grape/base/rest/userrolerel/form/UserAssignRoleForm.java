@@ -1,4 +1,4 @@
-package grape.base.rest.rolefuncrel.form;
+package grape.base.rest.userrolerel.form;
 
 import grape.common.rest.form.BaseForm;
 import io.swagger.annotations.ApiModel;
@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <p>
- * 功能分配角色
+ * 用户分配角色
  * </p>
  *
  * @author yangwei
@@ -22,14 +22,14 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Accessors(chain = true)
-@ApiModel(value="功能分配角色表单对象")
-public class FuncAssignRoleForm extends BaseForm {
+@ApiModel(value="用户分配角色表单对象")
+public class UserAssignRoleForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
-    @NotEmpty(message = "功能id不能为空")
-    @ApiModelProperty(value = "功能id")
-    private String funcId;
+    @NotEmpty(message = "用户id不能为空")
+    @ApiModelProperty(value = "用户id")
+    private String userId;
 
     @ApiModelProperty(value = "选择的角色id")
     private List<String> checkedRoleIds;

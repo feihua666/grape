@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -30,8 +31,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
             return null;
         }
         List<UserRoleRel> userRoleRelList = iUserRoleRelService.getByUserId(userId);
-        Set<String> roleIds = iUserRoleRelService.convertRoleIds(userRoleRelList);
-        if (!isSetEmpty(roleIds)) {
+        if (!isListEmpty(userRoleRelList)) {
+            Set<String> roleIds = userRoleRelList.stream().map(userRoleRel -> userRoleRel.getRoleId()).collect(Collectors.toSet());
             return (List<Role>) listByIds(roleIds);
         }
         return null;

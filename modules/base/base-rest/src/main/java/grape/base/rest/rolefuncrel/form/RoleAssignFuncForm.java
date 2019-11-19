@@ -34,7 +34,7 @@ public class RoleAssignFuncForm extends BaseForm {
     @ApiModelProperty(value = "选择的功能id")
     private List<String> checkedFuncIds;
 
-    @ApiModelProperty(value = "未选择的功能id",notes = "如果为懒加载请传已加载数据的未选择功能")
+    @ApiModelProperty(value = "未选择的功能id",notes = "如果为懒加载请传该值")
     private List<String> uncheckedFuncIds;
 
     @NotNull(message = "是否为懒加载不能为空")

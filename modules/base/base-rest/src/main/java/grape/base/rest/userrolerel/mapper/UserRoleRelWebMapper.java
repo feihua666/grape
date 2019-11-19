@@ -1,12 +1,9 @@
 package grape.base.rest.userrolerel.mapper;
 
+import grape.base.rest.userrolerel.vo.UserRoleRelVo;
 import grape.base.service.userrolerel.po.UserRoleRel;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
-import grape.base.rest.userrolerel.form.UserRoleRelCreateForm;
-import grape.base.rest.userrolerel.form.UserRoleRelUpdateForm;
-import grape.base.rest.userrolerel.form.UserRoleRelListPageForm;
-import grape.base.rest.userrolerel.vo.UserRoleRelVo;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -20,7 +17,4 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserRoleRelWebMapper extends WebMapper<UserRoleRelVo, UserRoleRel> {
 
-    UserRoleRel formToPo(UserRoleRelCreateForm f);
-    UserRoleRel formToPo(UserRoleRelUpdateForm f);
-    UserRoleRel formToPo(UserRoleRelListPageForm f);
 }

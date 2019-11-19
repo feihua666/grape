@@ -135,6 +135,13 @@
                                 return '启用/锁定'
                             }
                         }
+                    },
+                    {
+                        action: 'nav',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        url:'/user/assignRole/:id',
+                        label: '分配角色'
                     }
                 ]
             }

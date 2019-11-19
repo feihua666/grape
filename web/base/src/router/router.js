@@ -34,7 +34,7 @@ const router = new VueRouter({
         },
         {
             path: '/func/assignRole/:id',
-            component: () => import('@/views/func/AssignRole.vue')
+            component: () => import('@/views/func/FuncAssignRole.vue')
         },
         {
             path: '/comp',
@@ -73,6 +73,10 @@ const router = new VueRouter({
             component: () => import('@/views/user/UserEdit.vue')
         },
         {
+            path: '/user/assignRole/:id',
+            component: () => import('@/views/user/UserAssignRole.vue')
+        },
+        {
             path: '/role',
             component: () => import('@/views/role/Role.vue')
         },
@@ -86,7 +90,11 @@ const router = new VueRouter({
         },
         {
             path: '/role/assignFunc/:id',
-            component: () => import('@/views/role/AssignFunc.vue')
+            component: () => import('@/views/role/RoleAssignFunc.vue')
+        },
+        {
+            path: '/role/assignUser/:id',
+            component: () => import('@/views/role/RoleAssignUser.vue')
         },
         {
             path: '/post',

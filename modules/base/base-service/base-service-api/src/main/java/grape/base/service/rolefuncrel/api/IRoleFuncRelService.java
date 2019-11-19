@@ -29,7 +29,10 @@ public interface IRoleFuncRelService extends IBaseRelService<RoleFuncRel> {
      * @param roleId
      * @return
      */
-    default List<RoleFuncRel> getRoleAssignFunc(String roleId){
+    default List<RoleFuncRel> getByRoleId(String roleId){
+        if (roleId == null) {
+            return null;
+        }
         return list(Wrappers.<RoleFuncRel>lambdaQuery().eq(RoleFuncRel::getRoleId,roleId));
     }
 
@@ -46,7 +49,7 @@ public interface IRoleFuncRelService extends IBaseRelService<RoleFuncRel> {
      * 角色绑定功能
      * @param roleId 角色id
      * @param checkedFuncIds 已选择的功能id
-     * @param uncheckedFuncIds 未选择的功能id，如果页面为懒加载该参数必须传，否则认为全选
+     * @param uncheckedFuncIds 未选择的功能id
      * @param isLazyLoad 标识页面的可选择数据是否为懒加载
      */
     default void roleAssignFunc(String roleId, List<String> checkedFuncIds,List<String> uncheckedFuncIds,Boolean isLazyLoad){
@@ -61,7 +64,10 @@ public interface IRoleFuncRelService extends IBaseRelService<RoleFuncRel> {
      * @param funcId
      * @return
      */
-    default List<RoleFuncRel> getFuncAssignRole(String funcId){
+    default List<RoleFuncRel> getByFuncId(String funcId){
+        if (funcId == null) {
+            return null;
+        }
         return list(Wrappers.<RoleFuncRel>lambdaQuery().eq(RoleFuncRel::getFuncId,funcId));
     }
     /**
@@ -84,6 +90,13 @@ public interface IRoleFuncRelService extends IBaseRelService<RoleFuncRel> {
         // 再添加
         doBind(funcId, checkedRoleIds, false);
     }
+
+    /**
+     * 添加已选数据
+     * @param mainId
+     * @param checkedIds
+     * @param isRoleMain
+     */
     default void doBind(String mainId,List<String> checkedIds,boolean isRoleMain){
         if (!isListEmpty(checkedIds)) {
             List<RoleFuncRel> insert = new ArrayList<>(checkedIds.size());

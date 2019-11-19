@@ -89,13 +89,13 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_func","func",TableType.tree,tablePrefix,author);
         // 功能表
         commonSet("base_role","role",TableType.tree,tablePrefix,author);
-        commonSet("base_role_func_rel","rolefuncrel",TableType.rel,tablePrefix,author);
+        //commonSet("base_role_func_rel","rolefuncrel",TableType.rel,tablePrefix,author);
         commonSet("base_user_post_role_rel","userpostrolerel",TableType.rel,tablePrefix,author);
         commonSet("base_comp","comp",TableType.tree,tablePrefix,author);
         commonSet("base_dept","dept",TableType.tree,tablePrefix,author);
         commonSet("base_post","post",TableType.normal,tablePrefix,author);
         commonSet("base_user_post","userpost",TableType.normal,tablePrefix,author);
-        commonSet("base_user_role_rel","userrolerel",TableType.rel,tablePrefix,author);
+        //commonSet("base_user_role_rel","userrolerel",TableType.rel,tablePrefix,author);
         commonSet("base_job","job",TableType.normal,tablePrefix,author);
         commonSet("base_job_level","joblevel",TableType.normal,tablePrefix,author);
         commonSet("base_param_config","paramconfig",TableType.normal,tablePrefix,author);
