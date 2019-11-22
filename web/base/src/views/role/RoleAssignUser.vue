@@ -3,13 +3,13 @@
             :columns="columns"
             :form-items="formItems"
             form-submit-bus-key="roleAssignUserList"
-            :checked-data-url="'/userrolerel/role/' + $route.params.id"
+            :checked-data-url="'/userrolerel/role/' + $route.params.roleId"
             submit-url="/userrolerel/role/assign/user"
-            :main-value="$route.params.id"
+            :main-value="$route.params.roleId"
             main-prop="roleId"
             checked-prop="checkedUserIds"
             unchecked-prop="uncheckedUserIds"
-            :clear-all-url="'/userrolerel/role/' + $route.params.id"
+            :clear-all-url="'/userrolerel/role/' + $route.params.roleId"
     >
 
     </TableForRelBind>

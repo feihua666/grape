@@ -31,6 +31,15 @@ public interface ToolService {
     default boolean isEqual(final CharSequence cs1, final CharSequence cs2){
         return StringUtils.equals(cs1,cs2);
     }
+    /**
+     * 判断字符串是否为空
+     * @param str
+     * @return
+     */
+    default boolean isEqualAny(String str,String ...testStr){
+
+        return StringUtils.containsAny(str,testStr);
+    }
 
     /**
      * 判断是否为空

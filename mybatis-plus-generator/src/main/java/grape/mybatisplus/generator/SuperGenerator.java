@@ -172,12 +172,12 @@ public class SuperGenerator {
 
         strategy.setSuperControllerClass("grape.common.rest.mvc.BaseController");
         if(tableType == TableType.tree){
-            strategy.setSuperServiceClass("grape.common.service.IBaseTreeService");
+            strategy.setSuperServiceClass("grape.common.service.common.IBaseTreeService");
         }else {
-            strategy.setSuperServiceClass("grape.common.service.IBaseService");
+            strategy.setSuperServiceClass("grape.common.service.common.IBaseService");
         }
-        strategy.setSuperServiceImplClass("grape.common.service.BaseServiceImpl");
-        strategy.setSuperMapperClass("grape.common.service.IBaseMapper");
+        strategy.setSuperServiceImplClass("grape.common.service.common.BaseServiceImpl");
+        strategy.setSuperMapperClass("grape.common.service.common.IBaseMapper");
 
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);

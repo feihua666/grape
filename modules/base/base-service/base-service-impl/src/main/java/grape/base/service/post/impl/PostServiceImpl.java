@@ -3,7 +3,7 @@ package grape.base.service.post.impl;
 import grape.base.service.post.po.Post;
 import grape.base.service.post.mapper.PostMapper;
 import grape.base.service.post.api.IPostService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

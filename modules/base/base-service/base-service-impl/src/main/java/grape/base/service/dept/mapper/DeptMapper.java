@@ -1,7 +1,7 @@
 package grape.base.service.dept.mapper;
 
 import grape.base.service.dept.po.Dept;
-import grape.common.service.IBaseMapper;
+import grape.common.service.common.IBaseMapper;
 
 /**
  * <p>

@@ -3,7 +3,7 @@ package grape.base.service.userpostrolerel.impl;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.base.service.userpostrolerel.mapper.UserPostRoleRelMapper;
 import grape.base.service.userpostrolerel.api.IUserPostRoleRelService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

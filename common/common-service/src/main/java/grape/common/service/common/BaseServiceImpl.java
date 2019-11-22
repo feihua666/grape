@@ -1,8 +1,7 @@
-package grape.common.service;
+package grape.common.service.common;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import grape.common.service.po.IDBasePo;
-import grape.common.service.po.NormalBasePo;
 import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
 

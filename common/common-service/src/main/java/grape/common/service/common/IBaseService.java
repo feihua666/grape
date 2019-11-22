@@ -1,4 +1,4 @@
-package grape.common.service;
+package grape.common.service.common;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

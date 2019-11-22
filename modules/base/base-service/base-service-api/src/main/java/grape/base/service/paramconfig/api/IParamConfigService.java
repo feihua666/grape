@@ -1,11 +1,9 @@
 package grape.base.service.paramconfig.api;
 
-import cn.hutool.core.bean.DynaBean;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.paramconfig.po.ParamConfig;
 import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.service.IBaseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import grape.common.service.common.IBaseService;
 
 import java.util.Map;
 

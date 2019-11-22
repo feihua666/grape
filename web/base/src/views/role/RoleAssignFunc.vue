@@ -1,12 +1,12 @@
 <template>
-    <TreeForRelBind :checked-data-url="'/rolefuncrel/role/' + $route.params.id"
+    <TreeForRelBind :checked-data-url="'/rolefuncrel/role/' + $route.params.roleId"
                     data-url="/func/tree"
                     submit-url="/rolefuncrel/role/assign/func"
-                    :main-value="$route.params.id"
+                    :main-value="$route.params.roleId"
                     main-prop="roleId"
                     checked-prop="checkedFuncIds"
                     unchecked-prop="uncheckedFuncIds"
-                    :clear-all-url="'/rolefuncrel/role/' + $route.params.id"
+                    :clear-all-url="'/rolefuncrel/role/' + $route.params.roleId"
     >
 
     </TreeForRelBind>

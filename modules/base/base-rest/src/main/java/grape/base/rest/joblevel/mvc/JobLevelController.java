@@ -2,6 +2,7 @@ package grape.base.rest.joblevel.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.joblevel.form.JobLevelCreateForm;
+import grape.base.rest.joblevel.form.JobLevelListForm;
 import grape.base.rest.joblevel.form.JobLevelListPageForm;
 import grape.base.rest.joblevel.form.JobLevelUpdateForm;
 import grape.base.rest.joblevel.mapper.JobLevelWebMapper;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,7 +47,7 @@ public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
 
 
      @ApiOperation("添加职务级别")
-     @RequiresPermissions("job-level:single:create")
+     @RequiresPermissions("jobLevel:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public JobLevelVo create(@RequestBody @Valid JobLevelCreateForm cf) {
@@ -59,7 +61,7 @@ public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
      }
 
      @ApiOperation("根据ID查询职务级别")
-     @RequiresPermissions("job-level:single:queryById")
+     @RequiresPermissions("jobLevel:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public JobLevelVo queryById(@PathVariable String id) {
@@ -67,7 +69,7 @@ public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
      }
 
      @ApiOperation("删除职务级别")
-     @RequiresPermissions("job-level:single:deleteById")
+     @RequiresPermissions("jobLevel:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -75,7 +77,7 @@ public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
      }
 
      @ApiOperation("更新职务级别")
-     @RequiresPermissions("job-level:single:updateById")
+     @RequiresPermissions("jobLevel:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public JobLevelVo update(@PathVariable String id,@RequestBody @Valid JobLevelUpdateForm uf) {
@@ -85,13 +87,27 @@ public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
      }
 
     @ApiOperation("分页查询职务级别")
-    @RequiresPermissions("job-level:single:listPage")
+    @RequiresPermissions("jobLevel:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<JobLevelVo> listPage(JobLevelListPageForm listPageForm) {
          JobLevel po = currentWebMapper.formToPo(listPageForm);
          return super.listPage(po,listPageForm);
      }
+
+    /**
+     * 列出职务
+     * @param listForm
+     * @return
+     */
+    @ApiOperation(value = "不分页查询职务级别",notes = "可用于下拉搜索")
+    @RequiresPermissions("jobLevel:single:list")
+    @GetMapping("/list")
+    @ResponseStatus(HttpStatus.OK)
+    public List<JobLevelVo> list(JobLevelListForm listForm) {
+        JobLevel po = currentWebMapper.formToPo(listForm);
+        return super.list(po);
+    }
 
     @Override
     public JobLevelVo transVo(JobLevelVo jobLevelVo) {

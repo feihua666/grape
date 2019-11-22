@@ -48,7 +48,7 @@ public class UserPwd extends NormalBasePo<UserPwd> {
     /**
      * 密码的修改时间
      */
-    private String pwdModifiedAt;
+    private Long pwdModifiedAt;
 
 
     @Override

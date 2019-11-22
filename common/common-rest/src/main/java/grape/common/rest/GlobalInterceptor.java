@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.util.ThreadContext;
+import org.springframework.validation.BindException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -37,6 +38,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
             }
         }
         // 初始化请求id
+        String parentId = RequestIdTool.getRequestId();
         String requestId = RequestIdTool.initRequestId();
         long start = System.currentTimeMillis();
         ThreadContextTool.put(timeStartKey,start);
@@ -47,7 +49,8 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
             userId = loginUser.getUserId();
             username = loginUser.getNickname();
         }
-        log.info("请求开始: requestId={},userId={},username={},requestUrl={} ,requestMethod={},requestIp={}",
+        log.info("请求开始: {}requestId={},userId={},username={},requestUrl={} ,requestMethod={},requestIp={}",
+                parentId == null ? "":"parentId=" + parentId + ",",
                 requestId, userId,username,request.getRequestURL(),request.getMethod(), RequestTool.getRemoteAddr(request));
         if(handler instanceof HandlerMethod){
             Object annotationValue = AnnotationUtil.getAnnotationValue(((HandlerMethod) handler).getMethod(), ApiOperation.class);

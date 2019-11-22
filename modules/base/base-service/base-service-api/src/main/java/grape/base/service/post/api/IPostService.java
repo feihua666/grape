@@ -1,9 +1,13 @@
 package grape.base.service.post.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import grape.base.service.post.dto.PostListQuery;
 import grape.base.service.post.po.Post;
 import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,5 +32,24 @@ public interface IPostService extends IBaseService<Post> {
         post.setCode(code);
         int r = count(Wrappers.query(post));
         return r > 0;
+    }
+
+    /**
+     * 不分页查询岗位
+     * @param query
+     * @return
+     */
+    default List<Post> list(PostListQuery query){
+        LambdaQueryWrapper<Post> queryWrapper = Wrappers.<Post>lambdaQuery();
+        if (query.getCode() != null) {
+            queryWrapper = queryWrapper.eq(Post::getCode, query.getCode());
+        }
+        if (query.getName() != null) {
+            queryWrapper = queryWrapper.like(Post::getName, query.getName());
+        }
+        if (query.getDeptId() != null) {
+            queryWrapper = queryWrapper.eq(Post::getDeptId, query.getDeptId());
+        }
+        return list(queryWrapper);
     }
 }

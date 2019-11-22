@@ -1,12 +1,12 @@
 <template>
     <container type="top-header" :show="{header:formShow}" class="g-width100 g-height100">
         <Form slot="header" inline
-              submit-bus-key="joblevelManageList"
+              submit-bus-key="paramconfigManageList"
               :form-items="formItems"
         ></Form>
         <Table slot="main"
                ref="table"
-               form-submit-bus-key="joblevelManageList"
+               form-submit-bus-key="paramconfigManageList"
                :columns="columns"
                :operations="tableOperations"
                unique-label="name"
@@ -48,14 +48,14 @@
                     },
                     {
                         field: {
-                            name: 'jobId'
+                            name: 'valueTypeDictId'
                         },
                         element:{
-                            type: 'select',
-                            select:{
-                                url: '/job/list'
-                            },
-                            label: '职务'
+                            label: '值类型',
+                            type: 'selectDict',
+                            selectDict:{
+                                groupCode:'java_type'
+                            }
                         }
                     },
                     {
@@ -65,7 +65,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'get',
-                                    url: '/joblevel/listPage',
+                                    url: '/paramconfig/listPage',
                                     label: '查询'
                                 },
                                 {
@@ -84,38 +84,82 @@
                     {
                         prop: 'name',
                         label:'名称'
+                    },{
+                        prop: 'value',
+                        label:'值'
                     },
                     {
-                        prop: 'jobName',
-                        label:'职务'
+                        prop: 'valueTypeDictName',
+                        label:'值类型'
                     },
                     {
-                        prop: 'remark',
-                        label:'备注'
+                        prop: 'isDisabled',
+                        label:'是否禁用'
                     }
                 ],
                 tableOperations:[
                     {
                         action: 'nav',
-                        url:'/joblevel/joblevelAdd',
+                        url:'/paramConfig/paramConfigAdd',
                         label: '添加'
                     },
                     {
                         action: 'nav',
                         disabledOnMissingSelect:true,
-                        url:'/joblevel/joblevelEdit/:id',
+                        url:'/paramConfig/paramConfigEdit/:id',
                         label: '编辑'
                     },
                     {
                         action: 'delete',
-                        url:'/joblevel/:id',
+                        url:'/paramconfig/:id',
                         disabledOnMissingSelect:true,
                         label:'删除'
+                    },
+                    {
+                        action: this.enableOrDisable,
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label:(row) => {
+                            if(row){
+                                return row.isDisabled ? '启用': '禁用'
+                            }else {
+                                return '启用/禁用'
+                            }
+                        }
                     }
                 ]
             }
         },
         methods:{
+            enableOrDisable(row){
+                this.$prompt('请输入'+ row.name + (row.isDisabled ? '启用': '禁用') +'原因', '提示', {
+                    inputErrorMessage: '原因不能为空',
+                    inputValidator:(value)=>{return !!value}
+                }).then(({ value }) => {
+                    let data = {
+                        disabled: !row.isDisabled,
+                        version: row.version,
+                        disabledReason: value
+                    }
+                    this.axios.patch('/paramconfig/'+ row.id,data)
+                        .then(res => {
+                            this.$message.success('操作成功')
+                            // 重新加载数据
+                            this.$refs.table.toolbarRefreshClick()
+                        })
+                        .catch(error => {
+                            if(error.response){
+                                if(error.response.status == 404){
+                                    this.$message.error('数据不存在，请刷新数据再试')
+                                }else {
+                                    this.$message.error(error.response.data.msg)
+                                }
+                            }else {
+                                this.$message.error('删除失败，请刷新数据再试')
+                            }
+                        })
+                })
+            }
         }
     }
 </script>

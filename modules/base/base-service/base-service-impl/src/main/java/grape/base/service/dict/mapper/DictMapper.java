@@ -1,7 +1,7 @@
 package grape.base.service.dict.mapper;
 
 import grape.base.service.dict.po.Dict;
-import grape.common.service.IBaseMapper;
+import grape.common.service.common.IBaseMapper;
 
 /**
  * <p>

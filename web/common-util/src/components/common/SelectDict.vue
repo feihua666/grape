@@ -44,14 +44,14 @@
                 required: true
             },
             // 是否禁用
-        disabled:{
-            type:Boolean,
-            default:false
-        },
-        readonly:{
-            type:Boolean,
-            default:false
-        }
+            disabled:{
+                type:Boolean,
+                default:false
+            },
+            readonly:{
+                type:Boolean,
+                default:false
+            }
         },
         data () {
             return {

@@ -1,7 +1,7 @@
 package grape.base.service.func.mapper;
 
 import grape.base.service.func.po.Func;
-import grape.common.service.IBaseMapper;
+import grape.common.service.common.IBaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

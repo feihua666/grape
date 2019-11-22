@@ -1,24 +1,34 @@
 package grape.base.rest.userpost.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.userpost.form.UserPostCreateForm;
+import grape.base.rest.userpost.form.UserPostListPageForm;
+import grape.base.rest.userpost.form.UserPostUpdateForm;
+import grape.base.rest.userpost.mapper.UserPostWebMapper;
+import grape.base.rest.userpost.vo.UserPostVo;
+import grape.base.service.comp.api.ICompService;
+import grape.base.service.comp.po.Comp;
+import grape.base.service.dept.api.IDeptService;
+import grape.base.service.dept.po.Dept;
+import grape.base.service.job.api.IJobService;
+import grape.base.service.job.po.Job;
+import grape.base.service.joblevel.api.IJobLevelService;
+import grape.base.service.joblevel.po.JobLevel;
+import grape.base.service.post.api.IPostService;
+import grape.base.service.post.po.Post;
+import grape.base.service.user.api.IUserService;
+import grape.base.service.user.po.User;
+import grape.base.service.userpost.api.IUserPostService;
+import grape.base.service.userpost.po.UserPost;
+import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.userpost.form.UserPostCreateForm;
-import grape.base.rest.userpost.form.UserPostUpdateForm;
-import grape.base.rest.userpost.form.UserPostListPageForm;
-import grape.base.rest.userpost.vo.UserPostVo;
-import grape.base.rest.userpost.mapper.UserPostWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
-import grape.base.service.userpost.po.UserPost;
-import grape.base.service.userpost.api.IUserPostService;
-import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 /**
  * <p>
  * 用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职 前端控制器
@@ -28,8 +38,8 @@ import java.util.List;
  * @since 2019-10-22
  */
 @RestController
-@RequestMapping("/userst")
-@Api(tags = "用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职")
+@RequestMapping("/userpost")
+@Api(tags = "用户岗位信息相关接口")
 public class UserPostController extends BaseController<UserPostVo, UserPost> {
 
     @Autowired
@@ -37,10 +47,22 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
     @Autowired
     private IUserPostService currentService;
 
+    @Autowired
+    private IUserService iUserService;
+    @Autowired
+    private ICompService iCompService;
+    @Autowired
+    private IDeptService iDeptService;
+    @Autowired
+    private IPostService iPostService;
+    @Autowired
+    private IJobService iJobService;
+    @Autowired
+    private IJobLevelService iJobLevelService;
 
 
-     @ApiOperation("[用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职]单表创建/添加数据")
-     @RequiresPermissions("user-post:single:create")
+     @ApiOperation("添加用户岗位")
+     @RequiresPermissions("userPost:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostVo create(@RequestBody @Valid UserPostCreateForm cf) {
@@ -48,24 +70,24 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
          return super.create(po);
      }
 
-     @ApiOperation("[用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职]单表根据ID查询")
-     @RequiresPermissions("user-post:single:queryById")
+     @ApiOperation("根据id查询用户岗位")
+     @RequiresPermissions("userPost:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public UserPostVo queryById(@PathVariable String id) {
          return super.queryById(id);
      }
 
-     @ApiOperation("[用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职]单表根据ID删除")
-     @RequiresPermissions("user-post:single:deleteById")
+     @ApiOperation("根据id删除用户岗位")
+     @RequiresPermissions("userPost:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
          return super.deleteById(id);
      }
 
-     @ApiOperation("[用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职]单表根据ID更新")
-     @RequiresPermissions("user-post:single:updateById")
+     @ApiOperation("根据id更新用户岗位")
+     @RequiresPermissions("userPost:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostVo update(@PathVariable String id,@RequestBody @Valid UserPostUpdateForm uf) {
@@ -74,13 +96,45 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
          return super.update(po);
      }
 
-    @ApiOperation("[用户岗位关系表，多对多，如果一个用户存在有效的岗位，即表示在职]单表分页列表")
-    @RequiresPermissions("user-post:single:listPage")
+    @ApiOperation("分页查询用户岗位信息")
+    @RequiresPermissions("userPost:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
-    public IPage<UserPostVo> listPage(UserPostListPageForm listPageForm) {
+    public IPage<UserPostVo> listPage(@Valid UserPostListPageForm listPageForm) {
          UserPost po = currentWebMapper.formToPo(listPageForm);
          return super.listPage(po,listPageForm);
      }
 
+    @Override
+    public UserPostVo transVo(UserPostVo userPostVo) {
+
+        User user = iUserService.getById(userPostVo.getUserId());
+        if (user != null) {
+            userPostVo.setUserNickname(user.getNickname());
+        }
+
+        Comp comp = iCompService.getById(userPostVo.getCompId());
+        if (comp != null) {
+            userPostVo.setCompName(comp.getName());
+        }
+        Dept dept = iDeptService.getById(userPostVo.getDeptId());
+        if (dept != null) {
+            userPostVo.setDeptName(dept.getName());
+        }
+        Post post = iPostService.getById(userPostVo.getPostId());
+        if (post != null) {
+            userPostVo.setPostName(post.getName());
+        }
+        Job job = iJobService.getById(userPostVo.getJobId());
+        if (job != null) {
+            userPostVo.setJobName(job.getName());
+        }
+        JobLevel jobLevel = iJobLevelService.getById(userPostVo.getJobLevelId());
+        if (jobLevel != null) {
+            userPostVo.setJobLevelName(jobLevel.getName());
+        }
+
+
+        return userPostVo;
+    }
 }

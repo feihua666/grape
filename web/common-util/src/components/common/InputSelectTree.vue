@@ -3,6 +3,7 @@
     <el-popover
       ref="selectPopover"
       placement="right"
+      v-model="popShow"
       trigger="click">
       <el-scrollbar wrapStyle="max-height:500px;">
         <tree :label="treeLabel" :data-url="this.treeDataUrl" v-on:nodeClick="treeNodeClick" v-on:nodeClickExt="treeNodeClickExt" ></tree>
@@ -58,6 +59,7 @@
     },
     data () {
       return {
+          popShow:false,
         localValue: this.value,
         localLabelText: this.labelText
       }
@@ -82,6 +84,7 @@
       treeNodeClick (data) {
       },
         treeNodeClickExt (data) {
+          this.popShow = !this.popShow
             this.localValue = data.key.id
             this.localLabelText = data.key.label
             this.$emit('change', this.localValue)

@@ -30,7 +30,7 @@ public class JobLevelListPageForm extends BasePageForm {
     @ApiModelProperty(value = "职务级别名称")
     private String name;
 
-    @ApiModelProperty(value = "职务级别")
+    @ApiModelProperty(value = "职务id")
     private String jobId;
 
 }

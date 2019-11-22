@@ -3,7 +3,7 @@ package grape.base.service.joblevel.impl;
 import grape.base.service.joblevel.po.JobLevel;
 import grape.base.service.joblevel.mapper.JobLevelMapper;
 import grape.base.service.joblevel.api.IJobLevelService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

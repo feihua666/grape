@@ -2,7 +2,7 @@ package grape.base.service.user.api;
 
 import grape.base.service.BaseLoginUser;
 import grape.base.service.user.po.User;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseService;
 
 /**
  * <p>

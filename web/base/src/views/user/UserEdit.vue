@@ -46,7 +46,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/user/' +this.$route.params.id,
+                                    url: '/user/' +this.$route.params.userId,
                                     label: '保存'
                                 },
                                 {
@@ -61,7 +61,7 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.userId)
         },
         methods:{
             // 根据id获取数据

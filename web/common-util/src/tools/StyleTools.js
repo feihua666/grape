@@ -39,7 +39,7 @@ const d = [
 export function aiButtonStyle(pattern) {
     let r = {}
     d.forEach(item =>{
-        if(item.pattern.indexOf(pattern)>=0){
+        if(item.pattern.indexOf(pattern)>=0 || pattern.indexOf(item.pattern) >= 0){
             r = item
             return false
         }

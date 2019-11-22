@@ -76,7 +76,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/job/' +this.$route.params.id,
+                                    url: '/job/' +this.$route.params.jobId,
                                     label: '保存'
                                 },
                                 {
@@ -91,7 +91,7 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.jobId)
         },
         methods:{
             // 根据id获取数据

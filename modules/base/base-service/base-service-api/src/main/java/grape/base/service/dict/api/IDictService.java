@@ -2,9 +2,9 @@ package grape.base.service.dict.api;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.dict.po.Dict;
-import grape.base.service.func.po.Func;
 import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.service.IBaseTreeService;
+import grape.common.service.common.IBaseTreeService;
+import grape.common.service.trans.ITransService;
 
 import java.util.List;
 
@@ -16,7 +16,10 @@ import java.util.List;
  * @author yangwei
  * @since 2019-09-23
  */
-public interface IDictService extends IBaseTreeService<Dict> {
+public interface IDictService extends IBaseTreeService<Dict> , ITransService<String,String> {
+    public static final String trans_dictName = "dictName";
+    public static final String trans_dictCode = "dictCode";
+    public static final String trans_dictParentName = "dictParentName";
 
     /**
      * 根据组编码查询字典项
@@ -48,5 +51,31 @@ public interface IDictService extends IBaseTreeService<Dict> {
         dict.setCode(code);
         int r = count(Wrappers.query(dict));
         return r > 0;
+    }
+
+    @Override
+    default boolean support(String type){
+        return isEqualAny(type, trans_dictName, trans_dictParentName);
+    }
+
+    @Override
+    default String trans(String type, String key){
+        if (isEqual(type,trans_dictParentName)) {
+            Dict parent = getParent(key);
+            if (parent != null) {
+                return parent.getName();
+            }
+        }else if (isEqual(type,trans_dictName)) {
+            Dict po = getById(key);
+            if (po != null) {
+                return po.getName();
+            }
+        }else if (isEqual(type,trans_dictCode)) {
+            Dict po = getById(key);
+            if (po != null) {
+                return po.getCode();
+            }
+        }
+        return null;
     }
 }

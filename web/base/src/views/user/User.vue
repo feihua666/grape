@@ -142,6 +142,20 @@
                         disabledOnMissingSelect:true,
                         url:'/user/assignRole/:id',
                         label: '分配角色'
+                    },
+                    {
+                        action: 'nav',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        url:'/user/userPost/userPostAdd/:id',
+                        label: '新增岗位'
+                    },
+                    {
+                        action: 'nav',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        url:'/user/userPost/:id',
+                        label: '岗位信息'
                     }
                 ]
             }

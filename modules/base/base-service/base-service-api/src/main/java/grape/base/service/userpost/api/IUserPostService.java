@@ -3,9 +3,8 @@ package grape.base.service.userpost.api;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.userpost.po.UserPost;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

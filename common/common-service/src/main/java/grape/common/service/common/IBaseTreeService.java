@@ -1,12 +1,10 @@
-package grape.common.service;
+package grape.common.service.common;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.common.exception.CBaseException;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.exception.runtime.RBaseException;
-import grape.common.service.po.IDBasePo;
 import grape.common.service.po.TreeBasePo;
 
 import java.util.ArrayList;
@@ -81,7 +79,11 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
         if (id == null) {
             return null;
         }
-        return getById(id);
+        Po po = getById(id);
+        if (po != null) {
+            return getById(po.getParentId());
+        }
+        return null;
     }
 
     /**

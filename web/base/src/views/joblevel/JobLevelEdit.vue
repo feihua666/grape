@@ -19,43 +19,24 @@
                 formItems:[
                     {
                         field: {
-                            name: 'code'
-                        },
-                        element:{
-                            label: '编码',
-                            disabled: true,
-                            required:true
-                        }
-                    },
-                    {
-                        field: {
                             name: 'name'
                         },
                         element:{
                             label: '名称',
-                            required:true
+                            required: true
                         }
                     },
                     {
                         field: {
-                            name: 'value'
+                            name: 'jobId'
                         },
                         element:{
-                            label: '值',
-                            required:true
-                        }
-                    },
-                    {
-                        field: {
-                            name: 'valueTypeDictId'
-                        },
-                        element:{
-                            label: '值类型',
-                            type: 'selectDict',
-                            required:true,
-                            selectDict:{
-                                groupCode:'java_type'
-                            }
+                            label: '职务',
+                            type: 'select',
+                            select:{
+                                url:'/job/list'
+                            },
+                            required: true
                         }
                     },
                     {
@@ -68,7 +49,7 @@
                         }
                     },
                     {
-                        field: {
+                        field:{
                             name: 'version'
                         }
                     },
@@ -79,7 +60,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/paramconfig/' +this.$route.params.id,
+                                    url: '/joblevel/' +this.$route.params.jobLevelId,
                                     label: '保存'
                                 },
                                 {
@@ -94,15 +75,14 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.jobLevelId)
         },
         methods:{
             // 根据id获取数据
             getData(id){
                 this.formLoading = true
-                this.axios.get('/paramconfig/' + id).then(res => {
+                this.axios.get('/joblevel/' + id).then(res => {
                     let data = res.data.data
-                    data.parentId__label = data.parentName
                     this.formData = data
                 }).catch(error => {
                     if(error.response){
@@ -114,7 +94,7 @@
                     }else {
                         this.$message.error('数据加载失败')
                     }
-                }).finally(() => {
+                }).finally(()=>{
                     this.formLoading = false
                 })
             }

@@ -3,7 +3,7 @@ package grape.base.service.rolefuncrel.impl;
 import grape.base.service.rolefuncrel.po.RoleFuncRel;
 import grape.base.service.rolefuncrel.mapper.RoleFuncRelMapper;
 import grape.base.service.rolefuncrel.api.IRoleFuncRelService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

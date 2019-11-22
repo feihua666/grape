@@ -1,18 +1,11 @@
 package grape.base.service.rolefuncrel.api;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import grape.base.service.rolefuncrel.po.RoleFuncRel;
-import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.service.IBaseRelService;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseRelService;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
-
-import static cn.hutool.core.io.file.FileMode.r;
 
 /**
  * <p>

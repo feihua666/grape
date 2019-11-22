@@ -1,14 +1,12 @@
 package grape.base.service.paramconfig.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.DynaBean;
 import cn.hutool.core.convert.Convert;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import grape.base.service.paramconfig.po.ParamConfig;
 import grape.base.service.paramconfig.mapper.ParamConfigMapper;
 import grape.base.service.paramconfig.api.IParamConfigService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -9,7 +9,7 @@ import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.userpost.mapper.UserPostMapper;
 import grape.base.service.userpost.po.UserPost;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

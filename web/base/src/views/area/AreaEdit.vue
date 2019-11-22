@@ -102,7 +102,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/area/' +this.$route.params.id,
+                                    url: '/area/' +this.$route.params.areaId,
                                     label: '保存'
                                 },
                                 {
@@ -117,7 +117,7 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.areaId)
         },
         methods:{
             // 根据id获取数据

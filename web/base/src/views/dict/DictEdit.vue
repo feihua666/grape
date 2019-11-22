@@ -109,7 +109,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/dict/' +this.$route.params.id,
+                                    url: '/dict/' + this.$route.params.dictId,
                                     label: '保存'
                                 },
                                 {
@@ -124,7 +124,7 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.dictId)
         },
         methods:{
             // 根据id获取数据

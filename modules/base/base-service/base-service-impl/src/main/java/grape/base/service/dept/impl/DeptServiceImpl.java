@@ -3,7 +3,7 @@ package grape.base.service.dept.impl;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.dept.mapper.DeptMapper;
 import grape.base.service.dept.api.IDeptService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

@@ -34,7 +34,7 @@ public class NormalBasePo<T extends Model<?>> extends RelBasePo<T> {
      * 修改时间
      */
     @TableField(fill = FieldFill.UPDATE)
-    private String updateAt;
+    private Long updateAt;
 
     /**
      * 修改人

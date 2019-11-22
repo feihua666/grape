@@ -95,7 +95,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/post/' +this.$route.params.id,
+                                    url: '/post/' +this.$route.params.postId,
                                     label: '保存'
                                 },
                                 {
@@ -110,7 +110,7 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.postId)
         },
         methods:{
             // 根据id获取数据

@@ -101,7 +101,7 @@
                 }
                 this.axios.post(this.submitUrl,data)
                     .then((res)=>{
-                        this.$message.success('操作成功')
+                        this.$message.success('保存成功')
                     }).catch((error)=>{
                     if (error.response) {
                         this.$message.error(error.response.data.msg)

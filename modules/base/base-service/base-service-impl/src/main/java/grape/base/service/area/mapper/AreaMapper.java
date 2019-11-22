@@ -1,10 +1,7 @@
 package grape.base.service.area.mapper;
 
 import grape.base.service.area.po.Area;
-import grape.common.service.IBaseMapper;import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
+import grape.common.service.common.IBaseMapper;
 
 /**
  * <p>

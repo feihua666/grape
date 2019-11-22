@@ -1,15 +1,11 @@
-package grape.common.service;
+package grape.common.service.common;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
-import com.baomidou.mybatisplus.extension.service.IService;
 import grape.common.service.po.IDBasePo;
-import grape.common.tools.ToolService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * 关系表基础接口

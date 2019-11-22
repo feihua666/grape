@@ -132,10 +132,6 @@ public class AreaController extends BaseTreeController<AreaVo, Area> {
         Dict dict = iDictService.getById(vo.getTypeDictId());
         vo.setTypeDictCode(Optional.ofNullable(dict).map(d -> d.getCode()).orElse(null));
         vo.setTypeDictName(Optional.ofNullable(dict).map(d -> d.getName()).orElse(null));
-
-        Area area = getService().getById(vo.getParentId());
-        vo.setParentName(Optional.ofNullable(area).map(d -> d.getName()).orElse(null));
-
         return vo;
     }
 }

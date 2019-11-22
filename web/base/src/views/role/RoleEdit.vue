@@ -79,7 +79,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/role/' +this.$route.params.id,
+                                    url: '/role/' +this.$route.params.roleId,
                                     label: '保存'
                                 },
                                 {
@@ -94,7 +94,7 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.roleId)
         },
         methods:{
             // 根据id获取数据

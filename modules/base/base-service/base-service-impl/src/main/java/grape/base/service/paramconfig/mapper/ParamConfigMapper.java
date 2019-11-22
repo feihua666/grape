@@ -1,7 +1,7 @@
 package grape.base.service.paramconfig.mapper;
 
 import grape.base.service.paramconfig.po.ParamConfig;
-import grape.common.service.IBaseMapper;
+import grape.common.service.common.IBaseMapper;
 
 /**
  * <p>

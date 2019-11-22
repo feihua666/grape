@@ -5,7 +5,7 @@ import grape.base.service.dict.po.Dict;
 import grape.base.service.func.po.Func;
 import grape.base.service.func.mapper.FuncMapper;
 import grape.base.service.func.api.IFuncService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

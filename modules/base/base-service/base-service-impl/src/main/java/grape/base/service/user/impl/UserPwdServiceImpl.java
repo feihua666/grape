@@ -3,7 +3,7 @@ package grape.base.service.user.impl;
 import grape.base.service.user.po.UserPwd;
 import grape.base.service.user.mapper.UserPwdMapper;
 import grape.base.service.user.api.IUserPwdService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

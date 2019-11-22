@@ -1,12 +1,15 @@
-package grape.common.service;
+package grape.common.service.trans;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.function.Function;
 
 /**
- * 需要翻译的字典注解
+ * 一般为vo层使用
+ * 需要翻译的字段注解
+ * 标注到需要翻译的字段上
  * Created by yangwei
  * Created at 2019/10/9 9:59
  */

@@ -3,22 +3,15 @@ package grape.common.rest.mvc;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import grape.common.AbstractLoginUser;
-import grape.common.exception.CBaseException;
 import grape.common.exception.ExceptionTools;
-import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.form.BasePageForm;
-import grape.common.rest.vo.BaseTreeVo;
-import grape.common.rest.vo.TreeNodeVo;
-import grape.common.service.IBaseService;
-import grape.common.service.IBaseTreeService;
+import grape.common.service.common.IBaseService;
 import grape.common.service.po.IDBasePo;
-import grape.common.service.po.TreeBasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -164,7 +157,7 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
         return page;
     }
     /**
-     * 翻译vo的是外键属性，如：字典id换名称
+     * 翻译vo的是额外属性，如：字典id换名称，但一般提供了翻译注解，除非特别复杂的翻译直接手动写，否则直接实现ITransService接口即可
      * @param vo
      * @return
      */

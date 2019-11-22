@@ -1,5 +1,7 @@
 package grape.base.rest.post.mapper;
 
+import grape.base.rest.post.form.PostListForm;
+import grape.base.service.post.dto.PostListQuery;
 import grape.base.service.post.po.Post;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
@@ -23,4 +25,6 @@ public interface PostWebMapper extends WebMapper<PostVo, Post> {
     Post formToPo(PostCreateForm f);
     Post formToPo(PostUpdateForm f);
     Post formToPo(PostListPageForm f);
+    PostListQuery formToQuery(PostListForm f);
+
 }

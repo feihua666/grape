@@ -19,24 +19,43 @@
                 formItems:[
                     {
                         field: {
-                            name: 'name'
+                            name: 'code'
                         },
                         element:{
-                            label: '名称',
-                            required: true
+                            label: '编码',
+                            disabled: true,
+                            required:true
                         }
                     },
                     {
                         field: {
-                            name: 'jobId'
+                            name: 'name'
                         },
                         element:{
-                            label: '职务',
-                            type: 'select',
-                            select:{
-                                url:'/job/list'
-                            },
-                            required: true
+                            label: '名称',
+                            required:true
+                        }
+                    },
+                    {
+                        field: {
+                            name: 'value'
+                        },
+                        element:{
+                            label: '值',
+                            required:true
+                        }
+                    },
+                    {
+                        field: {
+                            name: 'valueTypeDictId'
+                        },
+                        element:{
+                            label: '值类型',
+                            type: 'selectDict',
+                            required:true,
+                            selectDict:{
+                                groupCode:'java_type'
+                            }
                         }
                     },
                     {
@@ -49,7 +68,7 @@
                         }
                     },
                     {
-                        field:{
+                        field: {
                             name: 'version'
                         }
                     },
@@ -60,7 +79,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/joblevel/' +this.$route.params.id,
+                                    url: '/paramconfig/' +this.$route.params.paramconfigId,
                                     label: '保存'
                                 },
                                 {
@@ -75,14 +94,15 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.paramconfigId)
         },
         methods:{
             // 根据id获取数据
             getData(id){
                 this.formLoading = true
-                this.axios.get('/joblevel/' + id).then(res => {
+                this.axios.get('/paramconfig/' + id).then(res => {
                     let data = res.data.data
+                    data.parentId__label = data.parentName
                     this.formData = data
                 }).catch(error => {
                     if(error.response){
@@ -94,7 +114,7 @@
                     }else {
                         this.$message.error('数据加载失败')
                     }
-                }).finally(()=>{
+                }).finally(() => {
                     this.formLoading = false
                 })
             }

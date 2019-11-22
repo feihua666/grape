@@ -3,7 +3,7 @@ package grape.base.service.area.impl;
 import grape.base.service.area.po.Area;
 import grape.base.service.area.mapper.AreaMapper;
 import grape.base.service.area.api.IAreaService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

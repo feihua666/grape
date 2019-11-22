@@ -1,5 +1,6 @@
 package grape.base.rest.joblevel.mapper;
 
+import grape.base.rest.joblevel.form.JobLevelListForm;
 import grape.base.service.joblevel.po.JobLevel;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
@@ -23,4 +24,5 @@ public interface JobLevelWebMapper extends WebMapper<JobLevelVo, JobLevel> {
     JobLevel formToPo(JobLevelCreateForm f);
     JobLevel formToPo(JobLevelUpdateForm f);
     JobLevel formToPo(JobLevelListPageForm f);
+    JobLevel formToPo(JobLevelListForm f);
 }

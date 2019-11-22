@@ -38,20 +38,20 @@
                 type: Boolean,
                 default: true
             },
-            // 字典组编码
+            // 数据地址
             url: {
                 type: String,
                 required: true
             },
             // 是否禁用
-        disabled:{
-            type:Boolean,
-            default:false
-        },
-        readonly:{
-            type:Boolean,
-            default:false
-        },
+            disabled:{
+                type:Boolean,
+                default:false
+            },
+            readonly:{
+                type:Boolean,
+                default:false
+            },
             props:{
                 type: Object,
                 default:function () {
@@ -85,7 +85,7 @@
             emitInput (val) {
                 this.$emit('input', val)
             },
-            // 加载字典
+            // 加载
             getDataByUrl (url) {
                 this.axios.get(url).then(res => {
                     this.data = res.data.data
@@ -98,6 +98,9 @@
         watch: {
             value(val){
                 this.localValue = val
+            },
+            url (val){
+                this.getDataByUrl(val)
             }
         }
     }

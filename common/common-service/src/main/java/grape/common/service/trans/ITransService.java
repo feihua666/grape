@@ -1,4 +1,4 @@
-package grape.common.service;
+package grape.common.service.trans;
 
 import grape.common.tools.ToolService;
 
@@ -19,8 +19,9 @@ public interface ITransService<R, K> extends ToolService {
 
     /**
      * 根据key翻译
+     * @param type 支持的类型
      * @param key
      * @return
      */
-    R trans(K key);
+    R trans(String type,K key);
 }

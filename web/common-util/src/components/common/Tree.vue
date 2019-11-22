@@ -201,11 +201,16 @@
       treeFilterText (val) {
         this.$refs.tree.filter(val)
       },
-        checkedKeys (val){
-          this.localCheckedKeys = val
-            this.setCheckedKeys(this.localCheckedKeys)
-
-        }
+      checkedKeys (val){
+        this.localCheckedKeys = val
+        this.setCheckedKeys(this.localCheckedKeys)
+      },
+      dataUrl (val){
+          this.loadTreeData()
+          if(this.localCheckedKeys.length > 0){
+              this.setCheckedKeys(this.localCheckedKeys)
+          }
+      }
     }
   }
 </script>

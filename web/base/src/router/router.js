@@ -17,7 +17,7 @@ const router = new VueRouter({
             component: () => import('@/views/dict/DictAdd.vue')
         },
         {
-            path: '/dict/dictEdit/:id',
+            path: '/dict/dictEdit/:dictId',
             component: () => import('@/views/dict/DictEdit.vue')
         },
         {
@@ -29,11 +29,11 @@ const router = new VueRouter({
             component: () => import('@/views/func/FuncAdd.vue')
         },
         {
-            path: '/func/funcEdit/:id',
+            path: '/func/funcEdit/:funcId',
             component: () => import('@/views/func/FuncEdit.vue')
         },
         {
-            path: '/func/assignRole/:id',
+            path: '/func/assignRole/:funcId',
             component: () => import('@/views/func/FuncAssignRole.vue')
         },
         {
@@ -45,7 +45,7 @@ const router = new VueRouter({
             component: () => import('@/views/comp/CompAdd.vue')
         },
         {
-            path: '/comp/compEdit/:id',
+            path: '/comp/compEdit/:compId',
             component: () => import('@/views/comp/CompEdit.vue')
         },
         {
@@ -57,7 +57,7 @@ const router = new VueRouter({
             component: () => import('@/views/dept/DeptAdd.vue')
         },
         {
-            path: '/dept/deptEdit/:id',
+            path: '/dept/deptEdit/:deptId',
             component: () => import('@/views/dept/DeptEdit.vue')
         },
         {
@@ -69,12 +69,20 @@ const router = new VueRouter({
             component: () => import('@/views/user/UserAdd.vue')
         },
         {
-            path: '/user/userEdit/:id',
+            path: '/user/userEdit/:userId',
             component: () => import('@/views/user/UserEdit.vue')
         },
         {
-            path: '/user/assignRole/:id',
+            path: '/user/assignRole/:userId',
             component: () => import('@/views/user/UserAssignRole.vue')
+        },
+        {
+            path: '/user/userPost/:userId',
+            component: () => import('@/views/user/userpost/UserPost.vue')
+        },
+        {
+            path: '/user/userPost/userPostAdd/:userId',
+            component: () => import('@/views/user/userpost/UserPostAdd.vue')
         },
         {
             path: '/role',
@@ -85,15 +93,15 @@ const router = new VueRouter({
             component: () => import('@/views/role/RoleAdd.vue')
         },
         {
-            path: '/role/roleEdit/:id',
+            path: '/role/roleEdit/:roleId',
             component: () => import('@/views/role/RoleEdit.vue')
         },
         {
-            path: '/role/assignFunc/:id',
+            path: '/role/assignFunc/:roleId',
             component: () => import('@/views/role/RoleAssignFunc.vue')
         },
         {
-            path: '/role/assignUser/:id',
+            path: '/role/assignUser/:roleId',
             component: () => import('@/views/role/RoleAssignUser.vue')
         },
         {
@@ -105,7 +113,7 @@ const router = new VueRouter({
             component: () => import('@/views/post/PostAdd.vue')
         },
         {
-            path: '/post/postEdit/:id',
+            path: '/post/postEdit/:postId',
             component: () => import('@/views/post/PostEdit.vue')
         },
         {
@@ -117,20 +125,20 @@ const router = new VueRouter({
             component: () => import('@/views/job/JobAdd.vue')
         },
         {
-            path: '/job/jobEdit/:id',
+            path: '/job/jobEdit/:jobId',
             component: () => import('@/views/job/JobEdit.vue')
         },
         {
-            path: '/joblevel',
-            component: () => import('@/views/joblevel/Joblevel.vue')
+            path: '/jobLevel',
+            component: () => import('@/views/joblevel/JobLevel.vue')
         },
         {
-            path: '/joblevel/joblevelAdd',
-            component: () => import('@/views/joblevel/JoblevelAdd.vue')
+            path: '/jobLevel/jobLevelAdd',
+            component: () => import('@/views/joblevel/JobLevelAdd.vue')
         },
         {
-            path: '/joblevel/joblevelEdit/:id',
-            component: () => import('@/views/joblevel/JoblevelEdit.vue')
+            path: '/jobLevel/jobLevelEdit/:jobLevelId',
+            component: () => import('@/views/joblevel/JobLevelEdit.vue')
         },
         {
             path: '/area',
@@ -141,19 +149,19 @@ const router = new VueRouter({
             component: () => import('@/views/area/AreaAdd.vue')
         },
         {
-            path: '/area/areaEdit/:id',
+            path: '/area/areaEdit/:areaId',
             component: () => import('@/views/area/AreaEdit.vue')
         },
         {
-            path: '/paramconfig',
-            component: () => import('@/views/paramconfig/Paramconfig.vue')
+            path: '/paramConfig',
+            component: () => import('@/views/paramconfig/ParamConfig.vue')
         },
         {
-            path: '/paramconfig/paramconfigAdd',
-            component: () => import('@/views/paramconfig/ParamconfigAdd.vue')
+            path: '/paramConfig/paramConfigAdd',
+            component: () => import('@/views/paramconfig/ParamConfigAdd.vue')
         },
         {
-            path: '/paramconfig/paramconfigEdit/:id',
+            path: '/paramConfig/paramConfigEdit/:paramConfigId',
             component: () => import('@/views/paramconfig/ParamconfigEdit.vue')
         }
     ]

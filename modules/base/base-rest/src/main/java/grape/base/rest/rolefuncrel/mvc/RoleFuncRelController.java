@@ -38,7 +38,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
     private IRoleFuncRelService currentService;
 
      @ApiOperation("角色分配功能")
-     @RequiresPermissions("rolefuncrel:single:roleAssignFunc")
+     @RequiresPermissions("roleFuncRel:single:roleAssignFunc")
      @PostMapping("/role/assign/func")
      @ResponseStatus(HttpStatus.CREATED)
      public Boolean roleAssignFunc(@RequestBody @Valid RoleAssignFuncForm cf) {
@@ -47,7 +47,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
      }
 
      @ApiOperation("根据角色ID查询已分配的功能id")
-     @RequiresPermissions("rolefuncrel:single:queryByRoleId")
+     @RequiresPermissions("roleFuncRel:single:queryByRoleId")
      @GetMapping("/role/{roleId}")
      @ResponseStatus(HttpStatus.OK)
      public List<String> queryByRoleId(@PathVariable String roleId) {
@@ -60,7 +60,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
      }
 
      @ApiOperation("清空角色下的所有功能")
-     @RequiresPermissions("rolefuncrel:single:deleteByRoleId")
+     @RequiresPermissions("roleFuncRel:single:deleteByRoleId")
      @DeleteMapping("/role/{roleId}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public Boolean deleteByRoleId(@PathVariable String roleId) {
@@ -73,7 +73,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
 
 
     @ApiOperation("功能分配角色")
-    @RequiresPermissions("rolefuncrel:single:funcAssignRole")
+    @RequiresPermissions("roleFuncRel:single:funcAssignRole")
     @PostMapping("/func/assign/role")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean funcAssignRole(@RequestBody @Valid FuncAssignRoleForm cf) {
@@ -82,7 +82,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
     }
 
     @ApiOperation("根据功能ID查询已分配的功能id")
-    @RequiresPermissions("rolefuncrel:single:queryByFuncId")
+    @RequiresPermissions("roleFuncRel:single:queryByFuncId")
     @GetMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByFuncId(@PathVariable String funcId) {
@@ -94,7 +94,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
     }
 
     @ApiOperation("清空功能下的所有角色")
-    @RequiresPermissions("rolefuncrel:single:deleteByFuncId")
+    @RequiresPermissions("roleFuncRel:single:deleteByFuncId")
     @DeleteMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByFuncId(@PathVariable String funcId) {

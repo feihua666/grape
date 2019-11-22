@@ -3,7 +3,7 @@ package grape.base.service.job.api;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.job.po.Job;
 import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseService;
 
 /**
  * <p>

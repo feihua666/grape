@@ -130,7 +130,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/func/' +this.$route.params.id,
+                                    url: '/func/' +this.$route.params.funcId,
                                     label: '保存'
                                 },
                                 {
@@ -145,7 +145,7 @@
             }
         },
         mounted(){
-            this.getData(this.$route.params.id)
+            this.getData(this.$route.params.funcId)
         },
         methods:{
             // 根据id获取数据

@@ -1,7 +1,9 @@
 package grape.base.rest.area.vo;
+import grape.base.service.area.api.IAreaService;
 import grape.common.rest.vo.BaseTreeVo;
 import grape.common.rest.vo.BaseVo;
 
+import grape.common.service.trans.Trans;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,6 +29,10 @@ public class AreaVo extends BaseTreeVo {
 
     @ApiModelProperty(value = "区域名称")
     private String name;
+    // 因为翻译的原因这里重写了父级字段
+    @Trans(type = IAreaService.trans_areaParentName,keyFieldName = "id")
+    @ApiModelProperty(value = "父级名称")
+    private String parentName;
 
     @ApiModelProperty(value = "拼音，全拼")
     private String spell;

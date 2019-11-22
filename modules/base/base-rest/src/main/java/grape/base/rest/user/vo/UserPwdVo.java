@@ -37,7 +37,7 @@ public class UserPwdVo extends BaseVo {
     private String pwdStatusDictId;
 
     @ApiModelProperty(value = "密码的修改时间")
-    private String pwdModifiedAt;
+    private Long pwdModifiedAt;
 
 
 }

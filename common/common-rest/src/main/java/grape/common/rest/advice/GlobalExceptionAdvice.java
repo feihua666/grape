@@ -24,6 +24,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -125,7 +126,7 @@ public class GlobalExceptionAdvice implements ToolService {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    public ResultMessage handleCBaseException(HttpServletRequest request, HttpMediaTypeNotSupportedException ex) {
+    public ResultMessage handleHttpMediaTypeNotSupportedException(HttpServletRequest request, HttpMediaTypeNotSupportedException ex) {
         return createRM(ExceptionCode.fail, ex.getMessage(), null, ex);
     }
 
@@ -138,7 +139,21 @@ public class GlobalExceptionAdvice implements ToolService {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResultMessage handleCBaseException(HttpServletRequest request, MethodArgumentNotValidException ex) {
+    public ResultMessage handleMethodArgumentNotValidException(HttpServletRequest request, MethodArgumentNotValidException ex) {
+        String msg = ex.getBindingResult().getFieldError().getDefaultMessage();
+        return createRM(ExceptionCode.fail, msg, null, ex);
+    }
+    /**
+     * 表单验证不对过异常响应
+     * 发现非requestBody 的get方法表单中有验证时会抛出这个异常
+     *
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResultMessage handleBindException(HttpServletRequest request, BindException ex) {
         String msg = ex.getBindingResult().getFieldError().getDefaultMessage();
         return createRM(ExceptionCode.fail, msg, null, ex);
     }
@@ -165,7 +180,7 @@ public class GlobalExceptionAdvice implements ToolService {
      */
     @ExceptionHandler(UnauthenticatedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResultMessage handleAuthorizationException(HttpServletRequest request, UnauthenticatedException ex) {
+    public ResultMessage handleUnauthenticatedException(HttpServletRequest request, UnauthenticatedException ex) {
         return createRM(ExceptionCode.notLogin, ExceptionCode.notLogin.getMsg(), request.getRequestURI().toString(), ex);
     }
 

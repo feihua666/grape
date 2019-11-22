@@ -2,7 +2,7 @@ package grape.base.service.userpostrolerel.api;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseService;
 
 /**
  * <p>

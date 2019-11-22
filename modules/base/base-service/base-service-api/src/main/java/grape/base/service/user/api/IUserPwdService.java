@@ -2,7 +2,7 @@ package grape.base.service.user.api;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.user.po.UserPwd;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseService;
 
 /**
  * <p>

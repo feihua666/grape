@@ -68,7 +68,7 @@ public class UserPost extends NormalBasePo<UserPost> {
     /**
      * 生效的时间
      */
-    private String effcetAt;
+    private Long effcetAt;
 
     /**
      * 是否主岗

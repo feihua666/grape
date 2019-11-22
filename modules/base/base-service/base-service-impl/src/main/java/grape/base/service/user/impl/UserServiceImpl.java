@@ -1,14 +1,10 @@
 package grape.base.service.user.impl;
 
 import grape.base.service.BaseLoginUser;
-import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
-import grape.base.service.job.api.IJobService;
-import grape.base.service.joblevel.api.IJobLevelService;
-import grape.base.service.post.api.IPostService;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.po.Role;
 import grape.base.service.user.api.IUserIdentifierService;
@@ -23,11 +19,10 @@ import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.common.AbstractLoginUser;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RDataNotExistException;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

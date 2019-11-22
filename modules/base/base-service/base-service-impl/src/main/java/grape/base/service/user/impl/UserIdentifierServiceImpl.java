@@ -3,7 +3,7 @@ package grape.base.service.user.impl;
 import grape.base.service.user.po.UserIdentifier;
 import grape.base.service.user.mapper.UserIdentifierMapper;
 import grape.base.service.user.api.IUserIdentifierService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

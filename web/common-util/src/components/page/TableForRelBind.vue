@@ -127,7 +127,7 @@
                 }
                 this.axios.post(this.submitUrl,data)
                     .then((res)=>{
-                        this.$message.success('操作成功')
+                        this.$message.success('保存成功')
                         // 重新加载已选中的数据
 
                         this.$refs.table.getCheckedData()

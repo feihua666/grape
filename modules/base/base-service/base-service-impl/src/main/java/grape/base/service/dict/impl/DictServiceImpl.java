@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.dict.po.Dict;
 import grape.base.service.dict.mapper.DictMapper;
 import grape.base.service.dict.api.IDictService;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 

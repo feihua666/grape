@@ -19,7 +19,7 @@
                 <el-input v-if="item.element.type == 'text'"
                           v-model="form[getFieldName(item)]"
                           :placeholder="item.element.placeholder"
-                          :disabled="item.element.disabled"
+                          :disabled="getDisabled(item)"
                           :readonly="item.element.readonly"
                           :title="getTitle(item)"
                           clearable>
@@ -27,7 +27,7 @@
                 <el-input v-else-if="item.element.type == 'textarea'"
                           type="textarea"
                           :placeholder="item.element.placeholder"
-                          :disabled="item.element.disabled"
+                          :disabled="getDisabled(item)"
                           :readonly="item.element.readonly"
                           v-model="form[getFieldName(item)]" clearable>
                 </el-input>
@@ -35,14 +35,14 @@
                                  v-model="form[getFieldName(item)]" controls-position="right"
                                  :min="getInputNumber(item).min"
                                  :max="getInputNumber(item).max"
-                                 :disabled="item.element.disabled"
+                                 :disabled="getDisabled(item)"
                                  :readonly="item.element.readonly"
                 ></el-input-number>
                 <SelectDict v-else-if="item.element.type == 'selectDict'"
                             :group-code="item.element.selectDict.groupCode"
                             :placeholder="item.element.placeholder"
                             v-on:dictCode="(dictCode)=> {form[item.field.name+'__code'] = dictCode}"
-                            :disabled="item.element.disabled"
+                            :disabled="getDisabled(item)"
                             :readonly="item.element.readonly"
                             v-model="form[getFieldName(item)]">
                 </SelectDict>
@@ -50,21 +50,21 @@
                                  v-model="form[getFieldName(item)]"
                                  :label-text="form[getFieldName(item) + '__label']"
                                  :placeholder="item.element.placeholder"
-                                 :disabled="item.element.disabled"
+                                 :disabled="getDisabled(item)"
                                  :readonly="item.element.readonly"
-                                 :tree-data-url="item.element.inputSelectTree.dataUrl">
+                                 :tree-data-url="handleUrl(item.element.inputSelectTree.dataUrl)">
 
                 </InputSelectTree>
                 <InputSelectIcon v-else-if="item.element.type == 'inputSelectIcon'"
                                  v-model="form[getFieldName(item)]"
-                                 :disabled="item.element.disabled"
+                                 :disabled="getDisabled(item)"
                                  :readonly="item.element.readonly"
                                  :placeholder="item.element.placeholder">
 
                 </InputSelectIcon>
                 <el-switch v-else-if="item.element.type == 'switch'"
                            v-model="form[getFieldName(item)]"
-                           :disabled="item.element.disabled"
+                           :disabled="getDisabled(item)"
                            :active-text="item.element.switch ? item.element.switch.activeText: '是'"
                            :inactive-text="item.element.switch ? item.element.switch.inactiveText: '否'"
                 >
@@ -72,10 +72,19 @@
                 </el-switch>
                 <Select v-else-if="item.element.type == 'select'"
                         v-model="form[getFieldName(item)]"
-                        :disabled="item.element.disabled"
-                        :url="item.element.select.url"
+                        :disabled="getDisabled(item)"
+                        :url="handleUrl(item.element.select.url)"
                         :props="item.element.select.props"
                 ></Select>
+                <DateTimePicker v-else-if="item.element.type == 'date'"
+                        v-model="form[getFieldName(item)]"
+                        :disabled="getDisabled(item)"
+                                :type="item.element.date ?item.element.date.type:null"
+                                :format="item.element.date ?item.element.date.format:null"
+                                :value-format="item.element.date ?item.element.date.valueFormat:null"
+                                v-on:start="(val)=>{form[item.field.startName || item.field.name + 'Start'] = val}"
+                                v-on:end="(val)=>{form[item.field.endName || item.field.name + 'End'] = val}"
+                ></DateTimePicker>
                 <template v-else-if="item.element.type == 'txt'">
                     {{form[getFieldName(item)]}}
                 </template>
@@ -103,7 +112,7 @@
                 <el-input v-else
                           v-model="form[getFieldName(item)]"
                           :placeholder="item.element.placeholder"
-                          :disabled="item.element.disabled"
+                          :disabled="getDisabled(item)"
                           :readonly="item.element.readonly"
                           clearable>
                 </el-input>
@@ -162,6 +171,7 @@
     import InputSelectTree from '../../components/common/InputSelectTree.vue'
     import InputSelectIcon from '../../components/common/InputSelectIcon.vue'
     import Select from '../../components/common/Select.vue'
+    import DateTimePicker from '../../components/common/DateTimePicker.vue'
 
     import {aiButtonStyle} from "../../tools/StyleTools.js"
     export default {
@@ -170,6 +180,7 @@
             SelectDict,
             InputSelectIcon,
             Select,
+            DateTimePicker,
             InputSelectTree
         },
         props:{
@@ -211,6 +222,10 @@
                     return {}
                 }
             },
+            // 表单提交之前处理 参数为form,返回值为处理后的form
+            formatForm:{
+                type: Function
+            }
         },
         computed:{
         },
@@ -219,12 +234,37 @@
             this.formItems.forEach(item =>{
                 if(item.field){
                     form[item.field.name] = this.getFormItemValueByName(item.field.name) || item.field.value || null
-                    // 扩展字段支持，label支持，主要是为了选择树回显翻译字面使用 ，当前也可以使用其它方式
+                    // 扩展字段支持，label支持，主要是为了选择树回显翻译字面使用 ，当然也可以使用其它方式
 
                     for (let fieldKey in item.field) {
                         if(fieldKey.indexOf('__') >=0 ){
                             form[fieldKey] = this.getFormItemValueByName(fieldKey) || item.field[fieldKey] || null
                         }
+                    }
+                }
+                // 处理范围选择的字段属性，目前是日期可以是范围选择，但控制v-model是一个数组，第一个表示开始，第二个表示结束，这里做一个转换，变为属性名
+                // 默认新增加的属性名是item.field.name + 'Start' 作为开发属性名，item.field.name + 'End' 作为结束属性名
+                // 也可以指定item.field.startName='xxx'和item.field.endName='xxx'来替换默认值
+                let isRange = false
+                if(item.element){
+                    if(item.element.type == 'date' ||item.element.type == 'time'){
+                        if(item.element.date && item.element.date.type.indexOf('range') > 0){
+                            isRange = true
+                        }else if(item.element.time && item.element.time.type.indexOf('range') > 0){
+                            isRange = true
+                        }
+                    }
+                }
+                if (isRange) {
+                    let startName = item.field.startName || item.field.name + 'Start'
+                    let endName = item.field.endName || item.field.name + 'End'
+                    let value = this.getFormItemValueByName(item.field.name)
+                    if(value && isArray(value)){
+                        form[startName] = value[0]
+                        form[endName] = value[1]
+                    }else {
+                        form[startName] = null
+                        form[endName] = null
                     }
                 }
             })
@@ -251,6 +291,22 @@
                     min: 1,
                     max: 100
                 }
+            },
+            handleUrl(url){
+                if (typeof url == 'function') {
+                    return url(this.form)
+                }
+                return url
+            },
+            getDisabled(item){
+                if(item && item.element){
+                    if(typeof item.element.disable == 'function'){
+                        return item.element.disable(this.form)
+                    }else{
+                        return item.element.disable
+                    }
+                }
+                return false
             },
             getTitle(item){
                 if(item){
@@ -368,6 +424,10 @@
                 if(!button) {
                     return
                 }
+                if(this.formatForm){
+                    this.form = this.formatForm(this.form)
+                }
+
                 this.$refs['dynamicValidateForm'].validate((valid) => {
                     if (valid) {
                         let tempForm = cloneSimple(this.form,true)
@@ -395,13 +455,13 @@
                                 }
                                 this.$emit('submitData',[])
                                 if(this.submitSuccessText){
-                                    this.$message.info(this.submitSuccessText)
+                                    this.$message.success(this.submitSuccessText)
                                 }else if(method == 'post'){
-                                    this.$message.info('添加成功')
+                                    this.$message.success('添加成功')
                                 }else if(method == 'delete'){
-                                    this.$message.info('删除成功')
+                                    this.$message.success('删除成功')
                                 }else if(method == 'put'){
-                                    this.$message.info('更新成功')
+                                    this.$message.success('更新成功')
                                 }
                             }).catch(error => {
                                 if(this.submitBusKey){

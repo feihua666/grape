@@ -28,7 +28,7 @@ import java.util.List;
  * @since 2019-10-22
  */
 @RestController
-@RequestMapping("/userst-role-rel")
+@RequestMapping("/userpostrolerel")
 @Api(tags = "用户岗位与角色关系表,决定了用户的功能")
 public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo, UserPostRoleRel> {
 
@@ -40,7 +40,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
 
 
      @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表创建/添加数据")
-     @RequiresPermissions("user-post-role-rel:single:create")
+     @RequiresPermissions("userPostRoleRel:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostRoleRelVo create(@RequestBody @Valid UserPostRoleRelCreateForm cf) {
@@ -49,7 +49,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
      }
 
      @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表根据ID查询")
-     @RequiresPermissions("user-post-role-rel:single:queryById")
+     @RequiresPermissions("userPostRoleRel:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public UserPostRoleRelVo queryById(@PathVariable String id) {
@@ -57,7 +57,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
      }
 
      @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表根据ID删除")
-     @RequiresPermissions("user-post-role-rel:single:deleteById")
+     @RequiresPermissions("userPostRoleRel:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -65,7 +65,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
      }
 
      @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表根据ID更新")
-     @RequiresPermissions("user-post-role-rel:single:updateById")
+     @RequiresPermissions("userPostRoleRel:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostRoleRelVo update(@PathVariable String id,@RequestBody @Valid UserPostRoleRelUpdateForm uf) {
@@ -75,7 +75,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
      }
 
     @ApiOperation("[用户岗位与角色关系表,决定了用户的功能]单表分页列表")
-    @RequiresPermissions("user-post-role-rel:single:listPage")
+    @RequiresPermissions("userPostRoleRel:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserPostRoleRelVo> listPage(UserPostRoleRelListPageForm listPageForm) {

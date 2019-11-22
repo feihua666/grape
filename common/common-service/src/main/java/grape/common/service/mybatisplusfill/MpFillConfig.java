@@ -1,4 +1,4 @@
-package grape.common.service;
+package grape.common.service.mybatisplusfill;
 
 import grape.common.AbstractLoginUser;
 import grape.common.service.po.IDBasePo;
@@ -34,7 +34,7 @@ public class MpFillConfig {
 
     public static List<MpFillConfig> getConfig(){
         List<MpFillConfig> configDynamic = new ArrayList<>();
-        String now = System.currentTimeMillis() + "";
+        Long now = System.currentTimeMillis();
         AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
         String currentUserId = loginUser == null ? IDBasePo.systemUserId : loginUser.getUserId();
         configDynamic.add(new MpFillConfig(NormalBasePo.PROPERTY_CREATE_BY,currentUserId,true,false));

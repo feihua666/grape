@@ -1,7 +1,7 @@
 package grape.base.service.userpostrolerel.mapper;
 
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
-import grape.common.service.IBaseMapper;
+import grape.common.service.common.IBaseMapper;
 
 /**
  * <p>

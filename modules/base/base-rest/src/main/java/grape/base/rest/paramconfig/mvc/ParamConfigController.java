@@ -45,7 +45,7 @@ public class ParamConfigController extends BaseController<ParamConfigVo, ParamCo
 
 
      @ApiOperation("添加参数配置")
-     @RequiresPermissions("paramconfig:single:create")
+     @RequiresPermissions("paramConfig:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public ParamConfigVo create(@RequestBody @Valid ParamConfigCreateForm cf) {
@@ -77,7 +77,7 @@ public class ParamConfigController extends BaseController<ParamConfigVo, ParamCo
         }
     }
      @ApiOperation("根据ID查询参数配置")
-     @RequiresPermissions("paramconfig:single:queryById")
+     @RequiresPermissions("paramConfig:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public ParamConfigVo queryById(@PathVariable String id) {
@@ -85,7 +85,7 @@ public class ParamConfigController extends BaseController<ParamConfigVo, ParamCo
      }
 
      @ApiOperation("删除参数配置")
-     @RequiresPermissions("paramconfig:single:deleteById")
+     @RequiresPermissions("paramConfig:single:deleteById")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -93,7 +93,7 @@ public class ParamConfigController extends BaseController<ParamConfigVo, ParamCo
      }
 
      @ApiOperation("更新参数配置")
-     @RequiresPermissions("paramconfig:single:updateById")
+     @RequiresPermissions("paramConfig:single:updateById")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public ParamConfigVo update(@PathVariable String id,@RequestBody @Valid ParamConfigUpdateForm uf) {
@@ -106,7 +106,7 @@ public class ParamConfigController extends BaseController<ParamConfigVo, ParamCo
      }
 
     @ApiOperation("分页查询参数配置")
-    @RequiresPermissions("paramconfig:single:listPage")
+    @RequiresPermissions("paramConfig:single:listPage")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<ParamConfigVo> listPage(ParamConfigListPageForm listPageForm) {
@@ -120,7 +120,7 @@ public class ParamConfigController extends BaseController<ParamConfigVo, ParamCo
      * @return
      */
     @ApiOperation("启用或禁用")
-    @RequiresPermissions("dict:single:enable")
+    @RequiresPermissions("paramConfig:single:enable")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public ParamConfigVo enable(@PathVariable String id, @RequestBody @Valid ParamConfigEnableForm form) {

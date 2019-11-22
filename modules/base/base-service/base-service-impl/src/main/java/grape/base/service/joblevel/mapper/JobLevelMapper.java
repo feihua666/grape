@@ -1,7 +1,7 @@
 package grape.base.service.joblevel.mapper;
 
 import grape.base.service.joblevel.po.JobLevel;
-import grape.common.service.IBaseMapper;
+import grape.common.service.common.IBaseMapper;
 
 /**
  * <p>

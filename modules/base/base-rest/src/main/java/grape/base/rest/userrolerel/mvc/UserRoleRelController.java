@@ -39,7 +39,7 @@ public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRol
 
 
     @ApiOperation("用户分配角色")
-    @RequiresPermissions("userrolerel:single:userAssignRole")
+    @RequiresPermissions("userRoleRel:single:userAssignRole")
     @PostMapping("/user/assign/role")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean userAssignRole(@RequestBody @Valid UserAssignRoleForm cf) {
@@ -48,7 +48,7 @@ public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRol
     }
 
     @ApiOperation("根据用户ID查询已分配的角色id")
-    @RequiresPermissions("userrolerel:single:queryByUserId")
+    @RequiresPermissions("userRoleRel:single:queryByUserId")
     @GetMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByUserId(@PathVariable String userId) {
@@ -61,7 +61,7 @@ public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRol
     }
 
     @ApiOperation("清空用户下的所有角色")
-    @RequiresPermissions("userrolerel:single:deleteByUserId")
+    @RequiresPermissions("userRoleRel:single:deleteByUserId")
     @DeleteMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByUserId(@PathVariable String userId) {
@@ -74,7 +74,7 @@ public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRol
 
 
     @ApiOperation("角色分配用户")
-    @RequiresPermissions("userrolerel:single:roleAssignUser")
+    @RequiresPermissions("userRoleRel:single:roleAssignUser")
     @PostMapping("/role/assign/user")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean roleAssignUser(@RequestBody @Valid RoleAssignUserForm cf) {
@@ -83,7 +83,7 @@ public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRol
     }
 
     @ApiOperation("根据角色id查询已分配的用户id")
-    @RequiresPermissions("userrolerel:single:queryByRoleId")
+    @RequiresPermissions("userRoleRel:single:queryByRoleId")
     @GetMapping("/role/{roleId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByRoleId(@PathVariable String roleId) {
@@ -95,7 +95,7 @@ public class UserRoleRelController extends BaseController<UserRoleRelVo, UserRol
     }
 
     @ApiOperation("清空角色下的所有用户")
-    @RequiresPermissions("userrolerel:single:deleteByRoleId")
+    @RequiresPermissions("userRoleRel:single:deleteByRoleId")
     @DeleteMapping("/role/{roleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByRoleId(@PathVariable String roleId) {

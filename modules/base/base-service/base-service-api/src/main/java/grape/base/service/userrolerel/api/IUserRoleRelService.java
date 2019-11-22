@@ -2,14 +2,10 @@ package grape.base.service.userrolerel.api;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.userrolerel.po.UserRoleRel;
-import grape.common.service.IBaseRelService;
-import grape.common.service.IBaseService;
+import grape.common.service.common.IBaseRelService;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p>

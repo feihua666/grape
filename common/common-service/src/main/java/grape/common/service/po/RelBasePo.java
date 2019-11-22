@@ -21,7 +21,7 @@ public class RelBasePo<T extends Model<?>> extends IDBasePo<String,T> {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private String createAt;
+    private Long createAt;
 
     /**
      * 创建人

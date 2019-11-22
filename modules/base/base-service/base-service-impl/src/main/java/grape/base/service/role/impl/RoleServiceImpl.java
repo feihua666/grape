@@ -5,7 +5,7 @@ import grape.base.service.role.mapper.RoleMapper;
 import grape.base.service.role.po.Role;
 import grape.base.service.userrolerel.api.IUserRoleRelService;
 import grape.base.service.userrolerel.po.UserRoleRel;
-import grape.common.service.BaseServiceImpl;
+import grape.common.service.common.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
