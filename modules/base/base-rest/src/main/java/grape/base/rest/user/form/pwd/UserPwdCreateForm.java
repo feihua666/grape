@@ -1,4 +1,4 @@
-package grape.base.rest.user.form;
+package grape.base.rest.user.form.pwd;
 import grape.common.rest.form.BaseForm;
 
 import io.swagger.annotations.ApiModel;

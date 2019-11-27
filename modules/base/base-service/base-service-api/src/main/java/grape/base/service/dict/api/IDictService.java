@@ -55,7 +55,7 @@ public interface IDictService extends IBaseTreeService<Dict> , ITransService<Str
 
     @Override
     default boolean support(String type){
-        return isEqualAny(type, trans_dictName, trans_dictParentName);
+        return isEqualAny(type,trans_dictCode, trans_dictName, trans_dictParentName);
     }
 
     @Override
@@ -65,16 +65,17 @@ public interface IDictService extends IBaseTreeService<Dict> , ITransService<Str
             if (parent != null) {
                 return parent.getName();
             }
-        }else if (isEqual(type,trans_dictName)) {
+        }else{
             Dict po = getById(key);
             if (po != null) {
-                return po.getName();
+                if (isEqual(type,trans_dictName)) {
+                    return po.getName();
+
+                }else if (isEqual(type,trans_dictCode)) {
+                    return po.getCode();
+                }
             }
-        }else if (isEqual(type,trans_dictCode)) {
-            Dict po = getById(key);
-            if (po != null) {
-                return po.getCode();
-            }
+
         }
         return null;
     }

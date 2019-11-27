@@ -126,12 +126,4 @@ public class AreaController extends BaseTreeController<AreaVo, Area> {
     public List<TreeNodeVo<AreaVo>> tree(String parentId) {
         return super.listToTreeNodeVo(super.getByParentId(parentId));
     }
-
-    @Override
-    public AreaVo transVo(AreaVo vo) {
-        Dict dict = iDictService.getById(vo.getTypeDictId());
-        vo.setTypeDictCode(Optional.ofNullable(dict).map(d -> d.getCode()).orElse(null));
-        vo.setTypeDictName(Optional.ofNullable(dict).map(d -> d.getName()).orElse(null));
-        return vo;
-    }
 }

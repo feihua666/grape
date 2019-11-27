@@ -178,17 +178,4 @@ public class DictController extends BaseTreeController<DictVo, Dict> {
         dict.setDisabledReason(form.getDisabledReason());
         return super.update(dict);
     }
-    @Override
-    public DictVo transVo(DictVo vo) {
-        Comp comp = iCompService.getById(vo.getCompId());
-        if (comp != null) {
-            vo.setCompName(comp.getName());
-        }
-
-        Dict parent = getService().getById(vo.getParentId());
-        if (parent != null) {
-            vo.setParentName(parent.getName());
-        }
-        return vo;
-    }
 }

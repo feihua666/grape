@@ -36,7 +36,7 @@ public interface IDeptService extends IBaseTreeService<Dept> , ITransService<Str
     }
     @Override
     default boolean support(String type){
-        return isEqualAny(type, trans_deptName, trans_deptParentName);
+        return isEqualAny(type,trans_deptCode, trans_deptName, trans_deptParentName);
     }
 
     @Override
@@ -46,15 +46,14 @@ public interface IDeptService extends IBaseTreeService<Dept> , ITransService<Str
             if (parent != null) {
                 return parent.getName();
             }
-        }else if (isEqual(type,trans_deptName)) {
+        }else{
             Dept po = getById(key);
             if (po != null) {
-                return po.getName();
-            }
-        }else if (isEqual(type,trans_deptCode)) {
-            Dept po = getById(key);
-            if (po != null) {
-                return po.getCode();
+                if (isEqual(type,trans_deptName)) {
+                    return po.getName();
+                }else if (isEqual(type,trans_deptCode)) {
+                    return po.getCode();
+                }
             }
         }
         return null;

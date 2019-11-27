@@ -155,8 +155,24 @@
                         position:'more',
                         disabledOnMissingSelect:true,
                         url:'/user/userPost/:id',
+                        routeQuery: 'nickname',
                         label: '岗位信息'
+                    },
+                    {
+                        action: 'nav',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        url:'/user/userIdentifier/:id',
+                        label: '帐号信息'
+                    },
+                    {
+                        action: 'nav',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        url:'/user/userIdentifier/userIdentifierAdd/:id',
+                        label: '新增帐号'
                     }
+
                 ]
             }
         },
@@ -167,7 +183,7 @@
                     inputValidator:(value)=>{return !!value}
                 }).then(({ value }) => {
                     let data = {
-                        isLock: !row.isDisabled,
+                        isLock: !row.isLock,
                         version: row.version,
                         lockReason: value
                     }

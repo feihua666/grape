@@ -17,6 +17,13 @@ import java.util.List;
  */
 public interface IUserPostService extends IBaseService<UserPost> {
 
+    /**
+     * 根据用户id获取岗位
+     * @param userId
+     * @param isMain
+     * @param isEffect
+     * @return
+     */
     default List<UserPost> getByUserId(String userId,Boolean isMain,Boolean isEffect){
         if (userId == null) {
             return null;
@@ -31,6 +38,20 @@ public interface IUserPostService extends IBaseService<UserPost> {
         }
         return list(Wrappers.query(userPost));
     }
+
+    /**
+     * 获取用户的主岗，一个用户只能有一个主岗
+     * @param userId
+     * @return
+     */
+    default UserPost getMainByUserId(String userId){
+        List<UserPost> list = getByUserId(userId, true, null);
+        if (!isListEmpty(list)) {
+            return  list.get(0);
+        }
+        return null;
+    }
+
      UserPostInfo getUserPostInfo(UserPost userPost);
      List<UserPostInfo> getUserPostInfos(List<UserPost> userPosts);
 }

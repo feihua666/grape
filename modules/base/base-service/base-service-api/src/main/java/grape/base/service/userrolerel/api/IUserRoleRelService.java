@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- * 角色菜单功能关系表，多对多 服务类
+ * 角色与用户关系表，多对多 服务类
  * </p>
  *
  * @author yangwei
@@ -31,12 +31,12 @@ public interface IUserRoleRelService extends IBaseRelService<UserRoleRel> {
         return list(Wrappers.query(userRoleRel));
     }
     /**
-     * 清空功能下的角色
+     * 清空用户下的角色
      * @param userId
      * @return
      */
     default boolean removeByUserId(String userId){
-        assertParamNotEmpty(userId,"funcId is not empty");
+        assertParamNotEmpty(userId,"userId is not empty");
         return remove(Wrappers.<UserRoleRel>lambdaQuery().eq(UserRoleRel::getUserId, userId));
     }
     /**

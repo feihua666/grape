@@ -107,18 +107,4 @@ public class JobController extends BaseController<JobVo, Job> {
         Job po = currentWebMapper.formToPo(listForm);
         return super.list(po);
     }
-
-    @Override
-    public JobVo transVo(JobVo jobVo) {
-        Dict dict = iDictService.getById(jobVo.getTypeDictId());
-        if (dict != null) {
-            jobVo.setTypeDictCode(dict.getCode());
-            jobVo.setTypeDictName(dict.getName());
-        }
-        Dept dept = iDeptService.getById(jobVo.getDeptId());
-        if (dept != null) {
-            jobVo.setDeptName(dept.getName());
-        }
-        return jobVo;
-    }
 }

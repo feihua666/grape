@@ -20,6 +20,7 @@ import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.po.UserPost;
+import grape.common.exception.ExceptionTools;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,19 +48,6 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
     @Autowired
     private IUserPostService currentService;
 
-    @Autowired
-    private IUserService iUserService;
-    @Autowired
-    private ICompService iCompService;
-    @Autowired
-    private IDeptService iDeptService;
-    @Autowired
-    private IPostService iPostService;
-    @Autowired
-    private IJobService iJobService;
-    @Autowired
-    private IJobLevelService iJobLevelService;
-
 
      @ApiOperation("添加用户岗位")
      @RequiresPermissions("userPost:single:create")
@@ -67,6 +55,13 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostVo create(@RequestBody @Valid UserPostCreateForm cf) {
          UserPost po = currentWebMapper.formToPo(cf);
+         // 主岗已存在，不能再添加主岗
+         if (po.getIsMain()) {
+             UserPost userPost = currentService.getMainByUserId(cf.getUserId());
+             if(userPost != null){
+                 throw ExceptionTools.failRE("已存在主岗");
+             }
+         }
          return super.create(po);
      }
 
@@ -93,6 +88,13 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
      public UserPostVo update(@PathVariable String id,@RequestBody @Valid UserPostUpdateForm uf) {
          UserPost po = currentWebMapper.formToPo(uf);
          po.setId(id);
+         // 主岗已存在，不能再添加主岗
+         if (po.getIsMain()) {
+             UserPost userPost = currentService.getMainByUserId(uf.getUserId());
+             if(userPost != null && !isEqual(id,userPost.getId())){
+                 throw ExceptionTools.failRE("已存在主岗");
+             }
+         }
          return super.update(po);
      }
 
@@ -104,37 +106,4 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
          UserPost po = currentWebMapper.formToPo(listPageForm);
          return super.listPage(po,listPageForm);
      }
-
-    @Override
-    public UserPostVo transVo(UserPostVo userPostVo) {
-
-        User user = iUserService.getById(userPostVo.getUserId());
-        if (user != null) {
-            userPostVo.setUserNickname(user.getNickname());
-        }
-
-        Comp comp = iCompService.getById(userPostVo.getCompId());
-        if (comp != null) {
-            userPostVo.setCompName(comp.getName());
-        }
-        Dept dept = iDeptService.getById(userPostVo.getDeptId());
-        if (dept != null) {
-            userPostVo.setDeptName(dept.getName());
-        }
-        Post post = iPostService.getById(userPostVo.getPostId());
-        if (post != null) {
-            userPostVo.setPostName(post.getName());
-        }
-        Job job = iJobService.getById(userPostVo.getJobId());
-        if (job != null) {
-            userPostVo.setJobName(job.getName());
-        }
-        JobLevel jobLevel = iJobLevelService.getById(userPostVo.getJobLevelId());
-        if (jobLevel != null) {
-            userPostVo.setJobLevelName(jobLevel.getName());
-        }
-
-
-        return userPostVo;
-    }
 }

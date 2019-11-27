@@ -1,6 +1,8 @@
 package grape.base.rest.joblevel.vo;
+import grape.base.service.job.api.IJobService;
 import grape.common.rest.vo.BaseIdVo;
 
+import grape.common.service.trans.TransBy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,6 +36,7 @@ public class JobLevelVo extends BaseIdVo<String> {
     @ApiModelProperty(value = "职务级别")
     private String jobId;
 
+    @TransBy(type = IJobService.trans_type_jobName,byFieldName = "typeDictId")
     @ApiModelProperty(value = "职务名称")
     private String jobName;
 

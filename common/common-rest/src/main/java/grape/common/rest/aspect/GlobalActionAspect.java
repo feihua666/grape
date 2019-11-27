@@ -39,16 +39,16 @@ public class GlobalActionAspect {
         HttpServletRequest request = attributes.getRequest();
 
         // 打印请求相关参数
-        log.info("请求参数: requestId={},requestParam={}",
+        log.info("请求参数: requestId=[{}],requestParam=[{}]",
                 RequestIdTool.getRequestId(), JSONUtil.toJsonStr(joinPoint.getArgs()));
-        log.info("请求头: requestId={},requestHeader={}",
+        log.info("请求头: requestId=[{}],requestHeader=[{}]",
                 RequestIdTool.getRequestId(), RequestTool.getHeaderText(request).toString());
-        log.info("请求方法: requestId={},method={}.{}",
+        log.info("请求方法: requestId=[{}],method=[{}.{}]",
                 RequestIdTool.getRequestId(),joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
     }
     @AfterReturning(value="pointcut()",returning="result")
     public void afterReturningMethod(JoinPoint joinPoint,Object result){
-        log.info("请求结果: requestId={},result={}",
+        log.info("请求结果: requestId=[{}],result=[{}]",
                 RequestIdTool.getRequestId(),JSONUtil.toJsonStr(result));
     }
 }

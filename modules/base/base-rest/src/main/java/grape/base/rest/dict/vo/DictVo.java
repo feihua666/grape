@@ -1,6 +1,10 @@
 package grape.base.rest.dict.vo;
 
+import grape.base.service.comp.api.ICompService;
+import grape.base.service.dict.api.IDictService;
 import grape.common.rest.vo.BaseTreeVo;
+import grape.common.service.trans.TransBy;
+import grape.common.service.trans.TransItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,9 +19,10 @@ import lombok.experimental.Accessors;
  * @author yangwei
  * @since 2019-09-23
  */
+
+@TransItem(type = IDictService.trans_dictName, byFieldName = "parentId",forFieldName = "parentName")
 @Data
 @EqualsAndHashCode(callSuper=false)
-
 @Accessors(chain = true)
 @ApiModel(value="字典数据响应对象")
 public class DictVo extends BaseTreeVo {
@@ -48,6 +53,7 @@ public class DictVo extends BaseTreeVo {
     @ApiModelProperty(value = "公司id",notes = "标识字典归属于哪个公司")
     private String compId;
 
+    @TransBy(type = ICompService.trans_compName,byFieldName = "compId")
     @ApiModelProperty(value = "公司名称")
     private String compName;
 

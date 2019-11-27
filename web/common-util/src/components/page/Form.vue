@@ -76,6 +76,14 @@
                         :url="handleUrl(item.element.select.url)"
                         :props="item.element.select.props"
                 ></Select>
+                <SelectRemote v-else-if="item.element.type == 'selectRemote'"
+                        v-model="form[getFieldName(item)]"
+                        :label="form[getFieldName(item) + '__label']"
+                        :disabled="getDisabled(item)"
+                        :url="handleUrl(item.element.selectRemote.url)"
+                        :props="item.element.selectRemote?item.element.selectRemote.props: null"
+                        :query-prop="item.element.selectRemote?item.element.selectRemote.queryProp:null"
+                ></SelectRemote>
                 <DateTimePicker v-else-if="item.element.type == 'date'"
                         v-model="form[getFieldName(item)]"
                         :disabled="getDisabled(item)"
@@ -171,6 +179,7 @@
     import InputSelectTree from '../../components/common/InputSelectTree.vue'
     import InputSelectIcon from '../../components/common/InputSelectIcon.vue'
     import Select from '../../components/common/Select.vue'
+    import SelectRemote from '../../components/common/SelectRemote.vue'
     import DateTimePicker from '../../components/common/DateTimePicker.vue'
 
     import {aiButtonStyle} from "../../tools/StyleTools.js"
@@ -180,6 +189,7 @@
             SelectDict,
             InputSelectIcon,
             Select,
+            SelectRemote,
             DateTimePicker,
             InputSelectTree
         },
@@ -387,6 +397,9 @@
                 let buttonR = null
                 this.formItems.forEach(item => {
                     let isBreak = false
+                    if (!item.element) {
+                        return true
+                    }
                     if(isObject(item.element.button)){
                         if(action == item.element.button.action){
                             buttonR = item.element.button

@@ -36,7 +36,7 @@ public interface ICompService extends IBaseTreeService<Comp>, ITransService<Stri
     }
     @Override
     default boolean support(String type){
-        return isEqualAny(type, trans_compName, trans_compParentName);
+        return isEqualAny(type,trans_compCode,trans_compParentName, trans_compName, trans_compParentName);
     }
 
     @Override
@@ -46,16 +46,16 @@ public interface ICompService extends IBaseTreeService<Comp>, ITransService<Stri
             if (parent != null) {
                 return parent.getName();
             }
-        }else if (isEqual(type,trans_compName)) {
+        }else{
             Comp po = getById(key);
             if (po != null) {
-                return po.getName();
+                if (isEqual(type,trans_compName)) {
+                        return po.getName();
+                }else if (isEqual(type,trans_compCode)) {
+                        return po.getCode();
+                }
             }
-        }else if (isEqual(type,trans_compCode)) {
-            Comp po = getById(key);
-            if (po != null) {
-                return po.getCode();
-            }
+
         }
         return null;
     }

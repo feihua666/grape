@@ -55,15 +55,23 @@
                 required: true
             },
             uncheckedProp:{
-                type: String,
-                required: true
+                type: String
             },
             lazyload:{
                 type: Boolean,
                 default: true
             },
+            // 清除所有已选的url
             clearAllUrl:{
                 type: String
+            },
+            // 限制的选择个数，最多选择几个
+            limit:{
+                type:Number
+            },
+            // 在form提交之前可以再做一些操作
+            formFormat:{
+                type:Function
             }
         },
         data (){
@@ -91,13 +99,22 @@
                 let data = {}
                 data[this.mainProp] = this.mainValue
                 data[this.checkedProp] = this.$refs.tree.getAllCheckedKeys()
-                data[this.uncheckedProp] = this.$refs.tree.getAllUncheckedKeys()
+                if(this.limit && data[this.checkedProp] && data[this.checkedProp].length > this.limit){
+                    this.$message.error('最多可选择 ' + this.limit + '个')
+                    return
+                }
+                if(this.uncheckedProp){
+                    data[this.uncheckedProp] = this.$refs.tree.getAllUncheckedKeys()
+                }
                 data.isLazyLoad = this.lazyload
                 if(data[this.checkedProp].length == 0){
                     data[this.checkedProp] = null
                 }
-                if(data[this.uncheckedProp].length == 0){
+                if(this.uncheckedProp && data[this.uncheckedProp].length == 0){
                     data[this.uncheckedProp] = null
+                }
+                if(this.formFormat){
+                    data = this.formFormat(data)
                 }
                 this.axios.post(this.submitUrl,data)
                     .then((res)=>{

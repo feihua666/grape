@@ -1,9 +1,10 @@
 package grape.base.rest.area.vo;
 import grape.base.service.area.api.IAreaService;
+import grape.base.service.dict.api.IDictService;
 import grape.common.rest.vo.BaseTreeVo;
-import grape.common.rest.vo.BaseVo;
 
-import grape.common.service.trans.Trans;
+import grape.common.service.trans.TransBy;
+import grape.common.service.trans.TransItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,9 +19,9 @@ import lombok.experimental.Accessors;
  * @author yangwei
  * @since 2019-09-23
  */
+@TransItem(type = IAreaService.trans_areaName, byFieldName = "parentId",forFieldName = "parentName")
 @Data
 @EqualsAndHashCode(callSuper=false)
-
 @Accessors(chain = true)
 @ApiModel(value="区域数据响应对象")
 public class AreaVo extends BaseTreeVo {
@@ -29,10 +30,6 @@ public class AreaVo extends BaseTreeVo {
 
     @ApiModelProperty(value = "区域名称")
     private String name;
-    // 因为翻译的原因这里重写了父级字段
-    @Trans(type = IAreaService.trans_areaParentName,keyFieldName = "id")
-    @ApiModelProperty(value = "父级名称")
-    private String parentName;
 
     @ApiModelProperty(value = "拼音，全拼")
     private String spell;
@@ -45,8 +42,12 @@ public class AreaVo extends BaseTreeVo {
 
     @ApiModelProperty(value = "类型，字典id")
     private String typeDictId;
+
+    @TransBy(type = IDictService.trans_dictCode,byFieldName = "typeDictId")
     @ApiModelProperty(value = "类型，字典编码")
     private String typeDictCode;
+
+    @TransBy(type = IDictService.trans_dictName,byFieldName = "typeDictId")
     @ApiModelProperty(value = "类型，字典名称")
     private String typeDictName;
 

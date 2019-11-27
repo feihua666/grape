@@ -9,19 +9,17 @@ import grape.base.rest.role.mapper.RoleWebMapper;
 import grape.base.rest.role.vo.RoleVo;
 import grape.base.rest.setting.shiro.IdentifierPasswordToken;
 import grape.base.rest.user.form.*;
+import grape.base.rest.user.form.login.LoginForm;
 import grape.base.rest.user.mapper.UserWebMapper;
 import grape.base.rest.user.vo.CurrentUserinfoVo;
 import grape.base.rest.user.vo.LoginVo;
 import grape.base.rest.user.vo.UserVo;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.comp.api.ICompService;
-import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.api.IDeptService;
-import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import grape.base.service.post.api.IPostService;
-import grape.base.service.post.po.Post;
 import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.common.exception.ExceptionTools;
@@ -36,7 +34,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -199,6 +196,19 @@ public class UserController extends BaseController<UserVo, User> {
      }
 
     /**
+     * 主要用于下拉搜索
+     * @param listPageForm
+     * @return
+     */
+    @ApiOperation(value = "不分页查询用户")
+    @RequiresPermissions("user:single:list")
+    @GetMapping("/list")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserVo> list(UserListForm listForm) {
+        User user = userWebMapper.formToPo(listForm);
+        return super.list(user);
+    }
+    /**
      * 启用或锁定
      * @param id
      * @param form
@@ -215,23 +225,5 @@ public class UserController extends BaseController<UserVo, User> {
         user.setVersion(form.getVersion());
         user.setLockReason(form.getLockReason());
         return super.update(user);
-    }
-
-    @Override
-    public UserVo transVo(UserVo vo) {
-        Dict genderDict = iDictService.getById(vo.getGenderDictId());
-        if (genderDict != null) {
-            vo.setGenderDictCode(genderDict.getCode());
-            vo.setGenderDictName(genderDict.getName());
-        }
-        Dept dept = iDeptService.getById(vo.getDeptId());
-        if (dept != null) {
-            vo.setDeptName(dept.getName());
-        }
-        Comp comp = iCompService.getById(vo.getCompId());
-        if (comp != null) {
-            vo.setCompName(comp.getName());
-        }
-        return vo;
     }
 }

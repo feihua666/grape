@@ -3,9 +3,9 @@ package grape.base.rest.user.mapper;
 import grape.base.service.user.po.UserPwd;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
-import grape.base.rest.user.form.UserPwdCreateForm;
-import grape.base.rest.user.form.UserPwdUpdateForm;
-import grape.base.rest.user.form.UserPwdListPageForm;
+import grape.base.rest.user.form.pwd.UserPwdCreateForm;
+import grape.base.rest.user.form.pwd.UserPwdUpdateForm;
+import grape.base.rest.user.form.pwd.UserPwdListPageForm;
 import grape.base.rest.user.vo.UserPwdVo;
 import org.mapstruct.ReportingPolicy;
 

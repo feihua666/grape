@@ -1,4 +1,4 @@
-package grape.common.rest;
+package grape.common.rest.common;
 
 import cn.hutool.core.annotation.AnnotationUtil;
 import grape.common.AbstractLoginUser;
@@ -49,12 +49,12 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
             userId = loginUser.getUserId();
             username = loginUser.getNickname();
         }
-        log.info("请求开始: {}requestId={},userId={},username={},requestUrl={} ,requestMethod={},requestIp={}",
-                parentId == null ? "":"parentId=" + parentId + ",",
+        log.info("请求开始: {}requestId=[{}],userId=[{}],username=[{}],requestUrl=[{}] ,requestMethod=[{}],requestIp=[{}]",
+                parentId == null ? "":"parentId=[" + parentId + "],",
                 requestId, userId,username,request.getRequestURL(),request.getMethod(), RequestTool.getRemoteAddr(request));
         if(handler instanceof HandlerMethod){
             Object annotationValue = AnnotationUtil.getAnnotationValue(((HandlerMethod) handler).getMethod(), ApiOperation.class);
-            log.info("请求接口名称: requestId={},apiName={}",
+            log.info("请求接口名称: requestId=[{}],apiName=[{}]",
                     requestId, annotationValue);
         }
         return super.preHandle(request, response, handler);
@@ -73,7 +73,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         String requestId = RequestIdTool.getRequestId();
-        String msg = "{}: requestId={},requestUrl={} ,duration={}ms";
+        String msg = "{}: requestId=[{}],requestUrl=[{}] ,duration=[{}]ms";
         String msgHit = "请求正常结束";
         long start = (long) ThreadContextTool.get(timeStartKey);
 

@@ -1,6 +1,8 @@
 package grape.base.rest.user.vo;
 
+import grape.base.service.dict.api.IDictService;
 import grape.common.rest.vo.BaseVo;
+import grape.common.service.trans.TransBy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +11,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户登录标识表
+ * 用户登录帐号表
  * </p>
  *
  * @author yangwei
@@ -17,7 +19,6 @@ import lombok.experimental.Accessors;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-
 @Accessors(chain = true)
 @ApiModel(value="登录数据响应对象")
 public class LoginVo extends BaseVo {
@@ -30,9 +31,11 @@ public class LoginVo extends BaseVo {
     @ApiModelProperty(value = "帐号类型字典id")
     private String identityTypeDictId;
 
+    @TransBy(type = IDictService.trans_dictCode,byFieldName = "identityTypeDictId")
     @ApiModelProperty(value = "帐号类型字典编码")
     private String identityTypeDictCode;
 
+    @TransBy(type = IDictService.trans_dictName,byFieldName = "identityTypeDictId")
     @ApiModelProperty(value = "帐号类型字典名称")
     private String identityTypeDictName;
 

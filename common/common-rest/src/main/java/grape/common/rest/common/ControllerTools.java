@@ -1,7 +1,6 @@
-package grape.common.rest;
+package grape.common.rest.common;
 
 import grape.common.exception.ExceptionCode;
-import grape.common.rest.vo.BaseVo;
 import grape.common.tools.RequestIdTool;
 
 /**

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 用户登录标识表 服务实现类
+ * 用户登录帐号表 服务实现类
  * </p>
  *
  * @author yangwei

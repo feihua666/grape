@@ -19,15 +19,6 @@
                 formItems:[
                     {
                         field: {
-                            name: 'code',
-                        },
-                        element:{
-                            label: '编码',
-                            disabled: true
-                        }
-                    },
-                    {
-                        field: {
                             name: 'name'
                         },
                         element:{

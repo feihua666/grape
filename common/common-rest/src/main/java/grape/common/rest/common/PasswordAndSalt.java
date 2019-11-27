@@ -1,4 +1,4 @@
-package grape.common.rest;
+package grape.common.rest.common;
 
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.RandomUtil;

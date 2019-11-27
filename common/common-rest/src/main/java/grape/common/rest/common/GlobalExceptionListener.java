@@ -1,4 +1,4 @@
-package grape.common.rest;
+package grape.common.rest.common;
 
 import javax.servlet.http.HttpServletRequest;
 

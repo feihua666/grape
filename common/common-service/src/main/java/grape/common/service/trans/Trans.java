@@ -4,30 +4,17 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.function.Function;
 
 /**
- * 一般为vo层使用
- * 需要翻译的字段注解
- * 标注到需要翻译的字段上
+ * 标注到类上，用来全局标识需要被翻译的字段们
+ * 添加该注解主要用来解决grape.common.service.trans.TransBy或grape.common.service.trans.TransFor不方便标注到父类的字段时使用
+ *
+ *
  * Created by yangwei
  * Created at 2019/10/9 9:59
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
+@Target({ ElementType.TYPE })
 public @interface Trans {
-
-    /**
-     * 类型
-     * TransService 的support方法参数
-     * @return
-     */
-    String type();
-
-    /**
-     * 需要翻译的字段名称
-     * 翻译进行时会到该字段名称的get方法的值作为TransService的key
-     * @return
-     */
-    String keyFieldName();
+    TransItem [] value();
 }

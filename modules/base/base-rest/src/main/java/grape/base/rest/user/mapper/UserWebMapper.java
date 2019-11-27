@@ -1,5 +1,6 @@
 package grape.base.rest.user.mapper;
 
+import grape.base.rest.user.form.UserListForm;
 import grape.base.service.user.po.User;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
@@ -23,4 +24,5 @@ public interface UserWebMapper extends WebMapper<UserVo, User> {
     User formToPo(UserCreateForm f);
     User formToPo(UserUpdateForm f);
     User formToPo(UserListPageForm f);
+    User formToPo(UserListForm f);
 }

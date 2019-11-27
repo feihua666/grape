@@ -1,6 +1,8 @@
 package grape.base.rest.paramconfig.vo;
+import grape.base.service.dict.api.IDictService;
 import grape.common.rest.vo.BaseIdVo;
 
+import grape.common.service.trans.TransBy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,9 +37,11 @@ public class ParamConfigVo extends BaseIdVo<String> {
     @ApiModelProperty(value = "配置值的类型，字典id")
     private String valueTypeDictId;
 
+    @TransBy(type = IDictService.trans_dictCode,byFieldName = "valueTypeDictId")
     @ApiModelProperty(value = "配置值的类型，字典编码")
     private String valueTypeDictCode;
 
+    @TransBy(type = IDictService.trans_dictName,byFieldName = "valueTypeDictId")
     @ApiModelProperty(value = "配置值的类型，字典名称")
     private String valueTypeDictName;
 

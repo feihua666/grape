@@ -131,13 +131,4 @@ public class ParamConfigController extends BaseController<ParamConfigVo, ParamCo
         paramConfig.setDisabledReason(form.getDisabledReason());
         return super.update(paramConfig);
     }
-    @Override
-    public ParamConfigVo transVo(ParamConfigVo paramConfigVo) {
-        Dict dict = iDictService.getById(paramConfigVo.getValueTypeDictId());
-        if (dict != null) {
-            paramConfigVo.setValueTypeDictCode(dict.getCode());
-            paramConfigVo.setValueTypeDictName(dict.getName());
-        }
-        return super.transVo(paramConfigVo);
-    }
 }

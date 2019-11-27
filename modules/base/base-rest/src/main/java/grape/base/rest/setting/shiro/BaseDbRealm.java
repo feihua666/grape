@@ -10,8 +10,7 @@ import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.base.service.user.po.UserIdentifier;
 import grape.base.service.user.po.UserPwd;
-import grape.base.service.userpostrolerel.api.IUserPostRoleRelService;
-import grape.common.rest.PasswordAndSalt;
+import grape.common.rest.common.PasswordAndSalt;
 import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -30,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

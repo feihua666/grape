@@ -1,13 +1,12 @@
 package grape.base.rest.user.mvc;
 
-import grape.base.rest.user.form.UserPwdUpdateForm;
-import grape.base.rest.user.vo.UserPwdVo;
+import grape.base.rest.user.form.pwd.UserPwdUpdateForm;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.user.api.IUserPwdService;
 import grape.base.service.user.po.UserPwd;
 import grape.common.exception.runtime.BadRequestException;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.PasswordAndSalt;
+import grape.common.rest.common.PasswordAndSalt;
 import grape.common.rest.mvc.SuperController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

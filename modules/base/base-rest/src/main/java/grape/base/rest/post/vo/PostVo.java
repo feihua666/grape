@@ -1,7 +1,10 @@
 package grape.base.rest.post.vo;
+import grape.base.service.dept.api.IDeptService;
+import grape.base.service.dict.api.IDictService;
 import grape.common.rest.vo.BaseIdVo;
 import grape.common.rest.vo.BaseVo;
 
+import grape.common.service.trans.TransBy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -43,15 +46,18 @@ public class PostVo extends BaseIdVo<String> {
     @ApiModelProperty(value = "类型，字典id")
     private String typeDictId;
 
+    @TransBy(type = IDictService.trans_dictCode,byFieldName = "typeDictId")
     @ApiModelProperty(value = "类型，字典编码")
     private String typeDictCode;
 
+    @TransBy(type = IDictService.trans_dictName,byFieldName = "typeDictId")
     @ApiModelProperty(value = "类型，字典名称")
     private String typeDictName;
 
     @ApiModelProperty(value = "部门id")
     private String deptId;
 
+    @TransBy(type = IDeptService.trans_deptName,byFieldName = "deptId")
     @ApiModelProperty(value = "部门名称")
     private String deptName;
 

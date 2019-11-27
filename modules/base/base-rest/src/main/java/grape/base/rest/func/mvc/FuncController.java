@@ -197,18 +197,5 @@ public class FuncController extends BaseTreeController<FuncVo, Func> {
 
         return super.listToTree(result);
     }
-    @Override
-    public FuncVo transVo(FuncVo vo) {
-        Dict dict = iDictService.getById(vo.getTypeDictId());
-        if (dict != null) {
-            vo.setTypeDictCode(dict.getCode());
-            vo.setTypeDictName(dict.getName());
-        }
 
-        Func parent = getService().getById(vo.getParentId());
-        if (parent != null) {
-            vo.setParentName(parent.getName());
-        }
-        return vo;
-    }
 }

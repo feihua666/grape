@@ -43,6 +43,16 @@
                     },
                     {
                         field: {
+                            name: 'isMain'
+                        },
+                        element:{
+                            type: 'switch',
+                            label: '是否主岗',
+                            required: true
+                        }
+                    },
+                    {
+                        field: {
                             name: 'typeDictId'
                         },
                         element:{

@@ -126,18 +126,4 @@ public class PostController extends BaseController<PostVo, Post> {
         post.setDisabledReason(form.getDisabledReason());
         return super.update(post);
     }
-    @Override
-    public PostVo transVo(PostVo postVo) {
-        Dict dict = iDictService.getById(postVo.getTypeDictId());
-        if (dict != null) {
-            postVo.setTypeDictCode(dict.getCode());
-            postVo.setTypeDictName(dict.getName());
-        }
-        Dept dept = iDeptService.getById(postVo.getDeptId());
-        if (dept != null) {
-            postVo.setDeptName(dept.getName());
-        }
-
-        return postVo;
-    }
 }

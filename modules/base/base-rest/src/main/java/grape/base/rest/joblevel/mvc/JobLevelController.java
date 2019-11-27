@@ -109,11 +109,4 @@ public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
         return super.list(po);
     }
 
-    @Override
-    public JobLevelVo transVo(JobLevelVo jobLevelVo) {
-        Job job = iJobService.getById(jobLevelVo.getJobId());
-        String jobName = Optional.ofNullable(job).map(Job::getName).orElse(null);
-        jobLevelVo.setJobName(jobName);
-        return jobLevelVo;
-    }
 }

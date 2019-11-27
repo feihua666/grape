@@ -79,10 +79,10 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_area","area",TableType.tree,tablePrefix,author);
         // 用户表
         commonSet("base_user","user",TableType.normal,tablePrefix,author);
-        // 用户登录标识表
+        // 用户登录帐号表
         commonSet("base_user_identifier","user",TableType.normal,tablePrefix,author);
         // 用户密码表
-        commonSet("base_user_pwd","user",TableType.normal,tablePrefix,author);
+        //commonSet("base_user_pwd","user",TableType.normal,tablePrefix,author);
         // 字典表
         commonSet("base_dict","dict",TableType.tree,tablePrefix,author);
         // 功能表
@@ -90,7 +90,7 @@ public class BaseGenerator extends SuperGenerator {
         // 功能表
         commonSet("base_role","role",TableType.tree,tablePrefix,author);
         //commonSet("base_role_func_rel","rolefuncrel",TableType.rel,tablePrefix,author);
-        commonSet("base_user_post_role_rel","userpostrolerel",TableType.rel,tablePrefix,author);
+        //commonSet("base_user_post_role_rel","userpostrolerel",TableType.rel,tablePrefix,author);
         commonSet("base_comp","comp",TableType.tree,tablePrefix,author);
         commonSet("base_dept","dept",TableType.tree,tablePrefix,author);
         commonSet("base_post","post",TableType.normal,tablePrefix,author);
@@ -99,7 +99,6 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_job","job",TableType.normal,tablePrefix,author);
         commonSet("base_job_level","joblevel",TableType.normal,tablePrefix,author);
         commonSet("base_param_config","paramconfig",TableType.normal,tablePrefix,author);
-        commonSet("base_log","log",TableType.normal,tablePrefix,author);
 
         return  tableConfig;
     }

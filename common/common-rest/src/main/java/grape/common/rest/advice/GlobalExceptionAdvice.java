@@ -5,10 +5,10 @@ import grape.common.exception.ExceptionCode;
 import grape.common.exception.runtime.BadRequestException;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.exception.runtime.RDataNotExistException;
-import grape.common.rest.ControllerTools;
-import grape.common.rest.GlobalExceptionListener;
-import grape.common.rest.GlobalInterceptor;
-import grape.common.rest.ResultMessage;
+import grape.common.rest.common.ControllerTools;
+import grape.common.rest.common.GlobalExceptionListener;
+import grape.common.rest.common.GlobalInterceptor;
+import grape.common.rest.common.ResultMessage;
 import grape.common.tools.RequestIdTool;
 import grape.common.tools.ThreadContextTool;
 import grape.common.tools.ToolService;
@@ -25,6 +25,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,8 +34,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public class GlobalExceptionAdvice implements ToolService {
 
 
     private ResultMessage createRM(ExceptionCode code, String msg, Object data, Exception e) {
-        log.error("请求错误信息: requestId={},code={},msg={},data={},exception={} ",RequestIdTool.getRequestId(), code, msg, data, e.getClass().getName());
+        log.error("请求错误信息: requestId=[{}],code=[{}],msg=[{}],data=[{}],exception=[{}] ",RequestIdTool.getRequestId(), code, msg, data, e.getClass().getName());
         return ControllerTools.newRm(code, msg == null ? code.getMsg() : msg, data);
     }
 
@@ -140,7 +139,15 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultMessage handleMethodArgumentNotValidException(HttpServletRequest request, MethodArgumentNotValidException ex) {
-        String msg = ex.getBindingResult().getFieldError().getDefaultMessage();
+        // 在脚本验证是没有指定reportOn会有全局异常
+        String msg = "";
+        FieldError fieldError = ex.getBindingResult().getFieldError();
+        if (fieldError != null) {
+            msg = fieldError.getDefaultMessage();
+        }else {
+            msg = ex.getBindingResult().getGlobalError().getDefaultMessage();
+        }
+
         return createRM(ExceptionCode.fail, msg, null, ex);
     }
     /**
@@ -287,7 +294,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResultMessage handleException(HttpServletRequest request, Exception ex) {
         // 防止子类的情况
-        String warnMsg = "如果有必要，你需要定义一个异常类，并继承 {}，以达到响应状态码的需求";
+        String warnMsg = "如果有必要，你需要定义一个异常类，并继承 [{}]，以达到响应状态码的需求";
         if (ex instanceof CBaseException) {
             log.warn(warnMsg, CBaseException.class.getName());
             return handleCBaseException(request, (CBaseException) ex);
@@ -296,9 +303,9 @@ public class GlobalExceptionAdvice implements ToolService {
             return handleRBaseException(request, (RBaseException) ex);
         }
         // 打印异常栈，方便定位问题
-        log.info("请求有异常：requestId={},errorDigest={},more information refer error log.",
+        log.info("请求有异常：requestId=[{}],errorDigest=[{}],more information refer error log.",
                 RequestIdTool.getRequestId(),ex.getMessage());
-        log.error("请求异常信息：requestId={},errorMsg={}",
+        log.error("请求异常信息：requestId=[{}],errorMsg=[{}]",
                 RequestIdTool.getRequestId(),ex.getMessage(), ex);
         ThreadContextTool.put(GlobalInterceptor.hasExceptionKey,true);
         if (!isListEmpty(globalExceptionListeners)) {

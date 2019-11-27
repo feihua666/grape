@@ -5,7 +5,7 @@ import grape.common.service.common.IBaseMapper;
 
 /**
  * <p>
- * 用户登录标识表 Mapper 接口
+ * 用户登录帐号表 Mapper 接口
  * </p>
  *
  * @author yangwei

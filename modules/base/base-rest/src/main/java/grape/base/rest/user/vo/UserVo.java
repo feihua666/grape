@@ -1,6 +1,10 @@
 package grape.base.rest.user.vo;
 
+import grape.base.service.comp.api.ICompService;
+import grape.base.service.dept.api.IDeptService;
+import grape.base.service.dict.api.IDictService;
 import grape.common.rest.vo.BaseIdVo;
+import grape.common.service.trans.TransBy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -30,8 +34,11 @@ public class UserVo extends BaseIdVo<String> {
     @ApiModelProperty(value = "性别，字典id")
     private String genderDictId;
 
+    @TransBy(type = IDictService.trans_dictCode,byFieldName = "genderDictId")
     @ApiModelProperty(value = "性别，字典编码")
     private String genderDictCode;
+
+    @TransBy(type = IDictService.trans_dictName,byFieldName = "genderDictId")
     @ApiModelProperty(value = "性别，字典名称")
     private String genderDictName;
 
@@ -44,12 +51,14 @@ public class UserVo extends BaseIdVo<String> {
     @ApiModelProperty(value = "部门id")
     private String deptId;
 
+    @TransBy(type = IDeptService.trans_deptName,byFieldName = "deptId")
     @ApiModelProperty(value = "部门名称")
     private String deptName;
 
     @ApiModelProperty(value = "公司id")
     private String compId;
 
+    @TransBy(type = ICompService.trans_compName,byFieldName = "compId")
     @ApiModelProperty(value = "公司名称")
     private String compName;
 

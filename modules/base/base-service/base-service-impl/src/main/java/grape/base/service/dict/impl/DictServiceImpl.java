@@ -5,6 +5,7 @@ import grape.base.service.dict.po.Dict;
 import grape.base.service.dict.mapper.DictMapper;
 import grape.base.service.dict.api.IDictService;
 import grape.common.service.common.BaseServiceImpl;
+import grape.common.service.common.DictService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  * @since 2019-09-23
  */
 @Service
-public class DictServiceImpl extends BaseServiceImpl<DictMapper, Dict> implements IDictService {
+public class DictServiceImpl extends BaseServiceImpl<DictMapper, Dict> implements IDictService, DictService {
 
     @Override
     public List<Dict> getItemByGroupCode(String groupCode, Boolean isDisabled) {
@@ -46,5 +47,16 @@ public class DictServiceImpl extends BaseServiceImpl<DictMapper, Dict> implement
             dicts = dicts.stream().filter(dict -> itemCodes.contains(dict.getCode())).collect(Collectors.toList());
         }
         return dicts;
+    }
+
+    @Override
+    public String getCodeById(String id) {
+        if(!isStrEmpty(id)){
+            Dict dict = getById(id);
+            if (dict != null) {
+                return dict.getCode();
+            }
+        }
+        return null;
     }
 }

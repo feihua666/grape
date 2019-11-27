@@ -45,10 +45,6 @@ public class CompController extends BaseTreeController<CompVo, Comp> {
     private CompWebMapper compWebMapper;
     @Autowired
     private ICompService iCompService;
-    @Autowired
-    private IDictService iDictService;
-    @Autowired
-    private IUserService iUserService;
 
      @ApiOperation("添加公司")
      @RequiresPermissions("comp:single:create")
@@ -122,18 +118,4 @@ public class CompController extends BaseTreeController<CompVo, Comp> {
         return super.listToTreeNodeVo(compVos);
     }
 
-    @Override
-    public CompVo transVo(CompVo vo) {
-        Dict dict = iDictService.getById(vo.getTypeDictId());
-        vo.setTypeDictCode(Optional.ofNullable(dict).map(d -> d.getCode()).orElse(null));
-        vo.setTypeDictName(Optional.ofNullable(dict).map(d -> d.getName()).orElse(null));
-
-        User user = iUserService.getById(vo.getMasterUserId());
-        vo.setMasterUserName(Optional.ofNullable(user).map(d -> d.getNickname()).orElse(null));
-
-        Comp parent = iCompService.getById(vo.getParentId());
-        vo.setParentName(Optional.ofNullable(parent).map(d -> d.getName()).orElse(null));
-
-        return vo;
-    }
 }

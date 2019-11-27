@@ -1,6 +1,6 @@
 package grape.common.rest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import grape.common.rest.common.PasswordAndSalt;
 
 /**
  * Created by yangwei

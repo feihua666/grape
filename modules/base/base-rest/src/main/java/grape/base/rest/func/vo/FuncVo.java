@@ -1,7 +1,11 @@
 package grape.base.rest.func.vo;
+import grape.base.service.dict.api.IDictService;
+import grape.base.service.func.api.IFuncService;
 import grape.common.rest.vo.BaseTreeVo;
 import grape.common.rest.vo.BaseVo;
 
+import grape.common.service.trans.TransBy;
+import grape.common.service.trans.TransItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,6 +20,8 @@ import lombok.experimental.Accessors;
  * @author yangwei
  * @since 2019-09-23
  */
+
+@TransItem(type = IFuncService.trans_funcName, byFieldName = "parentId",forFieldName = "parentName")
 @Data
 @EqualsAndHashCode(callSuper=false)
 
@@ -46,9 +52,11 @@ public class FuncVo extends BaseTreeVo {
     @ApiModelProperty(value = "类型,字典id")
     private String typeDictId;
 
+    @TransBy(type = IDictService.trans_dictCode,byFieldName = "typeDictId")
     @ApiModelProperty(value = "类型,字典编码")
     private String typeDictCode;
 
+    @TransBy(type = IDictService.trans_dictName,byFieldName = "typeDictId")
     @ApiModelProperty(value = "类型,字典名称")
     private String typeDictName;
 

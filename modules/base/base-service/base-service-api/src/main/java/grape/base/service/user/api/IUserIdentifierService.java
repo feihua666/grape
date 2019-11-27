@@ -6,7 +6,7 @@ import grape.common.service.common.IBaseService;
 
 /**
  * <p>
- * 用户登录标识表 服务类
+ * 用户登录帐号表 服务类
  * </p>
  *
  * @author yangwei

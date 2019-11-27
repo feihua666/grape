@@ -125,15 +125,4 @@ public class RoleController extends BaseTreeController<RoleVo, Role> {
     public List<TreeNodeVo<RoleVo>> tree(String parentId) {
         return super.listToTreeNodeVo(super.getByParentId(parentId));
     }
-
-    @Override
-    public RoleVo transVo(RoleVo roleVo) {
-
-        Role role = getService().getById(roleVo.getParentId());
-        if (role != null) {
-            roleVo.setParentName(role.getName());
-        }
-
-        return roleVo;
-    }
 }

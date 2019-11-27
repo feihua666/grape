@@ -1,14 +1,10 @@
 package grape.common.rest.advice;
 
-import cn.hutool.core.annotation.AnnotationUtil;
-import cn.hutool.core.util.ReflectUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.common.rest.ControllerTools;
-import grape.common.service.trans.ITransService;
-import grape.common.service.trans.Trans;
-import grape.common.service.trans.TransPower;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import grape.common.rest.common.ControllerTools;
+import grape.common.service.trans.TransHelper;
 import grape.common.tools.ToolService;
-import io.swagger.annotations.ApiModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -21,9 +17,7 @@ import springfox.documentation.swagger.web.ApiResourceController;
 import springfox.documentation.swagger2.web.Swagger2Controller;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 全局响应格式封装
@@ -36,8 +30,8 @@ import java.util.List;
 public class GlobalResponseBodyAdvice implements ResponseBodyAdvice, ToolService {
 
 
-    @Autowired(required = false)
-    private List<ITransService> transServices;
+    @Autowired
+    private TransHelper transHelper;
 
 
     // 禁用哪些类或注解不处理
@@ -61,48 +55,12 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice, ToolService
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        // 翻译支持
-        if (!isListEmpty(transServices)){
-            if (body instanceof IPage) {
-                List records = ((IPage) body).getRecords();
-                if (!isListEmpty(records)) {
-                    for (Object record : records) {
-                        trans(record);
-                    }
-                }
-            }else if(body instanceof List) {
-                ((List) body).forEach(item->{
-                    trans(item);
-                });
 
-            }else{
-                trans(body);
-            }
+        // 对String 处理一下，参见：https://my.oschina.net/u/1757225/blog/1543715
+        if(body instanceof String){
+            return JSONUtil.toJsonStr(new JSONObject(ControllerTools.newRm(body),false));
         }
+        body = transHelper.trans(body);
         return ControllerTools.newRm(body);
-    }
-
-    private void trans(Object body){
-        // 还可以添加一个TransPower注解用在需要翻译的类上，来标识该类的属性是否需要翻译，来加速性能，暂时未实现
-        // 只翻译vo实体
-        Class<?> bodyClass = body.getClass();
-        if (AnnotationUtil.getAnnotation(bodyClass, ApiModel.class) == null) {
-            return;
-        }
-        for (Field field : ReflectUtil.getFields(bodyClass)) {
-            Trans trans = AnnotationUtil.getAnnotation(field, Trans.class);
-            if (trans != null) {
-                for (ITransService transService : transServices) {
-                    if (transService.support(trans.type())) {
-                        Object fieldValue = ReflectUtil.getFieldValue(body, trans.keyFieldName());
-                        if (fieldValue != null) {
-                            Object transValue = transService.trans(trans.type(),fieldValue);
-                            ReflectUtil.setFieldValue(body,field,transValue);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
     }
 }

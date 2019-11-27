@@ -32,12 +32,6 @@
                 formItems:[
                     {
                         field: {
-                            name: 'userId',
-                            value: this.$route.params.userId
-                        }
-                    },
-                    {
-                        field: {
                             name: 'compId'
                         },
                         element:{
@@ -46,6 +40,22 @@
                                 dataUrl:'/comp/tree'
                             },
                             label: '公司'
+                        }
+                    },
+                    {
+                        field: {
+                            name: 'userId',
+                            userId__label:this.$route.query.nickname,
+                            value: this.$route.params.userId
+                        },
+                        element:{
+                            type: 'selectRemote',
+                            selectRemote:{
+                                url:'/user/list',
+                                props:{value:'id',label:'nickname'},
+                                queryProp:'nickname'
+                            },
+                            label: '用户'
                         }
                     },
                     {
@@ -137,6 +147,13 @@
                                 return '启用/锁定'
                             }
                         }
+                    },
+                    {
+                        action: 'nav',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        url:'/user/userPost/UserPostAssignRole/:id',
+                        label: '分配角色'
                     }
                 ]
             }

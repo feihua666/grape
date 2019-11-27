@@ -120,19 +120,4 @@ public class DeptController extends BaseTreeController<DeptVo, Dept> {
         return super.listToTreeNodeVo(super.getByParentId(parentId));
     }
 
-    @Override
-    public DeptVo transVo(DeptVo vo) {
-        Dict dict = iDictService.getById(vo.getTypeDictId());
-        vo.setTypeDictCode(Optional.ofNullable(dict).map(d -> d.getCode()).orElse(null));
-        vo.setTypeDictName(Optional.ofNullable(dict).map(d -> d.getName()).orElse(null));
-
-        Comp comp = iCompService.getById(vo.getCompId());
-        vo.setCompName(Optional.ofNullable(comp).map(d -> d.getName()).orElse(null));
-
-        User user = iUserService.getById(vo.getMasterUserId());
-        vo.setMasterUserName(Optional.ofNullable(user).map(d -> d.getNickname()).orElse(null));
-
-
-        return vo;
-    }
 }

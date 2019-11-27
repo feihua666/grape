@@ -85,6 +85,18 @@ const router = new VueRouter({
             component: () => import('@/views/user/userpost/UserPostAdd.vue')
         },
         {
+            path: '/user/userPost/UserPostAssignRole/:userPostId',
+            component: () => import('@/views/user/userpost/UserPostAssignRole.vue')
+        },
+        {
+            path: '/user/userIdentifier/:userId',
+            component: () => import('@/views/user/useridentifier/UserIdentifier.vue')
+        },
+        {
+            path: '/user/userIdentifier/userIdentifierAdd/:userId',
+            component: () => import('@/views/user/useridentifier/UserIdentifierAdd.vue')
+        },
+        {
             path: '/role',
             component: () => import('@/views/role/Role.vue')
         },
@@ -162,7 +174,7 @@ const router = new VueRouter({
         },
         {
             path: '/paramConfig/paramConfigEdit/:paramConfigId',
-            component: () => import('@/views/paramconfig/ParamconfigEdit.vue')
+            component: () => import('@/views/paramconfig/ParamConfigEdit.vue')
         }
     ]
 })

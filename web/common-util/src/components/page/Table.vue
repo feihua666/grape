@@ -442,6 +442,7 @@
                 }
                 switch (action) {
                     case 'nav':{
+                        // 可以在路由上添加参数
                         if(button.routeQuery){
 
                             let query = {}
@@ -472,6 +473,10 @@
                     }
                     case 'delete':{
                         this.doDelete(url,button)
+                        break
+                    }
+                    case 'enableOrDisable':{
+                        this.enableOrDisable(url,button)
                         break
                     }
                     case 'exportTableExcel':{
@@ -518,6 +523,46 @@
                         }).finally(()=>{
                         this.$set(this.localButtonLoading,button.code,true)
                     })
+                })
+            },
+            enableOrDisable(url,button){
+                if(!this.currentRow){
+                    this.$message.error('请先选中一条数据')
+                    return
+                }
+                let prop = 'isDisabled'
+                let reasonProp = 'disabledReason'
+
+                if(button.enableOrDisable){
+                    prop = button.enableOrDisable.prop
+                    reasonProp = button.enableOrDisable.reasonProp
+                }
+                this.$prompt('请输入'+ (this.currentRow[prop] ? '启用': '禁用') +'原因', '提示', {
+                    inputErrorMessage: '原因不能为空',
+                    inputValidator:(value)=>{return !!value}
+                }).then(({ value }) => {
+                    let data = {
+                        version: this.currentRow.version
+                    }
+                    data[prop] = !this.currentRow[prop]
+                    data[reasonProp] = value
+                    this.axios.patch(url,data)
+                        .then(res => {
+                            this.$message.success('操作成功')
+                            // 重新加载数据
+                            this.toolbarRefreshClick()
+                        })
+                        .catch(error => {
+                            if(error.response){
+                                if(error.response.status == 404){
+                                    this.$message.error('数据不存在，请刷新数据再试')
+                                }else {
+                                    this.$message.error(error.response.data.msg)
+                                }
+                            }else {
+                                this.$message.error('删除失败，请刷新数据再试')
+                            }
+                        })
                 })
             },
             toolbarMoreCheckAll(){

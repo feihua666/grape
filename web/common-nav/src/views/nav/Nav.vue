@@ -64,6 +64,7 @@
                         }else {
                             if(error.response){
                                 this.funcDataErrorMsg = error.response.data.message
+                                this.$message.error(error.response.data.message)
                             }
                         }
                     }).finally(()=>{
