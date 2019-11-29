@@ -82,6 +82,22 @@
                     },
                     {
                         field: {
+                            name: 'compId',
+                            compId__label:''
+                        },
+                        element:{
+                            type: 'inputSelectTree',
+                            inputSelectTree:{
+                                dataUrl: '/comp/tree'
+                            },
+                            required: (form)=>{
+                                return !form.isPublic
+                            },
+                            label: '公司'
+                        }
+                    },
+                    {
+                        field: {
                             name: 'remark'
                         },
                         element:{
@@ -133,6 +149,7 @@
                 this.axios.get('/dict/' + id).then(res => {
                     let data = res.data.data
                     data.parentId__label = data.parentName
+                    data.compId__label = data.compName
                     this.formData = data
                 }).catch(error => {
                     if(error.response){

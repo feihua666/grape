@@ -77,6 +77,21 @@
                     },
                     {
                         field: {
+                            name: 'compId'
+                        },
+                        element:{
+                            type: 'inputSelectTree',
+                            inputSelectTree:{
+                                dataUrl: '/comp/tree'
+                            },
+                            required: (form)=>{
+                                return !form.isPublic
+                            },
+                            label: '公司'
+                        }
+                    },
+                    {
+                        field: {
                             name: 'remark'
                         },
                         element:{

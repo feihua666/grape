@@ -5,21 +5,29 @@ import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
+import grape.base.service.dict.api.IDictService;
+import grape.base.service.dict.po.Dict;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.po.Role;
 import grape.base.service.user.api.IUserIdentifierService;
+import grape.base.service.user.api.IUserPwdService;
+import grape.base.service.user.dto.UserCreateParam;
+import grape.base.service.user.map.UserServiceMapper;
 import grape.base.service.user.mapper.UserMapper;
 import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.base.service.user.po.UserIdentifier;
+import grape.base.service.user.po.UserPwd;
 import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.po.UserPost;
 import grape.base.service.userpostrolerel.api.IUserPostRoleRelService;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.common.AbstractLoginUser;
 import grape.common.exception.runtime.InvalidParamsException;
+import grape.common.exception.runtime.RBaseException;
 import grape.common.exception.runtime.RDataNotExistException;
 import grape.common.service.common.BaseServiceImpl;
+import grape.common.service.pojoconvert.ServiceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +55,13 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     private IUserPostRoleRelService iUserPostRoleRelService;
     @Autowired
     private IUserIdentifierService iUserIdentifierService;
+
+    @Autowired
+    private IDictService iDictService;
+    @Autowired
+    private IUserPwdService iUserPwdService;
+    @Autowired
+    private UserServiceMapper userServiceMapper;
 
     @Override
     public BaseLoginUser initLoginUserByIdentifier(String identifier) {
@@ -109,5 +124,34 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         return loginUser;
     }
 
+    @Override
+    public User createUser(UserCreateParam cp) {
 
+        //检查帐号是否存在
+        if (iUserIdentifierService.getByIdentifier(cp.getAccount()) != null) {
+            throw new RBaseException("帐号已存在");
+        }
+
+        User user = userServiceMapper.paramToPo(cp);
+        user.setIsLock(false);
+        user.setCompId(iDeptService.getById(cp.getDeptId()).getCompId());
+        user = create(user);
+        // 添加用户帐号
+        UserIdentifier userIdentifier = new UserIdentifier();
+        userIdentifier.setUserId(user.getId());
+        userIdentifier.setIdentifier(cp.getAccount());
+        Dict identifierDict = iDictService.getByCode(UserIdentifier.TypeDictItem.account_str.name());
+        userIdentifier.setIdentityTypeDictId(identifierDict.getId());
+        userIdentifier.setIsLock(false);
+        iUserIdentifierService.create(userIdentifier);
+        // 添加密码
+        UserPwd userPwd = new UserPwd();
+        userPwd.setUserId(user.getId());
+        userPwd.setPwd(cp.getPassword());
+        userPwd.setSalt(cp.getSalt());
+        Dict pwdStatusDict = iDictService.getByCode(UserPwd.PwdStatusDictItem.normal.name());
+        userPwd.setPwdStatusDictId(pwdStatusDict.getId());
+        iUserPwdService.create(userPwd);
+        return user;
+    }
 }

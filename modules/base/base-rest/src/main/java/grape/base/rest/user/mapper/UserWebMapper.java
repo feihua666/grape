@@ -1,6 +1,7 @@
 package grape.base.rest.user.mapper;
 
 import grape.base.rest.user.form.UserListForm;
+import grape.base.service.user.dto.UserCreateParam;
 import grape.base.service.user.po.User;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
@@ -21,7 +22,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserWebMapper extends WebMapper<UserVo, User> {
 
-    User formToPo(UserCreateForm f);
+    UserCreateParam formToParam(UserCreateForm f);
     User formToPo(UserUpdateForm f);
     User formToPo(UserListPageForm f);
     User formToPo(UserListForm f);

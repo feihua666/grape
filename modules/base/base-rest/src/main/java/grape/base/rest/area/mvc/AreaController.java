@@ -9,19 +9,15 @@ import grape.base.rest.area.vo.AreaVo;
 import grape.base.service.area.api.IAreaService;
 import grape.base.service.area.po.Area;
 import grape.base.service.dict.api.IDictService;
-import grape.base.service.dict.po.Dict;
+import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.vo.TreeNodeVo;
 import grape.common.tools.PinyinDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,38 +45,47 @@ public class AreaController extends BaseTreeController<AreaVo, Area> {
     private IAreaService iAreaService;
     @Autowired
     private IDictService iDictService;
-    @Value("${baidu.map.ak}")
-    private String baiduMapAk;
 
-
+    /**
+     * 添加区域
+     * @param cf 创建区域的表单对象
+     * @return
+     */
      @ApiOperation("添加区域")
      @RequiresPermissions("area:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public AreaVo create(@RequestBody @Valid AreaCreateForm cf) {
          Area area = areaWebMapper.formToPo(cf);
-
          // 拼音
          setPinyin(area);
          return create(area);
      }
 
+    /**
+     * 区域名称汉语转拼音
+     * @param area 区域实体
+     */
      private void setPinyin(Area area){
-
+         PinyinDto pinyinDto = null;
          try {
              // 汉字转拼音
-             PinyinDto pinyinDto = getPinyin(area.getName(),true);
-             area.setSpell(Optional.ofNullable(pinyinDto.getFull()).orElse(area.getName()));
-             area.setSpellSimple(Optional.ofNullable(pinyinDto.getSimple()).orElse(area.getName()));
-             area.setSpellFirst(Optional.ofNullable(pinyinDto.getFirst()).orElse(area.getName().substring(0,1)));
-
+             pinyinDto = getPinyin(area.getName(),true);
          } catch (BadHanyuPinyinOutputFormatCombination e) {
-             // 产生异常这里可以基本不用管
-             log.error(e.getMessage(),e);
+             throw new RBaseException("汉语转拼音异常", e);
          }
+         area.setSpell(Optional.ofNullable(pinyinDto.getFull()).orElse(area.getName()));
+         area.setSpellSimple(Optional.ofNullable(pinyinDto.getSimple()).orElse(area.getName()));
+         area.setSpellFirst(Optional.ofNullable(pinyinDto.getFirst()).orElse(area.getName().substring(0,1)));
+
      }
 
-     @ApiOperation("根据id查询区域")
+    /**
+     * 根据区域id查询区域
+     * @param id 区域id
+     * @return
+     */
+     @ApiOperation("根据区域id查询区域")
      @RequiresPermissions("area:single:queryById")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
@@ -88,7 +93,12 @@ public class AreaController extends BaseTreeController<AreaVo, Area> {
          return super.queryById(id);
      }
 
-    @ApiOperation("删除区域")
+    /**
+     * 根据区域id删除区域
+     * @param id 区域id
+     * @return
+     */
+    @ApiOperation("根据区域id删除区域")
     @RequiresPermissions("area:single:deleteById")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -96,6 +106,12 @@ public class AreaController extends BaseTreeController<AreaVo, Area> {
         return super.deleteById(id);
     }
 
+    /**
+     * 根据id更新区域
+     * @param id 区域id
+     * @param uf 更新区域的表单对象
+     * @return
+     */
      @ApiOperation("更新区域")
      @RequiresPermissions("area:single:updateById")
      @PutMapping("/{id}")
@@ -107,6 +123,11 @@ public class AreaController extends BaseTreeController<AreaVo, Area> {
          return update(poQuery);
      }
 
+    /**
+     * 区域分页查询，主要用于分页管理
+     * @param listForm
+     * @return
+     */
     @ApiOperation("区域分页查询")
     @RequiresPermissions("area:single:listPage")
     @GetMapping("/listPage")
@@ -116,7 +137,12 @@ public class AreaController extends BaseTreeController<AreaVo, Area> {
         return listPage(poQuery,listForm);
      }
 
-    @ApiOperation("区域树")
+    /**
+     * 区域懒加载树
+     * @param parentId
+     * @return
+     */
+    @ApiOperation("区域懒加载树")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "父级id,不传获取根节点",name = "parentId")
     })

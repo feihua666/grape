@@ -15,9 +15,13 @@ import grape.common.service.common.IBaseService;
 public interface IUserIdentifierService extends IBaseService<UserIdentifier> {
 
     default UserIdentifier getByIdentifier(String identifier){
+        assertParamNotEmpty(identifier,"identifier不能为空");
+
         UserIdentifier userIdentifier = new UserIdentifier();
         userIdentifier.setIdentifier(identifier);
         return getOne(Wrappers.query(userIdentifier));
     }
 
+    UserIdentifier getByUserIdAndType(String userId,String type);
+    UserIdentifier getByUserIdAndTypeDictId(String userId,String typeDictId);
 }

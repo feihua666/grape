@@ -21,7 +21,6 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-
 @Accessors(chain = true)
 @ApiModel(value="更新用户基本信息表单")
 public class UserUpdateForm extends BaseForm {

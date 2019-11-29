@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.ScriptAssert;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,9 +19,9 @@ import javax.validation.constraints.NotNull;
  * @author yangwei
  * @since 2019-09-23
  */
+@ScriptAssert(lang = "javascript",message = "公司id不能为空",script = "_this.isPublic ? true: !!_this.compId")
 @Data
 @EqualsAndHashCode(callSuper=false)
-
 @Accessors(chain = true)
 @ApiModel(value="字典添加表单对象")
 public class DictCreateForm extends BaseForm {

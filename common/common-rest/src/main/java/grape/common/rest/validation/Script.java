@@ -8,6 +8,9 @@ import java.lang.annotation.*;
  * 自定义脚本验证器，暂时主要是为了添加字典id转code判断
  * 跟ScriptAssert没啥区别，只是额外添加了内置函数getDictCodeById(id),mobile(xx),email(xx)
  * 如果脚本中使用字典方法请添加dictIdProp字典属性名称
+ * 如果没有用到内置函数，直接使用ScriptAssert即可，以免产生再多bug
+ * 用法参见：grape.base.rest.user.form.identifier.UserIdentifierCreateForm
+ * 推荐使用表单验证方式grape.common.rest.validation.form.Form
  * Created by yangwei
  * Created at 2019/11/27 14:33
  */

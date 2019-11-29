@@ -81,6 +81,10 @@ const router = new VueRouter({
             component: () => import('@/views/user/userpost/UserPost.vue')
         },
         {
+            path: '/user/userPost',
+            component: () => import('@/views/user/userpost/UserPost.vue')
+        },
+        {
             path: '/user/userPost/userPostAdd/:userId',
             component: () => import('@/views/user/userpost/UserPostAdd.vue')
         },

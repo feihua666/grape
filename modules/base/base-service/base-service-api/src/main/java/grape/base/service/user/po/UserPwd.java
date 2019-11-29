@@ -24,7 +24,18 @@ import java.io.Serializable;
 public class UserPwd extends NormalBasePo<UserPwd> {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 密码状态字典组编码
+     */
+    public enum PwdStatusDictGroup{
+        pwd_status
+    }
+    /**
+     * 密码状态字典项编码
+     */
+    public  enum PwdStatusDictItem{
+        normal,need_update
+    }
     /**
      * 用户ID,base_user表的主键
      */

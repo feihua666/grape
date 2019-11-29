@@ -15,6 +15,24 @@
                 formItems:[
                     {
                         field: {
+                            name: 'account'
+                        },
+                        element:{
+                            label: '帐号',
+                            required: true
+                        }
+                    },
+                    {
+                        field: {
+                            name: 'pwd'
+                        },
+                        element:{
+                            label: '密码',
+                            required: true
+                        }
+                    },
+                    {
+                        field: {
                             name: 'nickname'
                         },
                         element:{

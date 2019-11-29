@@ -44,6 +44,11 @@ public class UserIdentifierController extends BaseController<UserIdentifierVo, U
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserIdentifierVo create(@RequestBody @Valid UserIdentifierCreateForm cf) {
+         // 判断用户是否已有帐号
+         if (iUserIdentifierService.getByUserIdAndTypeDictId(cf.getUserId(), cf.getIdentityTypeDictId()) != null) {
+             throw new RBaseException("该用户已存在该类型登录帐号，不可重复添加");
+         }
+
          if (iUserIdentifierService.getByIdentifier(cf.getIdentifier()) != null) {
              throw new RBaseException("登录帐号已存在");
          }

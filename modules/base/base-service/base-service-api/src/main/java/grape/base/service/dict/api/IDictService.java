@@ -44,15 +44,19 @@ public interface IDictService extends IBaseTreeService<Dict> , ITransService<Str
      * @return
      */
     default boolean existCode(String code){
-        if (isStrEmpty(code)) {
-            throw new InvalidParamsException("code 不能为空");
-        }
+        assertParamNotEmpty(code,"code 不能为空");
+
         Dict dict = new Dict();
         dict.setCode(code);
         int r = count(Wrappers.query(dict));
         return r > 0;
     }
-
+    default Dict getByCode(String code){
+        assertParamNotEmpty(code,"code 不能为空");
+        Dict dict = new Dict();
+        dict.setCode(code);
+        return getOne(Wrappers.query(dict));
+    }
     @Override
     default boolean support(String type){
         return isEqualAny(type,trans_dictCode, trans_dictName, trans_dictParentName);

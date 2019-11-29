@@ -125,7 +125,12 @@
                         label:'删除'
                     },
                     {
-                        action: this.enableOrDisable,
+                        action: 'enableOrDisable',
+                        enableOrDisable:{
+                            prop:'isLock',
+                            reasonProp:'lockReason'
+                        },
+                        url:'/user/:id',
                         position:'more',
                         disabledOnMissingSelect:true,
                         label:(row) => {
@@ -171,27 +176,31 @@
                         disabledOnMissingSelect:true,
                         url:'/user/userIdentifier/userIdentifierAdd/:id',
                         label: '新增帐号'
+                    },
+                    {
+                        action: this.resetPwd,
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label: '重置用户密码'
                     }
 
                 ]
             }
         },
         methods:{
-            enableOrDisable(row){
-                this.$prompt('请输入'+ (row.isLock ? '启用': '禁用') +'原因', '提示', {
-                    inputErrorMessage: '原因不能为空',
+            resetPwd(row){
+                this.$prompt('请输入密码', '提示', {
+                    inputErrorMessage: '密码不能为空',
                     inputValidator:(value)=>{return !!value}
                 }).then(({ value }) => {
                     let data = {
-                        isLock: !row.isLock,
+                        userId: row.id,
                         version: row.version,
-                        lockReason: value
+                        pwd: value
                     }
-                    this.axios.patch('/user/'+ row.id,data)
+                    this.axios.put('/userpwd/'+ row.id,data)
                         .then(res => {
-                            this.$message.success('操作成功')
-                            // 重新加载数据
-                            this.$refs.table.toolbarRefreshClick()
+                            this.$message.success('密码重置成功')
                         })
                         .catch(error => {
                             if(error.response){

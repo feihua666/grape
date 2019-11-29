@@ -20,7 +20,6 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-
 @Accessors(chain = true)
 @ApiModel(value="修改密码表单")
 public class UserPwdUpdateForm extends BaseForm {

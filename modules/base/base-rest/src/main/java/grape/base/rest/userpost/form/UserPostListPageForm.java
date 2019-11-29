@@ -26,7 +26,7 @@ public class UserPostListPageForm extends BasePageForm {
 
     private static final long serialVersionUID = 1L;
 
-    @NotEmpty(message = "用户id不能为空")
+
     @ApiModelProperty(value = "用户id")
     private String userId;
 

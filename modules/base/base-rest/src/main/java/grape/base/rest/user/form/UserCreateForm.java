@@ -28,6 +28,14 @@ public class UserCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+    @NotEmpty(message = "登录帐号不能为空")
+    @ApiModelProperty(value = "登录帐号",required = true)
+    private String account;
+
+    @NotEmpty(message = "帐号密码不能为空")
+    @ApiModelProperty(value = "登录帐号密码",required = true)
+    private String pwd;
+
     @NotEmpty(message = "昵称不能为空")
     @ApiModelProperty(value = "昵称，姓名",required = true)
     private String nickname;
@@ -47,7 +55,8 @@ public class UserCreateForm extends BaseForm {
     @ApiModelProperty(value = "部门id",required = true)
     private String deptId;
 
-    @ApiModelProperty(value = "是否虚拟用户",notes = "虚拟用户代表不是一个真正存在的用户")
+    @NotNull(message = "是否虚拟用户不能为空")
+    @ApiModelProperty(value = "是否虚拟用户",notes = "虚拟用户代表不是一个真正存在的用户",required = true)
     private Boolean isVirtual;
 
 }

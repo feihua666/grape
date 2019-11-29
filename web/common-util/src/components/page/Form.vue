@@ -93,6 +93,15 @@
                                 v-on:start="(val)=>{form[item.field.startName || item.field.name + 'Start'] = val}"
                                 v-on:end="(val)=>{form[item.field.endName || item.field.name + 'End'] = val}"
                 ></DateTimePicker>
+                <InputButton v-else-if="item.element.type == 'inputButton'"
+                          v-model="form[getFieldName(item)]"
+                          :placeholder="item.element.placeholder"
+                          :disabled="getDisabled(item)"
+                          :readonly="item.element.readonly"
+                          :title="getTitle(item)"
+                             :b-click="item.element.inputButton.bClick"
+                          clearable>
+                </InputButton>
                 <template v-else-if="item.element.type == 'txt'">
                     {{form[getFieldName(item)]}}
                 </template>
@@ -181,6 +190,7 @@
     import Select from '../../components/common/Select.vue'
     import SelectRemote from '../../components/common/SelectRemote.vue'
     import DateTimePicker from '../../components/common/DateTimePicker.vue'
+    import InputButton from '../../components/common/InputButton.vue'
 
     import {aiButtonStyle} from "../../tools/StyleTools.js"
     export default {
@@ -191,6 +201,7 @@
             Select,
             SelectRemote,
             DateTimePicker,
+            InputButton,
             InputSelectTree
         },
         props:{

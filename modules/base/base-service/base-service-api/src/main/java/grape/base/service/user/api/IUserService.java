@@ -1,6 +1,7 @@
 package grape.base.service.user.api;
 
 import grape.base.service.BaseLoginUser;
+import grape.base.service.user.dto.UserCreateParam;
 import grape.base.service.user.po.User;
 import grape.common.service.common.IBaseService;
 import grape.common.service.trans.ITransService;
@@ -25,6 +26,13 @@ public interface IUserService extends IBaseService<User>, ITransService<String, 
      * @return
      */
     BaseLoginUser initLoginUserByIdentifier(String identifier);
+
+    /**
+     * 添加用户
+     * @param cp
+     */
+
+    User createUser(UserCreateParam cp);
 
     @Override
     default boolean support(String type){

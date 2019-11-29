@@ -42,7 +42,7 @@ public class ScriptValidator  implements HibernateConstraintValidator<Script, Ob
 
     protected ScriptEvaluator scriptEvaluator;
 
-    @Autowired
+    @Autowired(required = false)
     private DictService dictService;
 
 
@@ -104,16 +104,21 @@ public class ScriptValidator  implements HibernateConstraintValidator<Script, Ob
         }
 
         if (this.dictIdProp != null) {
-            for (String dictIdP : dictIdProp) {
-                Object fieldValue = ReflectUtil.getFieldValue(value, dictIdP);
-                if (fieldValue != null) {
-                    String code = dictService.getCodeById(fieldValue.toString());
-                    dictCodeObj.put(fieldValue.toString(), code);
+            if(dictService != null){
+                for (String dictIdP : dictIdProp) {
+                    Object fieldValue = ReflectUtil.getFieldValue(value, dictIdP);
+                    if (fieldValue != null) {
+                        String code = dictService.getCodeById(fieldValue.toString());
+                        dictCodeObj.put(fieldValue.toString(), code);
+                    }
                 }
+                inner.append("var dictCodeObj = " + JSONUtil.toJsonStr(dictCodeObj) + ";");
+                inner.append("var getDictCodeById = function (id){return dictCodeObj[id]};");
+                inner.append(script);
+            }else {
+                throw new RuntimeException("脚本验证指定了字典属性但字典服务[DictService]没有被注入，请检查配置或需要实现[dictService]接口。当前正在验证的表单["+ value.getClass().getName() +"]");
             }
-            inner.append("var dictCodeObj = " + JSONUtil.toJsonStr(dictCodeObj) + ";");
-            inner.append("var getDictCodeById = function (id){return dictCodeObj[id]};");
-            inner.append(script);
+
         }
         return inner.toString();
     }

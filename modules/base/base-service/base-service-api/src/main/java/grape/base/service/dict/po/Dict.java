@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
  * <p>
  * 字典表,提供值与编码映射，用于下拉框或组合选择使用
  * </p>
- *
+ * 建议字典有硬编码写在po中的两个枚举，一个是组编码一个是组项编码，参见：grape.base.service.func.po.Func
  * @author yangwei
  * @since 2019-10-28
  */

@@ -1,5 +1,6 @@
 package grape.base.rest.user.mvc;
 
+import grape.base.rest.user.form.pwd.UserPwdResetForm;
 import grape.base.rest.user.form.pwd.UserPwdUpdateForm;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.user.api.IUserPwdService;
@@ -25,22 +26,38 @@ import javax.validation.Valid;
  * @since 2019-09-23
  */
 @RestController
-@RequestMapping("/user-pwd")
+@RequestMapping("/userpwd")
 @Api(tags = "用户密码相关接口")
 public class UserPwdController extends SuperController {
 
     @Autowired
     private IUserPwdService iUserPwdService;
-    // 请在这里添加额外的方法
-    //todo
 
 
 
+    @ApiOperation("重置用户密码")
+    @RequiresPermissions("userpwd:single:reset")
+    @PutMapping("/resetPwd")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Boolean resetPwd(@RequestBody @Valid UserPwdResetForm rf) {
+
+        UserPwd userPwd = iUserPwdService.getByUserId(rf.getUserId());
+        if (userPwd == null) {
+            throw new RBaseException("该用户没有添加密码，不能重置");
+        }
+
+        PasswordAndSalt newPs = PasswordAndSalt.entryptPassword(rf.getPwd());
+        userPwd.setPwd(newPs.getPassword());
+        userPwd.setSalt(newPs.getSalt());
+        userPwd.setPwdModifiedAt(System.currentTimeMillis());
+        if (!iUserPwdService.updateById(userPwd)) {
+            throw new RBaseException("重置用户密码失败");
+        }
+        return true;
+    }
 
 
-    /************************分割线，以下代码为 用户密码表 单表专用，自动生成谨慎修改**************************************************/
-
-     @ApiOperation("修改密码")
+     @ApiOperation("用户自己修改密码")
      @RequiresPermissions("user")
      @PutMapping("/update")
      @ResponseStatus(HttpStatus.CREATED)

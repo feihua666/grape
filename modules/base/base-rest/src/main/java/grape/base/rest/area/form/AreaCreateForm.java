@@ -41,10 +41,12 @@ public class AreaCreateForm extends BaseForm {
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
     private String adminDivisionId;
 
-    @ApiModelProperty(value = "经度")
+    @NotEmpty(message = "经度不能为空")
+    @ApiModelProperty(value = "经度",required = true)
     private String longitude;
 
-    @ApiModelProperty(value = "纬度")
+    @NotEmpty(message = "纬度不能为空")
+    @ApiModelProperty(value = "纬度",required = true)
     private String latitude;
 
     @ApiModelProperty(value = "描述、备注")

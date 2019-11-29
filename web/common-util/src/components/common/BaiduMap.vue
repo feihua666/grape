@@ -4,6 +4,7 @@
 </template>
 
 <script>
+ // 官方示例 http://lbsyun.baidu.com/jsdemo.htm#a1_2
   export default {
     props: {
       width: {
@@ -15,7 +16,7 @@
         default: '300px'
       },
       initZoom: {
-          type: Number,
+        type: Number,
         default: 14
       },
       // 地图初始坐标
@@ -34,7 +35,7 @@
         // 百度申请的key
       ak: {
           type: String,
-        default: null
+        default: '69a5a1e7260cd2cd298c33666e436530'
       }
     },
     data () {
@@ -59,7 +60,7 @@
         }
         this.map = new BMap.Map(this.$el)
         let point = this.newPoint(this.initPoint[0], this.initPoint[1])
-        this.map.centerAndZoom(point, this.initZoom)
+        this.centerAndZoom(point, this.initZoom)
         this.$emit('ready', this.map)
       },
       bMapScript (ak) {
@@ -87,10 +88,33 @@
           return window.BMap._preloader
         }
       },
+        centerAndZoom(point,zoom){
+            this.map.centerAndZoom(point, zoom ? zoom: this.map.getZoom());
+        },
+        // 新建一个点
       newPoint (longitude, latitude) {
         let point = new window.BMap.Point(longitude, latitude)
         return point
-      }
+      },
+        // 新建一个标注
+      addMarker(point){
+        let marker = new BMap.Marker(point);
+        this.map.addOverlay(marker);
+      },
+        // 地址解析并标注
+        addressMarker(address){
+            // 创建地址解析器实例
+            let myGeo = new BMap.Geocoder();
+            // 将地址解析结果显示在地图上,并调整地图视野
+            myGeo.getPoint(address, (point)=>{
+                if (point) {
+                    this.centerAndZoom(point);
+                    this.addMarker(point)
+                }else{
+                    alert("您选择地址没有解析到结果!");
+                }
+            }, "北京市");
+        }
     }
   }
 </script>

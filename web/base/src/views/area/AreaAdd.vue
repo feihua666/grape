@@ -1,17 +1,29 @@
 <template>
+    <div>
     <Form
           :form-items="formItems"
     ></Form>
+        <BaiduMapDialog ref="bMapDialog">
+
+            <el-input placeholder="输入关键字定位">
+                <el-button slot="append"
+                           @click="bClick">搜索</el-button>
+            </el-input>
+        </BaiduMapDialog>
+    </div>
 </template>
 
 <script>
     import Form from 'common-util/src/components/page/Form.vue'
+    import BaiduMapDialog from 'common-util/src/components/common/BaiduMapDialog.vue'
     export default {
         components:{
-            Form
+            Form,
+            BaiduMapDialog
         },
         data(){
             return {
+                mapDialogVisible:false,
                 formItems:[
                     {
                         field: {
@@ -64,6 +76,10 @@
                             name: 'longitude'
                         },
                         element:{
+                            type: 'inputButton',
+                            inputButton:{
+                                bClick:this.longitudeBtnClick
+                            },
                             label: '经度',
                         }
                     },
@@ -115,6 +131,10 @@
             }
         },
         methods:{
+            longitudeBtnClick () {
+
+                this.$refs.bMapDialog.show()
+            }
         }
     }
 </script>
