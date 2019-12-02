@@ -6,10 +6,10 @@
             v-on:closed="$emit('closed')"
             width="30%">
         <slot></slot>
-        <BaiduMap ref="baiduMap"></BaiduMap>
+        <BaiduMap ref="baiduMap" :m-click="mClick" v-on:mClick="(e)=>{$emit('mClick',e)}" v-on:ready="$emit('ready')"></BaiduMap>
         <span slot="footer" class="dialog-footer">
     <el-button @click="localVisible = false">取 消</el-button>
-    <el-button type="primary" @click="localVisible = false">确 定</el-button>
+    <el-button type="primary" @click="submit">确 定</el-button>
   </span>
     </el-dialog>
 </template>
@@ -23,6 +23,14 @@
             visible: {
                 type: Boolean,
                 default: false
+            },
+            // 地图点击
+            mClick:{
+                type: Function
+            },
+            // 确定按钮点击
+            sureClick:{
+                type: Function
             }
         },
         data(){
@@ -30,14 +38,28 @@
                 localVisible: this.visible
             }
         },
+        mounted(){
+
+        },
         methods:{
-            handleClose (){
-            },
             getBaiduMap(){
                 return this.$refs.baiduMap
             },
             show(){
                 this.localVisible = true
+            },
+            hide(){
+                this.localVisible = false
+            },
+            submit(){
+                if(this.sureClick){
+                    let r = this.sureClick()
+                    if(r == true){
+                        this.hide()
+                    }
+                }else {
+                    this.hide()
+                }
             }
         },
         watch:{

@@ -27,6 +27,9 @@
           return [116.404, 39.915]
         }
       },
+        mClick:{
+          type: Function
+        },
         // 是否组件加载完毕自动初始化地图
       initAuto: {
           type: Boolean,
@@ -61,12 +64,16 @@
         this.map = new BMap.Map(this.$el)
         let point = this.newPoint(this.initPoint[0], this.initPoint[1])
         this.centerAndZoom(point, this.initZoom)
+          let top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+          let top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+          this.map.addControl(top_left_control);
+          this.map.addControl(top_left_navigation);
+          this.map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+          this.map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+          this.bindClick()
         this.$emit('ready', this.map)
       },
       bMapScript (ak) {
-        if (!ak) {
-          ak = this.$config.bMapAk
-        }
         // 感谢vue-baidu-map项目
         if (!window.BMap) {
           window.BMap = {}
@@ -88,32 +95,70 @@
           return window.BMap._preloader
         }
       },
-        centerAndZoom(point,zoom){
-            this.map.centerAndZoom(point, zoom ? zoom: this.map.getZoom());
-        },
+       getMapIns(){
+         return this.map
+       },
+       // 地图初始化完成后调用
+       bindClick(){
+         this.map.addEventListener('click',(e)=>{
+             if(this.mClick){
+                 this.mClick(e)
+             }
+             this.$emit('mClick',e)
+         })
+       },
+       centerAndZoom(point,zoom){
+           this.map.centerAndZoom(point, zoom ? zoom: this.map.getZoom());
+       },
         // 新建一个点
       newPoint (longitude, latitude) {
-        let point = new window.BMap.Point(longitude, latitude)
+        let point = new BMap.Point(longitude, latitude)
         return point
       },
+        // 新建一个geo定位器
+        newGeocoder () {
+            let geo = new BMap.Geocoder()
+            return geo
+        },
         // 新建一个标注
       addMarker(point){
-        let marker = new BMap.Marker(point);
+        let marker = new BMap.Marker(point)
         this.map.addOverlay(marker);
       },
-        // 地址解析并标注
-        addressMarker(address){
+        getPoint(address,callback){
             // 创建地址解析器实例
-            let myGeo = new BMap.Geocoder();
+            let myGeo = this.newGeocoder()
             // 将地址解析结果显示在地图上,并调整地图视野
             myGeo.getPoint(address, (point)=>{
-                if (point) {
-                    this.centerAndZoom(point);
-                    this.addMarker(point)
-                }else{
-                    alert("您选择地址没有解析到结果!");
-                }
-            }, "北京市");
+                callback(point)
+            })
+        },
+        getAddress(point,callback){
+            // 创建地址解析器实例
+            let myGeo = this.newGeocoder()
+            myGeo.getLocation(point, (rs)=>{
+                let addComp = rs.addressComponents
+                let addr = []
+                addr.push(addComp.province)
+                addr.push(addComp.city)
+                addr.push(addComp.street)
+                addr.push(addComp.streetNumber)
+                callback(addr,rs)
+            })
+        },
+       // 地址解析并标注
+       addressMarker(address){
+           this.getPoint(address, (point)=>{
+               if (point) {
+                   this.centerAndZoom(point)
+                   this.addMarker(point)
+               }else{
+                   this.$message.error("您选择地址没有解析到结果!");
+               }
+           })
+       },
+        clearOverlays(){
+          this.map.clearOverlays()
         }
     }
   }

@@ -521,6 +521,12 @@
             },
             aiButtonStyle(label){
                 return aiButtonStyle(label)
+            },
+            // 设置值
+            setFormItem(prop,value){
+                if(this.form[prop] !== undefined){
+                    this.form[prop] = value
+                }
             }
         },
         watch:{

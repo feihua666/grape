@@ -1,19 +1,35 @@
 <template>
+    <div>
     <Form
           :form-items="formItems"
           :form-item-value="formData"
           :loading="formLoading"
     ></Form>
+    <BaiduMapDialog ref="bMapDialog" v-on:mClick="mClick" :sure-click="sureClick" v-on:ready="mapReady">
+
+        <el-input v-model="mapAddress" placeholder="输入关键字定位">
+            <el-button slot="append"
+                       @click="locateAddress">搜索</el-button>
+        </el-input>
+    </BaiduMapDialog>
+    </div>
 </template>
 
 <script>
     import Form from 'common-util/src/components/page/Form.vue'
+    import BaiduMapDialog from 'common-util/src/components/common/BaiduMapDialog.vue'
+
     export default {
         components:{
-            Form
+            Form,
+            BaiduMapDialog
         },
         data(){
             return {
+                mapDialogVisible:false,
+                mapAddress:null,
+                // 地图经纬度选择用
+                mapPoint:null,
                 formLoading: false,
                 formData:null,
                 formItems:[
@@ -52,6 +68,10 @@
                             name: 'longitude'
                         },
                         element:{
+                            type: 'inputButton',
+                            inputButton:{
+                                bClick:this.longitudeBtnClick
+                            },
                             label: '经度',
                         }
                     },
@@ -130,6 +150,59 @@
                 }).finally(()=>{
                     this.formLoading = false
                 })
+            },
+            longitudeBtnClick () {
+
+                this.$refs.bMapDialog.show()
+
+            },
+            locateAddress(){
+                let bdMapCom = this.$refs.bMapDialog.getBaiduMap()
+                bdMapCom.clearOverlays()
+                bdMapCom.getPoint(this.mapAddress,(point)=>{
+                    if (point) {
+                        bdMapCom.centerAndZoom(point)
+                        bdMapCom.addMarker(point)
+
+                        this.mapPoint = point
+                    }else{
+                        this.$message.error("您选择地址没有解析到结果!");
+                    }
+                })
+
+            },
+            mClick(e){
+                let bdMapCom = this.$refs.bMapDialog.getBaiduMap()
+                bdMapCom.clearOverlays()
+                bdMapCom.getAddress(e.point,(addr,rs)=>{
+                    this.mapAddress = addr.join(' ')
+                    bdMapCom.addMarker(e.point)
+                    this.mapPoint = e.point
+                })
+            },
+            sureClick(){
+                if(!this.mapPoint){
+                    this.$message.error('请先定位一个位置')
+                    return false
+                }
+                this.formData.latitude = this.mapPoint.lat
+                this.formData.longitude = this.mapPoint.lng
+                return true
+            },
+            // 发现在容器show的时候地图刚刚进行初始化，容易造成获取不到地图对象，这里进行初始化
+            mapReady(){
+                // 如果没有定位过，并且存在经纬度，在地图上回显
+                if(!this.mapPoint && this.formData.longitude && this.formData.latitude){
+                    let bdMapCom = this.$refs.bMapDialog.getBaiduMap()
+                    let point = bdMapCom.newPoint(this.formData.longitude,this.formData.latitude)
+                    bdMapCom.getAddress(point,(addr,rs)=>{
+                        this.mapAddress = addr.join(' ')
+                        bdMapCom.centerAndZoom(point)
+                        bdMapCom.addMarker(point)
+                        this.mapPoint = point
+                    })
+
+                }
             }
         }
     }

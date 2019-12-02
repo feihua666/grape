@@ -1,13 +1,13 @@
 <template>
     <div>
-    <Form
+    <Form ref="form"
           :form-items="formItems"
     ></Form>
-        <BaiduMapDialog ref="bMapDialog">
+        <BaiduMapDialog ref="bMapDialog" v-on:mClick="mClick" :sure-click="sureClick">
 
-            <el-input placeholder="输入关键字定位">
+            <el-input v-model="mapAddress" placeholder="输入关键字定位">
                 <el-button slot="append"
-                           @click="bClick">搜索</el-button>
+                           @click="locateAddress">搜索</el-button>
             </el-input>
         </BaiduMapDialog>
     </div>
@@ -24,6 +24,9 @@
         data(){
             return {
                 mapDialogVisible:false,
+                mapAddress:null,
+                // 地图经纬度选择用
+                mapPoint:null,
                 formItems:[
                     {
                         field: {
@@ -132,8 +135,40 @@
         },
         methods:{
             longitudeBtnClick () {
-
                 this.$refs.bMapDialog.show()
+            },
+            locateAddress(){
+                let bdMapCom = this.$refs.bMapDialog.getBaiduMap()
+                bdMapCom.clearOverlays()
+                bdMapCom.getPoint(this.mapAddress,(point)=>{
+                    if (point) {
+                        bdMapCom.centerAndZoom(point)
+                        bdMapCom.addMarker(point)
+
+                        this.mapPoint = point
+                    }else{
+                        this.$message.error("您选择地址没有解析到结果!");
+                    }
+                })
+
+            },
+            mClick(e){
+                let bdMapCom = this.$refs.bMapDialog.getBaiduMap()
+                bdMapCom.clearOverlays()
+                bdMapCom.getAddress(e.point,(addr,rs)=>{
+                    this.mapAddress = addr.join(' ')
+                    bdMapCom.addMarker(e.point)
+                    this.mapPoint = e.point
+                })
+            },
+            sureClick(){
+                if(!this.mapPoint){
+                    this.$message.error('请先定位一个位置')
+                    return false
+                }
+                this.$refs.form.setFormItem('latitude',this.mapPoint.lat)
+                this.$refs.form.setFormItem('longitude',this.mapPoint.lng)
+                return true
             }
         }
     }
