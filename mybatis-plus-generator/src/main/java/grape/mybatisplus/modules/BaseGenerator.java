@@ -80,7 +80,7 @@ public class BaseGenerator extends SuperGenerator {
         // 用户表
         commonSet("base_user","user",TableType.normal,tablePrefix,author);
         // 用户登录帐号表
-        commonSet("base_user_identifier","user",TableType.normal,tablePrefix,author);
+        //commonSet("base_user_identifier","user",TableType.normal,tablePrefix,author);
         // 用户密码表
         //commonSet("base_user_pwd","user",TableType.normal,tablePrefix,author);
         // 字典表
@@ -99,6 +99,14 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_job","job",TableType.normal,tablePrefix,author);
         commonSet("base_job_level","joblevel",TableType.normal,tablePrefix,author);
         commonSet("base_param_config","paramconfig",TableType.normal,tablePrefix,author);
+        // 数据约束相关表
+        commonSet("base_data_object","dataconstraint",TableType.normal,tablePrefix,author);
+        commonSet("base_data_scope","dataconstraint",TableType.normal,tablePrefix,author);
+        //commonSet("base_data_scope_custom_rel","dataconstraint",TableType.rel,tablePrefix,author);
+        commonSet("base_user_data_scope_rel","userdatascoperel",TableType.rel,tablePrefix,author);
+        commonSet("base_role_data_scope_rel","roledatascoperel",TableType.rel,tablePrefix,author);
+        commonSet("base_post_data_scope_rel","postdatascoperel",TableType.rel,tablePrefix,author);
+        commonSet("base_user_post_data_scope_rel","userpostdatascoperel",TableType.rel,tablePrefix,author);
 
         return  tableConfig;
     }

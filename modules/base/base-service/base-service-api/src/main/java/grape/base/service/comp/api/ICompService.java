@@ -1,5 +1,6 @@
 package grape.base.service.comp.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.comp.po.Comp;
 import grape.common.exception.runtime.InvalidParamsException;
@@ -26,9 +27,7 @@ public interface ICompService extends IBaseTreeService<Comp>, ITransService<Stri
      * @return
      */
     default boolean existCode(String code){
-        if (isStrEmpty(code)) {
-            throw new InvalidParamsException("code 不能为空");
-        }
+        assertParamNotEmpty(code,"code 不能为空");
         Comp comp = new Comp();
         comp.setCode(code);
         int r = count(Wrappers.query(comp));
@@ -58,5 +57,23 @@ public interface ICompService extends IBaseTreeService<Comp>, ITransService<Stri
 
         }
         return null;
+    }
+
+    /**
+     * 查询某个公司及以下的公司
+     * @param page 分页条件
+     * @param query 原始查询条件
+     * @param compId 限制条件，查询该公司及以下的公司
+     * @return
+     */
+    default IPage<Comp> page(IPage<Comp> page, Comp query,String compId){
+        assertParamNotEmpty(compId,"compId不能为空");
+
+        Comp comp = getById(compId);
+        return page(page, Wrappers.query(query).and((qw)->
+            qw.eq(Comp.COLUMN_PARENT_ID + comp.getLevel(),compId)
+                    .or()
+                    .eq(Comp.COLUMN_ID,compId)
+        ));
     }
 }

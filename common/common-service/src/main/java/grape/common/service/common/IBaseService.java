@@ -9,6 +9,7 @@ import grape.common.tools.ToolService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 所有service接口的父接口，以实现通用功能
@@ -28,10 +29,7 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
 
     default List<String> convertIds(List<Po> pos){
         if (!isListEmpty(pos)) {
-            List<String> ids = new ArrayList<>(pos.size());
-            for (Po po : pos) {
-                ids.add(po.getId().toString());
-            }
+            return pos.stream().map((p) -> p.getId().toString()).collect(Collectors.toList());
         }
         return null;
     }

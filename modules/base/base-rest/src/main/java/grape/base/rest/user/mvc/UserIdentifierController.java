@@ -7,6 +7,7 @@ import grape.base.rest.user.form.identifier.UserIdentifierListPageForm;
 import grape.base.rest.user.form.identifier.UserIdentifierUpdateForm;
 import grape.base.rest.user.mapper.UserIdentifierWebMapper;
 import grape.base.rest.user.vo.UserIdentifierVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.user.api.IUserIdentifierService;
 import grape.base.service.user.po.UserIdentifier;
@@ -31,7 +32,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/useridentifier")
 @Api(tags = "用户登录帐号相关接口")
-public class UserIdentifierController extends BaseController<UserIdentifierVo, UserIdentifier> {
+public class UserIdentifierController extends BaseController<UserIdentifierVo, UserIdentifier, BaseLoginUser> {
 
 
     @Autowired

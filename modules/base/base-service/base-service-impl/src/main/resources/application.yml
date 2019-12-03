@@ -3,3 +3,6 @@ spring:
     url: jdbc:mysql://39.104.146.45/grape?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
     password: jlks82lsUH@@
+logging:
+  level:
+    root: debug

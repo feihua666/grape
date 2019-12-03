@@ -1,19 +1,18 @@
 package grape.base.rest.comp.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import grape.base.rest.comp.form.CompCreateForm;
 import grape.base.rest.comp.form.CompListPageForm;
 import grape.base.rest.comp.form.CompUpdateForm;
 import grape.base.rest.comp.mapper.CompWebMapper;
 import grape.base.rest.comp.vo.CompVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
-import grape.base.service.dict.api.IDictService;
-import grape.base.service.dict.po.Dict;
-import grape.base.service.user.api.IUserService;
-import grape.base.service.user.po.User;
+import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseTreeController;
+import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -39,7 +37,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/comp")
 @Api(tags = "公司相关接口")
-public class CompController extends BaseTreeController<CompVo, Comp> {
+public class CompController extends BaseTreeLoginUserController<CompVo, Comp,BaseLoginUser> {
 
     @Autowired
     private CompWebMapper compWebMapper;
@@ -91,9 +89,22 @@ public class CompController extends BaseTreeController<CompVo, Comp> {
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<CompVo> listPage(CompListPageForm listForm) {
+
+        BaseLoginUser loginUser = getLoginUser();
         Comp poQuery = compWebMapper.formToPo(listForm);
-        return listPage(poQuery, listForm);
-     }
+        // 超级管理员处理
+        if (loginUser.getIsSuperAdmin()) {
+            return listPage(poQuery, listForm);
+        }
+
+        // 添加权限过滤，只查看本公司及以下公司
+        IPage<Comp> page = iCompService.page(new Page(listForm.getCurrent(),listForm.getSize()),poQuery,loginUser.getCurrentUserPost().getCompId());
+        if (page.getTotal() == 0) {
+            throw ExceptionTools.dataNotExistRE("暂无数据");
+        }
+        return pagePoToVo(page);
+
+    }
     /**
      * 检查树结构是否完整
      * @return
@@ -114,8 +125,21 @@ public class CompController extends BaseTreeController<CompVo, Comp> {
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public  List<TreeNodeVo<CompVo>> tree(String parentId) {
-        List<CompVo> compVos = super.getByParentId(parentId);
-        return super.listToTreeNodeVo(compVos);
+        BaseLoginUser loginUser = getLoginUser();
+
+        if (loginUser.getIsSuperAdmin()) {
+            List<CompVo> compVos = super.getByParentId(parentId);
+            return super.listToTreeNodeVo(compVos);
+        }
+
+        // 非超级管理员数据，查询本公司及以下公司
+        List<Comp> r;
+        if (parentId == null) {
+            r = iCompService.getRoot(loginUser.getCurrentUserPost().getCompId());
+        }else {
+            r = iCompService.getChildren(parentId,loginUser.getCurrentUserPost().getCompId());
+        }
+        return super.listToTreeNodeVo( super.posToVos(r));
     }
 
 }

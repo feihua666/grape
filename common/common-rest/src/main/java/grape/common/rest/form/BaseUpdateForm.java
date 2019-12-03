@@ -16,7 +16,8 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper=false)
 public class BaseUpdateForm extends BaseForm {
 
-    @ApiModelProperty(value = "版本",notes = "根据信息数据原样返回")
+    @ApiModelProperty(value = "版本",notes = "根据信息数据原样返回",required = true)
     @NotNull(message = "版本不能为空")
     private Integer version;
+
 }

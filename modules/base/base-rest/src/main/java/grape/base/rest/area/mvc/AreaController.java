@@ -6,14 +6,18 @@ import grape.base.rest.area.form.AreaListPageForm;
 import grape.base.rest.area.form.AreaUpdateForm;
 import grape.base.rest.area.mapper.AreaWebMapper;
 import grape.base.rest.area.vo.AreaVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.area.api.IAreaService;
 import grape.base.service.area.po.Area;
 import grape.base.service.dict.api.IDictService;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseTreeController;
+import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
 import grape.common.tools.PinyinDto;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,7 +41,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/area")
 @Api(tags = "区域相关接口")
-public class AreaController extends BaseTreeController<AreaVo, Area> {
+public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, BaseLoginUser> {
 
     @Autowired
     private AreaWebMapper areaWebMapper;

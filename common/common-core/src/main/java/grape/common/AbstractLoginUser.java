@@ -28,6 +28,10 @@ public abstract class AbstractLoginUser extends BasePojo {
     // 头像
     private String avatar;
 
+    public boolean superAdmin(){
+        return false;
+    }
+
     public static   AbstractLoginUser getLoginUser(){
         return (AbstractLoginUser) ThreadContextTool.get(loginUserKey);
     }

@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.common.exception.CBaseException;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.InvalidParamsException;
+import grape.common.service.po.BasePo;
+import grape.common.service.po.IDBasePo;
+import grape.common.service.po.NormalBasePo;
 import grape.common.service.po.TreeBasePo;
 
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static grape.common.service.po.TreeBasePo.INIT_LEVEL;
 import static grape.common.service.po.TreeBasePo.maxLevel;
 
 /**
@@ -22,10 +26,26 @@ import static grape.common.service.po.TreeBasePo.maxLevel;
 public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseService<Po> {
 
 
+    /**
+     * 查询第一级
+     * @return
+     */
     default List<Po> getRoot(){
         Map<String,Object> p = new HashMap<>(2);
-        p.put(TreeBasePo.COLUMN_LEVEL,1);
+        p.put(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL);
         p.put(TreeBasePo.COLUMN_PARENT_ID,null);
+        return (List<Po>) listByMap(p);
+    }
+    /**
+     * 查询第一级并且等于该id
+     * @return
+     */
+    default List<Po> getRoot(String id){
+        assertParamNotEmpty(id,"id不能为空");
+        Map<String,Object> p = new HashMap<>(3);
+        p.put(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL);
+        p.put(TreeBasePo.COLUMN_PARENT_ID,null);
+        p.put(TreeBasePo.COLUMN_ID,id);
         return (List<Po>) listByMap(p);
     }
     /**
@@ -34,12 +54,23 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      * @return
      */
     default List<Po> getChildren(String parentId){
-        if (parentId == null) {
-            return null;
-        }
+        assertParamNotEmpty(parentId,"parentId不能为空");
         Map<String,Object> p = new HashMap<>(1);
         p.put(TreeBasePo.COLUMN_PARENT_ID,parentId);
         return (List<Po>) listByMap(p);
+    }
+    /**
+     * 查询子一级节点，结果必须是等于限制id或其子节点
+     * @param parentId
+     * @param limitId 限制id
+     * @return
+     */
+    default List<Po> getChildren(String parentId,String limitId){
+        assertParamNotEmpty(parentId,"parentId不能为空");
+        Po po = getById(limitId);
+        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId)
+                .and((wq)->wq.eq(IDBasePo.COLUMN_ID,limitId).or().eq(TreeBasePo.COLUMN_PARENT_ID + po.getLevel(),limitId))
+        );
     }
     /**
      * 查询子一级节点,是否有子节点
@@ -141,7 +172,7 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      */
     default void checkTreeStruct(Po parent) throws CBaseException {
 
-        int level = parent == null? TreeBasePo.INIT_LEVEL:parent.getLevel() + 1;
+        int level = parent == null? INIT_LEVEL:parent.getLevel() + 1;
         Map<String, String> parentIdx = new HashMap<>(10);
         for (int i = 1; i < maxLevel; i++) {
             String fieldName = TreeBasePo.PROPERTY_PARENT_ID + i;

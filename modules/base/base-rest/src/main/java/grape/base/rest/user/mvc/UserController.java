@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户相关接口")
-public class UserController extends BaseController<UserVo, User> {
+public class UserController extends BaseController<UserVo, User,BaseLoginUser> {
 
     @Autowired
     private IUserService iUserService;

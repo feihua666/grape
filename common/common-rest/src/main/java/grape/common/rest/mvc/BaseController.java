@@ -29,13 +29,6 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
     @Autowired
     private WebMapper<Vo,Po> mapperConverter;
 
-    /**
-     * 获取当前登录用户
-     * @return
-     */
-    protected AbstractLoginUser getLoginUser(){
-        return AbstractLoginUser.getLoginUser();
-    }
 
     /**
      * 单表添加

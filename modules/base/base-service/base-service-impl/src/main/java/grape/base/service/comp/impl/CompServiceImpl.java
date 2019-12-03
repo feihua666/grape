@@ -1,5 +1,7 @@
 package grape.base.service.comp.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.comp.mapper.CompMapper;
 import grape.base.service.comp.api.ICompService;

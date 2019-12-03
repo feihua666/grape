@@ -2,7 +2,7 @@ package grape.base.service.user.map;
 
 import grape.base.service.user.dto.UserCreateParam;
 import grape.base.service.user.po.User;
-import grape.common.service.pojoconvert.ServiceMapper;
+import grape.common.service.pojomapper.ServiceMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

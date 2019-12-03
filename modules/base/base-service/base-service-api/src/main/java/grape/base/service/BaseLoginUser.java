@@ -49,6 +49,10 @@ public class BaseLoginUser extends AbstractLoginUser {
     // 用户的可用角色，用户角色关系而来
     private List<Role> roles;
 
+    @Override
+    public boolean superAdmin() {
+        return isSuperAdmin;
+    }
 
     public static BaseLoginUser getLoginUser(){
         return (BaseLoginUser) AbstractLoginUser.getLoginUser();
