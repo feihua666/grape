@@ -1,6 +1,7 @@
 package grape.common.service.common;
 
 import grape.common.AbstractLoginUser;
+import grape.common.tools.ToolService;
 
 /**
  * 数据范围控制接口
@@ -13,8 +14,9 @@ import grape.common.AbstractLoginUser;
  * Created by yangwei
  * Created at 2019/11/25 16:08
  */
-public interface IDataConstraintService <user extends AbstractLoginUser>{
+public interface IDataConstraintService <user extends AbstractLoginUser> extends ToolService {
 
+    public static final String insqlReplace = "{{insql}}";
 
     /**
      * 解析约束条件

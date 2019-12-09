@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * 数据约束内容对象
  * Created by yangwei
@@ -15,5 +17,13 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class ConstraintContent extends BasePojo {
 
+
+    public ConstraintContent(String content){
+        this.content = content;
+    }
+
     private String content;
+
+    private boolean custom;
+    private List<String> customDataIds;
 }

@@ -46,7 +46,7 @@ public class DataConstraintDto extends BaseDto {
     /**
      * 数据对象下的数据范围
      */
-    private List<DataScope> dataScopes;
+    private DataScope dataScope;
 
     // 用户正在使用的数据范围来自哪里
     private DataConstraintFrom dataConstraintFrom;

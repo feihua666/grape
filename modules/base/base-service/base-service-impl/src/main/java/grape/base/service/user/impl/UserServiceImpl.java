@@ -8,7 +8,6 @@ import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeService;
 import grape.base.service.dataconstraint.dto.DataConstraintDto;
 import grape.base.service.dataconstraint.po.DataObject;
-import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.api.IDictService;
@@ -36,7 +35,6 @@ import grape.base.service.userpostdatascoperel.api.IUserPostDataScopeRelService;
 import grape.base.service.userpostdatascoperel.po.UserPostDataScopeRel;
 import grape.base.service.userpostrolerel.api.IUserPostRoleRelService;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
-import grape.base.service.userrolerel.api.IUserRoleRelService;
 import grape.common.AbstractLoginUser;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
@@ -210,10 +208,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     private void bindDataConstraint(BaseLoginUser loginUser){
         // 用户分配的数据范围
         List<DataConstraintDto> dataConstraintDtos = new ArrayList<>();
-        Map<String, List<String>> dataObjectAndDataScope = new HashMap<>();
+        // key=数据对象id，value=数据范围id
+        Map<String, String> dataObjectAndDataScope = new HashMap<>();
         List<UserDataScopeRel> userDataScopeRels = iUserDataScopeRelService.list(Wrappers.<UserDataScopeRel>lambdaQuery().eq(UserDataScopeRel::getUserId, loginUser.getUserId()));
         if (!isListEmpty(userDataScopeRels)) {
-            Map<String, List<String>> dataObjectAndDataScopeUser = new HashMap<>();
+            Map<String, String> dataObjectAndDataScopeUser = new HashMap<>();
             userDataScopeRels.forEach(item -> putMap(item.getDataObjectId(),item.getDataScopeId(),dataObjectAndDataScopeUser));
             dataConstraintDtos.addAll(convertDataConstraint(dataObjectAndDataScopeUser,DataConstraintDto.DataConstraintFrom.user));
             dataObjectAndDataScope.putAll(dataObjectAndDataScopeUser);
@@ -225,7 +224,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
             if(currentRole != null){
                 List<RoleDataScopeRel> roleDataScopeRels = iRoleDataScopeRelService.list(Wrappers.<RoleDataScopeRel>lambdaQuery().eq(RoleDataScopeRel::getRoleId,currentRole.getId()));
                 if (!isListEmpty(roleDataScopeRels)) {
-                    Map<String, List<String>> dataObjectAndDataScopeRole = new HashMap<>();
+                    Map<String, String> dataObjectAndDataScopeRole = new HashMap<>();
                     roleDataScopeRels.stream().filter(item -> !dataObjectAndDataScope.containsKey(item.getDataObjectId())).forEach(item ->putMap(item.getDataObjectId(), item.getDataScopeId(),dataObjectAndDataScopeRole));
 
                     dataConstraintDtos.addAll(convertDataConstraint(dataObjectAndDataScopeRole,DataConstraintDto.DataConstraintFrom.role));
@@ -245,7 +244,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
                 // 用户岗位关系直接分配的数据范围
                 List<UserPostDataScopeRel> userPostDataScopeRels = iUserPostDataScopeRelService.list(Wrappers.<UserPostDataScopeRel>lambdaQuery().eq(UserPostDataScopeRel::getUserPostId,currentUserPost.getId()));
                 if (!isListEmpty(userPostDataScopeRels)) {
-                    Map<String, List<String>> dataObjectAndDataScopeUserPost = new HashMap<>();
+                    Map<String, String> dataObjectAndDataScopeUserPost = new HashMap<>();
                     userPostDataScopeRels.stream().filter(item -> !dataObjectAndDataScope.containsKey(item.getDataObjectId())).forEach(item ->putMap(item.getDataObjectId(), item.getDataScopeId(),dataObjectAndDataScopeUserPost));
                     dataConstraintDtos.addAll(convertDataConstraint(dataObjectAndDataScopeUserPost,DataConstraintDto.DataConstraintFrom.userPost));
                     dataObjectAndDataScope.putAll(dataObjectAndDataScopeUserPost);
@@ -255,7 +254,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
                 // 岗位直接分配的数据范围
                 List<PostDataScopeRel> postDataScopeRels = iPostDataScopeRelService.list(Wrappers.<PostDataScopeRel>lambdaQuery().eq(PostDataScopeRel::getPostId,currentUserPost.getPostId()));
                 if (!isListEmpty(postDataScopeRels)) {
-                    Map<String, List<String>> dataObjectAndDataScopePost = new HashMap<>();
+                    Map<String,String> dataObjectAndDataScopePost = new HashMap<>();
                     postDataScopeRels.stream().filter(item -> !dataObjectAndDataScope.containsKey(item.getDataObjectId())).forEach(item ->putMap(item.getDataObjectId(), item.getDataScopeId(),dataObjectAndDataScopePost));
 
                     dataConstraintDtos.addAll(convertDataConstraint(dataObjectAndDataScopePost,DataConstraintDto.DataConstraintFrom.post));
@@ -270,13 +269,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     }
 
-    private void putMap(String dataObjectId,String dataScopeId,Map<String,List<String>>  map){
-        List<String> dataScopeIds = map.get(dataObjectId);
-        if (isListEmpty(dataScopeIds)) {
-            dataScopeIds = new ArrayList<>();
-            map.put(dataObjectId, dataScopeIds);
-        }
-        dataScopeIds.add(dataScopeId);
+    private void putMap(String dataObjectId,String dataScopeId,Map<String,String>  map){
+
+        map.put(dataObjectId,dataScopeId);
 
     }
     /**
@@ -284,14 +279,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
      * @param dataObjectAndDataScope key为数据对象id，value为数据范围id
      * @return
      */
-    private List<DataConstraintDto> convertDataConstraint(Map<String, List<String>> dataObjectAndDataScope,DataConstraintDto.DataConstraintFrom dataConstraintFrom){
+    private List<DataConstraintDto> convertDataConstraint(Map<String, String> dataObjectAndDataScope,DataConstraintDto.DataConstraintFrom dataConstraintFrom){
         List<DataConstraintDto> dataConstraintDtos = new ArrayList<>();
         Set<String> dataObjectIds = dataObjectAndDataScope.keySet();
         List<DataObject> dataObjects = (List<DataObject>) iDataObjectService.listByIds(dataObjectIds);
         for (DataObject dataObject : dataObjects) {
-            List<String> _dataScopeIds = dataObjectAndDataScope.get(dataObject.getId());
+            String dataScopeId = dataObjectAndDataScope.get(dataObject.getId());
             DataConstraintDto dataConstraintDto = new DataConstraintDto(dataObject,
-                    (List<DataScope>) iDataScopeService.listByIds(_dataScopeIds),
+                   iDataScopeService.getById(dataScopeId),
                     dataConstraintFrom);
             dataConstraintDtos.add(dataConstraintDto);
         }
