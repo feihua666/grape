@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
  * @author yangwei
  * @since 2019-12-03
  */
-@ScriptAssert(message = "约束条件不能为空",lang = "javascript",script = "_this.isCustom?true:_this.constraintContent")
+@ScriptAssert(message = "约束条件不能为空",lang = "javascript",script = "_this.isCustom?true:!!_this.constraintContent")
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -43,4 +43,6 @@ public class DataScopeUpdateForm extends BaseUpdateForm {
     @ApiModelProperty(value = "是否自定义",required = true)
     private Boolean isCustom;
 
+    @ApiModelProperty(value = "备注")
+    private String remark;
 }

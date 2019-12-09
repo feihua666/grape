@@ -41,7 +41,7 @@ public abstract class BaseTreeController<Vo extends BaseTreeVo,Po extends TreeBa
         String parentId = poQuery.getParentId();
         if (!isStrEmpty(parentId)) {
             dbPo = service.createChild(poQuery,parentId);
-            return create(dbPo);
+            return returnCreate(dbPo);
         }else {
             return super.create(poQuery);
         }

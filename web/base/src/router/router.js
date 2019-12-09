@@ -89,8 +89,12 @@ const router = new VueRouter({
             component: () => import('@/views/user/userpost/UserPostAdd.vue')
         },
         {
-            path: '/user/userPost/UserPostAssignRole/:userPostId',
+            path: '/user/userPost/userPostAssignRole/:userPostId',
             component: () => import('@/views/user/userpost/UserPostAssignRole.vue')
+        },
+        {
+            path: '/user/userPost/userPostAssignDataScope/:userPostId',
+            component: () => import('@/views/user/userpost/UserPostAssignDataScope.vue')
         },
         {
             path: '/user/userIdentifier/:userId',
@@ -99,6 +103,10 @@ const router = new VueRouter({
         {
             path: '/user/userIdentifier/userIdentifierAdd/:userId',
             component: () => import('@/views/user/useridentifier/UserIdentifierAdd.vue')
+        },
+        {
+            path: '/user/UserAssignDataScope/:userId',
+            component: () => import('@/views/user/UserAssignDataScope.vue')
         },
         {
             path: '/role',
@@ -121,6 +129,10 @@ const router = new VueRouter({
             component: () => import('@/views/role/RoleAssignUser.vue')
         },
         {
+            path: '/role/RoleAssignDataScope/:roleId',
+            component: () => import('@/views/role/RoleAssignDataScope.vue')
+        },
+        {
             path: '/post',
             component: () => import('@/views/post/Post.vue')
         },
@@ -131,6 +143,10 @@ const router = new VueRouter({
         {
             path: '/post/postEdit/:postId',
             component: () => import('@/views/post/PostEdit.vue')
+        },
+        {
+            path: '/post/PostAssignDataScope/:postId',
+            component: () => import('@/views/post/PostAssignDataScope.vue')
         },
         {
             path: '/job',
@@ -179,6 +195,42 @@ const router = new VueRouter({
         {
             path: '/paramConfig/paramConfigEdit/:paramConfigId',
             component: () => import('@/views/paramconfig/ParamConfigEdit.vue')
+        },
+        {
+            path: '/dataConstraint/dataObject',
+            component: () => import('@/views/dataconstraint/dataobject/DataObject.vue')
+        },
+        {
+            path: '/dataConstraint/dataObjectAdd',
+            component: () => import('@/views/dataconstraint/dataobject/DataObjectAdd.vue')
+        },
+        {
+            path: '/dataConstraint/dataObjectEdit/:dataObjectId',
+            component: () => import('@/views/dataconstraint/dataobject/DataObjectEdit.vue')
+        },
+        {
+            path: '/dataConstraint/dataScope',
+            component: () => import('@/views/dataconstraint/datascope/DataScope.vue')
+        },
+        {
+            path: '/dataConstraint/dataScopeAdd',
+            component: () => import('@/views/dataconstraint/datascope/DataScopeAdd.vue')
+        },
+        {
+            path: '/dataConstraint/dataScopeAdd/:dataObjectId',
+            component: () => import('@/views/dataconstraint/datascope/DataScopeAdd.vue')
+        },
+        {
+            path: '/dataConstraint/dataScopeEdit/:dataScopeId',
+            component: () => import('@/views/dataconstraint/datascope/DataScopeEdit.vue')
+        },
+        {
+            path: '/dataConstraint/dataScopeAssignDataTree/:dataScopeId',
+            component: () => import('@/views/dataconstraint/datascope/DataScopeAssignDataTree.vue')
+        },
+        {
+            path: '/dataConstraint/dataScopeAssignDataTable/:dataScopeId',
+            component: () => import('@/views/dataconstraint/datascope/DataScopeAssignDataTable.vue')
         }
     ]
 })

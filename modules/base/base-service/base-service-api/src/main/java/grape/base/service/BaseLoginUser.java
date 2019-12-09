@@ -1,6 +1,8 @@
 package grape.base.service;
 
 import grape.base.service.comp.po.Comp;
+import grape.base.service.dataconstraint.dto.DataConstraintDto;
+import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.role.po.Role;
 import grape.base.service.user.po.UserIdentifier;
@@ -48,6 +50,9 @@ public class BaseLoginUser extends AbstractLoginUser {
     private List<UserPostInfo> userPostInfos;
     // 用户的可用角色，用户角色关系而来
     private List<Role> roles;
+    // 用户正在使用的数据范围
+    private List<DataConstraintDto> currentDataConstraints;
+
 
     @Override
     public boolean superAdmin() {

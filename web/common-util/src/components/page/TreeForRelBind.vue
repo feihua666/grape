@@ -9,7 +9,7 @@
                    type="info" show-icon :closable="false">
         </el-alert>
 
-    <tree ref="tree" show-checkbox check-strictly  :checked-keys="selectedIds" :data-url="dataUrl">
+    <tree ref="tree" :lazy="lazyload" show-checkbox check-strictly  :checked-keys="selectedIds" :data-url="dataUrl">
     </tree>
         <div class="g-align-center">
             <el-button type="primary" size="mini" :loading="submitLoading" @click="doSubmit">保存</el-button>
@@ -36,6 +36,7 @@
                 type: String,
                 required: true
             },
+            // 提交的url
             submitUrl:{
                 type: String,
                 required: true
@@ -50,13 +51,17 @@
                 type: String,
                 required: true
             },
+            // 已选中的提交属性
             checkedProp:{
                 type: String,
                 required: true
             },
+            // 未选中的提交属性
+            // 懒加载时填写
             uncheckedProp:{
                 type: String
             },
+            // 是否是数据懒加载，懒加载指供选择的数据不是数据库中全部数据，而是按分页或树懒加载展示
             lazyload:{
                 type: Boolean,
                 default: true

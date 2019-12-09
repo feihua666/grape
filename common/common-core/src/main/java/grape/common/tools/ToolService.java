@@ -2,6 +2,7 @@ package grape.common.tools;
 
 
 import grape.common.exception.runtime.InvalidParamsException;
+import grape.common.exception.runtime.RDataNotExistException;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -151,7 +152,11 @@ public interface ToolService {
         return pinyinDto;
     }
 
-
+    default public void assertNotNull(Object obj,String exceptionMsg){
+        if(obj == null){
+            throw new RDataNotExistException(exceptionMsg);
+        }
+    }
     default public void assertParamNotNull(Object obj,String exceptionMsg){
         if(obj == null){
             throw new InvalidParamsException(exceptionMsg);

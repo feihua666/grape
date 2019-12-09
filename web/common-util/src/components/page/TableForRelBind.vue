@@ -1,12 +1,12 @@
 <template>
     <container type="top-header" :show="{header:formShow && formItems.length>0}" class="g-width100 g-height100">
         <Form slot="header" inline v-if="formItems.length>0"
-              submit-bus-key="roleAssignUserList"
+              submit-bus-key="tableRelAssignList"
               :form-items="formItems"
         ></Form>
         <Table slot="main"
                ref="table"
-               form-submit-bus-key="roleAssignUserList"
+               form-submit-bus-key="tableRelAssignList"
                :columns="columns"
                unique-label="name"
                v-on:toolbarSearchClick="formShow = !formShow"

@@ -1,10 +1,16 @@
 package grape.base.rest.dataconstraint.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.dataconstraint.vo.DataScopeVirtualTreeNodeVo;
 import grape.base.service.BaseLoginUser;
+import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
+import grape.base.service.dataconstraint.dto.DataConstraintDto;
+import grape.base.service.dataconstraint.po.DataObject;
+import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.rest.vo.TreeNodeVo;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import grape.common.rest.mvc.BaseController;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dataconstraint.api.IDataScopeService;
+
+import java.util.ArrayList;
 import java.util.List;
 /**
  * <p>
@@ -43,6 +51,8 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
     private IDataScopeService currentService;
     @Autowired
     private IDataScopeCustomRelService iDataScopeCustomRelService;
+    @Autowired
+    private IDataObjectService iDataObjectService;
 
 
      @ApiOperation("添加数据范围")
@@ -99,4 +109,78 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
          return super.listPage(po,listPageForm);
      }
 
+    /**
+     * 数据范围树
+     * @return
+     */
+    @ApiOperation(value = "数据范围树",notes = "数据对象和数据范围组成一个树,一次性加载所有数据")
+    @RequiresPermissions("datascope:tree")
+    @GetMapping("/tree")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> treeAll() {
+
+        BaseLoginUser loginUser = getLoginUser();
+        List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> r = new ArrayList<>();
+        if(loginUser.getIsSuperAdmin()){
+            // 获取所有的数据对象作为第一级节点
+            List<DataObject> dataObjectList = iDataObjectService.list();
+
+            for (DataObject dataObject : dataObjectList) {
+                // 数据范围
+                List<DataScope> dataScopes = currentService.getByDataObjectId(dataObject.getId());
+                combine(r,dataObject,dataScopes);
+            }
+        }else {
+            List<DataConstraintDto> currentDataConstraints = loginUser.getCurrentDataConstraints();
+            if (!isListEmpty(currentDataConstraints)) {
+                for (DataConstraintDto currentDataConstraint : currentDataConstraints) {
+                    combine(r,currentDataConstraint.getDataObject(),currentDataConstraint.getDataScopes());
+                }
+            }else {
+                ExceptionTools.dataNotExistRE("当前用户未分配数据范围");
+            }
+        }
+
+        return r;
+    }
+
+
+    private void combine(List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> r,DataObject dataObject,List<DataScope> dataScopes){
+        TreeNodeVo<DataScopeVirtualTreeNodeVo> treeNode;
+        TreeNodeVo<DataScopeVirtualTreeNodeVo> treeNode1;
+        DataScopeVirtualTreeNodeVo dataScopeVirtualTreeNodeVo;
+        dataScopeVirtualTreeNodeVo = new DataScopeVirtualTreeNodeVo();
+
+        dataScopeVirtualTreeNodeVo.setIsDataObject(true);
+        dataScopeVirtualTreeNodeVo.setId(dataObject.getId());
+        dataScopeVirtualTreeNodeVo.setIsDisabled(true);
+        dataScopeVirtualTreeNodeVo.setName(dataObject.getName());
+        dataScopeVirtualTreeNodeVo.setParentId(null);
+        dataScopeVirtualTreeNodeVo.setVersion(dataObject.getVersion());
+            // 数据范围
+            dataScopes = currentService.getByDataObjectId(dataObject.getId());
+
+        treeNode = new TreeNodeVo<>();
+        treeNode.setNode(dataScopeVirtualTreeNodeVo);
+        treeNode.setId(dataScopeVirtualTreeNodeVo.getId());
+        treeNode.setVersion(dataScopeVirtualTreeNodeVo.getVersion());
+        if (!isListEmpty(dataScopes)) {
+            treeNode.setHasChildren(true);
+            treeNode.setChildren(new ArrayList<>());
+            for (DataScope dataScope : dataScopes) {
+                dataScopeVirtualTreeNodeVo = new DataScopeVirtualTreeNodeVo();
+                dataScopeVirtualTreeNodeVo.setIsDataObject(false);
+                dataScopeVirtualTreeNodeVo.setId(dataScope.getId());
+                dataScopeVirtualTreeNodeVo.setIsDisabled(false);
+                dataScopeVirtualTreeNodeVo.setName(dataScope.getName());
+                dataScopeVirtualTreeNodeVo.setParentId(dataObject.getId());
+                dataScopeVirtualTreeNodeVo.setVersion(dataScope.getVersion());
+                treeNode1 = new TreeNodeVo<>(dataScopeVirtualTreeNodeVo, null, false);
+                treeNode1.setId(dataScopeVirtualTreeNodeVo.getId());
+                treeNode1.setVersion(dataScopeVirtualTreeNodeVo.getVersion());
+                treeNode.getChildren().add(treeNode1);
+            }
+        }
+        r.add(treeNode);
+    }
 }

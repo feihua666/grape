@@ -35,7 +35,6 @@ public class DataScopeCustomRel extends RelBasePo<DataScopeCustomRel> {
      */
     private String dataScopeId;
 
-
     @Override
     protected Serializable pkVal() {
         return null;

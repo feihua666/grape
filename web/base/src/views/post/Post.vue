@@ -118,6 +118,13 @@
                                 return '启用/禁用'
                             }
                         }
+                    },
+                    {
+                        action: 'nav',
+                        url:'/post/postAssignDataScope/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label: '数据范围约束'
                     }
                 ]
             }

@@ -1,5 +1,6 @@
 package grape.base.rest.dataconstraint.mapper;
 
+import grape.base.rest.dataconstraint.form.DataObjectListForm;
 import grape.base.service.dataconstraint.po.DataObject;
 import grape.common.rest.mvc.WebMapper;
 import org.mapstruct.Mapper;
@@ -22,4 +23,5 @@ public interface DataObjectWebMapper extends WebMapper<DataObjectVo, DataObject>
     DataObject formToPo(DataObjectCreateForm f);
     DataObject formToPo(DataObjectUpdateForm f);
     DataObject formToPo(DataObjectListPageForm f);
+    DataObject formToPo(DataObjectListForm f);
 }

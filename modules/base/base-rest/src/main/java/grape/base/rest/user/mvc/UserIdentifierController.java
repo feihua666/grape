@@ -13,6 +13,7 @@ import grape.base.service.user.api.IUserIdentifierService;
 import grape.base.service.user.po.UserIdentifier;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseController;
+import grape.common.rest.mvc.BaseLoginUserController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -32,7 +33,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/useridentifier")
 @Api(tags = "用户登录帐号相关接口")
-public class UserIdentifierController extends BaseController<UserIdentifierVo, UserIdentifier, BaseLoginUser> {
+public class UserIdentifierController extends BaseLoginUserController<UserIdentifierVo, UserIdentifier, BaseLoginUser> {
 
 
     @Autowired

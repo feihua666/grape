@@ -38,7 +38,7 @@
                                :type="button.buttonType || aiButtonStyle(button).type || 'primary'"
                                :icon="button.buttonIcon || aiButtonStyle(button).icon"
                                size="mini"
-                               :loading="buttonLoading[button.code]"
+                               :loading="localButtonLoading[button.code]"
                                :key="index">{{operationButtonLabel(button)}}</el-button>
                 </template>
 
@@ -215,25 +215,33 @@
             }
         },
         computed:{
+            // 平铺的操作
             groupOperations(){
                 let r = []
                 if(this.operations){
                     for (let index in this.operations) {
-                        let item = this.operations[index]
-                        if(item.position == undefined || item.position == 'default'){
-                            r.push(item)
+                        let button = this.operations[index]
+                        if(button.code == undefined){
+                            button.code = 'code' + index;
+                        }
+                        if(button.position == undefined || button.position == 'default'){
+                            r.push(button)
                         }
                     }
                 }
                 return r
             },
+            // 下拉中的操作
             moreOperations(){
                 let r = []
                 if(this.operations){
                     for (let index in this.operations) {
-                        let item = this.operations[index]
-                        if(item.position == 'more'){
-                            r.push(item)
+                        let button = this.operations[index]
+                        if(button.code == undefined){
+                            button.code = 'code' + index;
+                        }
+                        if(button.position == 'more'){
+                            r.push(button)
                         }
                     }
                 }
@@ -419,12 +427,16 @@
                 return button.label
             },
             isButtonDisabled(button){
-                if(button.disabled == true){
+                if(button.disabled === true){
                     return true
                 }else if(button.disabledOnMissingSelect == true){
                     if(!this.currentRow){
                         return true
+                    }else if(typeof button.disabled == 'function'){
+                        return button.disabled(this.currentRow)
                     }
+                }else if(typeof button.disabled == 'function'){
+                    return button.disabled(this.currentRow)
                 }
                 return false
             },
@@ -521,7 +533,7 @@
                                 this.$message.error('删除失败，请刷新数据再试')
                             }
                         }).finally(()=>{
-                        this.$set(this.localButtonLoading,button.code,true)
+                        this.$set(this.localButtonLoading,button.code,false)
                     })
                 })
             },
@@ -546,6 +558,7 @@
                     }
                     data[prop] = !this.currentRow[prop]
                     data[reasonProp] = value
+                    this.$set(this.localButtonLoading,button.code,true)
                     this.axios.patch(url,data)
                         .then(res => {
                             this.$message.success('操作成功')
@@ -562,7 +575,9 @@
                             }else {
                                 this.$message.error('删除失败，请刷新数据再试')
                             }
-                        })
+                        }).finally(()=>{
+                        this.$set(this.localButtonLoading,button.code,false)
+                    })
                 })
             },
             toolbarMoreCheckAll(){
@@ -593,6 +608,11 @@
             clearSelection(){
                 this.$refs.table.clearSelection()
             },
+            // 设置按钮的加载状态，code为button中指定的code值，如果未指定则是默认的code+index索引字符串value=true或false
+            // 也可以通过buttonLoading方式改变状态
+            setOperationButtonLoading(code,value){
+                this.$set(this.localButtonLoading,code,value)
+            },
             // 加载多选选中的值
             getCheckedData(){
                 if(!this.checkedKeysUrl) return
@@ -621,8 +641,15 @@
             checkedKeys(val){
                 this.localCheckedKeys = val
             },
-            // 这里没有处理每一个属性的loading状态，但一般都是一个按钮操作不太影响
+            // 改变操作按钮的loading状态，也可以单个调用方法指定setOperationButtonLoading
             buttonLoading(val){
+                for(let prop in val){
+                    if(this.localButtonLoading[prop] == undefined){
+                        this.$set(this.localButtonLoading,prop,val[prop])
+                    }else  if(this.localButtonLoading[prop] != val[prop]){
+                        this.$set(this.localButtonLoading,prop,val[prop])
+                    }
+                }
                 this.localButtonLoading = val
             }
         }

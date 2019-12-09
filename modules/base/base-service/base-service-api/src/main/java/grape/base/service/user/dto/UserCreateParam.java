@@ -2,6 +2,7 @@ package grape.base.service.user.dto;
 
 import grape.common.service.dto.BaseDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 创建用户参数
@@ -9,6 +10,7 @@ import lombok.Data;
  * Created at 2019/11/28 14:26
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class UserCreateParam extends BaseDto {
 
     private String account;

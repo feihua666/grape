@@ -56,6 +56,7 @@ public class UserLoginController extends BaseController<UserVo, User> {
     public LoginVo login(@RequestBody @Valid LoginForm loginForm) {
         SecurityUtils.getSubject().login(new IdentifierPasswordToken(loginForm.getUsername(),loginForm.getPassword()));
 
+        // 登录成功初始化用户信息
         BaseLoginUser loginUser = iUserService.initLoginUserByIdentifier(loginForm.getUsername());
         BaseLoginUser.setLoginUser(loginUser);
         // 同时放到session中

@@ -39,7 +39,7 @@
                     if (valid) {
                         self.logining = true
                         self.axios.post('/user/login',self.form).then(res => {
-                            self.$message.info('登录成功')
+                            self.$message.success('登录成功')
                             self.$emit('success')
                         }).catch(error => {
                             if (error.response) {
@@ -51,7 +51,6 @@
                             self.logining = false
                         })
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });

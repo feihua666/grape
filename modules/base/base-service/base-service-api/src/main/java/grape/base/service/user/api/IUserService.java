@@ -28,6 +28,17 @@ public interface IUserService extends IBaseService<User>, ITransService<String, 
     BaseLoginUser initLoginUserByIdentifier(String identifier);
 
     /**
+     * 初始化当前登录用户信息用户信息
+     * 一般切换角色或切换岗位调用
+     * @param userId 必填
+     * @param identifierId 必填
+     * @param roleId
+     * @param postId
+     * @return
+     */
+    BaseLoginUser initLoginUserByUserId(String userId,String identifierId, String roleId, String postId);
+
+    /**
      * 添加用户
      * @param cp
      */

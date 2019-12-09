@@ -2,13 +2,16 @@ package grape.base.rest.dataconstraint.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.dataconstraint.form.DataObjectCreateForm;
+import grape.base.rest.dataconstraint.form.DataObjectListForm;
 import grape.base.rest.dataconstraint.form.DataObjectListPageForm;
+import grape.base.rest.dataconstraint.form.DataObjectUpdateForm;
 import grape.base.rest.dataconstraint.mapper.DataObjectWebMapper;
 import grape.base.rest.dataconstraint.vo.DataObjectVo;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeService;
 import grape.base.service.dataconstraint.po.DataObject;
+import grape.base.service.dataconstraint.po.DataScope;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseLoginUserController;
@@ -20,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+
 /**
  * <p>
  * 数据对象表 前端控制器
@@ -70,12 +75,21 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
          // 已存在数据范围不能删除
-         if (isListEmpty(iDataScopeService.getByDataObjectId(id))) {
+         if (!isListEmpty(iDataScopeService.getByDataObjectId(id))) {
              throw ExceptionTools.failRE("删除失败，存在关联的数据范围");
          }
          return super.deleteById(id);
      }
 
+     @ApiOperation("更新数据对象")
+     @RequiresPermissions("dataobject:single:updateById")
+     @PutMapping("/{id}")
+     @ResponseStatus(HttpStatus.CREATED)
+     public DataObjectVo update(@PathVariable String id,@RequestBody @Valid DataObjectUpdateForm uf) {
+         DataObject po = currentWebMapper.formToPo(uf);
+         po.setId(id);
+         return super.update(po);
+     }
 
     @ApiOperation("分页查询数据对象")
     @RequiresPermissions("dataobject:single:listPage")
@@ -85,5 +99,30 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
          DataObject po = currentWebMapper.formToPo(listPageForm);
          return super.listPage(po,listPageForm);
      }
+    /**
+     * 列出数据对象
+     * @param listForm
+     * @return
+     */
+    @ApiOperation(value = "不分页查询数据对象",notes = "可用于添加职级做下拉或下拉搜索")
+    @RequiresPermissions("dataobject:single:list")
+    @GetMapping("/list")
+    @ResponseStatus(HttpStatus.OK)
+    public List<DataObjectVo> list(DataObjectListForm listForm) {
+        DataObject po = currentWebMapper.formToPo(listForm);
+        return super.list(po);
+    }
 
+    @ApiOperation(value = "数据范围id查询数据对象",notes = "主要用于自定义数据范围参数判断")
+    @RequiresPermissions("dataobject:single:queryByDataScopeId")
+    @GetMapping("/dataobject/{dataScopeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public DataObjectVo queryByDataScopeId(@PathVariable String dataScopeId) {
+        DataScope dataScope = iDataScopeService.getById(dataScopeId);
+        DataObject dataObject = currentService.getById(dataScope.getDataObjectId());
+        if (dataObject == null) {
+            throw ExceptionTools.dataNotExistRE("数据对象不存在");
+        }
+        return transVo(currentWebMapper.poToVo(dataObject));
+    }
 }

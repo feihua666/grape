@@ -7,11 +7,11 @@
              v-loading="loading"
              @submit.native.prevent
     >
-        <template v-for="(item, index) in formItems">
+        <template v-for="(item, formItemIndex) in computedFormItems">
             <el-form-item
                     v-if="item.element"
                     :label="item.element.label"
-                    :key="index"
+                    :key="formItemIndex"
                     :prop="getFieldName(item)"
                     :rules="getRules(item)"
 
@@ -111,16 +111,16 @@
                                :icon="item.element.button.buttonIcon || aiButtonStyle(item.element.button.label).icon "
                                @click="buttonClick(item.element.button)"
                                :native-type="item.element.button.action == 'submit' ? 'submit': null"
-                               :loading="localButtonLoading[item.element.button.code] || item.element.button.loading"
+                               :loading="localButtonLoading[item.element.button.code]"
                                :title="getTitle(item.element.button)"
                     >{{item.element.button.label}}</el-button>
                     <template v-else-if="isArray(item.element.button)">
-                        <el-button v-for="(buttonItem,index) in item.element.button" :key="index"
+                        <el-button v-for="(buttonItem,elementButtonIndex) in item.element.button" :key="elementButtonIndex"
                                    :type="buttonItem.buttonType || aiButtonStyle(buttonItem.label).type || 'primary'"
                                    :icon="buttonItem.buttonIcon || aiButtonStyle(buttonItem.label).icon "
                                    @click="buttonClick(buttonItem)"
                                    :native-type="buttonItem.action == 'submit' ? 'submit': null"
-                                   :loading="localButtonLoading[buttonItem.code] || buttonItem.loading"
+                                   :loading="localButtonLoading[buttonItem.code]"
                                    :title="getTitle(buttonItem)"
                         >{{buttonItem.label}}</el-button>
                     </template>
@@ -249,6 +249,33 @@
             }
         },
         computed:{
+            // 主要是为生成默认的按钮编码
+            computedFormItems(){
+                let length = this.formItems.length
+                for(let i = 0;i<length;i++){
+                    let item = this.formItems[i]
+                    if(!item.element){
+                        continue
+                    }
+                    if(item.element.type == 'button'){
+                        if(isObject(item.element.button)){
+                            if(item.element.button.code == undefined){
+                                item.element.button.code = 'code' + i
+                            }
+                        }else if(isArray(item.element.button)){
+
+                            let _length = item.element.button.length
+                            for(let j = 0;j<_length;j++){
+                                let button = item.element.button[j]
+                                if(button.code == undefined){
+                                    button.code = 'code' + i + '' + j
+                                }
+                            }
+                        }
+                    }
+                }
+                return this.formItems
+            }
         },
         data(){
             let form = {}
@@ -537,9 +564,15 @@
                     }
                 }
             },
-            // 这里没有处理每一个属性的loading状态，但一般都是一个按钮操作不太影响
+
             buttonLoading(val){
-                this.localButtonLoading = val
+                for(let prop in val){
+                    if(this.localButtonLoading[prop] == undefined){
+                        this.$set(this.localButtonLoading,prop,val[prop])
+                    }else  if(this.localButtonLoading[prop] != val[prop]){
+                        this.$set(this.localButtonLoading,prop,val[prop])
+                    }
+                }
             }
         }
     }

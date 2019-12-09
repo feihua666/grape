@@ -26,6 +26,7 @@ import grape.base.service.user.po.User;
 import grape.common.exception.ExceptionTools;
 import grape.common.rest.common.PasswordAndSalt;
 import grape.common.rest.mvc.BaseController;
+import grape.common.rest.mvc.BaseLoginUserController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -49,7 +50,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户相关接口")
-public class UserController extends BaseController<UserVo, User,BaseLoginUser> {
+public class UserController extends BaseLoginUserController<UserVo, User,BaseLoginUser> {
 
     @Autowired
     private IUserService iUserService;

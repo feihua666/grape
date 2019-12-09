@@ -222,7 +222,7 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
     }
 
     default Po initParentIdXByParent(Po child,String parentId){
-        Po parent = getParent(parentId);
+        Po parent = getById(parentId);
         return initParentIdXByParent(child, parent);
     }
     default Po initParentIdXByParent(Po child,Po parent){

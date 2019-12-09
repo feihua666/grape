@@ -1,29 +1,15 @@
 package grape.base.rest.user.form.identifier;
-import cn.hutool.core.lang.PatternPool;
-import cn.hutool.core.lang.Validator;
-import cn.hutool.core.util.ReUtil;
+
 import grape.base.service.user.po.UserIdentifier;
 import grape.common.rest.form.BaseForm;
-
-import grape.common.rest.validation.Script;
 import grape.common.rest.validation.cross.depend.DependField;
-import grape.common.rest.validation.cross.depend.DependFieldValidator;
-import grape.common.rest.validation.form.Form;
-import grape.common.rest.validation.form.IFormValid;
-import grape.common.rest.validation.form.ValidContext;
-import grape.common.rest.validation.form.ValidResult;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.ScriptAssert;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.Map;
 
 /**
  * <p>
@@ -38,16 +24,17 @@ import java.util.Map;
        @Script( script = "getDictCodeById(_this.identityTypeDictId) == 'account_mobile'? mobile(_this.identifier):true",message = "手机号格式不正确",dictIdProp = {"identityTypeDictId"}),
        @Script( script = "getDictCodeById(_this.identityTypeDictId) == 'account_email'? email(_this.identifier):true",message = "邮箱格式不正确",dictIdProp = {"identityTypeDictId"})
 })*/
-// 最终改用依赖字段验证方式
+// 最终改用依赖字段验证方式,其实这种方式也挺长的,建议使用属性验证方式grape.common.rest.validation.props.PropValid
 @DependField.List({
-        @DependField(dependProp = "identityTypeDictId",dict =true, equal = UserIdentifier.type_dict_account_mobile,targetProp = "identifier",patternAlias = DependFieldValidator.pattern_alias_mobile,message = "手机号格式不正确"),
-        @DependField(dependProp = "identityTypeDictId",dict =true, equal = UserIdentifier.type_dict_account_email,targetProp = "identifier",patternAlias = DependFieldValidator.pattern_alias_email,message = "邮箱格式不正确")
+        @DependField(dependProp = "identityTypeDictId",dict =true, ifEqual = UserIdentifier.type_dict_account_mobile,targetProp = "identifier",patternAlias = "mobile",message = "手机号格式不正确"),
+        @DependField(dependProp = "identityTypeDictId",dict =true, ifEqual = UserIdentifier.type_dict_account_email,targetProp = "identifier",patternAlias = "email",message = "邮箱格式不正确")
 })
+// 表单验证方式
 //@Form(dictIdProp = {"identityTypeDictId"})
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Accessors(chain = true)
-@ApiModel(value="用户登录帐号表单")
+@ApiModel(value="用户创建登录帐号表单")
 public class UserIdentifierCreateForm extends BaseForm /*implements IFormValid*/ {
 
     private static final long serialVersionUID = 1L;

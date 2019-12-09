@@ -182,6 +182,13 @@
                         position:'more',
                         disabledOnMissingSelect:true,
                         label: '重置用户密码'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/user/UserAssignDataScope/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label: '数据范围约束'
                     }
 
                 ]

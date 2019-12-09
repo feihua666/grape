@@ -1,23 +1,16 @@
 package grape.common.rest.validation.cross.depend;
 
-import cn.hutool.core.lang.PatternPool;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.ReflectUtil;
-import grape.common.rest.validation.form.Form;
-import grape.common.rest.validation.form.IFormValid;
-import grape.common.rest.validation.form.ValidContext;
-import grape.common.rest.validation.form.ValidResult;
-import grape.common.service.common.DictService;
+import grape.common.rest.validation.ValidHelper;
 import grape.common.tools.RequestIdTool;
 import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.util.CollectionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,8 +21,8 @@ import java.util.Map;
 @Slf4j
 public class DependFieldValidator implements ConstraintValidator<DependField, Object>, ToolService {
 
-    @Autowired(required = false)
-    private DictService dictService;
+    @Autowired
+    private ValidHelper validHelper;
     private boolean dict;
     private String dependProp;
     private String targetProp;
@@ -39,23 +32,14 @@ public class DependFieldValidator implements ConstraintValidator<DependField, Ob
     private String message;
     private String reportOn;
 
-    public static final String pattern_alias_mobile = "mobile";
-    public static final String pattern_alias_email = "email";
-
-    private static Map<String,String> patternAliasMap = null;
-    static {
-        patternAliasMap = new HashMap<>();
-        patternAliasMap.put(pattern_alias_mobile, PatternPool.MOBILE.pattern());
-        patternAliasMap.put(pattern_alias_email, PatternPool.EMAIL.pattern());
-    }
     @Override
     public void initialize(DependField constraintAnnotation) {
 
         this.dict = constraintAnnotation.dict();
         this.dependProp = constraintAnnotation.dependProp();
         this.targetProp = constraintAnnotation.targetProp();
-        this.equal = constraintAnnotation.equal();
-        this.pattern = constraintAnnotation.pattern();
+        this.equal = constraintAnnotation.ifEqual();
+        this.pattern = constraintAnnotation.thenPattern();
         this.patternAlias = constraintAnnotation.patternAlias();
         this.message = constraintAnnotation.message();
         this.reportOn = constraintAnnotation.reportOn();
@@ -63,7 +47,7 @@ public class DependFieldValidator implements ConstraintValidator<DependField, Ob
 
         if(isStrEmpty(this.pattern) && !isStrEmpty(this.patternAlias)){
 
-            this.pattern = patternAliasMap.get(this.patternAlias);
+            this.pattern = validHelper.getPatternAliasMap().get(this.patternAlias);
         }
     }
 
@@ -78,19 +62,16 @@ public class DependFieldValidator implements ConstraintValidator<DependField, Ob
         // 字典转换
         if(this.dict){
             log.debug("依赖字段验证：requestId=[{}],设置了字典属性dependProp=[{}]",RequestIdTool.getRequestId(),this.dependProp);
-            if(this.dictService != null){
-                if(dependValue != null){
-                    dependValue = this.dictService.getCodeById(dependValue.toString());
-                }else {
-                    log.debug("依赖字段验证：requestId=[{}],字典属性[{}]值为空",RequestIdTool.getRequestId(),this.dependProp);
-                }
+            if(dependValue != null){
+                Map<String, String> dictCodeMap = validHelper.getDictCodeMap(new String[]{this.dependProp}, value);
+                dependValue = dictCodeMap.get(dependValue);
             }else {
-                throw new RuntimeException("依赖字段验证指定了字典属性但字典服务[DictService]没有被注入，请检查配置或需要实现[dictService]接口");
+                log.debug("依赖字段验证：requestId=[{}],字典属性[{}]值为空",RequestIdTool.getRequestId(),this.dependProp);
             }
         }else {
             log.debug("依赖字段验证：requestId=[{}],没有指定字典属性，将直接用dependProp对应的值",RequestIdTool.getRequestId());
         }
-        log.debug("依赖字段验证：requestId=[{}],dependValue=[{}],equal=[{}],targetValue=[{}]",
+        log.debug("依赖字段验证：requestId=[{}],dependValue=[{}],ifEqual=[{}],targetValue=[{}]",
                 RequestIdTool.getRequestId(),
                 dependValue,
                 this.equal,
@@ -103,10 +84,7 @@ public class DependFieldValidator implements ConstraintValidator<DependField, Ob
             // 验证pattern
             if (targetValue != null && !ReUtil.isMatch(this.pattern,targetValue.toString())) {
                 // 验证错误
-                if (!this.reportOn.isEmpty()) {
-                    constraintValidatorContext.disableDefaultConstraintViolation();
-                    constraintValidatorContext.buildConstraintViolationWithTemplate(this.message).addPropertyNode(this.reportOn).addConstraintViolation();
-                }
+                validHelper.reportMessageOnProp(this.reportOn,this.message,constraintValidatorContext);
                 return false;
             }
         }

@@ -152,8 +152,15 @@
                         action: 'nav',
                         position:'more',
                         disabledOnMissingSelect:true,
-                        url:'/user/userPost/UserPostAssignRole/:id',
+                        url:'/user/userPost/userPostAssignRole/:id',
                         label: '分配角色'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/user/userPost/userPostAssignDataScope/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label: '数据范围约束'
                     }
                 ]
             }

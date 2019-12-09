@@ -1,11 +1,14 @@
 package grape.base.rest.dataconstraint.form;
 import grape.common.rest.form.BaseForm;
 
+import grape.common.rest.validation.props.PropValid;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.ScriptAssert;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 /**
@@ -16,6 +19,7 @@ import javax.validation.constraints.NotNull;
  * @author yangwei
  * @since 2019-12-03
  */
+@PropValid
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
@@ -32,5 +36,18 @@ public class DataObjectCreateForm extends BaseForm {
     private String name;
 
 
+    @ApiModelProperty(value = "数据范围自定义url")
+    private String dataCustomUrl;
+
+    @PropValid.Depend(message = "是否数据懒加载不能为空",dependProp = "dataCustomUrl")
+    @ApiModelProperty(value = "是否数据懒加载")
+    private Boolean isDataLazy;
+
+    @PropValid.Depend(message = "交互方式不能为空",dependProp = "dataCustomUrl")
+    @ApiModelProperty(value = "交互方式")
+    private String interviewModeDictId;
+
+
+    private String tableModeColumns;
 
 }

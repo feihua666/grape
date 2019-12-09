@@ -11,5 +11,5 @@ import javax.validation.Valid;
  */
 public interface IFormValid  extends ToolService {
 
-    public void valid(ValidResult result, ValidContext context);
+    public boolean valid(ValidResult result, ValidContext context);
 }

@@ -75,6 +75,8 @@ public class BaseGenerator extends SuperGenerator {
         String author = "yangwei";
         String tablePrefix = "base";
 
+        // 以下注释了的说明生成的个别文件被移动或删除了，再次生成会重新生成，所以注释了
+
         // 区域表
         commonSet("base_area","area",TableType.tree,tablePrefix,author);
         // 用户表
@@ -103,10 +105,10 @@ public class BaseGenerator extends SuperGenerator {
         commonSet("base_data_object","dataconstraint",TableType.normal,tablePrefix,author);
         commonSet("base_data_scope","dataconstraint",TableType.normal,tablePrefix,author);
         //commonSet("base_data_scope_custom_rel","dataconstraint",TableType.rel,tablePrefix,author);
-        commonSet("base_user_data_scope_rel","userdatascoperel",TableType.rel,tablePrefix,author);
-        commonSet("base_role_data_scope_rel","roledatascoperel",TableType.rel,tablePrefix,author);
-        commonSet("base_post_data_scope_rel","postdatascoperel",TableType.rel,tablePrefix,author);
-        commonSet("base_user_post_data_scope_rel","userpostdatascoperel",TableType.rel,tablePrefix,author);
+        //commonSet("base_user_data_scope_rel","userdatascoperel",TableType.rel,tablePrefix,author);
+        //commonSet("base_role_data_scope_rel","roledatascoperel",TableType.rel,tablePrefix,author);
+        //commonSet("base_post_data_scope_rel","postdatascoperel",TableType.rel,tablePrefix,author);
+        //commonSet("base_user_post_data_scope_rel","userpostdatascoperel",TableType.rel,tablePrefix,author);
 
         return  tableConfig;
     }

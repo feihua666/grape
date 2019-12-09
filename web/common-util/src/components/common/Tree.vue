@@ -12,7 +12,7 @@
            :filter-node-method="treeFilterNode"
            ref="tree"
            node-key="id"
-           lazy
+           :lazy="lazy"
            :load="loadChildren"
            :show-checkbox="showCheckbox"
            :check-strictly="checkStrictly"
@@ -31,12 +31,16 @@
         default: false
       },
       showCheckbox: {
-          type: Boolean,
+        type: Boolean,
         default: false
       },
       dataUrl:{
         type: String,
         required:true
+      },
+      lazy:{
+        type: Boolean,
+          default: true
       },
       label:{
         type: String,
@@ -61,7 +65,8 @@
         props: {
           children: 'children',
           label: this.getLabel,
-          isLeaf: this.isLeaf
+          isLeaf: this.isLeaf,
+          disabled:this.getDisabled
         },
           // 记录所有已加载的主键
         loadedKeys:[],
@@ -80,6 +85,9 @@
         },
         getLabel(data,node){
             return data.node[this.label]
+        },
+        getDisabled(data,node){
+            return data.node.disabled === true || data.node.isDisabled
         },
         dataArrayToKeys(dataArray){
             return dataArray.map((item)=> item.node.id)

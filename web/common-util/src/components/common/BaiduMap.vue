@@ -64,7 +64,7 @@
         this.map = new BMap.Map(this.$el)
         let point = this.newPoint(this.initPoint[0], this.initPoint[1])
         this.centerAndZoom(point, this.initZoom)
-          let top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+          let top_left_control = new BMap.ScaleControl({anchor: window.BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
           let top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
           this.map.addControl(top_left_control);
           this.map.addControl(top_left_navigation);
@@ -112,17 +112,17 @@
        },
         // 新建一个点
       newPoint (longitude, latitude) {
-        let point = new BMap.Point(longitude, latitude)
+        let point = new window.BMap.Point(longitude, latitude)
         return point
       },
         // 新建一个geo定位器
         newGeocoder () {
-            let geo = new BMap.Geocoder()
+            let geo = new window.BMap.Geocoder()
             return geo
         },
         // 新建一个标注
       addMarker(point){
-        let marker = new BMap.Marker(point)
+        let marker = new window.BMap.Marker(point)
         this.map.addOverlay(marker);
       },
         getPoint(address,callback){

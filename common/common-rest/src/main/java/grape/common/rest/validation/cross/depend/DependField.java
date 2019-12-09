@@ -30,15 +30,15 @@ public @interface DependField {
 
     Class<? extends Payload>[] payload() default { };
 
-    // 字典属性
+    // 字典属性,表示依赖的属性是否为字典id属性
     boolean dict() default false;
     // 依赖哪个字段
     String dependProp();
     String targetProp();
     // 表示依赖的字段值与该值相等对则验证pattern
-    String equal() default "";
+    String ifEqual() default "";
     // 支持正则
-    String pattern() default "";
+    String thenPattern() default "";
 
     // 提供默认正则内置别名
     String patternAlias() default "";

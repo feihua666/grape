@@ -1,6 +1,8 @@
 package grape.base.rest.dataconstraint.vo;
+import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.common.rest.vo.BaseIdVo;
 
+import grape.common.service.trans.TransBy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -32,11 +34,17 @@ public class DataScopeVo extends BaseIdVo<String> {
     @ApiModelProperty(value = "数据对象id")
     private String dataObjectId;
 
+    @TransBy(type = IDataObjectService.trans_dataObjectName,byFieldName = "dataObjectId")
+    @ApiModelProperty(value = "数据对象名称")
+    private String dataObjectName;
+
     @ApiModelProperty(value = "约束条件，暂时想到的用sql模板")
-    private String constraint;
+    private String constraintContent;
 
     @ApiModelProperty(value = "是否自定义，如果自定义=1，否则为0")
     private Boolean isCustom;
 
 
+    @ApiModelProperty(value = "备注")
+    private String remark;
 }

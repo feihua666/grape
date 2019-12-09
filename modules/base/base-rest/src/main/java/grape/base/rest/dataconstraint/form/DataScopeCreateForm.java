@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 
-@ScriptAssert(message = "约束条件不能为空",lang = "javascript",script = "_this.isCustom?true:_this.constraintContent")
+@ScriptAssert(message = "约束条件不能为空",lang = "javascript",script = "_this.isCustom ? true : !!_this.constraintContent")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
@@ -50,5 +50,6 @@ public class DataScopeCreateForm extends BaseForm {
     @ApiModelProperty(value = "是否自定义",required = true)
     private Boolean isCustom;
 
-
+    @ApiModelProperty(value = "备注")
+    private String remark;
 }

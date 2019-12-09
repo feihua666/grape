@@ -5,7 +5,6 @@ import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.po.DataObject;
 import grape.common.service.common.ConstraintContent;
 import grape.common.service.common.IDataConstraintService;
-import grape.common.service.common.IDataObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ public class BaseDataConstraintServiceImpl implements IDataConstraintService<Bas
     private IDataObjectService iDataObjectService;
     @Override
     public ConstraintContent parseConstraint(String dataObjectCode, BaseLoginUser loginUser) {
-        DataObject dataObject = iDataObjectService.getBuCode(dataObjectCode);
+        DataObject dataObject = iDataObjectService.getByCode(dataObjectCode);
 
         return null;
     }

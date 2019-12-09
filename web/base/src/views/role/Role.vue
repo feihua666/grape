@@ -145,6 +145,13 @@
                         position:'more',
                         disabledOnMissingSelect:true,
                         label:'分配用户'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/role/RoleAssignDataScope/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label: '数据范围约束'
                     }
                 ]
             }

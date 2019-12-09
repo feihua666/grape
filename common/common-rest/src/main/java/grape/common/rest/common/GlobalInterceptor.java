@@ -84,6 +84,8 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
         long interval = System.currentTimeMillis() - start;
         log.info(msg,msgHit,requestId,request.getRequestURL(),interval);
 
+
+        ThreadContextTool.remove();
         super.afterCompletion(request, response, handler, ex);
     }
 }

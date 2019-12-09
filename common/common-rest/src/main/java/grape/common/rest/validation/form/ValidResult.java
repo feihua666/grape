@@ -10,10 +10,6 @@ import lombok.Data;
 @Data
 public class ValidResult {
     /**
-     * 标识验证成功还是失败
-     */
-    private boolean result = true;
-    /**
      * 如果验证错误，错误内容提示信息，如果没有指定则会取Form中定义的message
      */
     private String errorMsg;

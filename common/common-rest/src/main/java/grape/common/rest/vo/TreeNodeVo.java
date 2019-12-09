@@ -20,6 +20,9 @@ import java.util.List;
 @ApiModel(value="展示树节点")
 public class TreeNodeVo<T extends BaseVo> extends BaseIdVo<String> {
 
+
+    public TreeNodeVo(){}
+
     @TransField
     @ApiModelProperty(value = "父节点")
     private T node;

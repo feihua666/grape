@@ -1,10 +1,8 @@
 package grape.base.rest.user.form.identifier;
+
 import grape.base.service.user.po.UserIdentifier;
 import grape.common.rest.form.BaseForm;
-
-import grape.common.rest.validation.Script;
 import grape.common.rest.validation.cross.depend.DependField;
-import grape.common.rest.validation.cross.depend.DependFieldValidator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,8 +21,8 @@ import javax.validation.constraints.NotEmpty;
  */
 
 @DependField.List({
-        @DependField(dependProp = "identityTypeDictId",dict =true, equal = UserIdentifier.type_dict_account_mobile,targetProp = "identifier",patternAlias = DependFieldValidator.pattern_alias_mobile,message = "手机号格式不正确"),
-        @DependField(dependProp = "identityTypeDictId",dict =true, equal = UserIdentifier.type_dict_account_email,targetProp = "identifier",patternAlias = DependFieldValidator.pattern_alias_email,message = "邮箱格式不正确")
+        @DependField(dependProp = "identityTypeDictId",dict =true, ifEqual = UserIdentifier.type_dict_account_mobile,targetProp = "identifier",patternAlias = "mobile",message = "手机号格式不正确"),
+        @DependField(dependProp = "identityTypeDictId",dict =true, ifEqual = UserIdentifier.type_dict_account_email,targetProp = "identifier",patternAlias = "email",message = "邮箱格式不正确")
 })
 @Data
 @EqualsAndHashCode(callSuper=false)

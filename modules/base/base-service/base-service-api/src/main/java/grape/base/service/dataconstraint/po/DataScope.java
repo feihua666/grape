@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yangwei
- * @since 2019-12-03
+ * @since 2019-12-05
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -49,6 +49,11 @@ public class DataScope extends NormalBasePo<DataScope> {
      * 是否自定义，如果自定义=1，否则为0
      */
     private Boolean isCustom;
+
+    /**
+     * 描述
+     */
+    private String remark;
 
 
     @Override
