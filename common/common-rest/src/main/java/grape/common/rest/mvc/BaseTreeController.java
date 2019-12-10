@@ -66,6 +66,10 @@ public abstract class BaseTreeController<Vo extends BaseTreeVo,Po extends TreeBa
      */
 
     public Vo update(Po poQuery){
+        poQuery = beforUpdate(poQuery);
+        return super.update(poQuery);
+    }
+    protected Po beforUpdate(Po poQuery){
         // 判断父级是否修改
         Po poDb = getService().getById(poQuery.getId());
         //父级不相等，则有修改父级
@@ -79,7 +83,7 @@ public abstract class BaseTreeController<Vo extends BaseTreeVo,Po extends TreeBa
         if (!isStrEmpty(poQuery.getParentId())) {
             poQuery = service.initParentIdXByParent(poQuery, poQuery.getParentId());
         }
-        return super.update(poQuery);
+        return poQuery;
     }
 
     /**
@@ -88,7 +92,7 @@ public abstract class BaseTreeController<Vo extends BaseTreeVo,Po extends TreeBa
      * @return
      */
     public List<Vo> getByParentId(String parentId){
-        List<Po> r = new ArrayList<>();
+        List<Po> r;
         if (parentId == null) {
             r = ((IBaseTreeService) service).getRoot();
         }else {

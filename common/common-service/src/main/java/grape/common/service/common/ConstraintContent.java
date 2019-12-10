@@ -1,11 +1,8 @@
 package grape.common.service.common;
 
 import grape.common.pojo.BasePojo;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.List;
 
 /**
  * 数据约束内容对象
@@ -14,16 +11,12 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor
 public class ConstraintContent extends BasePojo {
 
 
-    public ConstraintContent(String content){
-        this.content = content;
+    public ConstraintContent(String compiledSqlContent){
+        this.compiledSqlContent = compiledSqlContent;
     }
 
-    private String content;
-
-    private boolean custom;
-    private List<String> customDataIds;
+    private String compiledSqlContent;
 }

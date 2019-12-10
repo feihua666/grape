@@ -31,10 +31,15 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      * @return
      */
     default List<Po> getRoot(){
-        Map<String,Object> p = new HashMap<>(2);
-        p.put(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL);
-        p.put(TreeBasePo.COLUMN_PARENT_ID,null);
-        return (List<Po>) listByMap(p);
+        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL).isNull(TreeBasePo.COLUMN_PARENT_ID));
+    }
+    /**
+     * 查询第一级，带数据约束
+     * @return
+     */
+    default List<Po> getRoot(ConstraintContent constraintContent){
+        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL).isNull(TreeBasePo.COLUMN_PARENT_ID).apply(constraintContent.getCompiledSqlContent()));
+
     }
     /**
      * 查询第一级并且等于该id
@@ -42,11 +47,8 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      */
     default List<Po> getRoot(String id){
         assertParamNotEmpty(id,"id不能为空");
-        Map<String,Object> p = new HashMap<>(3);
-        p.put(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL);
-        p.put(TreeBasePo.COLUMN_PARENT_ID,null);
-        p.put(TreeBasePo.COLUMN_ID,id);
-        return (List<Po>) listByMap(p);
+        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL).isNull(TreeBasePo.COLUMN_PARENT_ID).eq(TreeBasePo.COLUMN_ID,id));
+
     }
     /**
      * 查询子一级节点
@@ -55,9 +57,16 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      */
     default List<Po> getChildren(String parentId){
         assertParamNotEmpty(parentId,"parentId不能为空");
-        Map<String,Object> p = new HashMap<>(1);
-        p.put(TreeBasePo.COLUMN_PARENT_ID,parentId);
-        return (List<Po>) listByMap(p);
+        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId));
+    }
+    /**
+     * 查询子一级节点,带数据约束
+     * @param parentId
+     * @return
+     */
+    default List<Po> getChildren(String parentId,ConstraintContent constraintContent){
+        assertParamNotEmpty(parentId,"parentId不能为空");
+        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId).apply(constraintContent.getCompiledSqlContent()));
     }
     /**
      * 查询子一级节点，结果必须是等于限制id或其子节点

@@ -121,10 +121,10 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
 
         BaseLoginUser loginUser = getLoginUser();
         List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> r = new ArrayList<>();
+        // 超级管理员
         if(loginUser.getIsSuperAdmin()){
             // 获取所有的数据对象作为第一级节点
             List<DataObject> dataObjectList = iDataObjectService.list();
-
             for (DataObject dataObject : dataObjectList) {
                 // 数据范围
                 List<DataScope> dataScopes = currentService.getByDataObjectId(dataObject.getId());
@@ -134,17 +134,24 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
             List<DataConstraintDto> currentDataConstraints = loginUser.getCurrentDataConstraints();
             if (!isListEmpty(currentDataConstraints)) {
                 for (DataConstraintDto currentDataConstraint : currentDataConstraints) {
-                    combine(r,currentDataConstraint.getDataObject(),currentDataConstraint.getDataScopes());
+                    List<DataScope> dataScopes = new ArrayList<>();
+                    dataScopes.add(currentDataConstraint.getDataScope());
+                    combine(r,currentDataConstraint.getDataObject(),dataScopes);
                 }
             }else {
                 ExceptionTools.dataNotExistRE("当前用户未分配数据范围");
             }
         }
-
         return r;
     }
 
 
+    /**
+     * 组装为一整个树
+     * @param r
+     * @param dataObject
+     * @param dataScopes
+     */
     private void combine(List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> r,DataObject dataObject,List<DataScope> dataScopes){
         TreeNodeVo<DataScopeVirtualTreeNodeVo> treeNode;
         TreeNodeVo<DataScopeVirtualTreeNodeVo> treeNode1;
@@ -157,8 +164,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
         dataScopeVirtualTreeNodeVo.setName(dataObject.getName());
         dataScopeVirtualTreeNodeVo.setParentId(null);
         dataScopeVirtualTreeNodeVo.setVersion(dataObject.getVersion());
-            // 数据范围
-            dataScopes = currentService.getByDataObjectId(dataObject.getId());
+
 
         treeNode = new TreeNodeVo<>();
         treeNode.setNode(dataScopeVirtualTreeNodeVo);

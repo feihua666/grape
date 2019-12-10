@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
+import grape.common.service.po.BasePo;
 import grape.common.service.po.IDBasePo;
 import grape.common.tools.ToolService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +29,11 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      */
     Po create(Po entity);
 
+    /**
+     * 提取po们的id
+     * @param pos
+     * @return
+     */
     default List<String> convertIds(List<Po> pos){
         if (!isListEmpty(pos)) {
             return pos.stream().map((p) -> p.getId().toString()).collect(Collectors.toList());
@@ -34,11 +41,70 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
         return null;
     }
 
+    /**
+     * 分页查询的默认接口方法
+     * @param page
+     * @param query
+     * @return
+     */
     default IPage<Po> page(IPage<Po> page, Po query){
         return page(page, Wrappers.query(query));
     }
-
+    /**
+     * 分页查询的默认接口方法,带数据约束
+     * @param page
+     * @param query
+     * @param constraintContent 能直接使用的约束sql
+     * @return
+     */
+    default IPage<Po> page(IPage<Po> page, Po query,ConstraintContent constraintContent){
+        return page(page, Wrappers.query(query).apply(constraintContent.getCompiledSqlContent()));
+    }
+    /**
+     * 不分页查询的默认接口方法
+     * @param query
+     * @return
+     */
     default List<Po> list(Po query){
         return list(Wrappers.query(query));
+    }
+    /**
+     * 不分页查询的默认接口方法,带数据约束
+     * @param query
+     * @param constraintContent 能直接使用的约束sql
+     * @return
+     */
+    default List<Po> list(Po query,ConstraintContent constraintContent){
+        return list(Wrappers.query(query).apply(constraintContent.getCompiledSqlContent()));
+    }
+
+    /**
+     * 根据id删除，带数据约束
+     * @param id
+     * @param constraintContent
+     * @return
+     */
+    default boolean removeById(String id,ConstraintContent constraintContent){
+        return remove(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).apply(constraintContent.getCompiledSqlContent()));
+    }
+
+    /**
+     * 根据id查询，带数据约束
+     * @param id
+     * @param constraintContent
+     * @return
+     */
+    default Po getById(String id,ConstraintContent constraintContent){
+        return getOne(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).apply(constraintContent.getCompiledSqlContent()));
+    }
+
+    /**
+     *
+     * @param po
+     * @param constraintContent
+     * @return
+     */
+    default boolean updateById(Po po,ConstraintContent constraintContent){
+        return update(po, Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, po.getId()));
     }
 }

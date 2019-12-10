@@ -117,6 +117,11 @@ public class CompController extends BaseTreeLoginUserController<CompVo, Comp,Bas
         return super.checkTreeStruct();
     }
 
+    /**
+     * 公司树
+     * @param parentId
+     * @return
+     */
     @ApiOperation("公司树")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "父级id,不传获取根节点",name ="parentId",paramType = "query")
@@ -125,21 +130,8 @@ public class CompController extends BaseTreeLoginUserController<CompVo, Comp,Bas
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public  List<TreeNodeVo<CompVo>> tree(String parentId) {
-        BaseLoginUser loginUser = getLoginUser();
-
-        if (loginUser.getIsSuperAdmin()) {
-            List<CompVo> compVos = super.getByParentId(parentId);
-            return super.listToTreeNodeVo(compVos);
-        }
-
-        // 非超级管理员数据，查询本公司及以下公司
-        List<Comp> r;
-        if (parentId == null) {
-            r = iCompService.getRoot(loginUser.getCurrentUserPost().getCompId());
-        }else {
-            r = iCompService.getChildren(parentId,loginUser.getCurrentUserPost().getCompId());
-        }
-        return super.listToTreeNodeVo( super.posToVos(r));
+        List<CompVo> r = super.getByParentId(parentId);
+        return super.listToTreeNodeVo(r);
     }
 
 }

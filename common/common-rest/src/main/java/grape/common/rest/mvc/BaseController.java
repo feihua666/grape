@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 正常业务实体的controller基类,提供一些通用方法
@@ -41,19 +42,6 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
     }
 
     /**
-     * 用来返回添加后的响应
-     * @param dbPo
-     * @return
-     */
-    protected Vo returnCreate(Po dbPo){
-        if (dbPo == null) {
-            throw ExceptionTools.newRE("添加失败");
-        }
-        Vo vo = mapperConverter.poToVo(dbPo);
-        vo = transVo(vo);
-        return vo;
-    }
-    /**
      * 单表根据id获取
      * @param id
      * @return
@@ -69,7 +57,7 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
         return vo;
     }
     /**
-     * 单表根据id获取
+     * 单表根据id删除
      * @param id
      * @return
      */
@@ -78,18 +66,14 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
 
         boolean r = service.removeById(id);
         if (!r) {
-            // 如果删除失败，查询数据库中是否存在
-            if (service.getById(id) == null) {
-                throw ExceptionTools.dataNotExistRE("数据不存在，请刷新后再试");
-            }
-            throw ExceptionTools.failRE("删除失败，未知原因");
+            throw ExceptionTools.dataNotExistRE("数据不存在，请刷新后再试");
         }
         // 如果这里返回null，并不会被GlobalResponseBodyAdvice 统一包装
         return r;
     }
     /**
      * 单表更新
-     * @param uf
+     * @param poQuery
      * @return
      */
 
@@ -116,11 +100,30 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
         return pagePoToVo(page);
 
     }
+
+    /**
+     * 不分页查询
+     * @param poQuery
+     * @return
+     */
     public List<Vo> list(Po poQuery){
         List list = service.list(poQuery);
         return posToVos(list);
     }
 
+    /**
+     * 用来返回添加后的响应
+     * @param dbPo
+     * @return
+     */
+    protected Vo returnCreate(Po dbPo){
+        if (dbPo == null) {
+            throw ExceptionTools.newRE("添加失败");
+        }
+        Vo vo = mapperConverter.poToVo(dbPo);
+        vo = transVo(vo);
+        return vo;
+    }
 
     /**
      * pos转vos
@@ -128,11 +131,7 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
      * @return
      */
     public List<Vo> posToVos(List<Po> pos) {
-        List<Vo> vos = new ArrayList<>(pos.size());
-        for (Po po : pos) {
-            vos.add(transVo(mapperConverter.poToVo(po)));
-        }
-        return vos;
+        return pos.stream().map(po->transVo(mapperConverter.poToVo(po))).collect(Collectors.toList());
     }
 
     /**
@@ -150,7 +149,7 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
         return page;
     }
     /**
-     * 翻译vo的是额外属性，如：字典id换名称，但一般提供了翻译注解，除非特别复杂的翻译直接手动写，否则直接实现ITransService接口即可
+     * 翻译vo的额外属性，如：字典id换名称，但一般提供了翻译注解，除非特别复杂的翻译直接手动写，否则直接实现ITransService接口即可
      * @param vo
      * @return
      */
