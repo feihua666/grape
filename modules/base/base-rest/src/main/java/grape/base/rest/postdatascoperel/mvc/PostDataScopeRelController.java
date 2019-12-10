@@ -4,9 +4,12 @@ import grape.base.rest.postdatascoperel.form.DataScopeAssignPostForm;
 import grape.base.rest.postdatascoperel.form.PostAssignDataScopeForm;
 import grape.base.rest.postdatascoperel.mapper.PostDataScopeRelWebMapper;
 import grape.base.rest.postdatascoperel.vo.PostDataScopeRelVo;
+import grape.base.service.dataconstraint.api.IDataScopeService;
+import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.postdatascoperel.api.IPostDataScopeRelService;
 import grape.base.service.postdatascoperel.po.PostDataScopeRel;
 import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +41,8 @@ public class PostDataScopeRelController extends BaseController<PostDataScopeRelV
     private PostDataScopeRelWebMapper currentWebMapper;
     @Autowired
     private IPostDataScopeRelService currentService;
-
+    @Autowired
+    private IDataScopeService iDataScopeService;
 
 
     @ApiOperation("岗位分配数据范围")
@@ -44,6 +50,12 @@ public class PostDataScopeRelController extends BaseController<PostDataScopeRelV
     @PostMapping("/post/assign/datascope")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean postAssignDataScope(@RequestBody @Valid PostAssignDataScopeForm cf) {
+        // 检查每一个数据对象只能选中一个数据范围
+        Collection<DataScope> dataScopes = iDataScopeService.listByIds(cf.getCheckedDataScopeIds());
+        Set<String> stringSet = dataScopes.stream().map(item -> item.getDataObjectId()).collect(Collectors.toSet());
+        if (stringSet.size() != dataScopes.size()) {
+            throw new InvalidParamsException("每个数据对象只能选择一个数据范围");
+        }
         currentService.postAssignDataScope(cf.getPostId(),cf.getCheckedDataScopeIds(),cf.getUncheckedDataScopeIds(),cf.getIsLazyLoad());
         return true;
     }

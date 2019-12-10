@@ -99,6 +99,7 @@
                 this.formLoading = true
                 this.axios.get('/job/' + id).then(res => {
                     let data = res.data.data
+                    data.deptId__label = data.deptName
                     this.formData = data
                 }).catch(error => {
                     if(error.response){

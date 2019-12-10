@@ -4,9 +4,12 @@ import grape.base.rest.userdatascoperel.form.DataScopeAssignUserForm;
 import grape.base.rest.userdatascoperel.form.UserAssignDataScopeForm;
 import grape.base.rest.userdatascoperel.mapper.UserDataScopeRelWebMapper;
 import grape.base.rest.userdatascoperel.vo.UserDataScopeRelVo;
+import grape.base.service.dataconstraint.api.IDataScopeService;
+import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.userdatascoperel.api.IUserDataScopeRelService;
 import grape.base.service.userdatascoperel.po.UserDataScopeRel;
 import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +41,8 @@ public class UserDataScopeRelController extends BaseController<UserDataScopeRelV
     private UserDataScopeRelWebMapper currentWebMapper;
     @Autowired
     private IUserDataScopeRelService currentService;
+    @Autowired
+    private IDataScopeService iDataScopeService;
 
 
     @ApiOperation("用户分配数据范围")
@@ -43,6 +50,13 @@ public class UserDataScopeRelController extends BaseController<UserDataScopeRelV
     @PostMapping("/user/assign/datascope")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean userAssignDataScope(@RequestBody @Valid UserAssignDataScopeForm cf) {
+        // 检查每一个数据对象只能选中一个数据范围
+        Collection<DataScope> dataScopes = iDataScopeService.listByIds(cf.getCheckedDataScopeIds());
+        Set<String> stringSet = dataScopes.stream().map(item -> item.getDataObjectId()).collect(Collectors.toSet());
+        if (stringSet.size() != dataScopes.size()) {
+            throw new InvalidParamsException("每个数据对象只能选择一个数据范围");
+        }
+
         currentService.userAssignDataScope(cf.getUserId(),cf.getCheckedDataScopeIds(),cf.getUncheckedDataScopeIds(),cf.getIsLazyLoad());
         return true;
     }

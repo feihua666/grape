@@ -367,7 +367,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
         ThreadContextTool.put(enableDefaultDataObjectKey,true);
     }
     private boolean isEnableDefaultDataObject(){
-        boolean r =  (boolean) ThreadContextTool.get(enableDefaultDataObjectKey);
+        boolean r =  ThreadContextTool.get(enableDefaultDataObjectKey) == null ? false:true;
         ThreadContextTool.remove(enableDefaultDataObjectKey);
         return r;
     }

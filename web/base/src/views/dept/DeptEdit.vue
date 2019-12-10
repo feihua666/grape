@@ -95,7 +95,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/dict/' +this.$route.params.deptId,
+                                    url: '/dept/' +this.$route.params.deptId,
                                     label: '保存'
                                 },
                                 {

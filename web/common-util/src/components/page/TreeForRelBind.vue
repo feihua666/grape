@@ -8,6 +8,7 @@
                    title="此树为懒加载，暂不支持一键全选，当前已选择的数据和取消选择的数据不会影响未加载的选中数据"
                    type="info" show-icon :closable="false">
         </el-alert>
+        <slot name="alert"></slot>
 
     <tree ref="tree" :lazy="lazyload" show-checkbox check-strictly  :checked-keys="selectedIds" :data-url="dataUrl">
     </tree>

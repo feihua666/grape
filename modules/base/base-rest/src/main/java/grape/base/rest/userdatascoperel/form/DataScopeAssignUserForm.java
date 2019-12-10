@@ -28,9 +28,10 @@ public class DataScopeAssignUserForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "数据范围id不能为空")
-    @ApiModelProperty(value = "数据范围id")
+    @ApiModelProperty(value = "数据范围id",required = true)
     private String dataScopeId;
 
+    @NotEmpty(message = "选择的用户id不能为空")
     @ApiModelProperty(value = "选择的用户id")
     private List<String> checkedUserIds;
 

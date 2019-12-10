@@ -10,6 +10,10 @@
                     :lazyload="false"
     >
 
+        <el-alert slot="alert"
+                title="每个数据对象只能选中一个数据范围"
+                type="warning" show-icon  :closable="false">
+        </el-alert>
     </TreeForRelBind>
 </template>
 

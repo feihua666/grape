@@ -28,10 +28,11 @@ public class DataScopeAssignPostForm extends BaseForm {
     private static final long serialVersionUID = 1L;
 
     @NotEmpty(message = "数据范围id不能为空")
-    @ApiModelProperty(value = "数据范围id")
+    @ApiModelProperty(value = "数据范围id",required = true)
     private String dataScopeId;
 
-    @ApiModelProperty(value = "选择的岗位id")
+    @NotEmpty(message = "选择的岗位id不能为空")
+    @ApiModelProperty(value = "选择的岗位id",required = true)
     private List<String> checkedPostIds;
 
     @ApiModelProperty(value = "未选择的岗位id",notes = "如果为懒加载请传该值")

@@ -104,7 +104,7 @@
                     },
                     {
                         prop: 'isVirtual',
-                        label:'虚拟公司'
+                        label:'是否虚拟'
                     }
                 ],
                 tableOperations:[

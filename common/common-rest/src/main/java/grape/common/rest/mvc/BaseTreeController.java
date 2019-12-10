@@ -26,10 +26,10 @@ import java.util.List;
 public abstract class BaseTreeController<Vo extends BaseTreeVo,Po extends TreeBasePo<Po>> extends BaseController<Vo,Po> {
 
     @Autowired
-    private IBaseTreeService<Po> service;
+    protected IBaseTreeService<Po> service;
 
     @Autowired
-    private WebMapper<Vo,Po> mapperConverter;
+    protected WebMapper<Vo,Po> mapperConverter;
 
     /**
      * 单表添加
@@ -71,7 +71,7 @@ public abstract class BaseTreeController<Vo extends BaseTreeVo,Po extends TreeBa
     }
     protected Po beforUpdate(Po poQuery){
         // 判断父级是否修改
-        Po poDb = getService().getById(poQuery.getId());
+        Po poDb = service.getById(poQuery.getId());
         //父级不相等，则有修改父级
         if(!isEqual(poDb.getParentId(), poQuery.getParentId())){
             // 判断该节点下是否有子节点，如果有，不允许修改
