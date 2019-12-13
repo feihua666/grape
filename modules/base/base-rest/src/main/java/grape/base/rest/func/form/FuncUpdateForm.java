@@ -32,6 +32,15 @@ public class FuncUpdateForm extends BaseUpdateForm {
     @ApiModelProperty(value = "父id",notes = "如果该节点下还有子节点，不允许修改该值，也就是说只允许移动叶子节点")
     private String parentId;
 
+    @NotEmpty(message = "名称不能为空")
+    @ApiModelProperty(value = "名称",required = true)
+    private String name;
+
+    @NotEmpty(message = "应用id不能为空")
+    @ApiModelProperty(value = "应用id",required = true)
+    private String applicationId;
+
+
     @ApiModelProperty(value = "图标")
     private String icon;
 

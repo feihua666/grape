@@ -1,5 +1,7 @@
 package grape.base.rest.user.mvc;
 
+import grape.base.rest.application.mapper.ApplicationWebMapper;
+import grape.base.rest.application.vo.ApplicationVo;
 import grape.base.rest.post.mapper.PostWebMapper;
 import grape.base.rest.post.vo.PostVo;
 import grape.base.rest.role.mapper.RoleWebMapper;
@@ -11,8 +13,13 @@ import grape.base.rest.user.vo.CurrentUserinfoVo;
 import grape.base.rest.user.vo.LoginVo;
 import grape.base.rest.user.vo.UserVo;
 import grape.base.service.BaseLoginUser;
+import grape.base.service.application.api.IApplicationService;
+import grape.base.service.application.po.Application;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.func.api.IFuncService;
+import grape.base.service.func.po.Func;
+import grape.base.service.role.api.IRoleService;
 import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.common.exception.runtime.InvalidParamsException;
@@ -28,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +55,10 @@ public class UserLoginController extends BaseController<UserVo, User> {
 
     @Autowired
     private IDictService iDictService;
+
+    @Autowired
+    private ApplicationWebMapper applicationWebMapper;
+
     @Autowired
     BaseDbRealm baseDbRealm;
 
@@ -129,6 +141,13 @@ public class UserLoginController extends BaseController<UserVo, User> {
             currentUserinfoVo.setPosts(postVoList);
         }
 
+        // 可用的应用们
+        List<Application> applications = null;
+
+        if (!isListEmpty(applications)) {
+            List<ApplicationVo> applicationVos = applications.stream().map(application -> applicationWebMapper.poToVo(application)).collect(Collectors.toList());
+            currentUserinfoVo.setApplications(applicationVos);
+        }
         return currentUserinfoVo;
     }
     /**

@@ -50,6 +50,11 @@ public class Func extends TreeBasePo<Func> {
     private String name;
 
     /**
+     * 应用id
+     */
+    private String applicationId;
+
+    /**
      * 图标
      */
     private String icon;

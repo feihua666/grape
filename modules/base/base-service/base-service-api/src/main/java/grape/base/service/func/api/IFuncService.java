@@ -30,6 +30,27 @@ public interface IFuncService extends IBaseTreeService<Func>, ITransService<Stri
     List<Func> getByRoleId(String roleId,Boolean isDisabled);
 
     /**
+     * 根据应用id查询
+     * @param applicationId
+     * @param isDisabled null 忽略该条件
+     * @return
+     */
+    default List<Func> getByApplicationId(String applicationId,Boolean isDisabled){
+        assertParamNotEmpty(applicationId,"applicationId 不能为空");
+        return list(Wrappers.<Func>lambdaQuery().eq(Func::getApplicationId, applicationId).eq(isDisabled != null, Func::getIsDisabled, isDisabled));
+    }
+
+    /**
+     * 计数
+     * @param applicationId
+     * @param isDisabled null 忽略该条件
+     * @return
+     */
+    default int countByApplicationId(String applicationId,Boolean isDisabled){
+        assertParamNotEmpty(applicationId,"applicationId 不能为空");
+        return count(Wrappers.<Func>lambdaQuery().eq(Func::getApplicationId, applicationId).eq(isDisabled != null, Func::getIsDisabled, isDisabled));
+    }
+    /**
      * 根据角色id查询角色关联的功能,只包含类型是菜单和页面的功能
      * @param roleId
      * @param isDisabled null 忽略该条件

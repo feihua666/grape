@@ -50,6 +50,18 @@
                     },
                     {
                         field: {
+                            name: 'applicationId'
+                        },
+                        element:{
+                            label: '应用',
+                            type:'select',
+                            select:{
+                                url: '/application/list'
+                            },
+                        }
+                    },
+                    {
+                        field: {
                             name: 'typeDictId'
                         },
                         element:{
@@ -98,7 +110,12 @@
                     {
                         prop: 'name',
                         label:'名称'
-                    },{
+                    },
+                    {
+                        prop: 'applicationName',
+                        label:'应用'
+                    },
+                    {
                         prop: 'parentName',
                         label:'父级'
                     },

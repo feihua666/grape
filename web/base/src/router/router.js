@@ -156,6 +156,7 @@ const router = new VueRouter({
             path: '/post/PostAssignDataScope/:postId',
             component: () => import('@/views/post/PostAssignDataScope.vue')
         },
+        // 职务
         {
             path: '/job',
             component: () => import('@/views/job/Job.vue')
@@ -168,6 +169,7 @@ const router = new VueRouter({
             path: '/job/jobEdit/:jobId',
             component: () => import('@/views/job/JobEdit.vue')
         },
+        // 职级
         {
             path: '/jobLevel',
             component: () => import('@/views/joblevel/JobLevel.vue')
@@ -180,6 +182,7 @@ const router = new VueRouter({
             path: '/jobLevel/jobLevelEdit/:jobLevelId',
             component: () => import('@/views/joblevel/JobLevelEdit.vue')
         },
+        // 区域
         {
             path: '/area',
             component: () => import('@/views/area/Area.vue')
@@ -192,6 +195,7 @@ const router = new VueRouter({
             path: '/area/areaEdit/:areaId',
             component: () => import('@/views/area/AreaEdit.vue')
         },
+        // 参数配置
         {
             path: '/paramConfig',
             component: () => import('@/views/paramconfig/ParamConfig.vue')
@@ -204,6 +208,7 @@ const router = new VueRouter({
             path: '/paramConfig/paramConfigEdit/:paramConfigId',
             component: () => import('@/views/paramconfig/ParamConfigEdit.vue')
         },
+        // 数据约束
         {
             path: '/dataConstraint/dataObject',
             component: () => import('@/views/dataconstraint/dataobject/DataObject.vue')
@@ -239,6 +244,19 @@ const router = new VueRouter({
         {
             path: '/dataConstraint/dataScopeAssignDataTable/:dataScopeId',
             component: () => import('@/views/dataconstraint/datascope/DataScopeAssignDataTable.vue')
+        },
+        // 应用
+        {
+            path: '/application',
+            component: () => import('@/views/application/Application.vue')
+        },
+        {
+            path: '/application/applicationAdd',
+            component: () => import('@/views/application/ApplicationAdd.vue')
+        },
+        {
+            path: '/application/applicationEdit/:applicationId',
+            component: () => import('@/views/application/ApplicationEdit.vue')
         }
     ]
 })

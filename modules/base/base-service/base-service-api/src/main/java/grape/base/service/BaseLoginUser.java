@@ -1,5 +1,6 @@
 package grape.base.service;
 
+import grape.base.service.application.po.Application;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dataconstraint.dto.DataConstraintDto;
 import grape.base.service.dataconstraint.po.DataScope;
@@ -52,6 +53,8 @@ public class BaseLoginUser extends AbstractLoginUser {
     private List<Role> roles;
     // 用户正在使用的数据范围
     private List<DataConstraintDto> currentDataConstraints;
+    // 可用的应用们
+    private List<Application> applications;
 
 
     @Override

@@ -1,4 +1,5 @@
 package grape.base.rest.func.vo;
+import grape.base.service.application.api.IApplicationService;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.func.api.IFuncService;
 import grape.common.rest.vo.BaseTreeVo;
@@ -36,6 +37,13 @@ public class FuncVo extends BaseTreeVo {
 
     @ApiModelProperty(value = "名称")
     private String name;
+
+    @ApiModelProperty(value = "应用id")
+    private String applicationId;
+
+    @TransBy(type = IApplicationService.trans_type_applicationName,byFieldName = "applicationId")
+    @ApiModelProperty(value = "应用名称")
+    private String applicationName;
 
     @ApiModelProperty(value = "图标")
     private String icon;

@@ -37,10 +37,6 @@ axios.interceptors.response.use(function (response) {
     return Promise.reject(error)
 })
 router.beforeEach((to, from, next) => {
-    to.meta.xxx = 'xxxx'
-    console.log(from)
-    console.log(to)
-
     next()
 })
 Vue.use(VueAxios, axios)
@@ -64,7 +60,7 @@ function getInstance() {
     return instance
 }
 let instance = null;
-
+// 微前端子应用需要导出
 export async function bootstrap() {
 }
 

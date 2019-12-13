@@ -16,6 +16,19 @@
                 formItems:[
                     {
                         field: {
+                            name: 'applicationId'
+                        },
+                        element:{
+                            label: '应用',
+                            type:'select',
+                            select:{
+                                url: '/application/list'
+                            },
+                            required:true
+                        }
+                    },
+                    {
+                        field: {
                             name: 'parentId',
                             value:this.$route.query.id,
                             parentId__label:this.$route.query.name

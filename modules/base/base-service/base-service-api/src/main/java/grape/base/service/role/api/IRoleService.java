@@ -24,9 +24,10 @@ public interface IRoleService extends IBaseTreeService<Role> , ITransService<Str
      * 根据用户id查询角色
      * 用户与角色的关系表查询
      * @param userId
+     * @param roleDisabled null 忽略该条件
      * @return
      */
-    List<Role> getByUserId(String userId);
+    List<Role> getByUserId(String userId,Boolean roleDisabled);
 
     /**
      * 判断编码是否已存在

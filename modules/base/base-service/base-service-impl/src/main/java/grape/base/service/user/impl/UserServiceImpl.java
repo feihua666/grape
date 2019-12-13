@@ -2,6 +2,8 @@ package grape.base.service.user.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.BaseLoginUser;
+import grape.base.service.application.api.IApplicationService;
+import grape.base.service.application.po.Application;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dataconstraint.api.IDataObjectService;
@@ -12,6 +14,8 @@ import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
+import grape.base.service.func.api.IFuncService;
+import grape.base.service.func.po.Func;
 import grape.base.service.postdatascoperel.api.IPostDataScopeRelService;
 import grape.base.service.postdatascoperel.po.PostDataScopeRel;
 import grape.base.service.role.api.IRoleService;
@@ -90,6 +94,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     @Autowired
     private IDataScopeService iDataScopeService;
 
+    @Autowired
+    private IApplicationService iApplicationService;
+    @Autowired
+    private IFuncService iFuncService;
     @Override
     public BaseLoginUser initLoginUserByIdentifier(String identifier) {
         assertParamNotEmpty(identifier,"identifier 不能为空");
@@ -116,6 +124,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         assertNotNull(user,"根据userId="+ userIdentifier.getUserId() +"没有找到用户");
 
         loginUser.setUserId(userIdentifier.getUserId());
+
+        loginUser.setUserIdentifier(userIdentifier);
         loginUser.setAvatar(user.getAvatar());
         loginUser.setNickname(user.getNickname());
 
@@ -129,33 +139,27 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
             Comp comp = iCompService.getById(user.getCompId());
             loginUser.setComp(comp);
         }
+        bindRoles(loginUser, roleId);
+        bindPosts(loginUser, postId);
 
-        // 用户直接关联的角色
-        List<Role> roles = iRoleService.getByUserId(userIdentifier.getUserId());
-        if (!isListEmpty(roles)) {
-            // 如果用户直接绑定了角色则按切换角色
-            loginUser.setIsSwitchRole(true);
+        loginUser.setIsSuperAdmin(loginUser.getCurrentRole()!=null && AbstractLoginUser.superadminCode.equals(loginUser.getCurrentRole().getCode()) );
 
-            if(!isStrEmpty(roleId)){
-                Role currentRole = roles.stream().filter(item -> isEqual(item.getId(), roleId)).findFirst().orElse(null);
-                if (currentRole != null) {
-                    loginUser.setCurrentRole(currentRole);
-                }else{
-                    throw new InvalidParamsException("角色切换模式，用户分配的角色["+ roles.stream().map(item->item.getId()).collect(Collectors.joining()) +"]不包含指定的角色roleId=["+roleId+"]");
-                }
-            }else {
-                // 默认取第一个角色作为初始角色
-                loginUser.setCurrentRole(roles.get(0));
-            }
-            loginUser.setRoles(roles);
-        }else {
-            if(!isStrEmpty(roleId)){
-                throw new InvalidParamsException("角色切换模式，用户没有分配角色，不能指定角色roleId=["+roleId+"]");
-            }
-        }
+        // 数据范围约束相关
+        // 超级管理员不设置数据范围
+        bindDataConstraint(loginUser);
+        bindApplications(loginUser);
+        return loginUser;
+    }
+
+    /**
+     * 尝试绑定岗位
+     * @param loginUser
+     * @param postId 如果有值，尝试使用该岗位，否则默认一个主岗位
+     */
+    private void bindPosts(BaseLoginUser loginUser,String postId){
 
         // 担任岗位
-        List<UserPost> userPosts = iUserPostService.getByUserId(userIdentifier.getUserId(),null,true);
+        List<UserPost> userPosts = iUserPostService.getByUserId(loginUser.getUserId(),null,true);
         // 设置所有担任岗位
         loginUser.setUserPosts(userPosts);
         loginUser.setUserPostInfos(iUserPostService.getUserPostInfos(userPosts));
@@ -191,21 +195,73 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
             }
 
         }
-
-        loginUser.setUserIdentifier(userIdentifier);
-        loginUser.setIsSuperAdmin(loginUser.getCurrentRole()!=null && AbstractLoginUser.superadminCode.equals(loginUser.getCurrentRole().getCode()) );
-
-        // 数据范围约束相关
-        // 超级管理员不设置数据范围
-        if(!loginUser.getIsSuperAdmin()){
-            bindDataConstraint(loginUser);
-        }
-
-
-        return loginUser;
     }
 
+    /**
+     * 绑定角色
+     * @param loginUser
+     * @param roleId 如果有值，尝试使用该角色，否则默认一个角色
+     */
+    private void bindRoles(BaseLoginUser loginUser,String roleId){
+
+        // 用户直接关联的角色
+        List<Role> roles = iRoleService.getByUserId(loginUser.getUserId(),false);
+        if (!isListEmpty(roles)) {
+            // 如果用户直接绑定了角色则按切换角色
+            loginUser.setIsSwitchRole(true);
+
+            if(!isStrEmpty(roleId)){
+                Role currentRole = roles.stream().filter(item -> isEqual(item.getId(), roleId)).findFirst().orElse(null);
+                if (currentRole != null) {
+                    loginUser.setCurrentRole(currentRole);
+                }else{
+                    throw new InvalidParamsException("角色切换模式，用户分配的角色["+ roles.stream().map(item->item.getId()).collect(Collectors.joining()) +"]不包含指定的角色roleId=["+roleId+"]");
+                }
+            }else {
+                // 默认取第一个角色作为初始角色
+                loginUser.setCurrentRole(roles.get(0));
+            }
+            loginUser.setRoles(roles);
+        }else {
+            if(!isStrEmpty(roleId)){
+                throw new InvalidParamsException("角色切换模式，用户没有分配角色，不能指定角色roleId=["+roleId+"]");
+            }
+        }
+    }
+    /**
+     * 绑定可用的应用
+     * @param loginUser
+     */
+    private void bindApplications(BaseLoginUser loginUser){
+        // 可用的应用们
+        List<Application> applications = null;
+
+        if (loginUser.getIsSuperAdmin()) {
+            applications = iApplicationService.list();
+
+        }else {
+            if(loginUser.getCurrentRole() != null){
+                // 当前用户分配的功能
+                List<Func> funcList = iFuncService.getByRoleId(loginUser.getCurrentRole().getId(), false);
+                if (!isListEmpty(funcList)) {
+                    // 提取applicationIds
+                    Set<String> applicationIds = funcList.stream().map(func -> func.getApplicationId()).collect(Collectors.toSet());
+                    applications = (List<Application>) iApplicationService.listByIds(applicationIds);
+                }
+            }
+        }
+
+        loginUser.setApplications(applications);
+    }
+
+    /**
+     * 绑定数据约束
+     * @param loginUser
+     */
     private void bindDataConstraint(BaseLoginUser loginUser){
+        if(!loginUser.getIsSuperAdmin()){
+           return;
+        }
         // 用户分配的数据范围
         List<DataConstraintDto> dataConstraintDtos = new ArrayList<>();
         // key=数据对象id，value=数据范围id

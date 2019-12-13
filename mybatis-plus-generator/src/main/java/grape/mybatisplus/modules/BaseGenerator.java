@@ -109,7 +109,7 @@ public class BaseGenerator extends SuperGenerator {
         //commonSet("base_role_data_scope_rel","roledatascoperel",TableType.rel,tablePrefix,author);
         //commonSet("base_post_data_scope_rel","postdatascoperel",TableType.rel,tablePrefix,author);
         //commonSet("base_user_post_data_scope_rel","userpostdatascoperel",TableType.rel,tablePrefix,author);
-
+        commonSet("base_application","application",TableType.normal,tablePrefix,author);
         return  tableConfig;
     }
 

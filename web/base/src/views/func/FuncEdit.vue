@@ -20,6 +20,19 @@
                 formItems:[
                     {
                         field: {
+                            name: 'applicationId'
+                        },
+                        element:{
+                            label: '应用',
+                            type:'select',
+                            select:{
+                                url: '/application/list'
+                            },
+                            required:true
+                        }
+                    },
+                    {
+                        field: {
                             name: 'parentId',
                             parentId__label:''
                         },

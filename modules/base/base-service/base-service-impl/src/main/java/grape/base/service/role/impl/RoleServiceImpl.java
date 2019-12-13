@@ -26,14 +26,20 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Autowired
     private IUserRoleRelService iUserRoleRelService;
     @Override
-    public List<Role> getByUserId(String userId) {
+    public List<Role> getByUserId(String userId,Boolean roleDisabled) {
         if (userId == null) {
             return null;
         }
         List<UserRoleRel> userRoleRelList = iUserRoleRelService.getByUserId(userId);
         if (!isListEmpty(userRoleRelList)) {
             Set<String> roleIds = userRoleRelList.stream().map(userRoleRel -> userRoleRel.getRoleId()).collect(Collectors.toSet());
-            return (List<Role>) listByIds(roleIds);
+            List<Role> roles = (List<Role>) listByIds(roleIds);
+            if (roleDisabled == null) {
+                return roles;
+            }else {
+                // 过滤一下状态
+                return roles.stream().filter(role -> role.getIsDisabled().equals(roleDisabled)).collect(Collectors.toList());
+            }
         }
         return null;
     }

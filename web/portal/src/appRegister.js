@@ -4,6 +4,7 @@ import {genActiveRule, render} from "common-util/src/components/mfe";
 export default function registApps() {
     registerMicroApps(
         [
+            // 导航项目
             {
                 name: 'common-nav',
                 entry: '//localhost:9001/common-nav',

@@ -1,5 +1,6 @@
 package grape.base.rest.user.vo;
 
+import grape.base.rest.application.vo.ApplicationVo;
 import grape.base.rest.post.vo.PostVo;
 import grape.base.rest.role.vo.RoleVo;
 import grape.common.rest.vo.BaseVo;
@@ -60,5 +61,8 @@ public class CurrentUserinfoVo extends BaseVo {
 
     @ApiModelProperty(value = "可切换的岗位们")
     private List<PostVo> posts;
+
+    @ApiModelProperty(value = "可用的应用们")
+     private List<ApplicationVo> applications;
 
 }

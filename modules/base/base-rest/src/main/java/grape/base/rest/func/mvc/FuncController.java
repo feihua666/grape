@@ -13,6 +13,7 @@ import grape.base.service.dict.po.Dict;
 import grape.base.service.func.api.IFuncService;
 import grape.base.service.func.po.Func;
 import grape.common.exception.ExceptionTools;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.vo.TreeNodeVo;
@@ -61,6 +62,13 @@ public class FuncController extends BaseTreeController<FuncVo, Func> {
          if (iFuncService.existCode(cf.getCode())) {
              throw new RBaseException("编码已存在");
          }
+         // 应用id必须和父级的应用id一致
+         if (!isStrEmpty(cf.getParentId())) {
+             Func parent = iFuncService.getById(cf.getParentId());
+             if (!isEqual(cf.getApplicationId(), parent.getApplicationId())) {
+                 throw new InvalidParamsException("选择的应用和父级所在应用不一致");
+             }
+         }
          Func func = funcWebMapper.formToPo(cf);
          func.setIsDisabled(false);
          return super.create(func);
@@ -103,6 +111,23 @@ public class FuncController extends BaseTreeController<FuncVo, Func> {
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public FuncVo update(@PathVariable String id,@RequestBody @Valid FuncUpdateForm uf) {
+         // 应用id必须和父级的应用id一致
+         if (!isStrEmpty(uf.getParentId())) {
+             Func parent = iFuncService.getById(uf.getParentId());
+             if (!isEqual(uf.getApplicationId(), parent.getApplicationId())) {
+                 throw new InvalidParamsException("选择的应用和父级所在应用不一致");
+             }
+         }
+         // 如果有子节点，不允许修改应用id
+         if (iFuncService.getChildrenCount(id) > 0) {
+             Func funcDb = iFuncService.getById(uf.getParentId());
+             if (!isEqual(uf.getApplicationId(), funcDb.getApplicationId())) {
+                 throw new InvalidParamsException("当前功能存在子节点，不允许变更应用");
+             }
+
+         }
+
+
          Func func = funcWebMapper.formToPo(uf);
          func.setId(id);
          return super.update(func);

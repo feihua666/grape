@@ -35,6 +35,10 @@ public class FuncCreateForm extends BaseForm {
     @ApiModelProperty(value = "名称",required = true)
     private String name;
 
+    @NotEmpty(message = "应用id不能为空")
+    @ApiModelProperty(value = "应用id",required = true)
+    private String applicationId;
+
     @ApiModelProperty(value = "父id",notes = "不填写为根节点")
     private String parentId;
 
