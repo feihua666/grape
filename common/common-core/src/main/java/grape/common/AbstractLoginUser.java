@@ -35,6 +35,9 @@ public abstract class AbstractLoginUser extends BasePojo {
     public static   AbstractLoginUser getLoginUser(){
         return (AbstractLoginUser) ThreadContextTool.get(loginUserKey);
     }
+    public static   AbstractLoginUser removeLoginUser(){
+        return (AbstractLoginUser) ThreadContextTool.remove(loginUserKey);
+    }
     public static void setLoginUser(AbstractLoginUser loginUser){
         ThreadContextTool.put(loginUserKey,loginUser);
     }

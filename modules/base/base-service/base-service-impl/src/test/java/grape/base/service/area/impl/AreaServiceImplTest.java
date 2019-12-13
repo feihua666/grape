@@ -33,7 +33,7 @@ class AreaServiceImplTest {
     @Test
     public void testApply(){
 
-        List<Area> list = iAreaService.list(Wrappers.<Area>query().apply(null, null));
+        List<Area> list = iAreaService.list(Wrappers.<Area>query().apply(null));
         list.stream().map(item -> item.getName()).forEach(System.out::println);
     }
 }

@@ -35,6 +35,7 @@ public class AreaUpdateForm extends BaseUpdateForm {
     @ApiModelProperty(value = "区域名称",required = true)
     private String name;
 
+
     @ApiModelProperty(value = "行政区划id，该id来自国家统计")
     private String adminDivisionId;
 

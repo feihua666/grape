@@ -95,7 +95,7 @@
                                 {
                                     action: 'submit',
                                     requestMethod:'put',
-                                    url: '/dict/' +this.$route.params.compId,
+                                    url: '/comp/' +this.$route.params.compId,
                                     label: '保存'
                                 },
                                 {

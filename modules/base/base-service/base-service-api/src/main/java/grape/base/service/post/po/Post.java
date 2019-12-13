@@ -61,6 +61,11 @@ public class Post extends NormalBasePo<Post> {
     private String deptId;
 
     /**
+     * 职务id
+     */
+    private String jobId;
+
+    /**
      * 描述
      */
     private String remark;

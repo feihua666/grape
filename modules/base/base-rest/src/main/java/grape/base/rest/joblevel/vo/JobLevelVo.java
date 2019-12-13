@@ -33,10 +33,10 @@ public class JobLevelVo extends BaseIdVo<String> {
     @ApiModelProperty(value = "职务级别名称")
     private String name;
 
-    @ApiModelProperty(value = "职务级别")
+    @ApiModelProperty(value = "职务id")
     private String jobId;
 
-    @TransBy(type = IJobService.trans_type_jobName,byFieldName = "typeDictId")
+    @TransBy(type = IJobService.trans_type_jobName,byFieldName = "jobId")
     @ApiModelProperty(value = "职务名称")
     private String jobName;
 

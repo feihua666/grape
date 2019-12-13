@@ -30,6 +30,9 @@ public class RoleUpdateForm extends BaseUpdateForm {
     @ApiModelProperty(value = "角色名称",required = true)
     private String name;
 
+    @ApiModelProperty(value = "父id",notes = "如果该节点下还有子节点，不允许修改该值，也就是说只允许移动叶子节点")
+    private String parentId;
+
     @ApiModelProperty(value = "描述")
     private String remark;
 

@@ -3,7 +3,7 @@
              size="mini"
              :model="form"
              ref="dynamicValidateForm"
-             label-width="100px"
+             :label-width="labelWidth"
              v-loading="loading"
              @submit.native.prevent
     >
@@ -205,6 +205,9 @@
             InputSelectTree
         },
         props:{
+            labelWidth:{
+                default: '100px'
+            },
             inline:{
                 type: Boolean,
                 default: false

@@ -14,6 +14,7 @@ import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.vo.TreeNodeVo;
@@ -46,12 +47,6 @@ public class DeptController extends BaseTreeController<DeptVo, Dept> {
     private DeptWebMapper deptWebMapper;
     @Autowired
     private IDeptService iDeptService;
-    @Autowired
-    private ICompService iCompService;
-    @Autowired
-    private IDictService iDictService;
-    @Autowired
-    private IUserService iUserService;
 
      @ApiOperation("添加部门")
      @RequiresPermissions("dept:single:create")
@@ -61,6 +56,13 @@ public class DeptController extends BaseTreeController<DeptVo, Dept> {
          // code 唯一检查
          if (iDeptService.existCode(cf.getCode())) {
              throw new RBaseException("编码已存在");
+         }
+         // 添加子部门的公司必须和父级公司一致
+         if (cf.getParentId() != null) {
+             Dept dept = iDeptService.getById(cf.getParentId());
+             if(!isEqual(dept.getCompId(),cf.getCompId())){
+                 throw new InvalidParamsException("子部门的公司必须同上级部门公司一致");
+             }
          }
          Dept dept = deptWebMapper.formToPo(cf);
          return super.create(dept);
@@ -87,6 +89,13 @@ public class DeptController extends BaseTreeController<DeptVo, Dept> {
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public DeptVo update(@PathVariable String id,@RequestBody @Valid DeptUpdateForm uf) {
+         // 如果部门有子节点，不能变更公司
+         Dept deptDb = iDeptService.getById(id);
+         if (iDeptService.getChildrenCount(id) > 0 || deptDb.getParentId() != null) {
+             if(!isEqual(deptDb.getCompId(),uf.getCompId())){
+                 throw new InvalidParamsException("当前部门不允许变更公司");
+             }
+         }
          Dept dept = deptWebMapper.formToPo(uf);
          dept.setId(id);
          return super.update(dept);

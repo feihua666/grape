@@ -183,6 +183,9 @@ public class FuncController extends BaseTreeController<FuncVo, Func> {
             menuAndPage.add(Func.TypeDictItem.page.name());
             funcList = iFuncService.getByTypes(menuAndPage,false);
         }else{
+            if (loginUser.getCurrentRole() == null) {
+                throw new RBaseException("当前用户没有可用角色");
+            }
             funcList = iFuncService.getMenuAndPageByRoleId(loginUser.getCurrentRole().getId(),false);
         }
         if (isListEmpty(funcList)) {

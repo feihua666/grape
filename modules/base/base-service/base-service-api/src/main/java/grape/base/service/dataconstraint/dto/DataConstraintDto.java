@@ -5,6 +5,7 @@ import grape.base.service.dataconstraint.po.DataScope;
 import grape.common.service.dto.BaseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class DataConstraintDto extends BaseDto {
 
     // 当前登录用户的数据约束来自哪里，枚举

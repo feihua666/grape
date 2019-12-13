@@ -1,8 +1,9 @@
 <template>
-    <container type="top-header" :show="{header:formShow}" class="g-width100 g-height100">
+    <container type="top-header" :show="{header:formShow}" class="g-width100 g-height100" header-style="height:auto;" main-style="padding:0;">
         <Form slot="header" inline
               submit-bus-key="deptManageList"
               :form-items="formItems"
+              label-width=""
         ></Form>
         <Table slot="main"
                ref="table"
@@ -128,10 +129,10 @@
                     {
                         action: 'nav',
                         url:'/dept/deptAdd',
-                        routeQuery:['id','name'],
+                        routeQuery:['id','name','compId','compName'],
                         position:'more',
                         disabledOnMissingSelect:true,
-                        label:'添加子节点'
+                        label:'添加下级部门'
                     }
                 ]
             }

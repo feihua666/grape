@@ -73,6 +73,14 @@ const router = new VueRouter({
             component: () => import('@/views/user/UserEdit.vue')
         },
         {
+            path: '/user/updatePwd',
+            component: () => import('@/views/user/UpdatePwd.vue')
+        },
+        {
+            path: '/user/userinfo/current',
+            component: () => import('@/views/user/Userinfo.vue')
+        },
+        {
             path: '/user/assignRole/:userId',
             component: () => import('@/views/user/UserAssignRole.vue')
         },

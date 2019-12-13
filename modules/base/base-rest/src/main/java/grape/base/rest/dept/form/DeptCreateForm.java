@@ -27,6 +27,9 @@ public class DeptCreateForm extends BaseForm {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "上级id",notes = "添加根节点不传值")
+    private String parentId;
+
     @NotEmpty(message = "编码不能为空")
     @ApiModelProperty(value = "部门编码",required = true)
     private String code;

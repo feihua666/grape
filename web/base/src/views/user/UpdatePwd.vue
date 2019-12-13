@@ -1,20 +1,19 @@
 <template>
     <div class="g-flex-center-all g-height100 g-width100">
-        <LoginComp class="login" v-on:success="loginSuccess"></LoginComp>
+        <UpdatePassword class="update-password" v-on:success="updateSuccess"></UpdatePassword>
     </div>
 </template>
 <script>
-import LoginComp from 'common-util/src/components/login/Login.vue'
+import UpdatePassword from 'common-util/src/components/login/UpdatePassword.vue'
     export default {
-        name: 'Login',
         components: {
-            LoginComp
+            UpdatePassword
         },
         created () {
         },
         methods: {
-            loginSuccess(){
-                this.$router.replace('/nav')
+            updateSuccess(){
+                this.$message.success("修改成功")
             }
         },
         data () {
@@ -27,7 +26,7 @@ import LoginComp from 'common-util/src/components/login/Login.vue'
     }
 </script>
 <style scoped>
-    .login{
+    .update-password{
         max-width: 500px;
         min-width: 500px;
     }

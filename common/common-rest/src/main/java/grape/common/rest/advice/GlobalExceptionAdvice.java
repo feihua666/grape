@@ -55,7 +55,7 @@ public class GlobalExceptionAdvice implements ToolService {
 
 
     private ResultMessage createRM(ExceptionCode code, String msg, Object data, Exception e) {
-        log.error("请求错误信息: requestId=[{}],code=[{}],msg=[{}],data=[{}],exception=[{}] ",RequestIdTool.getRequestId(), code, msg, data, e.getClass().getName());
+        log.error("请求错误信息: requestId=[{}],code=[{}],msg=[{}],data=[{}],exceptionMsg=[{}],exception=[{}] ",RequestIdTool.getRequestId(), code, msg, data,e.getMessage(), e.getClass().getName());
         return ControllerTools.newRm(code, msg == null ? code.getMsg() : msg, data);
     }
 
@@ -175,7 +175,8 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(AuthorizationException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResultMessage handleAuthorizationException(HttpServletRequest request, AuthorizationException ex) {
-        return createRM(ExceptionCode.unAuthorized, null, request.getRequestURI().toString(), ex);
+
+        return createRM(ExceptionCode.unAuthorized, null, request.getRequestURI(), ex);
     }
 
     /**
@@ -188,7 +189,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(UnauthenticatedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResultMessage handleUnauthenticatedException(HttpServletRequest request, UnauthenticatedException ex) {
-        return createRM(ExceptionCode.notLogin, ExceptionCode.notLogin.getMsg(), request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.notLogin, ExceptionCode.notLogin.getMsg(), request.getRequestURI(), ex);
     }
 
     /**
@@ -201,7 +202,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(UnknownAccountException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResultMessage handleUnknownAccountException(HttpServletRequest request, UnknownAccountException ex) {
-        return createRM(ExceptionCode.fail, "帐号不正确", request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.fail, "帐号不正确", request.getRequestURI(), ex);
     }
 
     /**
@@ -214,7 +215,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(IncorrectCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResultMessage handleIncorrectCredentialsException(HttpServletRequest request, IncorrectCredentialsException ex) {
-        return createRM(ExceptionCode.fail, "密码不正确", request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.fail, "密码不正确", request.getRequestURI(), ex);
     }
 
     /**
@@ -227,7 +228,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(LockedAccountException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResultMessage handleLockedAccountException(HttpServletRequest request, LockedAccountException ex) {
-        return createRM(ExceptionCode.fail, "帐号已被锁定", request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.fail, "帐号已被锁定", request.getRequestURI(), ex);
     }
 
 
@@ -241,7 +242,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ResultMessage handleHttpRequestMethodNotSupportedException(HttpServletRequest request, HttpRequestMethodNotSupportedException ex) {
-        return createRM(ExceptionCode.fail, "不支持的请求方法" + request.getMethod(), request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.fail, "不支持的请求方法" + request.getMethod(), request.getRequestURI(), ex);
     }
 
     /**
@@ -254,7 +255,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultMessage handleSQLException(HttpServletRequest request, DataIntegrityViolationException ex) {
-        return createRM(ExceptionCode.fail, "数据库请求错误" + ex.getCause().getMessage(), request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.fail, "数据库请求错误" + ex.getCause().getMessage(), request.getRequestURI(), ex);
     }
 
     /**
@@ -267,7 +268,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(DuplicateKeyException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultMessage handleSQLIntegrityConstraintViolationException(HttpServletRequest request, DuplicateKeyException ex) {
-        return createRM(ExceptionCode.fail, "违反数据库约束" + ex.getCause().getMessage(), request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.fail, "违反数据库约束" + ex.getCause().getMessage(), request.getRequestURI(), ex);
     }
 
     /**
@@ -280,7 +281,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultMessage handleHttpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException ex) {
-        return createRM(ExceptionCode.fail, "没有可用参数", request.getRequestURI().toString(), ex);
+        return createRM(ExceptionCode.fail, "没有可用参数", request.getRequestURI(), ex);
     }
 
     /**

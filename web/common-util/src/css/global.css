@@ -3,24 +3,118 @@
      height:100% !important;
      margin: 0;
      padding: 0;
+     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
  }
+/* 边距 */
+.g-padding0{
+    padding: 0 !important;
+}
+.g-margin0{
+    margin: 0 !important;
+}
+/* 宽高 */
 .g-width100{
-    width: 100% !important;;
+    width: 100% !important;
 }
 .g-height100{
-    height: 100% !important;;
+    height: 100% !important;
 }
-.g-center-all{
+.g-width50-p{
+    width: 50px !important;
+}
+.g-height50-p{
+    height: 50px !important;
+}
+/* flex 主轴纵向排列 */
+.g-flex-direction-c{
+    display: flex;
+    flex-direction:column;
+}
+/* flex 水平居中 */
+.g-flex-center-h{
+    display: flex;
+    justify-content:center;
+}
+/* flex 垂直居中 */
+.g-flex-center-v{
+    display: flex;
+    align-items:center;
+}
+/* flex 水平垂直居中 */
+.g-flex-center-all{
     display: flex;
     align-items:center;
     justify-content:center;
 }
+/* flex 右对齐 */
+.g-flex-align-right{
+    justify-content:right;
+}
+.g-flex-align-between{
+    justify-content:space-between;
+}
+/* 文本对齐 */
 .g-align-center{
     text-align: center;
 }
+
 .g-align-right{
     text-align: right;
 }
+.g-align-left{
+    text-align: left;
+}
+
+
+/* 字体大小 */
+.g-font-size-esm{
+    font-size: 12px;
+}
+.g-font-size-sm{
+    font-size: 13px;
+}
+.g-font-size-base{
+    font-size: 14px;
+}
+.g-font-size-md{
+    font-size: 16px;
+}
+.g-font-size-lg{
+    font-size: 18px;
+}
+.g-font-size-elg{
+    font-size: 20px;
+}
+.g-pointer:hover{
+    cursor: pointer;
+}
+/* 颜色 */
+.g-color-fff{
+    color:#fff;
+}
+/* 主要 */
+.g-color-primary{
+    color:#303133;
+}
+/* 常规 */
+.g-color-normal{
+    color:#606266;
+}
+/* 次要 */
+.g-color-less{
+    color:#909399;
+}
+/* 占位 */
+.g-color-position{
+    color:#909399;
+}
+
+/* 边框 */
+.g-border-circle{
+    border-radius: 50%;
+}
+/* 其它 */
+
 .g-block{
     display: block !important;
 }

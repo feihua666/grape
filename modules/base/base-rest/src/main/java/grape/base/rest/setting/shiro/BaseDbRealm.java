@@ -11,6 +11,7 @@ import grape.base.service.user.po.User;
 import grape.base.service.user.po.UserIdentifier;
 import grape.base.service.user.po.UserPwd;
 import grape.common.rest.common.PasswordAndSalt;
+import grape.common.tools.RequestIdTool;
 import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -76,6 +77,7 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //principal is a userId
         Object principal = SecurityUtils.getSubject().getPrincipal();
+        log.debug("获取授权信息，requestId=[{}]", RequestIdTool.getRequestId());
         if(principal != null){
             BaseLoginUser loginUser = BaseLoginUser.getLoginUser();
             if (loginUser == null) {
@@ -97,7 +99,7 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
                         }
                     }
                 }
-                info.setStringPermissions(stringPermissions);
+
                 // 角色
                 Set<String> stringRoles = new HashSet<>(1);
                 stringRoles.add(loginUser.getCurrentRole().getCode());
@@ -105,7 +107,9 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
                     List<String> roleCodes = loginUser.getRoles().stream().map(role -> role.getCode()).collect(Collectors.toList());
                     stringRoles.addAll(roleCodes);
                 }
+                info.setRoles(stringRoles);
             }
+            info.setStringPermissions(stringPermissions);
             return info;
         }else {
             return null;

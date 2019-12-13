@@ -1,8 +1,8 @@
 <template>
-  <el-menu-item :index="index(item.node)">
+  <el-menu-item :index="index(item.node)" style="min-width: auto">
           <span slot="title">
               <i v-if="item.node.icon" :class="item.node.icon"></i>
-            <router-link class="router-link" v-if="item.node.typeDictCode == 'page'" :to="getUrl(item)">{{item.node.name}}</router-link>
+            <router-link class="router-link" v-if="item.node.typeDictCode == 'page'" :to="{path: getUrl(item),params:{routeName:item.node.name}}">{{item.node.name}}</router-link>
             <template v-else>{{item.node.name}}</template>
           </span>
   </el-menu-item>

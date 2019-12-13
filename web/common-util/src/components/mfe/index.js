@@ -43,8 +43,15 @@ export function tryMount(containerId,instance,times) {
             },window.mfe_mount_delay)
         }
     }
-
-
+}
+// 微前端应用监听路由变化，主要是在一个应该中改变另一个应该的路由
+// 视应用需求使用
+export function listenRoute($router,key) {
+    if (window.mfe_vue_bus) {
+        window.mfe_vue_bus.$on(key ,(path)=>{$router.push(path)})
+    }else {
+        new Error('没有安装自定义属性，请确定 installMfe 方法已调用')
+    }
 }
 // 子应用激活的规则，当前只支持history模式
 // 子应用中使用

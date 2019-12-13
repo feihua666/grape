@@ -18,6 +18,20 @@
                 formLoading: false,
                 formData:null,
                 formItems:[
+
+                    {
+                        field: {
+                            name: 'compId',
+                            compId__label:''
+                        },
+                        element:{
+                            type: 'inputSelectTree',
+                            inputSelectTree:{
+                                dataUrl:'/comp/tree'
+                            },
+                            label: '公司'
+                        }
+                    },
                     {
                         field: {
                             name: 'parentId',
@@ -38,7 +52,7 @@
                         },
                         element:{
                             label: '编码',
-                            disabled: true
+                            disable: true
                         }
                     },
                     {
@@ -119,6 +133,7 @@
                 this.axios.get('/dept/' + id).then(res => {
                     let data = res.data.data
                     data.parentId__label = data.parentName
+                    data.compId__label = data.compName
                     this.formData = data
                 }).catch(error => {
                     if(error.response){

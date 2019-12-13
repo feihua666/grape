@@ -16,6 +16,20 @@
                 formItems:[
                     {
                         field: {
+                            name: 'compId',
+                            value:this.$route.query.compId,
+                            compId__label:this.$route.query.compName
+                        },
+                        element:{
+                            type: 'inputSelectTree',
+                            inputSelectTree:{
+                                dataUrl:'/comp/tree'
+                            },
+                            label: '公司'
+                        }
+                    },
+                    {
+                        field: {
                             name: 'parentId',
                             value:this.$route.query.id,
                             parentId__label:this.$route.query.name

@@ -24,6 +24,12 @@ axios.interceptors.response.use(function (response) {
     }
     return Promise.reject(error)
 })
+
+router.beforeEach((to, from, next) => {
+    console.log(from)
+    console.log(to)
+    next()
+})
 Vue.use(VueAxios, axios)
 
 let containerId = 'app-base'

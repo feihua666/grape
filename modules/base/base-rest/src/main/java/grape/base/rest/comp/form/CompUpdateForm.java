@@ -31,6 +31,9 @@ public class CompUpdateForm extends BaseForm {
     @ApiModelProperty(value = "公司名称",required = true)
     private String name;
 
+    @ApiModelProperty(value = "父id",notes = "如果该节点下还有子节点，不允许修改该值，也就是说只允许移动叶子节点")
+    private String parentId;
+
     @ApiModelProperty(value = "负责人用户id",notes = "该id可用来填充审批人")
     private String masterUserId;
 

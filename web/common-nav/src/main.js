@@ -36,7 +36,13 @@ axios.interceptors.response.use(function (response) {
     }
     return Promise.reject(error)
 })
+router.beforeEach((to, from, next) => {
+    to.meta.xxx = 'xxxx'
+    console.log(from)
+    console.log(to)
 
+    next()
+})
 Vue.use(VueAxios, axios)
 let containerId = 'app-common-nav'
 
