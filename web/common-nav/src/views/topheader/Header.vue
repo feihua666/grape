@@ -5,10 +5,12 @@
         </el-aside>
         <el-main class="g-color-fff g-padding0">
             <el-row type="flex" class="g-height100" justify="space-between">
-                <el-col class="g-height100 g-flex-center-v"></el-col>
+                <el-col class="g-height100 g-flex-center-v">
+                    <ApplicationSwitch  :current-userinfo="currentUserinfo" :userinfo-loading="userinfoLoading"></ApplicationSwitch>
+                </el-col>
                 <el-col class="g-height100 g-flex-center-v g-flex-align-right">
                     <!-- 右侧 头像和用户名 -->
-                    <UserinfoDropdown class="item"></UserinfoDropdown>
+                    <UserinfoDropdown class="item" :current-userinfo="currentUserinfo" :userinfo-loading="userinfoLoading"></UserinfoDropdown>
                 </el-col>
             </el-row>
 
@@ -18,12 +20,41 @@
 
 <script>
     import UserinfoDropdown from './UserinfoDropdown.vue'
+    import ApplicationSwitch from './ApplicationSwitch.vue'
 
     export default {
         components: {
-            UserinfoDropdown
+            UserinfoDropdown,
+            ApplicationSwitch
+        },
+        data (){
+            return {
+                roleChangePopShow: false,
+                postChangePopShow: false,
+                userinfoLoading: false,
+                currentUserinfo:{}
+            }
+        },
+        mounted(){
+            this.getUserinfo()
+        },
+        methods:{
+            getUserinfo(){
+                this.userinfoLoading = true
+                this.axios.get('/user/userinfo/current').then(res => {
+                    this.currentUserinfo = res.data.data
+                    //this.$set('currentUserinfo',res.data.data)
+                }).catch((error) => {
+                    if(error.response){
+                        if(error.response.status != 401){
+                            this.$message.error(error.response.data.msg)
+                        }
+                    }
+                }).finally(()=>{
+                    this.userinfoLoading = false
+                })
+            }
         }
-
     }
 </script>
 

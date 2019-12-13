@@ -30,10 +30,6 @@ export default {
       },
         getUrl(item){
           let url = item.node.url
-            if (window.mfe) {
-                // nav的来源是因为导航项目的所有子项目被渲染在路由nav下
-                url = '/nav' + url
-            }
             return url
         }
     },

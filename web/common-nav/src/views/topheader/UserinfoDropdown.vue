@@ -36,33 +36,20 @@
 
 <script>
     export default {
+        props:{
+            userinfoLoading: false,
+            currentUserinfo:{}
+        },
         data (){
             return {
                 roleChangePopShow: false,
-                postChangePopShow: false,
-                userinfoLoading: false,
-                currentUserinfo:{}
+                postChangePopShow: false
             }
         },
         mounted(){
-            this.getUserinfo()
         },
         methods:{
-            getUserinfo(){
-                this.userinfoLoading = true
-                this.axios.get('/user/userinfo/current').then(res => {
-                    this.currentUserinfo = res.data.data
-                    //this.$set('currentUserinfo',res.data.data)
-                }).catch((error) => {
-                    if(error.response){
-                        if(error.response.status != 401){
-                            this.$message.error(error.response.data.msg)
-                        }
-                    }
-                }).finally(()=>{
-                    this.userinfoLoading = false
-                })
-            },
+
             switchRole(role){
                 this.roleChangePopShow = !this.roleChangePopShow
                 this.axios.post('/user/switchrole/' + role.id).then(res => {
@@ -93,12 +80,12 @@
                 switch (command) {
                     case 'userinfo':{
                         // 该页面在base项目
-                        this.$router.push('/nav/base/user/userinfo/current')
+                        this.$router.push('/base/user/userinfo/current')
                         break
                     }
                     case 'updatePwd':{
                         // 该页面在base项目
-                        this.$router.push('/nav/base/user/updatePwd')
+                        this.$router.push('/base/user/updatePwd')
                         break
                     }
                     case 'updateAvatar':{
@@ -106,7 +93,14 @@
                     }
                     case 'logout':{
                         this.axios.post('/user/logout').then(res=>{
-                            this.$router.replace('/login')
+                            if (window.mfe) {
+                                // 该事件是在portal项目app.vue中监听
+                                window.mfe_vue_bus.$emit('toLogin')
+                            }else {
+                                // 如果不是向前端
+                                this.$router.replace('/login')
+                            }
+
                         })
                         break
                     }

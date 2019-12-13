@@ -8,6 +8,7 @@ import router from './router/router'
 import {tryMount} from "common-util/src/components/mfe"
 import bus from 'common-util/src/components/bus/index.js'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'common-util/src/css/global.css'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueRouter)
@@ -26,18 +27,15 @@ axios.interceptors.response.use(function (response) {
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(from)
-    console.log(to)
     next()
 })
 Vue.use(VueAxios, axios)
-
+// 该id定义在public/index.html中挂载app的容器标识
 let containerId = 'app-base'
+
 if (!window.mfe) {
     getInstance().$mount('#' + containerId)
 }
-
-
 
 function getInstance() {
     let instance = new Vue({

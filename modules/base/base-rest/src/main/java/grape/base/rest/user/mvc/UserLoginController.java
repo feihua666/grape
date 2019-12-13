@@ -142,7 +142,7 @@ public class UserLoginController extends BaseController<UserVo, User> {
         }
 
         // 可用的应用们
-        List<Application> applications = null;
+        List<Application> applications = loginUser.getApplications();
 
         if (!isListEmpty(applications)) {
             List<ApplicationVo> applicationVos = applications.stream().map(application -> applicationWebMapper.poToVo(application)).collect(Collectors.toList());

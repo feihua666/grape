@@ -1,6 +1,6 @@
 let packageName = require('./package.json').name
 module.exports = {
-    publicPath: '/app-base',
+    publicPath: '/app-base-public',
     devServer: {
         port: 9002,
         headers: {

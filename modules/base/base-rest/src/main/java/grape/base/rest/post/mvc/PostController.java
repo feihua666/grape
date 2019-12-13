@@ -91,8 +91,6 @@ public class PostController extends BaseController<PostVo, Post> {
     @ResponseStatus(HttpStatus.OK)
     public IPage<PostVo> listPage(PostListPageForm listPageForm) {
          Post po = currentWebMapper.formToPo(listPageForm);
-         // 包括公共的
-        po.setIsPublic(true);
          return super.listPage(po,listPageForm);
      }
     /**

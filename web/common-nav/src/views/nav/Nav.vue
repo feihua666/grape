@@ -19,10 +19,10 @@
             </template>
         </el-menu>
         </el-scrollbar>
+        <!-- 渲染子项目到中央区域 -->
         <mfe-loader
                 slot="main"
-                :loading-id="loadingId"
-                    :container-id="containerId"
+                render-key="renderKey-commonNavRenderMfe"
         ></mfe-loader>
     </container>
 </template>
@@ -51,11 +51,8 @@
         },
         data () {
             return {
-                loadingId: 'app-common-nav-container-loading',
-                containerId: 'app-common-nav-container',
                 funcData: [],
-                funcDataLoading: false,
-                funcDataErrorMsg:'发生了未知的错误，服务端未能返回错误信息'
+                funcDataLoading: false
             }
         },
         mounted () {
@@ -71,12 +68,7 @@
                     .catch(error =>{
                         if(error.response){
                             let status = error.response.status
-                            if(window.mfe && status == 401){
-                                window.mfe_vue_bus.$emit('login')
-                            }else {
-                                this.funcDataErrorMsg = error.response.data.msg
-                                this.$message.error(error.response.data.msg)
-                            }
+                            this.$message.error('加载导航菜单出现错误：' + error.response.data.msg)
                         }
 
                     }).finally(()=>{
