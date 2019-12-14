@@ -15,8 +15,16 @@
     import storage from 'common-util/src/tools/StorageTools.js'
     export default {
         props:{
-            userinfoLoading: false,
-            currentUserinfo:{}
+            userinfoLoading:{
+                type:Boolean,
+                default: false
+            },
+            currentUserinfo:{
+                type:Object,
+                default: function () {
+                    return {}
+                }
+            }
         },
         data (){
             return {

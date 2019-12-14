@@ -7,9 +7,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'common-util/src/css/global.css'
-import {start, runDefaultMountEffects } from 'qiankun'
 import {installMfe} from 'common-util/src/components/mfe/index'
-import registApps from './appRegister'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -37,12 +35,6 @@ const portalIns = new Vue({
         router,
         render: h => h(App),
         mounted () {
-            // 注册应用
-            registApps()
-            // 刷新的时候会有问题
-            //runDefaultMountEffects('/common-nav');
-
-            start({ prefetch: false, jsSandbox: true });
         }
     })
 

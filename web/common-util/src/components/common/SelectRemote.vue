@@ -15,7 +15,7 @@
             v-on:input="emitInput"
     >
         <el-option
-                v-for="(item,index) in data"
+                v-for="(item) in data"
                 :label="item[props.label]"
                 :disabled="item.isDisable"
                 :value="item[props.value]"

@@ -16,43 +16,6 @@ export function installMfe() {
     // 如果要修改该值，请在调用方法后再次赋值
     window.mfe_nav_router_base_path = ''
 }
-//渲染子应用的函数 renderKey vue事件总线的kdy，renderProps qiankun 注册应用的render方法的调用参数
-// 主应用中使用
-export function render(renderProps,renderKey) {
-
-    if (window.mfe_vue_bus) {
-        window.mfe_vue_bus.$emit(renderKey,renderProps)
-    }else {
-        new Error('没有安装自定义属性，请确定 installMfe 方法已调用')
-    }
-}
-// 挂载应用，如果第一时间没有dom延迟再试
-// 子应用中使用
-export function tryMount(containerId,instance,times) {
-    if(times == null || times == undefined){
-        tryMount(containerId,instance,1)
-    }else if (times >= 0){
-
-        // 如果dom存在直接挂载
-        if(document.getElementById(containerId)){
-            instance.$mount('#' + containerId)
-        }else {
-            // 如果dom不存在延迟一秒再挂载，因为该项目依赖common-nav导航，确保导航项目已正确渲染
-            setTimeout(function () {
-                tryMount(containerId,instance,times - 1)
-            },window.mfe_mount_delay)
-        }
-    }
-}
-// 微前端应用监听路由变化，主要是在一个应该中改变另一个应该的路由
-// 视应用需求使用
-export function listenRoute($router,key) {
-    if (window.mfe_vue_bus) {
-        window.mfe_vue_bus.$on(key ,(path)=>{$router.push(path)})
-    }else {
-        new Error('没有安装自定义属性，请确定 installMfe 方法已调用')
-    }
-}
 // 子应用激活的规则，当前只支持history模式
 // 子应用中使用
 export function genActiveRule(routerPrefix) {

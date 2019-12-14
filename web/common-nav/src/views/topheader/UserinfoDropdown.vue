@@ -37,8 +37,16 @@
 <script>
     export default {
         props:{
-            userinfoLoading: false,
-            currentUserinfo:{}
+            userinfoLoading:{
+                type:Boolean,
+                default: false
+            },
+            currentUserinfo:{
+                type:Object,
+                default: function () {
+                    return {}
+                }
+            }
         },
         data (){
             return {

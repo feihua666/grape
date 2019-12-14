@@ -7,10 +7,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'common-util/src/css/global.css'
-import {tryMount} from "common-util/src/components/mfe"
-import {start, runDefaultMountEffects } from 'qiankun';
 import {installMfe} from 'common-util/src/components/mfe/index'
-import registApps from './appRegister'
 
 Vue.config.productionTip = false
 
@@ -33,8 +30,6 @@ Vue.use(VueAxios, axios)
 // 该id定义在public/index.html中挂载app的容器标识
 let containerId = 'app-common-nav'
 
-
-
 // 初始化微前端自定义设置
 
 if (!window.mfe) {
@@ -47,10 +42,6 @@ function getInstance() {
         router,
         render: h => h(App),
         mounted () {
-            // 注册应用
-            registApps()
-            //runDefaultMountEffects('/common-nav');
-            start({ prefetch: false, jsSandbox: true });
         }
     });
     return instance
@@ -62,7 +53,7 @@ export async function bootstrap() {
 
 export async function mount(props) {
     instance = getInstance()
-    tryMount(containerId,instance)
+    instance.$mount('#' + containerId)
 }
 
 export async function unmount() {

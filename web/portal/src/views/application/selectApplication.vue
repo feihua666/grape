@@ -20,7 +20,18 @@
         data (){
             return {
                 userinfoLoading: false,
-                currentUserinfo:{},
+                currentUserinfo:{
+                    applications:[
+                        {
+                            name:'aaaa',
+                            id:'aaaa'
+                        },
+                        {
+                            name:'bbbb',
+                            id:'bbbb'
+                        }
+                    ]
+                },
                 buttonLoading:{}
             }
         },
@@ -35,6 +46,13 @@
                     // 如果只有一个系统直接进入
                     if(this.currentUserinfo.applications.length == 1){
                         this.enter(this.currentUserinfo.applications[0],true)
+                    }
+                    // 添加混合模式
+                    if(this.currentUserinfo.applications.length>1){
+                        this.currentUserinfo.applications.push({
+                            name:'混合模式',
+                            id:'mixmode'
+                        })
                     }
                 }).catch((error) => {
                     if(error.response){
@@ -58,6 +76,7 @@
                     this.buttonLoading[application.id] = true
                     storage.set("currentApplication",application)
                     // 临时解决
+                    // this.$router.replace('/')
                     window.location.href=window.location.href.replace('selectApplication','')
                 }
 

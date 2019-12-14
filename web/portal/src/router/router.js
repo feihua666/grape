@@ -15,7 +15,7 @@ const router = new VueRouter({
             component: () => import('@/views/application/selectApplication.vue')
         },
         {
-            path: '/**',
+            path: '/*',
             component: () => import('@/views/mfe/Mfe.vue')
         }
     ]

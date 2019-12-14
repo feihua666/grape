@@ -15,7 +15,7 @@
             <el-header v-if="$slots.header" :style="headerStyle"  v-show="show.header !== false">
                 <slot name="header"></slot>
             </el-header>
-            <el-container>
+            <el-container :style="innerContainerStyle">
                 <el-aside v-if="$slots.aside" :style="asideStyle" v-show="show.aside !== false" width="200px">
                     <slot name="aside"></slot>
                 </el-aside>
@@ -31,7 +31,7 @@
             <el-aside v-if="$slots.aside" :style="asideStyle" v-show="show.aside !== false" width="200px">
                 <slot name="aside"></slot>
             </el-aside>
-            <el-container>
+            <el-container :style="innerContainerStyle">
                 <el-header v-if="$slots.header" :style="headerStyle"   v-show="show.header !== false">
                     <slot name="header"></slot>
                 </el-header>
@@ -58,6 +58,7 @@
             footerStyle:{},
             mainStyle:{},
             asideStyle:{},
+            innerContainerStyle:{},
             /*
             {
                 header: false,

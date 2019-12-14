@@ -5,7 +5,6 @@ import ElementUI from 'element-ui'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import router from './router/router'
-import {tryMount} from "common-util/src/components/mfe"
 import bus from 'common-util/src/components/bus/index.js'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'common-util/src/css/global.css'
@@ -50,7 +49,7 @@ export async function bootstrap() {
 let instance = null;
 export async function mount(props) {
     instance = getInstance()
-    tryMount(containerId,instance)
+    instance.$mount('#' + containerId)
 }
 
 export async function unmount() {
