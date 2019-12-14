@@ -35,6 +35,8 @@
 </template>
 
 <script>
+    import storageTool from 'common-util/src/tools/StorageTools.js'
+
     export default {
         props:{
             userinfoLoading:{
@@ -88,11 +90,17 @@
                 switch (command) {
                     case 'userinfo':{
                         // 该页面在base项目
+                        storageTool.set("rootBreadcrumb",{
+                            path:this.$route.path
+                        })
                         this.$router.push('/base/user/userinfo/current')
                         break
                     }
                     case 'updatePwd':{
                         // 该页面在base项目
+                        storageTool.set("rootBreadcrumb",{
+                            path:this.$route.path
+                        })
                         this.$router.push('/base/user/updatePwd')
                         break
                     }

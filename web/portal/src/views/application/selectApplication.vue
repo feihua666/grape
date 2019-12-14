@@ -36,7 +36,7 @@
             }
         },
         mounted(){
-            this.getUserinfo()
+            //this.getUserinfo()
         },
         methods:{
             getUserinfo(){

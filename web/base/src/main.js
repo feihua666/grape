@@ -26,6 +26,8 @@ axios.interceptors.response.use(function (response) {
 })
 
 router.beforeEach((to, from, next) => {
+    console.log('beforeEachbaseto',to)
+    console.log('beforeEachbasessfrom',from)
     next()
 })
 Vue.use(VueAxios, axios)

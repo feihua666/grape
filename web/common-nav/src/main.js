@@ -23,7 +23,10 @@ axios.interceptors.response.use(function (response) {
 
     return Promise.reject(error)
 })
+// 路由守卫
 router.beforeEach((to, from, next) => {
+    console.log('beforeEachnavto',to)
+    console.log('beforeEachnavfrom',from)
     next()
 })
 Vue.use(VueAxios, axios)
