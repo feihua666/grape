@@ -18,7 +18,6 @@
 </template>
 
 <script>
-    import storageTool from 'common-util/src/tools/StorageTools.js'
 
     export default {
   name: 'app',
@@ -45,22 +44,28 @@
     },
     watch:{
       $route(to,from){
-          if('/' == from.path || from.meta.reset){
-              // 清空数组
-              this.breadcrumbs.splice(0)
-          }
-          // 其它微前端项目中设置的需要重置面包屑数组，这里目前是导航项目点击导航菜单设置的
-          let rootBreadcrumb = storageTool.get('rootBreadcrumb')
-          if(rootBreadcrumb && rootBreadcrumb.path.indexOf(from.path) >=0){
-              this.breadcrumbs.splice(0)
-          }
-          //如果去向路由是面包屑中的路径，则将面包屑后面的数据清除
-          for(let i = 0;i < this.breadcrumbs.length; i++){
-              if(to.path == this.breadcrumbs[i].path){
-                  this.breadcrumbs.splice(i)
-                  break
+          if(this.breadcrumbs.length > 0){
+              if('/' == from.path || from.meta.reset){
+                  // 清空数组
+                  this.breadcrumbs.splice(0)
+              }else{
+                  //如果去向路由是面包屑中的路径，则将面包屑后面的数据清除
+                  let isInclude = false
+                  for(let i = 0;i < this.breadcrumbs.length; i++){
+                      if(to.path == this.breadcrumbs[i].path){
+                          this.breadcrumbs.splice(i)
+                          isInclude = true
+                          break
+                      }
+                  }
+                  if(!isInclude && to.meta.root){
+                      this.breadcrumbs.splice(0)
+                  }
               }
+
+
           }
+
           //暂时没什么作用以后研究 todo
           // 缓存判断
           if(from.meta.nextKeepalive){

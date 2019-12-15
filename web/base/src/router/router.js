@@ -16,7 +16,8 @@ const router = new VueRouter({
                 // 这样可以面包屑随后台设置而修改，如果后台分配的功能存在该值则以该code对象的名称替换title显示
                 titleCode:'',
                 title: '字典管理', // 名称，目前主要用于面包屑
-                keepAlive: false // 不需要缓存
+                keepAlive: false, // 不需要缓存
+                root:true //标识是一个根路由 用于面包屑
             }
         },
         {
@@ -40,7 +41,8 @@ const router = new VueRouter({
             component: () => import('@/views/func/Func.vue'),
             meta: {
                 titleCode:'',
-                title: '功能管理'
+                title: '功能管理',
+                root:true
             }
         },
         {
@@ -72,7 +74,8 @@ const router = new VueRouter({
             component: () => import('@/views/comp/Comp.vue'),
             meta: {
                 titleCode:'',
-                title: '公司管理'
+                title: '公司管理',
+                root:true
             }
         },
         {
@@ -96,7 +99,8 @@ const router = new VueRouter({
             component: () => import('@/views/dept/Dept.vue'),
             meta: {
                 titleCode:'',
-                title: '部门管理'
+                title: '部门管理',
+                root:true
             }
         },
         {
@@ -120,7 +124,8 @@ const router = new VueRouter({
             component: () => import('@/views/user/User.vue'),
             meta: {
                 titleCode:'',
-                title: '用户管理'
+                title: '用户管理',
+                root:true
             }
         },
         {
@@ -144,7 +149,8 @@ const router = new VueRouter({
             component: () => import('@/views/user/UpdatePwd.vue'),
             meta: {
                 titleCode:'',
-                title: '修改密码'
+                title: '修改密码',
+                root:true
             }
         },
         {
@@ -152,7 +158,8 @@ const router = new VueRouter({
             component: () => import('@/views/user/Userinfo.vue'),
             meta: {
                 titleCode:'',
-                title: '个人信息'
+                title: '个人信息',
+                root:true
             }
         },
         {
@@ -168,7 +175,8 @@ const router = new VueRouter({
             component: () => import('@/views/user/userpost/UserPost.vue'),
             meta: {
                 titleCode:'',
-                title: '用户岗位管理'
+                title: '用户岗位管理',
+                root:true
             }
         },
         {
@@ -200,7 +208,8 @@ const router = new VueRouter({
             component: () => import('@/views/user/useridentifier/UserIdentifier.vue'),
             meta: {
                 titleCode:'',
-                title: '用户帐号标识管理'
+                title: '用户帐号标识管理',
+                root:true
             }
         },
         {
@@ -224,7 +233,8 @@ const router = new VueRouter({
             component: () => import('@/views/role/Role.vue'),
             meta: {
                 titleCode:'',
-                title: '角色管理'
+                title: '角色管理',
+                root:true
             }
         },
         {
@@ -272,7 +282,8 @@ const router = new VueRouter({
             component: () => import('@/views/post/Post.vue'),
             meta: {
                 titleCode:'',
-                title: '岗位管理'
+                title: '岗位管理',
+                root:true
             }
         },
         {
@@ -305,7 +316,8 @@ const router = new VueRouter({
             component: () => import('@/views/job/Job.vue'),
             meta: {
                 titleCode:'',
-                title: '职务管理'
+                title: '职务管理',
+                root:true
             }
         },
         {
@@ -330,7 +342,8 @@ const router = new VueRouter({
             component: () => import('@/views/joblevel/JobLevel.vue'),
             meta: {
                 titleCode:'',
-                title: '职级管理'
+                title: '职级管理',
+                root:true
             }
         },
         {
@@ -355,7 +368,8 @@ const router = new VueRouter({
             component: () => import('@/views/area/Area.vue'),
             meta: {
                 titleCode:'',
-                title: '区域管理'
+                title: '区域管理',
+                root:true
             }
         },
         {
@@ -380,7 +394,8 @@ const router = new VueRouter({
             component: () => import('@/views/paramconfig/ParamConfig.vue'),
             meta: {
                 titleCode:'',
-                title: '参数配置管理'
+                title: '参数配置管理',
+                root:true
             }
         },
         {
@@ -405,7 +420,8 @@ const router = new VueRouter({
             component: () => import('@/views/dataconstraint/dataobject/DataObject.vue'),
             meta: {
                 titleCode:'',
-                title: '数据对象管理'
+                title: '数据对象管理',
+                root:true
             }
         },
         {
@@ -429,7 +445,8 @@ const router = new VueRouter({
             component: () => import('@/views/dataconstraint/datascope/DataScope.vue'),
             meta: {
                 titleCode:'',
-                title: '数据范围约束管理'
+                title: '数据范围约束管理',
+                root:true
             }
         },
         {
@@ -470,7 +487,8 @@ const router = new VueRouter({
             component: () => import('@/views/application/Application.vue'),
             meta: {
                 titleCode:'',
-                title: '后端应用管理'
+                title: '后端应用管理',
+                root:true
             }
         },
         {
