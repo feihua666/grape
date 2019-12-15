@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <template v-if="type == 'simple'">
-            <el-header v-if="$slots.header" :style="headerStyle" v-show="show.header !== false">
+            <el-header v-if="forceRender.header || $slots.header" :style="headerStyle" v-show="show.header !== false">
                 <slot name="header"></slot>
             </el-header>
             <el-main v-if="$slots.main" :style="mainStyle" v-show="show.main !== false">
@@ -11,8 +11,8 @@
                 <slot name="footer"></slot>
             </el-footer>
         </template>
-        <template v-if="type == 'top-header'">
-            <el-header v-if="$slots.header" :style="headerStyle"  v-show="show.header !== false">
+        <template v-else-if="type == 'top-header'">
+            <el-header v-if="forceRender.header || $slots.header" :style="headerStyle"  v-show="show.header !== false">
                 <slot name="header"></slot>
             </el-header>
             <el-container :style="innerContainerStyle">
@@ -32,7 +32,7 @@
                 <slot name="aside"></slot>
             </el-aside>
             <el-container :style="innerContainerStyle">
-                <el-header v-if="$slots.header" :style="headerStyle"   v-show="show.header !== false">
+                <el-header v-if="forceRender.header || $slots.header" :style="headerStyle"   v-show="show.header !== false">
                     <slot name="header"></slot>
                 </el-header>
                 <el-main v-if="$slots.main" :style="mainStyle" v-show="show.main !== false">
@@ -54,11 +54,17 @@
                 type: String,
                 default: 'top-header' // left-aside
             },
-            headerStyle:{},
-            footerStyle:{},
-            mainStyle:{},
-            asideStyle:{},
-            innerContainerStyle:{},
+            headerStyle:String,
+            footerStyle:String,
+            mainStyle:String,
+            asideStyle:String,
+            innerContainerStyle:String,
+            forceRender:{
+                type: Object,
+                default: function () {
+                    return {}
+                }
+            },//命名视图时只根据slots判断布局会出现错觉，暂时只加了一个header判断
             /*
             {
                 header: false,
