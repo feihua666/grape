@@ -16,7 +16,10 @@ const router = new VueRouter({
         },
         {
             path: '/*',
-            component: () => import('@/views/mfe/Mfe.vue')
+            component: () => import('@/views/mfe/Mfe.vue'),
+            meta:{
+                keepAlive: true // 加载子应用的路由必须缓存否则子应用挂载的 dom会丢失
+            }
         }
     ]
 })

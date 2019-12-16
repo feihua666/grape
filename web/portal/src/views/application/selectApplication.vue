@@ -6,7 +6,6 @@
                 <el-avatar icon="el-icon-user-solid" :src="currentUserinfo.avatar"></el-avatar>
             </div>
                 <el-button type="primary" v-for="(app,index) in currentUserinfo.applications" :key="index" style="margin:10px;" class="g-pointer" @click="enter(app)" :loading="buttonLoading[app.id]">{{app.name}}</el-button>
-
         </el-card>
 
     </div>
@@ -21,22 +20,12 @@
             return {
                 userinfoLoading: false,
                 currentUserinfo:{
-                    applications:[
-                        {
-                            name:'aaaa',
-                            id:'aaaa'
-                        },
-                        {
-                            name:'bbbb',
-                            id:'bbbb'
-                        }
-                    ]
                 },
                 buttonLoading:{}
             }
         },
         mounted(){
-            //this.getUserinfo()
+            this.getUserinfo()
         },
         methods:{
             getUserinfo(){
@@ -68,15 +57,17 @@
 
                 if(delay){
                     this.$message.info('即将进入应用：' + application.name)
-
                     setTimeout(()=>{
                         this.enter(application,false)
                     },2000)
                 }else {
                     this.buttonLoading[application.id] = true
                     storage.set("currentApplication",application)
-                    // 临时解决
-                    // this.$router.replace('/')
+                    // 感觉遇到一个问题描述如下：
+                    // 在portal项目中加载子项目导航项目，但portal导航到登录页面后Mfe组件页面后这里Mfe的被挂载的子项目的挂载点已经不存在了，（即使存在一个同样的id容器也不是以前的容器了）
+                    // 所以子项目应该会加载不出来，暂时两种解决方法，一种是mfe组件页面加keepAlive包裹（这种方式不会触发子项目的生命周期钩子函数，只有一个berforeRouteUpdate方法会监测到路由的改变）,另一种是直接直接浏览器地址刷新重新加载
+                    // 暂时用刷新的方式 todo
+                     //this.$router.replace('/')
                     window.location.href=window.location.href.replace('selectApplication','')
                 }
 

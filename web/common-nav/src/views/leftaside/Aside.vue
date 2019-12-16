@@ -1,10 +1,8 @@
 <template>
-    <el-scrollbar class="g-height100 scroll-bar-view" v-loading="funcDataLoading" element-loading-background="#304156" wrapStyle="overflow:auto;">
+    <el-scrollbar class="g-height100 scroll-bar-view" v-loading="funcDataLoading" style="background-color: #304156;" element-loading-background="#304156" wrapStyle="overflow:auto;">
         <el-menu
                 :default-openeds="defaultActive"
                 class="g-height100"
-
-
                 background-color="#304156"
                 text-color="#fff"
                 active-text-color="#ffd04b"
@@ -20,6 +18,7 @@
 <script>
     import NavMenuItem from './NavMenuItem.vue'
     import NavSubMenu from './NavSubMenu.vue'
+    import storage from 'common-util/src/tools/StorageTools.js'
     export default {
         name: 'Aside',
         components: {
@@ -54,10 +53,21 @@
         mounted () {
             this.getFuncData()
         },
+        updated(){
+        },
+        activated(){
+        },
+        beforeRouteEnter(to, from, next){
+            next()
+        },
         methods: {
             getFuncData(){
                 this.funcDataLoading = true
-                this.axios.get('/func/tree/nav')
+                // 获取当前选中的应用，数据结构同后台应用vo
+                let currentApplication = storage.get('currentApplication')
+                this.axios.get('/func/tree/nav',{params:{
+                    applicationId:currentApplication?currentApplication.id:null
+                    }})
                     .then(res =>{
                         this.funcData = res.data.data
                     })

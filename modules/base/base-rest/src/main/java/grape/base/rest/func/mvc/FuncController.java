@@ -198,20 +198,18 @@ public class FuncController extends BaseTreeController<FuncVo, Func> {
     @RequiresPermissions("user")
     @GetMapping("/tree/nav")
     @ResponseStatus(HttpStatus.OK)
-    public List<TreeNodeVo<FuncVo>> treeNav() {
+    public List<TreeNodeVo<FuncVo>> treeNav(String applicationId) {
         BaseLoginUser loginUser = BaseLoginUser.getLoginUser();
         List<Func> funcList;
+        List<Func.TypeDictItem> typeDictItems = newArrayList(Func.TypeDictItem.menu, Func.TypeDictItem.page);
         // 超级管理员查全部的
         if (loginUser.getIsSuperAdmin()) {
-            List<String> menuAndPage = new ArrayList<>(2);
-            menuAndPage.add(Func.TypeDictItem.menu.name());
-            menuAndPage.add(Func.TypeDictItem.page.name());
-            funcList = iFuncService.getByTypes(menuAndPage,false);
+            funcList = iFuncService.getByTypes(typeDictItems,applicationId,false);
         }else{
             if (loginUser.getCurrentRole() == null) {
                 throw new RBaseException("当前用户没有可用角色");
             }
-            funcList = iFuncService.getMenuAndPageByRoleId(loginUser.getCurrentRole().getId(),false);
+            funcList = iFuncService.getRoleId(loginUser.getCurrentRole().getId(),typeDictItems,applicationId,false);
         }
         if (isListEmpty(funcList)) {
             throw ExceptionTools.dataNotExistRE("暂无数据");

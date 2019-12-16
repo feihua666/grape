@@ -1,5 +1,5 @@
 <template>
-  <div role="router-box" class="g-width100 g-height100">
+  <div role="app-base-router-box" class="g-width100 g-height100">
 
     <el-breadcrumb separator="/" style="margin-bottom: 20px;">
       <el-breadcrumb-item>当前位置：</el-breadcrumb-item>
@@ -11,9 +11,9 @@
       </el-breadcrumb-item>
     </el-breadcrumb>
     <keep-alive>
-      <router-view v-if="$route.meta && $route.meta.keepAlive === true"></router-view>
+      <router-view v-if="$route.meta.keepAlive === true"></router-view>
     </keep-alive>
-    <router-view v-if="!$route.meta || !$route.meta.keepAlive"></router-view>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 

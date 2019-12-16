@@ -22,7 +22,7 @@
         m.create_by,
         m.update_at,
         m.update_by,
-        m.code, m.name, m.icon, m.is_disabled, m.disabled_reason, m.url, m.permissions, m.type_dict_id, m.remark, m.seq
+        m.code, m.name, m.icon,m.application_id, m.is_disabled, m.disabled_reason, m.url, m.permissions, m.type_dict_id, m.remark, m.seq
     </sql>
     <select id="getByRoleId" resultType="grape.base.service.func.po.Func">
         select
@@ -30,30 +30,17 @@
         from base_func m
         join base_role_func_rel rfr on rfr.func_id = m.id
         WHERE rfr.role_id =#{roleId}
+        <if test="applicationId != null">
+            and m.application_id = #{applicationId}
+        </if>
         <if test="isDisabled != null">
-            and is_disabled = #{isDisabled}
+            and m.is_disabled = #{isDisabled}
         </if>
         <if test="typeDictIds != null">
-              and type_dict_id in
+              and m.type_dict_id in
             <foreach collection="typeDictIds" index="index" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
-    </select>
-    <select id="getByType" resultType="grape.base.service.func.po.Func">
-        select
-        <include refid="Base_Column_List"/>
-        from base_func m
-             <where>
-        <if test="isDisabled != null">
-            and is_disabled = #{isDisabled}
-        </if>
-        <if test="typeDictIds != null">
-            and type_dict_id in
-            <foreach collection="typeDictIds" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-             </where>
     </select>
 </mapper>

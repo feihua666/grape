@@ -7,6 +7,8 @@
         name: 'app',
         components:{
             Nav
+        },
+        mounted() {
         }
     }
 </script>

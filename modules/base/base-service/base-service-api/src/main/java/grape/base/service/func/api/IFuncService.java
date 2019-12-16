@@ -53,10 +53,12 @@ public interface IFuncService extends IBaseTreeService<Func>, ITransService<Stri
     /**
      * 根据角色id查询角色关联的功能,只包含类型是菜单和页面的功能
      * @param roleId
+     * @param typeCode null 忽略该条件
+     * @param applicationId null 忽略该条件
      * @param isDisabled null 忽略该条件
      * @return
      */
-    List<Func> getMenuAndPageByRoleId(String roleId,Boolean isDisabled);
+    List<Func> getRoleId(String roleId,List<Func.TypeDictItem> typeCode,String applicationId,Boolean isDisabled);
 
     /**
      * 根据类型编码查询
@@ -64,7 +66,16 @@ public interface IFuncService extends IBaseTreeService<Func>, ITransService<Stri
      * @param isDisabled null 忽略该条件
      * @return
      */
-    List<Func> getByTypes(List<String> typeCode,Boolean isDisabled);
+    List<Func> getByTypes(List<Func.TypeDictItem> typeCode, Boolean isDisabled);
+
+    /**
+     * 根据类型编码查询
+     * @param typeCode
+     * @param applicationId null 忽略该条件
+     * @param isDisabled null 忽略该条件
+     * @return
+     */
+    List<Func> getByTypes(List<Func.TypeDictItem> typeCode,String applicationId, Boolean isDisabled);
 
     /**
      * 判断编码是否已存在

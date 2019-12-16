@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 一个常用工具集合
@@ -152,6 +154,24 @@ public interface ToolService {
         return pinyinDto;
     }
 
+
+    /**
+     * 新建一个数组
+     * @param items
+     * @return
+     */
+    default <T> List<T> newArrayList(T ...items){
+        if (items != null) {
+            return Stream.of(items).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    /**
+     * 断言
+     * @param obj
+     * @param exceptionMsg
+     */
     default public void assertNotNull(Object obj,String exceptionMsg){
         if(obj == null){
             throw new RDataNotExistException(exceptionMsg);
