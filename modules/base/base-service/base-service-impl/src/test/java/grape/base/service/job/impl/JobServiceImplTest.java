@@ -23,7 +23,7 @@ class JobServiceImplTest implements ToolService {
     @Autowired
     private IJobService iJobService;
 
-    @Test
+    //@Test
     public void testInsert() throws BadHanyuPinyinOutputFormatCombination {
 
         // 类型普通

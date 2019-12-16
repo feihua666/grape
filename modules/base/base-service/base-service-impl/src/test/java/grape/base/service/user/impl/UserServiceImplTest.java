@@ -33,7 +33,7 @@ class UserServiceImplTest implements ToolService {
     // 性别
     String manDictId = "3";// 男 字典id
     String femaleDictId = "4";// 女 字典id
-    @Test
+    //@Test
     public void testInsert() throws BadHanyuPinyinOutputFormatCombination {
         List<Dept> deptList = iDeptService.list();
 

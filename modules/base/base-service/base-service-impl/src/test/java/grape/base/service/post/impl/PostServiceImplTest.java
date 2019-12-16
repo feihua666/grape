@@ -23,7 +23,7 @@ class PostServiceImplTest implements ToolService {
     @Autowired
     private IPostService iPostService;
 
-    @Test
+    //@Test
     public void testInsert() throws BadHanyuPinyinOutputFormatCombination {
         // key=职务名称 value为对应岗位的前缀
         Map<String, String[]> map = new HashMap<>();

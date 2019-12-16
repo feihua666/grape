@@ -20,7 +20,7 @@ class JobLevelServiceImplTest implements ToolService {
     @Autowired
     private IJobLevelService iJobLevelService;
 
-    @Test
+    //@Test
     public void testInsert() throws BadHanyuPinyinOutputFormatCombination {
 
         String prefix[] = {"高级", "", "高级副","副"};

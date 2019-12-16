@@ -25,7 +25,7 @@ class DeptServiceImplTest implements ToolService {
     @Autowired
     private ICompService iCompService;
 
-    @Test
+    //@Test
     public void testInsert() throws BadHanyuPinyinOutputFormatCombination {
 
         List<String> compNames = new ArrayList<>();
