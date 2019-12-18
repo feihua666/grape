@@ -2,6 +2,7 @@ package grape.base.rest.userpost.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.userpost.form.UserPostCreateForm;
+import grape.base.rest.userpost.form.UserPostEffectForm;
 import grape.base.rest.userpost.form.UserPostListPageForm;
 import grape.base.rest.userpost.form.UserPostUpdateForm;
 import grape.base.rest.userpost.mapper.UserPostWebMapper;
@@ -106,4 +107,23 @@ public class UserPostController extends BaseController<UserPostVo, UserPost> {
          UserPost po = currentWebMapper.formToPo(listPageForm);
          return super.listPage(po,listPageForm);
      }
+
+    /**
+     * 启用或禁用
+     * @param id
+     * @param form
+     * @return
+     */
+    @ApiOperation("启用或禁用")
+    @RequiresPermissions("userPost:single:effect")
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserPostVo enable(@PathVariable String id, @RequestBody @Valid UserPostEffectForm form) {
+        UserPost role = new UserPost();
+        role.setId(id);
+        role.setIsEffect(form.getIsEffect());
+        role.setVersion(form.getVersion());
+        role.setIneffectReason(form.getIneffectReason());
+        return super.update(role);
+    }
 }

@@ -24,59 +24,40 @@ public interface IFuncService extends IBaseTreeService<Func>, ITransService<Stri
     /**
      * 根据角色id查询角色关联的功能
      * @param roleId
-     * @param isDisabled null 忽略该条件
+     * @param funcQuery null 忽略该条件
      * @return
      */
-    List<Func> getByRoleId(String roleId,Boolean isDisabled);
+    List<Func> getByRoleId(String roleId,Func funcQuery);
+    /**
+     * 根据用户id查询用户关联的功能
+     * @param userId
+     * @param funcQuery null 忽略该条件
+     * @return
+     */
+    List<Func> getByUserId(String userId,Func funcQuery);
+    /**
+     * 根据用户岗位id查询用户岗位关联的功能
+     * @param userPostId
+     * @param funcQuery null 忽略该条件
+     * @return
+     */
+    List<Func> getByUserPostId(String userPostId,Func funcQuery);
 
     /**
-     * 根据应用id查询
-     * @param applicationId
-     * @param isDisabled null 忽略该条件
+     * 根据用岗位id查询岗位关联的功能
+     * @param postId
+     * @param funcQuery null 忽略该条件
      * @return
      */
-    default List<Func> getByApplicationId(String applicationId,Boolean isDisabled){
-        assertParamNotEmpty(applicationId,"applicationId 不能为空");
-        return list(Wrappers.<Func>lambdaQuery().eq(Func::getApplicationId, applicationId).eq(isDisabled != null, Func::getIsDisabled, isDisabled));
-    }
+    List<Func> getByPostId(String postId,Func funcQuery);
 
     /**
-     * 计数
-     * @param applicationId
-     * @param isDisabled null 忽略该条件
+     * 根据类型查询
+     * @param dictItems
+     * @param funcQuery
      * @return
      */
-    default int countByApplicationId(String applicationId,Boolean isDisabled){
-        assertParamNotEmpty(applicationId,"applicationId 不能为空");
-        return count(Wrappers.<Func>lambdaQuery().eq(Func::getApplicationId, applicationId).eq(isDisabled != null, Func::getIsDisabled, isDisabled));
-    }
-    /**
-     * 根据角色id查询角色关联的功能,只包含类型是菜单和页面的功能
-     * @param roleId
-     * @param typeCode null 忽略该条件
-     * @param applicationId null 忽略该条件
-     * @param isDisabled null 忽略该条件
-     * @return
-     */
-    List<Func> getRoleId(String roleId,List<Func.TypeDictItem> typeCode,String applicationId,Boolean isDisabled);
-
-    /**
-     * 根据类型编码查询
-     * @param typeCode 必须是grape.base.service.func.po.Func.TypeDictGroup#func_type下字典项
-     * @param isDisabled null 忽略该条件
-     * @return
-     */
-    List<Func> getByTypes(List<Func.TypeDictItem> typeCode, Boolean isDisabled);
-
-    /**
-     * 根据类型编码查询
-     * @param typeCode
-     * @param applicationId null 忽略该条件
-     * @param isDisabled null 忽略该条件
-     * @return
-     */
-    List<Func> getByTypes(List<Func.TypeDictItem> typeCode,String applicationId, Boolean isDisabled);
-
+    List<Func> getByTypes(List<Func.TypeDictItem> dictItems,Func funcQuery);
     /**
      * 判断编码是否已存在
      * @param code

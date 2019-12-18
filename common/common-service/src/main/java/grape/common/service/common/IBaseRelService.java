@@ -26,19 +26,19 @@ public interface IBaseRelService<Po extends IDBasePo<?,?>> extends IBaseService<
         assertParamNotEmpty(mainId,"mainId is not empty");
 
         // 懒加载或都未选择数据，则清空
-        if ((isLazyLoad!=null && !isLazyLoad) || (isListEmpty(checkedIds) && isListEmpty(uncheckeIds))) {
+        if ((isLazyLoad!=null && !isLazyLoad) || (isEmpty(checkedIds) && isEmpty(uncheckeIds))) {
             // 先删除
             remove(Wrappers.<Po>lambdaQuery().eq(main,mainId));
         }else {
             List<String> removedIds = new ArrayList<>();
-            if(!isListEmpty(checkedIds)){
+            if(!isEmpty(checkedIds)){
                 removedIds.addAll(checkedIds);
             }
-            if(!isListEmpty(uncheckeIds)){
+            if(!isEmpty(uncheckeIds)){
                 removedIds.addAll(uncheckeIds);
             }
 
-            if(!isListEmpty(removedIds)){
+            if(!isEmpty(removedIds)){
                 remove(Wrappers.<Po>lambdaQuery()
                         .eq(main, mainId)
                         .in(other, removedIds));

@@ -42,9 +42,41 @@ public interface IDataScopeService extends IBaseService<DataScope> {
      * @param dataObjectId
      * @return
      */
-    default List<DataScope> getByDataObjectId(String dataObjectId){
+    default List<DataScope> getByDataObjectId(String dataObjectId,DataScope query){
         assertParamNotEmpty(dataObjectId,"dataObjectId 不能为空");
-        return list(Wrappers.<DataScope>lambdaQuery().eq(DataScope::getDataObjectId, dataObjectId));
-
+        return list(Wrappers.<DataScope>lambdaQuery(query).eq(DataScope::getDataObjectId, dataObjectId));
     }
+
+    /**
+     * 根据用户id查询数据范围
+     * 通过用户数据范围关系表查询的
+     * @param userId
+     * @return
+     */
+    List<DataScope> getByUserId(String userId,DataScope query);
+    /**
+     * 根据角色id查询数据范围
+     * 通过角色数据范围关系表查询的
+     * @param roleId
+     * @return
+     */
+    List<DataScope> getByRoleId(String roleId,DataScope query);
+
+    /**
+     * 根据用户岗位id查询数据范围
+     * 通过用户岗位数据范围关系表查询的
+     * @param userPostId
+     * @param query
+     * @return
+     */
+    List<DataScope> getByUserPostId(String userPostId,DataScope query);
+
+    /**
+     * 根据岗位id查询数据范围
+     * 通过岗位数据范围关系表查询的
+     * @param postId
+     * @param query
+     * @return
+     */
+    List<DataScope> getByPostId(String postId,DataScope query);
 }

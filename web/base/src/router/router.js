@@ -171,6 +171,14 @@ const router = new VueRouter({
             }
         },
         {
+            path: '/user/assignFunc/:userId',
+            component: () => import('@/views/user/UserAssignFunc.vue'),
+            meta: {
+                titleCode:'',
+                title: '用户分配功能'
+            }
+        },
+        {
             path: '/user/userPost/:userId?',
             component: () => import('@/views/user/userpost/UserPost.vue'),
             meta: {
@@ -182,6 +190,14 @@ const router = new VueRouter({
         {
             path: '/user/userPost/userPostAdd/:userId',
             component: () => import('@/views/user/userpost/UserPostAdd.vue'),
+            meta: {
+                titleCode:'',
+                title: '添加用户岗位'
+            }
+        },
+        {
+            path: '/user/userPost/userPostEdit/:userPostId',
+            component: () => import('@/views/user/userpost/UserPostEdit.vue'),
             meta: {
                 titleCode:'',
                 title: '添加用户岗位'
@@ -201,6 +217,14 @@ const router = new VueRouter({
             meta: {
                 titleCode:'',
                 title: '用户岗位分配数据范围约束'
+            }
+        },
+        {
+            path: '/user/userPost/userPostAssignFunc/:userPostId',
+            component: () => import('@/views/user/userpost/UserPostAssignFunc.vue'),
+            meta: {
+                titleCode:'',
+                title: '用户岗位分配功能'
             }
         },
         {
@@ -303,11 +327,19 @@ const router = new VueRouter({
             }
         },
         {
-            path: '/post/PostAssignDataScope/:postId',
+            path: '/post/postAssignDataScope/:postId',
             component: () => import('@/views/post/PostAssignDataScope.vue'),
             meta: {
                 titleCode:'',
                 title: '岗位分配数据范围'
+            }
+        },
+        {
+            path: '/post/postAssignFunc/:postId',
+            component: () => import('@/views/post/PostAssignFunc.vue'),
+            meta: {
+                titleCode:'',
+                title: '岗位分配功能'
             }
         },
         // 职务

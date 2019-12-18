@@ -1,6 +1,8 @@
 package grape.base.service.func.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import grape.common.service.common.IDictGroup;
+import grape.common.service.common.IDictItem;
 import grape.common.service.po.TreeBasePo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,16 +30,24 @@ public class Func extends TreeBasePo<Func> {
     /**
      * 功能类型字典组编码
      */
-    public enum TypeDictGroup{
-        func_type
-    }
+    public enum TypeDictGroup implements IDictGroup {
+        func_type;
+
+        @Override
+        public String groupCode() {
+            return this.name();
+        }}
 
     /**
      * 功能类型字典项编码
      */
-    public enum TypeDictItem{
-        menu,page
-    }
+    public enum TypeDictItem implements IDictItem {
+        menu,page;
+
+        @Override
+        public String itemCode() {
+            return this.name();
+        }}
 
     /**
      * 编码，用来查询或系统判断

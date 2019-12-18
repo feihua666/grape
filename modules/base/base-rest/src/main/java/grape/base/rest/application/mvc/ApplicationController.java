@@ -3,6 +3,7 @@ package grape.base.rest.application.mvc;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.application.form.ApplicationListForm;
 import grape.base.service.func.api.IFuncService;
+import grape.base.service.func.po.Func;
 import grape.common.exception.runtime.RBaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -71,7 +72,8 @@ public class ApplicationController extends BaseController<ApplicationVo, Applica
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
          // 不能删除已使用的应用
-         if (iFuncService.countByApplicationId(id,null) > 0) {
+
+         if (iFuncService.count(new Func().setApplicationId(id)) > 0) {
              throw new RBaseException("有功能在使用不能删除");
          }
          return super.deleteById(id);

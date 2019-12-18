@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper=false)
 
 @Accessors(chain = true)
-@ApiModel(value="RoleFuncRelVo数据响应对象", description="角色菜单功能关系表，多对多")
+@ApiModel(value="RoleFuncRelVo数据响应对象")
 public class RoleFuncRelVo extends BaseVo {
 
     private static final long serialVersionUID = 1L;

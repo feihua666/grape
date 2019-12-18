@@ -5,6 +5,8 @@ import grape.base.service.dept.api.IDeptService;
 import grape.base.service.job.api.IJobService;
 import grape.base.service.joblevel.api.IJobLevelService;
 import grape.base.service.post.api.IPostService;
+import grape.base.service.role.api.IRoleService;
+import grape.base.service.role.po.Role;
 import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.userpost.mapper.UserPostMapper;
@@ -37,6 +39,8 @@ public class UserPostServiceImpl extends BaseServiceImpl<UserPostMapper, UserPos
     private IJobLevelService iJobLevelService;
     @Autowired
     private IJobService iJobService;
+    @Autowired
+    private IRoleService iRoleService;
     @Override
     public UserPostInfo getUserPostInfo(UserPost userPost) {
 
@@ -49,12 +53,13 @@ public class UserPostServiceImpl extends BaseServiceImpl<UserPostMapper, UserPos
         userPostInfo.setPost(iPostService.getById(userPost.getPostId()));
         userPostInfo.setJob(iJobService.getById(userPost.getJobId()));
         userPostInfo.setJobLevel(iJobLevelService.getById(userPost.getJobLevelId()));
+        userPostInfo.setRoles(iRoleService.getByUserPostId(userPost.getId(),new Role().setIsDisabled(false)));
         return userPostInfo;
     }
 
     @Override
     public List<UserPostInfo> getUserPostInfos(List<UserPost> userPosts) {
-        if (isListEmpty(userPosts)) {
+        if (isEmpty(userPosts)) {
             return null;
         }
         List<UserPostInfo> r = new ArrayList<>(userPosts.size());

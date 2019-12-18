@@ -91,7 +91,7 @@ public interface IRoleFuncRelService extends IBaseRelService<RoleFuncRel> {
      * @param isRoleMain
      */
     default void doBind(String mainId,List<String> checkedIds,boolean isRoleMain){
-        if (!isListEmpty(checkedIds)) {
+        if (!isEmpty(checkedIds)) {
             List<RoleFuncRel> insert = new ArrayList<>(checkedIds.size());
             RoleFuncRel roleFuncRel = null;
             for (String checkedId : checkedIds) {

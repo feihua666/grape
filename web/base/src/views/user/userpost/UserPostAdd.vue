@@ -15,6 +15,16 @@
                 formItems:[
                     {
                         field: {
+                            name: 'nickname',
+                            value: this.$route.query.nickname
+                        },
+                        element:{
+                            type: 'txt',
+                            label: '用户'
+                        }
+                    },
+                    {
+                        field: {
                             name: 'userId',
                             value: this.$route.params.userId
                         }

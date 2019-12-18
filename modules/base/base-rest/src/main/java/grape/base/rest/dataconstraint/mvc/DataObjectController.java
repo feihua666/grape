@@ -75,7 +75,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
          // 已存在数据范围不能删除
-         if (!isListEmpty(iDataScopeService.getByDataObjectId(id))) {
+         if (!isEmpty(iDataScopeService.getByDataObjectId(id,null))) {
              throw ExceptionTools.failRE("删除失败，存在关联的数据范围");
          }
          return super.deleteById(id);

@@ -1,5 +1,5 @@
 <template>
-    <div class="g-flex-center-all g-height100 g-width100">
+    <div class="g-flex-align-center g-height100 g-width100">
         <UpdatePassword class="update-password" v-on:success="updateSuccess"></UpdatePassword>
     </div>
 </template>

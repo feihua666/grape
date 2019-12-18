@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.common.exception.CBaseException;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.InvalidParamsException;
-import grape.common.service.po.BasePo;
 import grape.common.service.po.IDBasePo;
-import grape.common.service.po.NormalBasePo;
 import grape.common.service.po.TreeBasePo;
 
 import java.util.ArrayList;
@@ -34,11 +32,21 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
         return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL).isNull(TreeBasePo.COLUMN_PARENT_ID));
     }
     /**
+     * 查询第一级
+     * @return
+     */
+    default List<Po> getRoot(Po query){
+        return list(Wrappers.<Po>query(query).eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL).isNull(TreeBasePo.COLUMN_PARENT_ID));
+    }
+    /**
      * 查询第一级，带数据约束
      * @return
      */
     default List<Po> getRoot(ConstraintContent constraintContent){
-        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL).isNull(TreeBasePo.COLUMN_PARENT_ID).apply(constraintContent.getCompiledSqlContent()));
+        return list(Wrappers.<Po>query()
+                .eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL)
+                .isNull(TreeBasePo.COLUMN_PARENT_ID)
+                .apply(constraintContent.getCompiledSqlContent()));
 
     }
     /**
@@ -58,6 +66,20 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
     default List<Po> getChildren(String parentId){
         assertParamNotEmpty(parentId,"parentId不能为空");
         return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId));
+    }
+    /**
+     * 查询子一级节点
+     * @param parentId
+     * @param query
+     * @return
+     */
+    default List<Po> getChildren(String parentId,Po query){
+        assertParamNotEmpty(parentId,"parentId不能为空");
+        if(query == null){
+            return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId));
+        }else {
+            return list(Wrappers.<Po>query(query).eq(TreeBasePo.COLUMN_PARENT_ID,parentId));
+        }
     }
     /**
      * 查询子一级节点,带数据约束
@@ -199,7 +221,7 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
         }else {
             children = getChildren(parent.getId());
         }
-        if (!isListEmpty(children)) {
+        if (!isEmpty(children)) {
             for (Po po : children) {
                 if(po.getLevel() != level){
                     throw new CBaseException("id=" + po.getId() + " level应该为"+ level +"实际为" + po.getLevel());

@@ -2,7 +2,6 @@ package grape.common.rest.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import grape.common.AbstractLoginUser;
 import grape.common.exception.ExceptionTools;
 import grape.common.rest.form.BasePageForm;
 import grape.common.service.common.IBaseService;
@@ -11,7 +10,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -141,7 +139,7 @@ public abstract class BaseController<Vo,Po extends IDBasePo<?,?>> extends SuperC
      */
     public IPage<Vo> pagePoToVo(IPage page){
         List<Po> records = page.getRecords();
-        if (page != null && !isListEmpty(records)) {
+        if (page != null && !isEmpty(records)) {
             page.setRecords(posToVos(records));
             return page;
         }

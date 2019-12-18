@@ -43,7 +43,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
     @PostMapping("/userpost/assign/role")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean userPostAssignRole(@RequestBody @Valid UserPostAssignRoleForm cf) {
-        currentService.userAssignRole(cf.getUserPostId(),cf.getCheckedRoleId());
+        currentService.userPostAssignRole(cf.getUserPostId(),cf.getCheckedRoleIds(),cf.getUncheckedRoleIds(),cf.getIsLazyLoad());
         return true;
     }
 
@@ -51,13 +51,13 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
     @RequiresPermissions("userPostRoleRel:single:queryByUserPostId")
     @GetMapping("/userpost/{userPostId}")
     @ResponseStatus(HttpStatus.OK)
-    public String queryByUserPostId(@PathVariable String userPostId) {
-        UserPostRoleRel rel = currentService.getByUserPostId(userPostId);
-        if (rel == null) {
+    public List<String> queryByUserPostId(@PathVariable String userPostId) {
+        List<UserPostRoleRel> rels = currentService.getByUserPostId(userPostId);
+        if (rels == null) {
             ExceptionTools.dataNotExistRE("数据不存在");
         }
 
-        return rel.getRoleId();
+        return rels.stream().map(rel-> rel.getRoleId()).collect(Collectors.toList());
     }
 
     @ApiOperation("清空用户岗位下的所有角色")

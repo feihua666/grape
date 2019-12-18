@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.dict.po.Dict;
 import grape.base.service.dict.mapper.DictMapper;
 import grape.base.service.dict.api.IDictService;
+import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.service.common.BaseServiceImpl;
 import grape.common.service.common.DictService;
+import grape.common.service.common.IDictGroup;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,30 +25,19 @@ import java.util.stream.Collectors;
 public class DictServiceImpl extends BaseServiceImpl<DictMapper, Dict> implements IDictService, DictService {
 
     @Override
-    public List<Dict> getItemByGroupCode(String groupCode, Boolean isDisabled) {
-        Dict dict = new Dict();
-        dict.setCode(groupCode);
-        dict.setIsDisabled(isDisabled);
-        Dict groupDict = getOne(Wrappers.query(dict));
-        if (groupDict != null) {
-            dict.setCode(null);
-            dict.setParentId(groupDict.getId());
-            return list(Wrappers.query(dict));
-        }
-        return null;
+    public List<Dict> getItemByGroupCode(IDictGroup groupCode, Dict dictQuery) {
+
+        return getItemByGroupCode(groupCode.groupCode(), dictQuery);
     }
 
     @Override
-    public List<Dict> getItemByGroupCode(String groupCode, Boolean isDisabled, List<String> itemCodes) {
-        if (isListEmpty(itemCodes)) {
+    public List<Dict> getItemByGroupCode(String groupCode, Dict dictQuery) {
+        assertParamNotEmpty(groupCode,"groupCode 不能为空");
+        Dict dict = getByCode(groupCode);
+        if (dict == null) {
             return null;
         }
-        List<Dict> dicts = getItemByGroupCode(groupCode, isDisabled);
-        // 以下是去除不包括itemCodes的项
-        if (!isListEmpty(dicts)) {
-            dicts = dicts.stream().filter(dict -> itemCodes.contains(dict.getCode())).collect(Collectors.toList());
-        }
-        return dicts;
+        return list(Wrappers.query(dictQuery).lambda().eq(Dict::getParentId,dict.getId()));
     }
 
     @Override

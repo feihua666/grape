@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/datascopecustomrel")
-@Api(tags = "数据范围约束自定义表相关接口")
+@Api(tags = "数据范围约束自定义相关接口")
 public class DataScopeCustomRelController extends BaseLoginUserController<DataScopeCustomRelVo, DataScopeCustomRel, BaseLoginUser> {
 
     @Autowired

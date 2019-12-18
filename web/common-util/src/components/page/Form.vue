@@ -4,7 +4,7 @@
              :model="form"
              ref="dynamicValidateForm"
              :label-width="labelWidth"
-             v-loading="loading"
+             v-loading="formLoading"
              @submit.native.prevent
     >
         <template v-for="(item, formItemIndex) in computedFormItems">
@@ -14,7 +14,6 @@
                     :key="formItemIndex"
                     :prop="getFieldName(item)"
                     :rules="getRules(item)"
-
             >
                 <el-input v-if="item.element.type == 'text'"
                           v-model="form[getFieldName(item)]"
@@ -249,7 +248,11 @@
             // 表单提交之前处理 参数为form,返回值为处理后的form
             formatForm:{
                 type: Function
-            }
+            },
+            // 数据初始化的url，一般是修改时用
+            initDataUrl:String,
+            // 数据初始化的url请求完数据后，预处理回调
+            handleInitData:Function
         },
         computed:{
             // 主要是为生成默认的按钮编码
@@ -320,6 +323,7 @@
                 }
             })
             return {
+                formLoading: this.loading,
                 form,
                 // 按钮loading 状态 submit为formItems.element.button.action的值，标识是哪个按钮
                 localButtonLoading:this.buttonLoading,
@@ -329,6 +333,7 @@
         },
         mounted(){
             this.busInit()
+            this.initDataByUrl()
         },
         methods:{
             getInputNumber(item){
@@ -419,6 +424,33 @@
             busInit(){
                 if(this.submitBusKey){
                     this.$bus.$on(this.submitBusKey,this.handleBusSubmit)
+                }
+            },
+            initDataByUrl(){
+                if(this.initDataUrl){
+                    this.formLoading = true
+                    this.axios.get(this.initDataUrl).then(res => {
+                        let data = res.data.data
+                        if(this.handleInitData){
+                            data = this.handleInitData(data)
+                        }
+                        this.formData = data
+                        for(let key in data){
+                            this.setFormItem(key,data[key])
+                        }
+                    }).catch(error => {
+                        if(error.response){
+                            if(error.response.status == 404){
+                                this.$message.error('数据不存在，请刷新数据再试')
+                            }else {
+                                this.$message.error(error.response.data.msg)
+                            }
+                        }else {
+                            this.$message.error('数据加载失败')
+                        }
+                    }).finally(()=>{
+                        this.formLoading = false
+                    })
                 }
             },
             handleBusSubmit(obj){
@@ -552,7 +584,7 @@
             aiButtonStyle(label){
                 return aiButtonStyle(label)
             },
-            // 设置值
+            // 设置值，请尽量使用该方法而不是去改变formItemValue
             setFormItem(prop,value){
                 if(this.form[prop] !== undefined){
                     this.form[prop] = value
@@ -567,7 +599,6 @@
                     }
                 }
             },
-
             buttonLoading(val){
                 for(let prop in val){
                     if(this.localButtonLoading[prop] == undefined){
@@ -576,6 +607,9 @@
                         this.$set(this.localButtonLoading,prop,val[prop])
                     }
                 }
+            },
+            loading(val){
+                this.formLoading = val
             }
         }
     }

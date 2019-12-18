@@ -1,6 +1,7 @@
 package grape.base.service.post.api;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.post.dto.PostListQuery;
 import grape.base.service.post.po.Post;
@@ -42,15 +43,12 @@ public interface IPostService extends IBaseService<Post>, ITransService<String,S
      * @return
      */
     default List<Post> list(PostListQuery query){
-        LambdaQueryWrapper<Post> queryWrapper = Wrappers.<Post>lambdaQuery();
-        if (query.getCode() != null) {
-            queryWrapper = queryWrapper.eq(Post::getCode, query.getCode());
-        }
-        if (query.getName() != null) {
-            queryWrapper = queryWrapper.like(Post::getName, query.getName());
-        }
-        if (query.getDeptId() != null) {
-            queryWrapper = queryWrapper.eq(Post::getDeptId, query.getDeptId());
+        LambdaQueryWrapper<Post> queryWrapper = Wrappers.<Post>lambdaQuery()
+        .eq(query.getCode() != null,Post::getCode, query.getCode())
+        .like(query.getName() != null,Post::getName, query.getName())
+        .eq(query.getDeptId() != null,Post::getDeptId, query.getDeptId());
+        if(query.getIsIncludePublic()){
+            queryWrapper.or(wq -> wq.eq(Post::getIsPublic, true));
         }
         return list(queryWrapper);
     }

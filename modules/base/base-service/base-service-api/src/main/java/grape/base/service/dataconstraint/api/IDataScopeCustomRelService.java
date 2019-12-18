@@ -70,7 +70,7 @@ public interface IDataScopeCustomRelService extends IBaseRelService<DataScopeCus
      * @param isDataScopeMain
      */
     default void doBind(String mainId,List<String> checkedIds,boolean isDataScopeMain){
-        if (!isListEmpty(checkedIds)) {
+        if (!isEmpty(checkedIds)) {
             List<DataScopeCustomRel> insert = new ArrayList<>(checkedIds.size());
             DataScopeCustomRel dataScopeCustomRel = null;
             for (String checkedId : checkedIds) {

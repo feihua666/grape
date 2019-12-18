@@ -3,7 +3,6 @@ package grape.base.service.userpostrolerel.api;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.common.service.common.IBaseRelService;
-import grape.common.service.common.IBaseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +22,14 @@ public interface IUserPostRoleRelService extends IBaseRelService<UserPostRoleRel
      * @param userPostId
      * @return
      */
-    default UserPostRoleRel getByUserPostId(String userPostId){
+    default List<UserPostRoleRel> getByUserPostId(String userPostId){
         if (userPostId == null) {
             return null;
         }
+
         UserPostRoleRel userPostRoleRel = new UserPostRoleRel();
         userPostRoleRel.setUserPostId(userPostId);
-        return getOne(Wrappers.query(userPostRoleRel));
+        return list(Wrappers.query(userPostRoleRel));
     }
 
 
@@ -46,10 +46,9 @@ public interface IUserPostRoleRelService extends IBaseRelService<UserPostRoleRel
      * 用户岗位绑定角色
      * @param userPostId
      */
-    default void userAssignRole(String userPostId,String checkedRoleId){
-        removeByUserPostId(userPostId);
-        List<String> checkedRoleIds = new ArrayList<>(1);
-        checkedRoleIds.add(checkedRoleId);
+    default void userPostAssignRole(String userPostId, List<String> checkedRoleIds,List<String> uncheckedRoleIds,Boolean isLazyLoad){
+        removeAssignRel(userPostId,checkedRoleIds,uncheckedRoleIds,isLazyLoad,UserPostRoleRel::getUserPostId,UserPostRoleRel::getRoleId);
+
         // 再添加
         doBind(userPostId, checkedRoleIds, false);
     }
@@ -96,7 +95,7 @@ public interface IUserPostRoleRelService extends IBaseRelService<UserPostRoleRel
      * @param isRoleMain
      */
     default void doBind(String mainId,List<String> checkedIds,boolean isRoleMain){
-        if (!isListEmpty(checkedIds)) {
+        if (!isEmpty(checkedIds)) {
             List<UserPostRoleRel> insert = new ArrayList<>(checkedIds.size());
             UserPostRoleRel rel = null;
             for (String checkedId : checkedIds) {

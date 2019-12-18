@@ -31,26 +31,26 @@
     flex-direction:column;
 }
 /* flex 水平居中 */
-.g-flex-center-h{
+.g-flex-align-h-center{
     display: flex;
     justify-content:center;
 }
 /* flex 垂直居中 */
-.g-flex-center-v{
+.g-flex-align-v-center{
     display: flex;
     align-items:center;
 }
 /* flex 水平垂直居中 */
-.g-flex-center-all{
+.g-flex-align-center{
     display: flex;
     align-items:center;
     justify-content:center;
 }
-/* flex 右对齐 */
-.g-flex-align-right{
-    justify-content:right;
+/* flex 对齐 */
+.g-flex-align-h-end{
+    justify-content:flex-end;
 }
-.g-flex-align-between{
+.g-flex-align-h-between{
     justify-content:space-between;
 }
 /* 文本对齐 */

@@ -12,8 +12,8 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,17 +49,10 @@ public interface ToolService {
      * @param list
      * @return true 如果是null或size为0
      */
-    default boolean isListEmpty(List list){
+    default boolean isEmpty(Collection<?> list){
         return list == null || list.isEmpty();
     }
-    /**
-     * 判断是否为空
-     * @param set
-     * @return true 如果是null或size为0
-     */
-    default boolean isSetEmpty(Set set){
-        return set == null || set.isEmpty();
-    }
+
     /**
      * 判断字符串是否为空
      * @param str
@@ -187,8 +180,8 @@ public interface ToolService {
             throw new InvalidParamsException(exceptionMsg);
         }
     }
-    default public void assertListNotEmpty(List obj,String exceptionMsg){
-        if(isListEmpty(obj)){
+    default public void assertNotEmpty(Collection<?> obj, String exceptionMsg){
+        if(isEmpty(obj)){
             throw new InvalidParamsException(exceptionMsg);
         }
     }

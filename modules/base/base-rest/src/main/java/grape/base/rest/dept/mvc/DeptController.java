@@ -125,8 +125,10 @@ public class DeptController extends BaseTreeController<DeptVo, Dept> {
     @RequiresPermissions("dept:single:getByParentId")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
-    public List<TreeNodeVo<DeptVo>> tree(String parentId) {
-        return super.listToTreeNodeVo(super.getByParentId(parentId));
+    public List<TreeNodeVo<DeptVo>> tree(String parentId,String compId) {
+        Dept query = new Dept();
+        query.setCompId(compId);
+        return super.listToTreeNodeVo(super.getByParentId(parentId,query));
     }
 
 }

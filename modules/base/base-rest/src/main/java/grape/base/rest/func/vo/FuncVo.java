@@ -48,6 +48,9 @@ public class FuncVo extends BaseTreeVo {
     @ApiModelProperty(value = "图标")
     private String icon;
 
+    @ApiModelProperty(value = "权限标识")
+    private String permissions;
+
     @ApiModelProperty(value = "是否禁用")
     private Boolean isDisabled;
 

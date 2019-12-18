@@ -1,6 +1,7 @@
 package grape.base.service.userdatascoperel.impl;
 
 import grape.base.service.dataconstraint.api.IDataScopeService;
+import grape.base.service.dataconstraint.mapper.DataScopeMapper;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.userdatascoperel.po.UserDataScopeRel;
 import grape.base.service.userdatascoperel.mapper.UserDataScopeRelMapper;
@@ -27,19 +28,19 @@ public class UserDataScopeRelServiceImpl extends BaseServiceImpl<UserDataScopeRe
 
 
     @Autowired
-    private IDataScopeService iDataScopeService;
+    private DataScopeMapper dataScopeMapper;
 
     @Override
     public void doBind(String mainId,List<String> checkedIds,boolean isDataScopeMain){
-        if (!isListEmpty(checkedIds)) {
+        if (!isEmpty(checkedIds)) {
             // 插入数据对象id
             Map<String, String> dataObjectMap = new HashMap<>();
             if (isDataScopeMain) {
-                DataScope dataScope = iDataScopeService.getById(mainId);
+                DataScope dataScope = dataScopeMapper.selectById(mainId);
                 dataObjectMap.put(dataScope.getId(),dataScope.getDataObjectId());
             }else {
-                List<DataScope> dataScopes = (List<DataScope>) iDataScopeService.listByIds(checkedIds);
-                if (!isListEmpty(dataScopes)) {
+                List<DataScope> dataScopes = dataScopeMapper.selectBatchIds(checkedIds);
+                if (!isEmpty(dataScopes)) {
                     for (DataScope dataScope : dataScopes) {
                         dataObjectMap.put(dataScope.getId(),dataScope.getDataObjectId());
                     }

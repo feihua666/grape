@@ -89,21 +89,8 @@ public class CompController extends BaseTreeLoginUserController<CompVo, Comp,Bas
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<CompVo> listPage(CompListPageForm listForm) {
-
-        BaseLoginUser loginUser = getLoginUser();
-        Comp poQuery = compWebMapper.formToPo(listForm);
-        // 超级管理员处理
-        if (loginUser.getIsSuperAdmin()) {
-            return listPage(poQuery, listForm);
-        }
-
-        // 添加权限过滤，只查看本公司及以下公司
-        IPage<Comp> page = iCompService.page(new Page(listForm.getCurrent(),listForm.getSize()),poQuery,loginUser.getCurrentUserPost().getCompId());
-        if (page.getTotal() == 0) {
-            throw ExceptionTools.dataNotExistRE("暂无数据");
-        }
-        return pagePoToVo(page);
-
+         Comp poQuery = compWebMapper.formToPo(listForm);
+        return listPage(poQuery, listForm);
     }
     /**
      * 检查树结构是否完整

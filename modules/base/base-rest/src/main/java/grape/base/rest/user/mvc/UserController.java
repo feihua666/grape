@@ -27,6 +27,7 @@ import grape.common.exception.ExceptionTools;
 import grape.common.rest.common.PasswordAndSalt;
 import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -51,6 +52,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 @Api(tags = "用户相关接口")
 public class UserController extends BaseLoginUserController<UserVo, User,BaseLoginUser> {
+
+    private String userDataObjectCode = "user";
 
     @Autowired
     private IUserService iUserService;
@@ -114,7 +117,7 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserVo> listPage(UserListPageForm listPageForm) {
         User user = userWebMapper.formToPo(listPageForm);
-         return super.listPage(user,listPageForm);
+         return super.listPage(user,listPageForm,userDataObjectCode);
      }
 
     /**

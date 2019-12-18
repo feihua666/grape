@@ -8,7 +8,6 @@ import grape.base.rest.dict.form.DictUpdateForm;
 import grape.base.rest.dict.mapper.DictWebMapper;
 import grape.base.rest.dict.vo.DictVo;
 import grape.base.service.comp.api.ICompService;
-import grape.base.service.comp.po.Comp;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import grape.common.exception.ExceptionTools;
@@ -50,12 +49,14 @@ public class DictController extends BaseTreeController<DictVo, Dict> {
      * @return
      */
     @ApiOperation("根据字典组编码查询字典项")
-    @RequiresPermissions("dict:items:queryItemsByGroupCode")
+    // 注释掉，一般字段的权限都有，如果要细粒度控制建议打开并在功能权限字符串中配置
+    //@RequiresPermissions("dict:items:queryItemsByGroupCode")
+    @RequiresPermissions("user")
     @GetMapping("/items/{groupCode}")
     @ResponseStatus(HttpStatus.OK)
     public List<DictVo> queryItemsByGroupCode(@PathVariable String groupCode) {
-        List<Dict> items = iDictService.getItemByGroupCode(groupCode, false);
-        if (isListEmpty(items)) {
+        List<Dict> items = iDictService.getItemByGroupCode(groupCode, null);
+        if (isEmpty(items)) {
             throw ExceptionTools.dataNotExistRE("字典组编码" + groupCode + "对应的字典项不存在");
         }
         return posToVos(items);

@@ -1,16 +1,14 @@
 package grape.common.service.common;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
-import grape.common.service.po.BasePo;
 import grape.common.service.po.IDBasePo;
 import grape.common.tools.ToolService;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -35,12 +33,24 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @return
      */
     default List<String> convertIds(List<Po> pos){
-        if (!isListEmpty(pos)) {
+        if (!isEmpty(pos)) {
             return pos.stream().map((p) -> p.getId().toString()).collect(Collectors.toList());
         }
         return null;
     }
 
+    /**
+     * 根据id查询，附加额外条件
+     * @param ids
+     * @param query
+     * @return
+     */
+    default List<Po> listByIds(Collection<String> ids,Po query){
+        if (isEmpty(ids)) {
+            return null;
+        }
+        return list(Wrappers.query(query).in(IDBasePo.COLUMN_ID, ids));
+    }
     /**
      * 分页查询的默认接口方法
      * @param page
@@ -58,7 +68,7 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @return
      */
     default IPage<Po> page(IPage<Po> page, Po query,ConstraintContent constraintContent){
-        return page(page, Wrappers.query(query).apply(constraintContent.getCompiledSqlContent()));
+        return page(page, Wrappers.query(query).apply(!isStrEmpty(constraintContent.getCompiledSqlContent()),constraintContent.getCompiledSqlContent()));
     }
     /**
      * 不分页查询的默认接口方法
@@ -106,5 +116,14 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      */
     default boolean updateById(Po po,ConstraintContent constraintContent){
         return update(po, Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, po.getId()));
+    }
+
+    /**
+     * 计数
+     * @param query
+     * @return
+     */
+    default int count(Po query){
+        return count(Wrappers.query(query));
     }
 }

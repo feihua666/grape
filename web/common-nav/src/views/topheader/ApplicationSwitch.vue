@@ -1,6 +1,6 @@
 
 <template>
-    <el-dropdown class=" g-flex-center-v g-color-fff" style="padding: 0 5px;" @command="applicationSwitch"  :v-loading="userinfoLoading"  element-loading-spinner="el-icon-loading">
+    <el-dropdown class=" g-flex-align-v-center g-color-fff" style="padding: 0 5px;" @command="applicationSwitch"  :v-loading="userinfoLoading"  element-loading-spinner="el-icon-loading">
         <span class="g-pointer" title="切换应用"> {{currentApplication.name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
         <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="(app,index) in currentUserinfo.applications" :command="app" :key="index"

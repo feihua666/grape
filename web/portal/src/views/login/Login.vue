@@ -1,6 +1,6 @@
 <template>
-    <div class="g-flex-center-all g-height100 g-width100">
-        <LoginComp class="login" v-on:success="loginSuccess"></LoginComp>
+    <div class="g-flex-align-center g-height100 g-width100">
+        <LoginComp style="width: 500px;" class="login" v-on:success="loginSuccess"></LoginComp>
     </div>
 </template>
 <script>

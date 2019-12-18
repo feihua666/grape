@@ -93,7 +93,7 @@ public interface IUserRoleRelService extends IBaseRelService<UserRoleRel> {
      * @param isRoleMain
      */
     default void doBind(String mainId,List<String> checkedIds,boolean isRoleMain){
-        if (!isListEmpty(checkedIds)) {
+        if (!isEmpty(checkedIds)) {
             List<UserRoleRel> insert = new ArrayList<>(checkedIds.size());
             UserRoleRel rel = null;
             for (String checkedId : checkedIds) {

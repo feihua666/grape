@@ -1,11 +1,13 @@
 package grape.base.rest.setting.dataconstraint;
 
-import cn.hutool.extra.template.engine.freemarker.FreemarkerTemplate;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.extra.template.Template;
+import cn.hutool.extra.template.TemplateConfig;
+import cn.hutool.extra.template.TemplateEngine;
+import cn.hutool.extra.template.TemplateUtil;
 import grape.base.service.BaseLoginUser;
-import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
-import grape.base.service.dataconstraint.dto.DataConstraintDto;
-import grape.base.service.dataconstraint.po.DataObject;
+import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dataconstraint.po.DataScopeCustomRel;
 import grape.common.service.common.ConstraintContent;
@@ -14,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -24,11 +26,10 @@ import java.util.stream.Collectors;
  */
 @Component
 public class BaseDataConstraintServiceImpl implements IDataConstraintService<BaseLoginUser> {
-
-    @Autowired
-    private IDataObjectService iDataObjectService;
     @Autowired
     private IDataScopeCustomRelService iDataScopeCustomRelService;
+    private TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig());
+
     @Override
     public ConstraintContent parseConstraint(String dataObjectCode, BaseLoginUser loginUser) {
         if (loginUser.getIsSuperAdmin()) {
@@ -36,8 +37,8 @@ public class BaseDataConstraintServiceImpl implements IDataConstraintService<Bas
             return new ConstraintContent("");
         }else {
 
-            if(!isListEmpty(loginUser.getCurrentDataConstraints())){
-                DataConstraintDto first = loginUser.getCurrentDataConstraints().stream().filter(item -> isEqual(item.getDataObject().getCode(), dataObjectCode)).findFirst().get();
+            if(!isEmpty(loginUser.getDataObjectAndScopes())){
+                DataObjectAndScopeDto first = loginUser.getDataObjectAndScopes().stream().filter(item -> isEqual(item.getDataObject().getCode(), dataObjectCode)).findFirst().get();
 
                 DataScope dataScope = first.getDataScope();
                 if (dataScope.getIsCustom()) {
@@ -46,7 +47,13 @@ public class BaseDataConstraintServiceImpl implements IDataConstraintService<Bas
                     String insql = dataIds.stream().map(str -> "'" + str + "'").collect(Collectors.joining(","));
                     return new ConstraintContent(dataScope.getConstraintContent().replace(IDataConstraintService.insqlReplace,insql));
                 }else {
-                    return new ConstraintContent(dataScope.getConstraintContent());
+                    // 解析内容
+                    // 支持freeMarker
+                    Template template = engine.getTemplate(dataScope.getConstraintContent());
+                    Map<String, Object> stringObjectMap = BeanUtil.beanToMap(loginUser);
+                    System.out.println(stringObjectMap);
+                    String compiledSql = template.render(stringObjectMap);
+                    return new ConstraintContent(compiledSql);
                 }
             }
         }

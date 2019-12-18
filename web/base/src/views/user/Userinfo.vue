@@ -1,7 +1,7 @@
 <template>
-    <div class="g-flex-center-h g-height100 g-width100">
+    <div class="g-flex-align-h-center g-height100 g-width100">
         <el-card style="width:500px;">
-            <div slot="header" class="g-flex-center-v g-flex-align-between">
+            <div slot="header" class="g-flex-align-v-center g-flex-align-h-between">
                 <span>个人信息</span>
                 <el-avatar style="float: right; padding: 3px 0" icon="el-icon-user-solid" :src="currentUserinfo.avatar"></el-avatar>
             </div>

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.base.service.dict.po.Dict;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.service.common.IBaseTreeService;
+import grape.common.service.common.IDictGroup;
 import grape.common.service.trans.ITransService;
 
 import java.util.List;
@@ -24,19 +25,12 @@ public interface IDictService extends IBaseTreeService<Dict> , ITransService<Str
     /**
      * 根据组编码查询字典项
      * @param groupCode 字典表中is_group = 1的字典组编码
-     * @param isDisabled 禁用状态，null忽略该条件
+     * @param dictQuery null忽略该条件
      * @return 组下的字典项
      */
-    List<Dict> getItemByGroupCode(String groupCode,Boolean isDisabled);
+    List<Dict> getItemByGroupCode(IDictGroup groupCode, Dict dictQuery);
 
-    /**
-     * 根据组编码查询字典项
-     * @param groupCode 字典表中is_group = 1的字典组编码
-     * @param isDisabled 禁用状态，null忽略该条件
-     * @param itemCode 字典项编码
-     * @return
-     */
-    List<Dict> getItemByGroupCode(String groupCode,Boolean isDisabled,List<String> itemCode);
+    List<Dict> getItemByGroupCode(String groupCode, Dict dictQuery);
 
     /**
      * 判断编码是否已存在

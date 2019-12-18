@@ -1,14 +1,14 @@
 <template>
     <el-container class="g-height100 g-width100 g-padding0" style="background-color: #3c8dbc;">
-        <el-aside width="200px" class="g-flex-center-all g-font-size-elg g-color-fff" style="background-color: #367fa9;">
+        <el-aside width="200px" class="g-flex-align-center g-font-size-elg g-color-fff" style="background-color: #367fa9;">
             <i class="el-icon-grape"> grape</i>
         </el-aside>
         <el-main class="g-color-fff g-padding0">
             <el-row type="flex" class="g-height100" justify="space-between">
-                <el-col class="g-height100 g-flex-center-v">
+                <el-col class="g-height100 g-flex-align-v-center">
                     <ApplicationSwitch  :current-userinfo="currentUserinfo" :userinfo-loading="userinfoLoading"></ApplicationSwitch>
                 </el-col>
-                <el-col class="g-height100 g-flex-center-v g-flex-align-right">
+                <el-col class="g-height100 g-flex-align-v-center g-flex-align-h-end">
                     <!-- 右侧 头像和用户名 -->
                     <UserinfoDropdown class="item" :current-userinfo="currentUserinfo" :userinfo-loading="userinfoLoading"></UserinfoDropdown>
                 </el-col>

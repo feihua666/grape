@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="form" status-icon :rules="rules" ref="form" label-width="100px">
+    <el-form :model="form" status-icon :rules="rules" :style="formStyle"  ref="form" label-width="100px">
         <el-form-item label="帐号" prop="username">
             <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
@@ -15,6 +15,9 @@
 <script>
     export default {
         name: "Login",
+        props: {
+            formStyle:String
+        },
         data (){
             return {
                 logining: false,

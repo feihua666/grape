@@ -76,6 +76,7 @@ public class BaseGenerator extends SuperGenerator {
         String tablePrefix = "base";
 
         // 以下注释了的说明生成的个别文件被移动或删除了，再次生成会重新生成，所以注释了
+/*
 
         // 区域表
         commonSet("base_area","area",TableType.tree,tablePrefix,author);
@@ -110,6 +111,12 @@ public class BaseGenerator extends SuperGenerator {
         //commonSet("base_post_data_scope_rel","postdatascoperel",TableType.rel,tablePrefix,author);
         //commonSet("base_user_post_data_scope_rel","userpostdatascoperel",TableType.rel,tablePrefix,author);
         commonSet("base_application","application",TableType.normal,tablePrefix,author);
+
+
+        commonSet("base_user_func_rel","userfuncrel",TableType.rel,tablePrefix,author);
+        commonSet("base_post_func_rel","postfuncrel",TableType.rel,tablePrefix,author);
+        commonSet("base_user_post_func_rel","userpostfuncrel",TableType.rel,tablePrefix,author);
+        */
         return  tableConfig;
     }
 

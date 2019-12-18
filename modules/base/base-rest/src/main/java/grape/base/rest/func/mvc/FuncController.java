@@ -9,7 +9,6 @@ import grape.base.rest.func.mapper.FuncWebMapper;
 import grape.base.rest.func.vo.FuncVo;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.dict.api.IDictService;
-import grape.base.service.dict.po.Dict;
 import grape.base.service.func.api.IFuncService;
 import grape.base.service.func.po.Func;
 import grape.common.exception.ExceptionTools;
@@ -204,14 +203,11 @@ public class FuncController extends BaseTreeController<FuncVo, Func> {
         List<Func.TypeDictItem> typeDictItems = newArrayList(Func.TypeDictItem.menu, Func.TypeDictItem.page);
         // 超级管理员查全部的
         if (loginUser.getIsSuperAdmin()) {
-            funcList = iFuncService.getByTypes(typeDictItems,applicationId,false);
+            funcList = iFuncService.getByTypes(typeDictItems,new Func().setApplicationId(applicationId).setIsDisabled(false));
         }else{
-            if (loginUser.getCurrentRole() == null) {
-                throw new RBaseException("当前用户没有可用角色");
-            }
-            funcList = iFuncService.getRoleId(loginUser.getCurrentRole().getId(),typeDictItems,applicationId,false);
+            funcList = loginUser.getFuncs();
         }
-        if (isListEmpty(funcList)) {
+        if (isEmpty(funcList)) {
             throw ExceptionTools.dataNotExistRE("暂无数据");
         }
         List<FuncVo> result = new ArrayList<>();

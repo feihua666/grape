@@ -3,6 +3,8 @@ package grape.base.service.role.impl;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.mapper.RoleMapper;
 import grape.base.service.role.po.Role;
+import grape.base.service.userpostrolerel.api.IUserPostRoleRelService;
+import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.base.service.userrolerel.api.IUserRoleRelService;
 import grape.base.service.userrolerel.po.UserRoleRel;
 import grape.common.service.common.BaseServiceImpl;
@@ -25,21 +27,26 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements IRoleService {
     @Autowired
     private IUserRoleRelService iUserRoleRelService;
+    @Autowired
+    private IUserPostRoleRelService iUserPostRoleRelService;
     @Override
-    public List<Role> getByUserId(String userId,Boolean roleDisabled) {
-        if (userId == null) {
-            return null;
-        }
+    public List<Role> getByUserId(String userId,Role query) {
+        assertParamNotEmpty(userId,"用户id不能为空");
         List<UserRoleRel> userRoleRelList = iUserRoleRelService.getByUserId(userId);
-        if (!isListEmpty(userRoleRelList)) {
+        if (!isEmpty(userRoleRelList)) {
             Set<String> roleIds = userRoleRelList.stream().map(userRoleRel -> userRoleRel.getRoleId()).collect(Collectors.toSet());
-            List<Role> roles = (List<Role>) listByIds(roleIds);
-            if (roleDisabled == null) {
-                return roles;
-            }else {
-                // 过滤一下状态
-                return roles.stream().filter(role -> role.getIsDisabled().equals(roleDisabled)).collect(Collectors.toList());
-            }
+            return listByIds(roleIds, query);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Role> getByUserPostId(String userPostId,Role query) {
+        assertParamNotEmpty(userPostId,"用户岗位id不能为空");
+        List<UserPostRoleRel> userPostRoleRelList = iUserPostRoleRelService.getByUserPostId(userPostId);
+        if (!isEmpty(userPostRoleRelList)) {
+            Set<String> roleIds = userPostRoleRelList.stream().map(userPostRoleRel -> userPostRoleRel.getRoleId()).collect(Collectors.toSet());
+            return listByIds(roleIds, query);
         }
         return null;
     }

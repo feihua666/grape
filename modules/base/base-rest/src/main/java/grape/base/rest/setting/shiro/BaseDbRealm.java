@@ -10,6 +10,8 @@ import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.base.service.user.po.UserIdentifier;
 import grape.base.service.user.po.UserPwd;
+import grape.common.exception.runtime.RBaseException;
+import grape.common.exception.runtime.RDataNotExistException;
 import grape.common.rest.common.PasswordAndSalt;
 import grape.common.tools.RequestIdTool;
 import grape.common.tools.ToolService;
@@ -63,6 +65,9 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
         }
 
         UserPwd userPwd = iUserPwdService.getByUserId(userIdentifier.getUserId());
+        if (userPwd == null) {
+            throw new RDataNotExistException("用户密码数据不存在");
+        }
         byte[] salt = Hex.decode(userPwd.getSalt());
         String password = userPwd.getPwd();
 
@@ -86,30 +91,26 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             Set<String> stringPermissions = new HashSet<>();
             stringPermissions.add("user");
-            if (loginUser.getCurrentRole() != null) {
-                List<Func> funcs = iFuncService.getByRoleId(loginUser.getCurrentRole().getId(),false);
-                if (!isListEmpty(funcs)) {
-                    for (Func func : funcs) {
-                        String permissions = func.getPermissions();
-                        if (!isStrEmpty(permissions)) {
-                            String permissionArray[] = permissions.split(",");
-                            for (String permission : permissionArray) {
-                                stringPermissions.add(permission);
-                            }
+            List<Func> funcs = loginUser.getFuncs();
+            if (!isEmpty(funcs)) {
+                for (Func func : funcs) {
+                    String permissions = func.getPermissions();
+                    if (!isStrEmpty(permissions)) {
+                        String permissionArray[] = permissions.split(",");
+                        for (String permission : permissionArray) {
+                            stringPermissions.add(permission);
                         }
                     }
                 }
-
-                // 角色
-                Set<String> stringRoles = new HashSet<>(1);
-                stringRoles.add(loginUser.getCurrentRole().getCode());
-                if (!isListEmpty(loginUser.getRoles())) {
-                    List<String> roleCodes = loginUser.getRoles().stream().map(role -> role.getCode()).collect(Collectors.toList());
-                    stringRoles.addAll(roleCodes);
-                }
-                info.setRoles(stringRoles);
             }
             info.setStringPermissions(stringPermissions);
+
+            if (!isEmpty(loginUser.getRoles())) {
+                List<String> roleCodes = loginUser.getRoles().stream().map(role -> role.getCode()).collect(Collectors.toList());
+                info.setRoles(new HashSet<>(roleCodes));
+            }
+
+
             return info;
         }else {
             return null;

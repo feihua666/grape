@@ -4,9 +4,9 @@
                     submit-url="/userpostrolerel/userpost/assign/role"
                     :main-value="$route.params.userPostId"
                     main-prop="userPostId"
-                    checked-prop="checkedRoleId"
+                    checked-prop="checkedRoleIds"
+                    unchecked-prop="uncheckedRoleIds"
                     :clear-all-url="'/userpostrolerel/userpost/' + $route.params.userPostId"
-                    :form-format="formFormat"
     >
 
     </TreeForRelBind>
@@ -25,13 +25,6 @@
         mounted(){
         },
         methods:{
-            formFormat(form){
-                // 因为角色只能选择一个，转换一下
-                if(form.checkedRoleId && form.checkedRoleId.length > 0){
-                    form.checkedRoleId = form.checkedRoleId[0]
-                }
-                return form
-            }
         }
     }
 </script>

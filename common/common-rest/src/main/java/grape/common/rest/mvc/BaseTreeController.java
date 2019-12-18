@@ -100,7 +100,21 @@ public abstract class BaseTreeController<Vo extends BaseTreeVo,Po extends TreeBa
         }
         return super.posToVos(r);
     }
-
+    /**
+     * 根据父id请求
+     * @param parentId
+     * @param query 额外过滤条件
+     * @return
+     */
+    public List<Vo> getByParentId(String parentId,Po query){
+        List<Po> r;
+        if (parentId == null) {
+            r = ((IBaseTreeService) service).getRoot(query);
+        }else {
+            r = ((IBaseTreeService) service).getChildren(parentId,query);
+        }
+        return super.posToVos(r);
+    }
     /**
      * 检查机构树结构是否完整
      */

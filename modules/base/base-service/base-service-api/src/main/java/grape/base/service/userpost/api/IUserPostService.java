@@ -46,12 +46,23 @@ public interface IUserPostService extends IBaseService<UserPost> {
      */
     default UserPost getMainByUserId(String userId){
         List<UserPost> list = getByUserId(userId, true, null);
-        if (!isListEmpty(list)) {
+        if (!isEmpty(list)) {
             return  list.get(0);
         }
         return null;
     }
 
+    /**
+     * 获取具体信息，角色只包含未禁用的
+     * @param userPost
+     * @return
+     */
      UserPostInfo getUserPostInfo(UserPost userPost);
+
+    /**
+     * 获取具体信息，角色只包含未禁用的
+     * @param userPosts
+     * @return
+     */
      List<UserPostInfo> getUserPostInfos(List<UserPost> userPosts);
 }

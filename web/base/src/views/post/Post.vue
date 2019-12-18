@@ -125,7 +125,14 @@
                         url:'/post/postAssignDataScope/:id',
                         position:'more',
                         disabledOnMissingSelect:true,
-                        label: '数据范围约束'
+                        label: '分配数据范围约束'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/post/postAssignFunc/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label: '分配功能'
                     }
                 ]
             }

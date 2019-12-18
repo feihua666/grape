@@ -31,8 +31,14 @@ public class UserPostAssignRoleForm extends BaseForm {
     @ApiModelProperty(value = "用户岗位id")
     private String userPostId;
 
-    @NotEmpty(message = "角色id不能为空")
     @ApiModelProperty(value = "选择的角色id")
-    private String checkedRoleId;
+    private List<String> checkedRoleIds;
+
+    @ApiModelProperty(value = "未选择的角色id",notes = "如果为懒加载请传该值")
+    private List<String> uncheckedRoleIds;
+
+    @NotNull(message = "是否为懒加载不能为空")
+    @ApiModelProperty(value = "页面可选择的数据是否为懒加载")
+    private Boolean isLazyLoad;
 
 }

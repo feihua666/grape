@@ -47,6 +47,8 @@
 		<org.mapstruct.version>1.3.0.Final</org.mapstruct.version>
 		<hutool-all.version>4.6.8</hutool-all.version>
 		<pinyin4j.version>2.5.1</pinyin4j.version>
+		<!-- 模板引擎 -->
+		<enjoy.verion>4.8</enjoy.verion>
 	</properties>
 
 	<dependencyManagement>

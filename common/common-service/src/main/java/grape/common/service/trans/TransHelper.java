@@ -30,10 +30,10 @@ public class TransHelper implements ToolService {
      */
     public Object trans(Object body){
         // 翻译支持
-        if (!isListEmpty(transServices)){
+        if (!isEmpty(transServices)){
             if (body instanceof IPage) {
                 List records = ((IPage) body).getRecords();
-                if (!isListEmpty(records)) {
+                if (!isEmpty(records)) {
                     for (Object record : records) {
                         transInner(record);
                     }

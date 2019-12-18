@@ -153,6 +153,13 @@
                         action: 'nav',
                         position:'more',
                         disabledOnMissingSelect:true,
+                        url:'/user/assignFunc/:id',
+                        label: '分配功能'
+                    },
+                    {
+                        action: 'nav',
+                        position:'more',
+                        disabledOnMissingSelect:true,
                         url:'/user/userPost/userPostAdd/:id',
                         label: '新增岗位'
                     },
@@ -191,7 +198,6 @@
                         disabledOnMissingSelect:true,
                         label: '数据范围约束'
                     }
-
                 ]
             }
         },

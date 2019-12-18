@@ -1,9 +1,12 @@
 package grape.base.rest.user.vo;
 
 import grape.base.rest.application.vo.ApplicationVo;
+import grape.base.rest.func.vo.FuncVo;
 import grape.base.rest.post.vo.PostVo;
 import grape.base.rest.role.vo.RoleVo;
+import grape.base.rest.userpost.vo.UserPostVo;
 import grape.common.rest.vo.BaseVo;
+import grape.common.service.trans.TransField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,8 +32,9 @@ public class CurrentUserinfoVo extends BaseVo {
     private String nickname;
     @ApiModelProperty(value = "头像地址，绝对地址")
     private String avatar;
-    @ApiModelProperty(value = "是否切换角色，true=切换角色，false=切换岗位")
-    private Boolean isSwitchRole;
+
+    @ApiModelProperty(value = "超级管理员")
+    private Boolean isSuperAdmin;
 
     @ApiModelProperty(value = "所属公司id")
     private String compId;
@@ -42,27 +46,21 @@ public class CurrentUserinfoVo extends BaseVo {
     @ApiModelProperty(value = "所属部门名称")
     private String deptName;
 
-    @ApiModelProperty(value = "当前使用的角色id")
-    private String currentRoleId;
-    @ApiModelProperty(value = "当前使用的角色编码")
-    private String currentRoleCode;
-    @ApiModelProperty(value = "当前使用的角色名称")
-    private String currentRoleName;
-
-    @ApiModelProperty(value = "可切换的角色们")
+    @TransField
+    @ApiModelProperty(value = "直接分配的角色")
     private List<RoleVo> roles;
 
-    @ApiModelProperty(value = "当前使用的岗位id,如果是切换角色，该值为空")
-    private String currentPostId;
-    @ApiModelProperty(value = "当前使用的岗位编码,如果是切换角色，该值为空")
-    private String currentPostCode;
-    @ApiModelProperty(value = "当前使用的岗位名称,如果是切换角色，该值为空")
-    private String currentPostName;
 
-    @ApiModelProperty(value = "可切换的岗位们")
-    private List<PostVo> posts;
+    @TransField
+    @ApiModelProperty(value = "分配的岗位")
+    private List<UserPostVo> userPosts;
 
+    @TransField
     @ApiModelProperty(value = "可用的应用们")
-     private List<ApplicationVo> applications;
+    private List<ApplicationVo> applications;
+
+    @TransField
+    @ApiModelProperty(value = "可用功能")
+    private List<FuncVo> funcs;
 
 }

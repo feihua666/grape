@@ -3,8 +3,11 @@ package grape.base.service;
 import grape.base.service.application.po.Application;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dataconstraint.dto.DataConstraintDto;
+import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dept.po.Dept;
+import grape.base.service.func.dto.FuncAssignDto;
+import grape.base.service.func.po.Func;
 import grape.base.service.role.po.Role;
 import grape.base.service.user.po.UserIdentifier;
 import grape.base.service.userpost.dto.UserPostInfo;
@@ -26,37 +29,33 @@ import java.util.List;
 @EqualsAndHashCode(callSuper=false)
 public class BaseLoginUser extends AbstractLoginUser {
 
+
     // 用户登录的帐号信息
     private UserIdentifier userIdentifier;
     // 是否超级管理员
     private Boolean isSuperAdmin;
-    // 是否切换角色true=切换角色，false=切换岗位
-    private Boolean isSwitchRole;
     // 用户所属公司
     private Comp comp;
     // 用户所属部门,用户表的部门并不是担任岗位的部门
     private Dept dept;
-    // 用户担任岗位,正在使用的岗位关系
-    private UserPost currentUserPost;
-    // 用户担任岗位,正在使用的岗位关系对应实体
-    private UserPostInfo currentUserPostInfo;
 
-    // 用户担任岗位对应的角色关系
-    private UserPostRoleRel currentUserPostRoleRel;
-    // 当前正在使用的角色，isSwitchRole=false时由currentUserPostRoleRel派生，isSwitchRole=true时由用户角色关系派生
-    private Role currentRole;
     // 用户担任的所有岗位关系
     private List<UserPost> userPosts;
     // 用户担任的所有岗位关系对应实体
     private List<UserPostInfo> userPostInfos;
     // 用户的可用角色，用户角色关系而来
     private List<Role> roles;
-    // 用户正在使用的数据范围
-    private List<DataConstraintDto> currentDataConstraints;
-    // 可用的应用们
+    // 用户可用的数据范围约束
+    private List<DataConstraintDto> dataConstraintAssigns;
+
+    // 用户的所有功能们，如果要所有的功能需要提取
+    private List<FuncAssignDto> funcAssigns;
+    // 可用的应用们，funcs而来
     private List<Application> applications;
-
-
+    // 可用的功能们 范围应该在funcAssigns中
+    private List<Func> funcs;
+    // 可用的数据范围约束们
+    private List<DataObjectAndScopeDto> dataObjectAndScopes;
     @Override
     public boolean superAdmin() {
         return isSuperAdmin;

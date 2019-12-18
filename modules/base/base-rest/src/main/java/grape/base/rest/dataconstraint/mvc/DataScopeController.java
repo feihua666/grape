@@ -6,15 +6,14 @@ import grape.base.service.BaseLoginUser;
 import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
 import grape.base.service.dataconstraint.dto.DataConstraintDto;
+import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
 import grape.base.service.dataconstraint.po.DataObject;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,7 +25,6 @@ import grape.base.rest.dataconstraint.vo.DataScopeVo;
 import grape.base.rest.dataconstraint.mapper.DataScopeWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dataconstraint.api.IDataScopeService;
 
@@ -127,16 +125,16 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
             List<DataObject> dataObjectList = iDataObjectService.list();
             for (DataObject dataObject : dataObjectList) {
                 // 数据范围
-                List<DataScope> dataScopes = currentService.getByDataObjectId(dataObject.getId());
+                List<DataScope> dataScopes = currentService.getByDataObjectId(dataObject.getId(),null);
                 combine(r,dataObject,dataScopes);
             }
         }else {
-            List<DataConstraintDto> currentDataConstraints = loginUser.getCurrentDataConstraints();
-            if (!isListEmpty(currentDataConstraints)) {
-                for (DataConstraintDto currentDataConstraint : currentDataConstraints) {
+            List<DataObjectAndScopeDto> dataObjectAndScopeDtos = loginUser.getDataObjectAndScopes();
+            if (!isEmpty(dataObjectAndScopeDtos)) {
+                for (DataObjectAndScopeDto dataObjectAndScopeDto : dataObjectAndScopeDtos) {
                     List<DataScope> dataScopes = new ArrayList<>();
-                    dataScopes.add(currentDataConstraint.getDataScope());
-                    combine(r,currentDataConstraint.getDataObject(),dataScopes);
+                    dataScopes.add(dataObjectAndScopeDto.getDataScope());
+                    combine(r,dataObjectAndScopeDto.getDataObject(),dataScopes);
                 }
             }else {
                 ExceptionTools.dataNotExistRE("当前用户未分配数据范围");
@@ -170,7 +168,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
         treeNode.setNode(dataScopeVirtualTreeNodeVo);
         treeNode.setId(dataScopeVirtualTreeNodeVo.getId());
         treeNode.setVersion(dataScopeVirtualTreeNodeVo.getVersion());
-        if (!isListEmpty(dataScopes)) {
+        if (!isEmpty(dataScopes)) {
             treeNode.setHasChildren(true);
             treeNode.setChildren(new ArrayList<>());
             for (DataScope dataScope : dataScopes) {

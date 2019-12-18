@@ -59,5 +59,11 @@
             <artifactId>swagger-models</artifactId>
             <version>${swagger-models.version}</version>
         </dependency>
+        <!-- 引入模板引擎，主要用来解析数据范围约束 -->
+        <dependency>
+            <groupId>com.jfinal</groupId>
+            <artifactId>enjoy</artifactId>
+            <version>${enjoy.verion}</version>
+        </dependency>
     </dependencies>
 </project>

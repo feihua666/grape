@@ -309,7 +309,7 @@ public class GlobalExceptionAdvice implements ToolService {
         log.error("请求异常信息：requestId=[{}],errorMsg=[{}]",
                 RequestIdTool.getRequestId(),ex.getMessage(), ex);
         ThreadContextTool.put(GlobalInterceptor.hasExceptionKey,true);
-        if (!isListEmpty(globalExceptionListeners)) {
+        if (!isEmpty(globalExceptionListeners)) {
             for (GlobalExceptionListener globalExceptionListener : globalExceptionListeners) {
                 if (globalExceptionListener.support(request)) {
                     globalExceptionListener.onException(request,ex);

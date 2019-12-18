@@ -13,4 +13,5 @@ import grape.common.service.common.IBaseMapper;
  */
 public interface UserPostMapper extends IBaseMapper<UserPost> {
 
+
 }

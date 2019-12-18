@@ -27,12 +27,12 @@ public class DataObjectServiceImpl extends BaseServiceImpl<DataObjectMapper, Dat
     private DataScopeMapper dataScopeMapper;
     @Override
     public List<DataObject> getByDataScopeIds(List<String> dataScopeIds) {
-        if (isListEmpty(dataScopeIds)) {
+        if (isEmpty(dataScopeIds)) {
             return null;
         }
 
         List<DataScope> dataScopes = dataScopeMapper.selectBatchIds(dataScopeIds);
-        if (isListEmpty(dataScopes)) {
+        if (isEmpty(dataScopes)) {
             return null;
         }
         List<String> dataObjectIds = dataScopes.stream().map(item -> item.getDataObjectId()).collect(Collectors.toList());

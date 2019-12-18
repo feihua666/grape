@@ -122,28 +122,35 @@
                 tableOperations:[
                     {
                         action: 'nav',
-                        url:'/user/userPost/userPostAdd/' + this.$route.params.userId,
-                        label: '新增岗位'
+                        url:'/user/userPost/userPostAdd/' + this.$route.params.userId + '?nickname=' + this.$route.query.nickname,
+                        // 没有用户要禁用
+                        disabled:!this.$route.params.userId,
+                        label: '新增用户岗位'
                     },
                     {
                         action: 'nav',
                         disabledOnMissingSelect:true,
-                        url:'/user/userEdit/:id',
-                        label: '编辑岗位'
+                        url:'/user/userPost/userPostEdit/:id',
+                        label: '编辑用户岗位'
                     },
                     {
                         action: 'delete',
                         url:'/user/:id',
                         disabledOnMissingSelect:true,
-                        label:'删除岗位'
+                        label:'删除用户岗位'
                     },
                     {
-                        action: this.enableOrDisable,
+                        action: 'enableOrDisable',
+                        enableOrDisable:{
+                            prop:'isEffect',
+                            reasonProp:'ineffectReason'
+                        },
+                        url:'/userpost/:id',
                         position:'more',
                         disabledOnMissingSelect:true,
                         label:(row) => {
                             if(row){
-                                return row.isLock ? '启用': '锁定'
+                                return row.isEffect ? '使其失效': '启用'
                             }else {
                                 return '启用/锁定'
                             }
@@ -161,41 +168,19 @@
                         url:'/user/userPost/userPostAssignDataScope/:id',
                         position:'more',
                         disabledOnMissingSelect:true,
-                        label: '数据范围约束'
+                        label: '分配数据范围约束'
+                    },
+                    {
+                        action: 'nav',
+                        url:'/user/userPost/userPostAssignFunc/:id',
+                        position:'more',
+                        disabledOnMissingSelect:true,
+                        label: '分配功能'
                     }
                 ]
             }
         },
         methods:{
-            enableOrDisable(row){
-                this.$prompt('请输入'+ (row.isLock ? '启用': '禁用') +'原因', '提示', {
-                    inputErrorMessage: '原因不能为空',
-                    inputValidator:(value)=>{return !!value}
-                }).then(({ value }) => {
-                    let data = {
-                        isLock: !row.isDisabled,
-                        version: row.version,
-                        lockReason: value
-                    }
-                    this.axios.patch('/user/'+ row.id,data)
-                        .then(res => {
-                            this.$message.success('操作成功')
-                            // 重新加载数据
-                            this.$refs.table.toolbarRefreshClick()
-                        })
-                        .catch(error => {
-                            if(error.response){
-                                if(error.response.status == 404){
-                                    this.$message.error('数据不存在，请刷新数据再试')
-                                }else {
-                                    this.$message.error(error.response.data.msg)
-                                }
-                            }else {
-                                this.$message.error('删除失败，请刷新数据再试')
-                            }
-                        })
-                })
-            }
         }
     }
 </script>
