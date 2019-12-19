@@ -11,10 +11,11 @@ import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dataconstraint.po.DataScopeCustomRel;
 import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.IDataConstraintService;
+import grape.common.service.common.IDataConstraintParseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,38 +26,52 @@ import java.util.stream.Collectors;
  * Created at 2019/12/3 17:15
  */
 @Component
-public class BaseDataConstraintServiceImpl implements IDataConstraintService<BaseLoginUser> {
+public class BaseDataConstraintServiceImpl implements IDataConstraintParseService<BaseLoginUser> {
     @Autowired
     private IDataScopeCustomRelService iDataScopeCustomRelService;
     private TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig());
 
     @Override
-    public ConstraintContent parseConstraint(String dataObjectCode, BaseLoginUser loginUser) {
+    public List<ConstraintContent> parseConstraint(String dataObjectCode, BaseLoginUser loginUser) {
+
+        List<ConstraintContent> constraintContents = new ArrayList<>();
         if (loginUser.getIsSuperAdmin()) {
             // 超级管理员没有约束
-            return new ConstraintContent("");
+            constraintContents.add(new ConstraintContent("true"));
+            return constraintContents;
         }else {
 
             if(!isEmpty(loginUser.getDataObjectAndScopes())){
                 DataObjectAndScopeDto first = loginUser.getDataObjectAndScopes().stream().filter(item -> isEqual(item.getDataObject().getCode(), dataObjectCode)).findFirst().get();
 
-                DataScope dataScope = first.getDataScope();
-                if (dataScope.getIsCustom()) {
-                    List<DataScopeCustomRel> customRels = iDataScopeCustomRelService.getByDataScopeId(dataScope.getId());
-                    List<String> dataIds = customRels.stream().map(item -> item.getDataId()).collect(Collectors.toList());
-                    String insql = dataIds.stream().map(str -> "'" + str + "'").collect(Collectors.joining(","));
-                    return new ConstraintContent(dataScope.getConstraintContent().replace(IDataConstraintService.insqlReplace,insql));
-                }else {
-                    // 解析内容
-                    // 支持freeMarker
-                    Template template = engine.getTemplate(dataScope.getConstraintContent());
-                    Map<String, Object> stringObjectMap = BeanUtil.beanToMap(loginUser);
-                    System.out.println(stringObjectMap);
-                    String compiledSql = template.render(stringObjectMap);
-                    return new ConstraintContent(compiledSql);
+                List<DataScope> dataScopes = first.getDataScopes();
+                for (DataScope dataScope : dataScopes) {
+                    if (dataScope.getIsCustom()) {
+                        List<DataScopeCustomRel> customRels = iDataScopeCustomRelService.getByDataScopeId(dataScope.getId());
+                        List<String> dataIds = customRels.stream().map(item -> item.getDataId()).collect(Collectors.toList());
+                        String insql = dataIds.stream().map(str -> "'" + str + "'").collect(Collectors.joining(","));
+                        String constraintContent = dataScope.getConstraintContent();
+                        if (isStrEmpty(constraintContent)) {
+                            constraintContent = IDataConstraintParseService.customeSqlTemplate;
+                        }
+                        constraintContents.add( new ConstraintContent(constraintContent.replace(IDataConstraintParseService.insqlReplace,insql)));
+                    }else {
+                        // 解析内容
+                        // 支持enjoy模板
+                        Template template = engine.getTemplate(dataScope.getConstraintContent());
+                        Map<String, Object> stringObjectMap = BeanUtil.beanToMap(loginUser);
+                        System.out.println(stringObjectMap);
+                        String compiledSql = template.render(stringObjectMap);
+                        constraintContents.add( new ConstraintContent(compiledSql));
+                    }
                 }
+                return constraintContents;
+
             }
         }
-        return null;
+        // 没有数据
+        constraintContents.add(new ConstraintContent("false"));
+
+        return constraintContents;
     }
 }

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * Created by yangwei
  * Created at 2019/12/18 11:12
@@ -22,5 +24,5 @@ public class DataObjectAndScopeDto extends BaseDto {
     /**
      * 数据对象下的数据范围
      */
-    private DataScope dataScope;
+    private List<DataScope> dataScopes;
 }

@@ -9,30 +9,22 @@ import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeService;
 import grape.base.service.dataconstraint.dto.DataConstraintDto;
 import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
+import grape.base.service.dataconstraint.po.DataObject;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
-import grape.base.service.dict.api.IDictService;
 import grape.base.service.func.api.IFuncService;
 import grape.base.service.func.dto.FuncAssignDto;
 import grape.base.service.func.po.Func;
-import grape.base.service.postdatascoperel.api.IPostDataScopeRelService;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.po.Role;
-import grape.base.service.roledatascoperel.api.IRoleDataScopeRelService;
-import grape.base.service.rolefuncrel.api.IRoleFuncRelService;
 import grape.base.service.user.api.IUserIdentifierService;
-import grape.base.service.user.api.IUserPwdService;
 import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.base.service.user.po.UserIdentifier;
-import grape.base.service.userdatascoperel.api.IUserDataScopeRelService;
-import grape.base.service.userfuncrel.api.IUserFuncRelService;
 import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.userpost.po.UserPost;
-import grape.base.service.userpostdatascoperel.api.IUserPostDataScopeRelService;
-import grape.base.service.userpostrolerel.api.IUserPostRoleRelService;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.tools.ToolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -252,10 +244,21 @@ public class LoginUserHelperService implements ToolService {
         if (!isEmpty(dataScopes)) {
             DataObjectAndScopeDto dataObjectAndScopeDto = null;
             List<DataObjectAndScopeDto> dataObjectAndScopeDtos = new ArrayList<>(dataScopes.size());
+            Map<String, List<DataScope>> map = new HashMap<>();
             for (DataScope dataScope : dataScopes) {
+                List<DataScope> list = map.get(dataScope.getDataObjectId());
+                if (list == null) {
+                    list = new ArrayList<>();
+                    map.put(dataScope.getDataObjectId(), list);
+                }
+                list.add(dataScope);
+
+            }
+            for (String dataObjectId : map.keySet()) {
+
                 dataObjectAndScopeDto = new DataObjectAndScopeDto();
-                dataObjectAndScopeDto.setDataObject(iDataObjectService.getById(dataScope.getDataObjectId()));
-                dataObjectAndScopeDto.setDataScope(dataScope);
+                dataObjectAndScopeDto.setDataObject(iDataObjectService.getById(dataObjectId));
+                dataObjectAndScopeDto.setDataScopes(map.get(dataObjectId));
                 dataObjectAndScopeDtos.add(dataObjectAndScopeDto);
             }
             DataConstraintDto dataConstraintDto = new DataConstraintDto();
@@ -492,26 +495,45 @@ public class LoginUserHelperService implements ToolService {
         }
     }
     /**
-     * 绑定数据约束
+     * 绑定数据约束,提取来自不同的分配于一个数组，并且去重
      * @param loginUser
      */
     private void setDataObjectAndScopes(BaseLoginUser loginUser){
         List<DataConstraintDto> dataConstraintAssigns = loginUser.getDataConstraintAssigns();
         if (!isEmpty(dataConstraintAssigns)) {
-            // 按order 从大到小排序
-            dataConstraintAssigns.sort(Comparator.comparing(DataConstraintDto::getOrder).reversed());
-            Map<String,DataObjectAndScopeDto> map = new HashMap<>();
+            Map<String, List<DataScope>> mapDistinctDataScopes = new HashMap<>();
+            Map<String, DataObject> mapDistinctDataObjectss = new HashMap<>();
+
             for (DataConstraintDto dataConstraintAssign : dataConstraintAssigns) {
                 List<DataObjectAndScopeDto> dataObjectAndScopeDtos = dataConstraintAssign.getDataObjectAndScopeDtos();
                 if (!isEmpty(dataObjectAndScopeDtos)) {
                     for (DataObjectAndScopeDto dataObjectAndScopeDto : dataObjectAndScopeDtos) {
-                        map.put(dataObjectAndScopeDto.getDataScope().getId(), dataObjectAndScopeDto);
+                        mapDistinctDataObjectss.put(dataObjectAndScopeDto.getDataObject().getId(), dataObjectAndScopeDto.getDataObject());
+                        for (DataScope dataScope : dataObjectAndScopeDto.getDataScopes()) {
+                            List<DataScope> list = mapDistinctDataScopes.get(dataScope.getDataObjectId());
+                            if (list == null) {
+                                list = new ArrayList<>();
+                                mapDistinctDataScopes.put(dataScope.getDataObjectId(), list);
+                            }
+                            list.add(dataScope);
+                        }
                     }
                 }
-
             }
-            if (!map.isEmpty()) {
-                loginUser.setDataObjectAndScopes(map.values().stream().collect(Collectors.toList()));
+
+            if (!mapDistinctDataScopes.isEmpty()) {
+                List<DataObjectAndScopeDto> dataObjectAndScopes = new ArrayList<>(mapDistinctDataScopes.size());
+                DataObjectAndScopeDto dataObjectAndScopeDto  = null;
+                for (String dataObjectId : mapDistinctDataScopes.keySet()) {
+                    dataObjectAndScopeDto = new DataObjectAndScopeDto();
+                    dataObjectAndScopeDto.setDataObject(mapDistinctDataObjectss.get(dataObjectId));
+                    // 去重
+                    List<DataScope> dataScopes = mapDistinctDataScopes.get(dataObjectId);
+                    dataScopes = dataScopes.stream().filter(distinctByKey(item->item.getId())).collect(Collectors.toList());
+                    dataObjectAndScopeDto.setDataScopes(dataScopes);
+                    dataObjectAndScopes.add(dataObjectAndScopeDto);
+                }
+                loginUser.setDataObjectAndScopes(dataObjectAndScopes);
             }
         }
 

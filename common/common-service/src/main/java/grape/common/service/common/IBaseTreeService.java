@@ -42,11 +42,19 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      * 查询第一级，带数据约束
      * @return
      */
-    default List<Po> getRoot(ConstraintContent constraintContent){
+    default List<Po> getRoot(List<ConstraintContent> constraintContents){
         return list(Wrappers.<Po>query()
                 .eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL)
                 .isNull(TreeBasePo.COLUMN_PARENT_ID)
-                .apply(constraintContent.getCompiledSqlContent()));
+                .and(wq->
+                        {
+                            //wq.apply(sqlSegment);
+                            for (ConstraintContent constraintContent : constraintContents) {
+                                wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
+                            }
+                            return wq;
+                        }
+                ));
 
     }
     /**
@@ -86,9 +94,17 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      * @param parentId
      * @return
      */
-    default List<Po> getChildren(String parentId,ConstraintContent constraintContent){
+    default List<Po> getChildren(String parentId,List<ConstraintContent> constraintContents){
         assertParamNotEmpty(parentId,"parentId不能为空");
-        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId).apply(constraintContent.getCompiledSqlContent()));
+        return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId).and(wq->
+                {
+                    //wq.apply(sqlSegment);
+                    for (ConstraintContent constraintContent : constraintContents) {
+                        wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
+                    }
+                    return wq;
+                }
+        ));
     }
     /**
      * 查询子一级节点，结果必须是等于限制id或其子节点

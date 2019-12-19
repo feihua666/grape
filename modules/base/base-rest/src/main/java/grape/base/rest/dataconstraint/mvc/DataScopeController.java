@@ -132,9 +132,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
             List<DataObjectAndScopeDto> dataObjectAndScopeDtos = loginUser.getDataObjectAndScopes();
             if (!isEmpty(dataObjectAndScopeDtos)) {
                 for (DataObjectAndScopeDto dataObjectAndScopeDto : dataObjectAndScopeDtos) {
-                    List<DataScope> dataScopes = new ArrayList<>();
-                    dataScopes.add(dataObjectAndScopeDto.getDataScope());
-                    combine(r,dataObjectAndScopeDto.getDataObject(),dataScopes);
+                    combine(r,dataObjectAndScopeDto.getDataObject(),dataObjectAndScopeDto.getDataScopes());
                 }
             }else {
                 ExceptionTools.dataNotExistRE("当前用户未分配数据范围");

@@ -3,6 +3,8 @@ package grape.common.service.common;
 import grape.common.AbstractLoginUser;
 import grape.common.tools.ToolService;
 
+import java.util.List;
+
 /**
  * 数据范围控制接口
  * 主要解决用户的数据权限
@@ -14,9 +16,10 @@ import grape.common.tools.ToolService;
  * Created by yangwei
  * Created at 2019/11/25 16:08
  */
-public interface IDataConstraintService <user extends AbstractLoginUser> extends ToolService {
+public interface IDataConstraintParseService<user extends AbstractLoginUser> extends ToolService {
 
     public static final String insqlReplace = "{{insql}}";
+    public static final String customeSqlTemplate = "id in ("+ insqlReplace +")";
 
     /**
      * 解析约束条件
@@ -24,7 +27,7 @@ public interface IDataConstraintService <user extends AbstractLoginUser> extends
      * @param loginUser
      * @return
      */
-    default public ConstraintContent parseConstraint(IDataObject dataObject, user loginUser){
+    default public List<ConstraintContent> parseConstraint(IDataObject dataObject, user loginUser){
         return parseConstraint(dataObject.dataObjectCode(), loginUser);
     }
     /**
@@ -33,5 +36,5 @@ public interface IDataConstraintService <user extends AbstractLoginUser> extends
      * @param loginUser
      * @return
      */
-    public ConstraintContent parseConstraint(String dataObjectCode, user loginUser);
+    public List<ConstraintContent> parseConstraint(String dataObjectCode, user loginUser);
 }

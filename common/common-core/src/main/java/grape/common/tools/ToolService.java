@@ -14,6 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -145,6 +149,18 @@ public interface ToolService {
         }
 
         return pinyinDto;
+    }
+
+    /**
+     * 根据属性去重
+     * 结合filter使用
+     * @param keyExtractor
+     * @param <T>
+     * @return
+     */
+    default <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
 

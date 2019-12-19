@@ -64,11 +64,19 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * 分页查询的默认接口方法,带数据约束
      * @param page
      * @param query
-     * @param constraintContent 能直接使用的约束sql
+     * @param constraintContents 能直接使用的约束sql
      * @return
      */
-    default IPage<Po> page(IPage<Po> page, Po query,ConstraintContent constraintContent){
-        return page(page, Wrappers.query(query).apply(!isStrEmpty(constraintContent.getCompiledSqlContent()),constraintContent.getCompiledSqlContent()));
+    default IPage<Po> page(IPage<Po> page, Po query,List<ConstraintContent> constraintContents){
+        return page(page, Wrappers.query(query).and(wq->
+                {
+                    //wq.apply(sqlSegment);
+                    for (ConstraintContent constraintContent : constraintContents) {
+                        wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
+                    }
+                    return wq;
+                }
+        ));
     }
     /**
      * 不分页查询的默认接口方法
@@ -81,31 +89,55 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
     /**
      * 不分页查询的默认接口方法,带数据约束
      * @param query
-     * @param constraintContent 能直接使用的约束sql
+     * @param constraintContents 能直接使用的约束sql
      * @return
      */
-    default List<Po> list(Po query,ConstraintContent constraintContent){
-        return list(Wrappers.query(query).apply(constraintContent.getCompiledSqlContent()));
+    default List<Po> list(Po query,List<ConstraintContent> constraintContents){
+        return list(Wrappers.query(query).and(wq->
+                {
+                    //wq.apply(sqlSegment);
+                    for (ConstraintContent constraintContent : constraintContents) {
+                        wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
+                    }
+                    return wq;
+                }
+        ));
     }
 
     /**
      * 根据id删除，带数据约束
      * @param id
-     * @param constraintContent
+     * @param constraintContents
      * @return
      */
-    default boolean removeById(String id,ConstraintContent constraintContent){
-        return remove(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).apply(constraintContent.getCompiledSqlContent()));
+    default boolean removeById(String id,List<ConstraintContent> constraintContents){
+        return remove(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).and(wq->
+                {
+                    //wq.apply(sqlSegment);
+                    for (ConstraintContent constraintContent : constraintContents) {
+                        wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
+                    }
+                    return wq;
+                }
+        ));
     }
 
     /**
      * 根据id查询，带数据约束
      * @param id
-     * @param constraintContent
+     * @param constraintContents
      * @return
      */
-    default Po getById(String id,ConstraintContent constraintContent){
-        return getOne(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).apply(constraintContent.getCompiledSqlContent()));
+    default Po getById(String id,List<ConstraintContent> constraintContents){
+        return getOne(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).and(wq->
+                {
+                    //wq.apply(sqlSegment);
+                    for (ConstraintContent constraintContent : constraintContents) {
+                        wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
+                    }
+                    return wq;
+                }
+        ));
     }
 
     /**
@@ -114,7 +146,7 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @param constraintContent
      * @return
      */
-    default boolean updateById(Po po,ConstraintContent constraintContent){
+    default boolean updateById(Po po,List<ConstraintContent> constraintContent){
         return update(po, Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, po.getId()));
     }
 

@@ -7,7 +7,7 @@ import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.form.BasePageForm;
 import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.IDataConstraintService;
+import grape.common.service.common.IDataConstraintParseService;
 import grape.common.service.common.IDataObject;
 import grape.common.service.po.IDBasePo;
 import grape.common.tools.ThreadContextTool;
@@ -30,7 +30,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
 
 
     @Autowired(required = false)
-    private IDataConstraintService<loginUser> iDataConstraintService;
+    private IDataConstraintParseService<loginUser> iDataConstraintService;
 
     public BaseLoginUserController() {
     }
@@ -65,7 +65,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param dataObjectCode
      * @return
      */
-    protected ConstraintContent parseConstraint(String dataObjectCode){
+    protected List<ConstraintContent> parseConstraint(String dataObjectCode){
         if (iDataConstraintService == null) {
             throw new RBaseException("iDataConstraintService is null,check config please");
         }
@@ -77,7 +77,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param dataObjectCode
      * @return
      */
-    protected ConstraintContent parseConstraint(IDataObject dataObjectCode){
+    protected List<ConstraintContent> parseConstraint(IDataObject dataObjectCode){
         return parseConstraint(dataObjectCode.dataObjectCode());
     }
     /**
@@ -116,7 +116,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
 
-    public Vo update(Po poQuery,ConstraintContent constraintContent){
+    public Vo update(Po poQuery,List<ConstraintContent> constraintContent){
         boolean r = getService().updateById(poQuery,constraintContent);
         if (!r) {
             throw ExceptionTools.failRE("更新失败，请刷新数据后再试");
@@ -163,7 +163,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
 
-    public boolean deleteById(String id,ConstraintContent constraintContent){
+    public boolean deleteById(String id,List<ConstraintContent> constraintContent){
 
         boolean r = getService().removeById(id,constraintContent);
         if (!r) {
@@ -208,7 +208,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
 
-    public Vo queryById(String id,ConstraintContent constraintContent){
+    public Vo queryById(String id,List<ConstraintContent> constraintContent){
         Po dbPo = getService().getById(id,constraintContent);
         Vo vo = getMapperConverter().poToVo(dbPo);
         if (vo == null) {
@@ -256,7 +256,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param pageForm
      * @return
      */
-    public IPage<Vo> listPage(Po poQuery, BasePageForm pageForm,ConstraintContent constraintContent){
+    public IPage<Vo> listPage(Po poQuery, BasePageForm pageForm,List<ConstraintContent> constraintContent){
         assertNotNull(constraintContent,"约束内容不能为空");
         IPage<Po> page = getService().page(new Page(pageForm.getCurrent(),pageForm.getSize()),poQuery,constraintContent);
         if (page.getTotal() == 0) {
@@ -299,7 +299,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param poQuery
      * @return
      */
-    public List<Vo> list(Po poQuery,ConstraintContent constraintContent){
+    public List<Vo> list(Po poQuery,List<ConstraintContent> constraintContent){
         assertNotNull(constraintContent,"约束内容不能为空");
         List list = getService().list(poQuery,constraintContent);
         return posToVos(list);

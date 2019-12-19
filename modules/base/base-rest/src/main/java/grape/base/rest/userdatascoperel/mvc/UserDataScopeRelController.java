@@ -50,12 +50,6 @@ public class UserDataScopeRelController extends BaseController<UserDataScopeRelV
     @PostMapping("/user/assign/datascope")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean userAssignDataScope(@RequestBody @Valid UserAssignDataScopeForm cf) {
-        // 检查每一个数据对象只能选中一个数据范围
-        Collection<DataScope> dataScopes = iDataScopeService.listByIds(cf.getCheckedDataScopeIds());
-        Set<String> stringSet = dataScopes.stream().map(item -> item.getDataObjectId()).collect(Collectors.toSet());
-        if (stringSet.size() != dataScopes.size()) {
-            throw new InvalidParamsException("每个数据对象只能选择一个数据范围");
-        }
 
         currentService.userAssignDataScope(cf.getUserId(),cf.getCheckedDataScopeIds(),cf.getUncheckedDataScopeIds(),cf.getIsLazyLoad());
         return true;
