@@ -13,6 +13,8 @@ import grape.base.service.dict.api.IDictService;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import grape.common.tools.PinyinDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,12 +45,35 @@ import java.util.Optional;
 @Api(tags = "区域相关接口")
 public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, BaseLoginUser> {
 
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeArea");
+
+
     @Autowired
     private AreaWebMapper areaWebMapper;
     @Autowired
     private IAreaService iAreaService;
     @Autowired
     private IDictService iDictService;
+
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
     /**
      * 添加区域

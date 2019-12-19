@@ -14,6 +14,8 @@ import grape.base.service.user.po.UserIdentifier;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,11 +37,32 @@ import javax.validation.Valid;
 @Api(tags = "用户登录帐号相关接口")
 public class UserIdentifierController extends BaseLoginUserController<UserIdentifierVo, UserIdentifier, BaseLoginUser> {
 
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeUserIdentifier");
 
     @Autowired
     private UserIdentifierWebMapper userIdentifierWebMapper;
     @Autowired
     private IUserIdentifierService iUserIdentifierService;
+
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation(value = "添加登录帐号",notes = "添加可用来登录的用户标识，如：邮箱、帐号、手机号等")
      @RequiresPermissions("useridentifier:single:create")

@@ -2,13 +2,17 @@ package grape.base.rest.user.mvc;
 
 import grape.base.rest.user.form.pwd.UserPwdResetForm;
 import grape.base.rest.user.form.pwd.UserPwdUpdateForm;
+import grape.base.rest.user.vo.UserPwdVo;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.user.api.IUserPwdService;
 import grape.base.service.user.po.UserPwd;
 import grape.common.exception.runtime.BadRequestException;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.common.PasswordAndSalt;
+import grape.common.rest.mvc.BaseLoginUserController;
 import grape.common.rest.mvc.SuperController;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,12 +32,31 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/userpwd")
 @Api(tags = "用户密码相关接口")
-public class UserPwdController extends SuperController {
+public class UserPwdController extends BaseLoginUserController<UserPwdVo,UserPwd,BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeUserPwd");
 
     @Autowired
     private IUserPwdService iUserPwdService;
 
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
 
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
     @ApiOperation("重置用户密码")
     @RequiresPermissions("userpwd:single:reset")
@@ -50,9 +73,12 @@ public class UserPwdController extends SuperController {
         userPwd.setPwd(newPs.getPassword());
         userPwd.setSalt(newPs.getSalt());
         userPwd.setPwdModifiedAt(System.currentTimeMillis());
-        if (!iUserPwdService.updateById(userPwd)) {
+        try {
+            update(userPwd);
+        } catch (Exception e) {
             throw new RBaseException("重置用户密码失败");
         }
+
         return true;
     }
 

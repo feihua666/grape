@@ -366,9 +366,23 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
         // 记得用完从线程变量删除
         ThreadContextTool.put(enableDefaultDataObjectKey,true);
     }
-    private boolean isEnableDefaultDataObject(){
-        boolean r =  ThreadContextTool.get(enableDefaultDataObjectKey) == null ? false:true;
-        ThreadContextTool.remove(enableDefaultDataObjectKey);
+    protected void disableDefaultDataObject(){
+        // 记得用完从线程变量删除
+        ThreadContextTool.put(enableDefaultDataObjectKey,false);
+    }
+    protected Object getEnableDefaultDataObjectKeyValue(){
+        return ThreadContextTool.get(enableDefaultDataObjectKey);
+    }
+    /**
+     * 重写该方法以全局开启默认数据对象
+     * @return
+     */
+    public boolean isEnableDefaultDataObject(){
+        boolean r = false;
+        if (getEnableDefaultDataObjectKeyValue()!= null) {
+            r = (boolean) getEnableDefaultDataObjectKeyValue();
+            ThreadContextTool.remove(enableDefaultDataObjectKey);
+        }
         return r;
     }
     /**

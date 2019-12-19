@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.post.form.*;
 import grape.base.rest.post.mapper.PostWebMapper;
 import grape.base.rest.post.vo.PostVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.api.IDictService;
@@ -13,6 +14,9 @@ import grape.base.service.post.dto.PostListQuery;
 import grape.base.service.post.po.Post;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseController;
+import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -34,7 +38,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @Api(tags = "岗位相关接口")
-public class PostController extends BaseController<PostVo, Post> {
+public class PostController extends BaseLoginUserController<PostVo, Post, BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodePost");
 
     @Autowired
     private PostWebMapper currentWebMapper;
@@ -44,6 +50,26 @@ public class PostController extends BaseController<PostVo, Post> {
     private IDictService iDictService;
     @Autowired
     private IDeptService iDeptService;
+
+
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation("添加岗位")
      @RequiresPermissions("post:single:create")

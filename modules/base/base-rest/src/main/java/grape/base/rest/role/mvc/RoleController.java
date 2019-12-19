@@ -7,11 +7,15 @@ import grape.base.rest.role.form.RoleListPageForm;
 import grape.base.rest.role.form.RoleUpdateForm;
 import grape.base.rest.role.mapper.RoleWebMapper;
 import grape.base.rest.role.vo.RoleVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.po.Role;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
+import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -32,14 +36,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 @Api(tags = "角色相关接口")
-public class RoleController extends BaseTreeController<RoleVo, Role> {
+public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeRole");
 
     @Autowired
     private RoleWebMapper currentWebMapper;
     @Autowired
     private IRoleService currentService;
 
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
 
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation("添加角色")
      @RequiresPermissions("role:single:create")

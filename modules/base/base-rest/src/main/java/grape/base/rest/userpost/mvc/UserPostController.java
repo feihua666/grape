@@ -7,6 +7,7 @@ import grape.base.rest.userpost.form.UserPostListPageForm;
 import grape.base.rest.userpost.form.UserPostUpdateForm;
 import grape.base.rest.userpost.mapper.UserPostWebMapper;
 import grape.base.rest.userpost.vo.UserPostVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.api.IDeptService;
@@ -23,6 +24,9 @@ import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.po.UserPost;
 import grape.common.exception.ExceptionTools;
 import grape.common.rest.mvc.BaseController;
+import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -42,13 +46,32 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/userpost")
 @Api(tags = "用户岗位信息相关接口")
-public class UserPostController extends BaseController<UserPostVo, UserPost> {
+public class UserPostController extends BaseLoginUserController<UserPostVo, UserPost, BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeUserPost");
 
     @Autowired
     private UserPostWebMapper currentWebMapper;
     @Autowired
     private IUserPostService currentService;
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
 
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation("添加用户岗位")
      @RequiresPermissions("userPost:single:create")

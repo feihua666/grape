@@ -6,6 +6,7 @@ import grape.base.rest.dept.form.DeptListPageForm;
 import grape.base.rest.dept.form.DeptUpdateForm;
 import grape.base.rest.dept.mapper.DeptWebMapper;
 import grape.base.rest.dept.vo.DeptVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.comp.po.Comp;
 import grape.base.service.dept.api.IDeptService;
@@ -17,7 +18,10 @@ import grape.base.service.user.po.User;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
+import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -40,13 +44,34 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/dept")
 @Api(tags = "部门相关接口")
-public class DeptController extends BaseTreeController<DeptVo, Dept> {
+public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, BaseLoginUser> {
 
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeDept");
 
     @Autowired
     private DeptWebMapper deptWebMapper;
     @Autowired
     private IDeptService iDeptService;
+
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation("添加部门")
      @RequiresPermissions("dept:single:create")

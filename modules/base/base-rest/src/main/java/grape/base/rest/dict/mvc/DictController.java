@@ -7,13 +7,17 @@ import grape.base.rest.dict.form.DictListPageForm;
 import grape.base.rest.dict.form.DictUpdateForm;
 import grape.base.rest.dict.mapper.DictWebMapper;
 import grape.base.rest.dict.vo.DictVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
+import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,7 +39,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/dict")
 @Api(tags = "字典相关接口")
-public class DictController extends BaseTreeController<DictVo, Dict> {
+public class DictController extends BaseTreeLoginUserController<DictVo, Dict, BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeDict");
 
     @Autowired
     private DictWebMapper dictWebMapper;
@@ -43,6 +49,26 @@ public class DictController extends BaseTreeController<DictVo, Dict> {
     private IDictService iDictService;
     @Autowired
     private ICompService iCompService;
+
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
+
     /**
      * 获取字典组下的字典项
      * @param groupCode

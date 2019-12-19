@@ -15,7 +15,10 @@ import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
+import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,8 +40,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/func")
 @Api(tags = "功能相关接口")
-public class FuncController extends BaseTreeController<FuncVo, Func> {
+public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,BaseLoginUser> {
 
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeFunc");
 
     @Autowired
     private FuncWebMapper funcWebMapper;
@@ -46,6 +51,27 @@ public class FuncController extends BaseTreeController<FuncVo, Func> {
     private IFuncService iFuncService;
     @Autowired
     private IDictService iDictService;
+
+
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
+
 
     /**
      * 功能添加

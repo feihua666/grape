@@ -2,9 +2,13 @@ package grape.base.rest.application.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.application.form.ApplicationListForm;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.func.api.IFuncService;
 import grape.base.service.func.po.Func;
 import grape.common.exception.runtime.RBaseException;
+import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -34,7 +38,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/application")
 @Api(tags = "应用相关接口")
-public class ApplicationController extends BaseController<ApplicationVo, Application> {
+public class ApplicationController extends BaseLoginUserController<ApplicationVo, Application, BaseLoginUser> {
+
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeApplication");
 
     @Autowired
     private ApplicationWebMapper currentWebMapper;
@@ -44,6 +51,24 @@ public class ApplicationController extends BaseController<ApplicationVo, Applica
     @Autowired
     private IFuncService iFuncService;
 
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation("添加应用")
      @RequiresPermissions("application:single:create")

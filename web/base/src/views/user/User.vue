@@ -160,6 +160,7 @@
                         action: 'nav',
                         position:'more',
                         disabledOnMissingSelect:true,
+                        routeQuery:['nickname'],
                         url:'/user/userPost/userPostAdd/:id',
                         label: '新增岗位'
                     },

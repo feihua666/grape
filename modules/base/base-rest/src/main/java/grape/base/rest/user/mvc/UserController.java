@@ -27,6 +27,7 @@ import grape.common.exception.ExceptionTools;
 import grape.common.rest.common.PasswordAndSalt;
 import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.DefaultDataObject;
 import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,7 +54,8 @@ import java.util.stream.Collectors;
 @Api(tags = "用户相关接口")
 public class UserController extends BaseLoginUserController<UserVo, User,BaseLoginUser> {
 
-    private String userDataObjectCode = "user";
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeUser");
 
     @Autowired
     private IUserService iUserService;
@@ -78,6 +80,24 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
     @Autowired
     private IPostService iPostService;
 
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation(value = "添加用户",notes = "添加用户的基本信息")
      @RequiresPermissions("user:single:create")
@@ -117,7 +137,7 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserVo> listPage(UserListPageForm listPageForm) {
         User user = userWebMapper.formToPo(listPageForm);
-         return super.listPage(user,listPageForm,userDataObjectCode);
+         return super.listPage(user,listPageForm);
      }
 
     /**

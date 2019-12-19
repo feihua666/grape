@@ -14,6 +14,8 @@ import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -39,10 +41,33 @@ import java.util.List;
 @Api(tags = "公司相关接口")
 public class CompController extends BaseTreeLoginUserController<CompVo, Comp,BaseLoginUser> {
 
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeComp");
+
+
     @Autowired
     private CompWebMapper compWebMapper;
     @Autowired
     private ICompService iCompService;
+
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation("添加公司")
      @RequiresPermissions("comp:single:create")

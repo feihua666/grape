@@ -7,6 +7,7 @@ import grape.base.rest.job.form.JobListPageForm;
 import grape.base.rest.job.form.JobUpdateForm;
 import grape.base.rest.job.mapper.JobWebMapper;
 import grape.base.rest.job.vo.JobVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.api.IDictService;
@@ -15,6 +16,9 @@ import grape.base.service.job.api.IJobService;
 import grape.base.service.job.po.Job;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseController;
+import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,7 +39,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/job")
 @Api(tags = "职务相关接口")
-public class JobController extends BaseController<JobVo, Job> {
+public class JobController extends BaseLoginUserController<JobVo, Job, BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeJob");
 
     @Autowired
     private JobWebMapper currentWebMapper;
@@ -46,7 +52,27 @@ public class JobController extends BaseController<JobVo, Job> {
     @Autowired
     private IDeptService iDeptService;
 
-     @ApiOperation("添加职务")
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
+
+
+    @ApiOperation("添加职务")
      @RequiresPermissions("job:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)

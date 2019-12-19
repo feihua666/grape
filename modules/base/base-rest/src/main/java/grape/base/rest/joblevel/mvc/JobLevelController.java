@@ -7,12 +7,16 @@ import grape.base.rest.joblevel.form.JobLevelListPageForm;
 import grape.base.rest.joblevel.form.JobLevelUpdateForm;
 import grape.base.rest.joblevel.mapper.JobLevelWebMapper;
 import grape.base.rest.joblevel.vo.JobLevelVo;
+import grape.base.service.BaseLoginUser;
 import grape.base.service.job.api.IJobService;
 import grape.base.service.job.po.Job;
 import grape.base.service.joblevel.api.IJobLevelService;
 import grape.base.service.joblevel.po.JobLevel;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseController;
+import grape.common.rest.mvc.BaseLoginUserController;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,7 +39,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/joblevel")
 @Api(tags = "职务级别相关接口")
-public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
+public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobLevel, BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeJobLevel");
 
     @Autowired
     private JobLevelWebMapper currentWebMapper;
@@ -46,7 +52,28 @@ public class JobLevelController extends BaseController<JobLevelVo, JobLevel> {
     private IJobService iJobService;
 
 
-     @ApiOperation("添加职务级别")
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
+
+
+
+    @ApiOperation("添加职务级别")
      @RequiresPermissions("jobLevel:single:create")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
