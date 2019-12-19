@@ -174,7 +174,7 @@ public class LoginUserHelperService implements ToolService {
         if (isIncludeSuperAdmin(roles)) {
             loginUser.setIsSuperAdmin(true);
         }
-        if(!loginUser.getIsSuperAdmin()){
+        else {
             List<UserPostInfo> userPostInfos = loginUser.getUserPostInfos();
             if (!isEmpty(userPostInfos)) {
                 for (UserPostInfo userPostInfo : userPostInfos) {
