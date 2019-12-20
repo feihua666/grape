@@ -2,6 +2,7 @@ package grape.base.rest.dataconstraint.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.dataconstraint.vo.DataScopeVirtualTreeNodeVo;
+import grape.base.rest.setting.dataconstraint.BaseDataConstraintServiceImpl;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
@@ -12,6 +13,9 @@ import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.ConstraintContent;
+import grape.common.service.common.DefaultDataObject;
+import grape.common.service.common.IDataObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
@@ -28,8 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dataconstraint.api.IDataScopeService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 数据范围约束表 前端控制器
@@ -42,6 +47,8 @@ import java.util.List;
 @RequestMapping("/datascope")
 @Api(tags = "数据范围相关接口")
 public class DataScopeController extends BaseLoginUserController<DataScopeVo, DataScope, BaseLoginUser> {
+    // 默认的数据对象编码
+    public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeDataScope");
 
     @Autowired
     private DataScopeWebMapper currentWebMapper;
@@ -52,6 +59,24 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
     @Autowired
     private IDataObjectService iDataObjectService;
 
+    /**
+     * 开启全局
+     * @return
+     */
+    @Override
+    public boolean isEnableDefaultDataObject() {
+        // 判断是否存在关闭的情况
+        if (getEnableDefaultDataObjectKeyValue() != null) {
+            return (boolean) getEnableDefaultDataObjectKeyValue();
+        }
+        enableDefaultDataObject();
+        return super.isEnableDefaultDataObject();
+    }
+
+    @Override
+    protected String defaultDataObjectCode() {
+        return defaultDataObjectCode.dataObjectCode();
+    }
 
      @ApiOperation("添加数据范围")
      @RequiresPermissions("datascope:single:create")
@@ -117,27 +142,29 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> treeAll() {
 
-        BaseLoginUser loginUser = getLoginUser();
         List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> r = new ArrayList<>();
-        // 超级管理员
-        if(loginUser.getIsSuperAdmin()){
-            // 获取所有的数据对象作为第一级节点
-            List<DataObject> dataObjectList = iDataObjectService.list();
-            for (DataObject dataObject : dataObjectList) {
-                // 数据范围
-                List<DataScope> dataScopes = currentService.getByDataObjectId(dataObject.getId(),null);
-                combine(r,dataObject,dataScopes);
+
+        List<DataScope> list = currentService.list(null, parseConstraint(defaultDataObjectCode()));
+        if (isEmpty(list)) {
+            ExceptionTools.dataNotExistRE("当前用户未分配数据范围");
+        }
+        Map<String, List<DataScope>> map = new HashMap<>();
+        for (DataScope dataScope : list) {
+            List<DataScope> dataScopes = map.get(dataScope.getDataObjectId());
+            if (dataScope == null) {
+                dataScopes = new ArrayList<>();
+                map.put(dataScope.getDataObjectId(), dataScopes);
             }
-        }else {
-            List<DataObjectAndScopeDto> dataObjectAndScopeDtos = loginUser.getDataObjectAndScopes();
-            if (!isEmpty(dataObjectAndScopeDtos)) {
-                for (DataObjectAndScopeDto dataObjectAndScopeDto : dataObjectAndScopeDtos) {
-                    combine(r,dataObjectAndScopeDto.getDataObject(),dataObjectAndScopeDto.getDataScopes());
-                }
-            }else {
-                ExceptionTools.dataNotExistRE("当前用户未分配数据范围");
+            dataScopes.add(dataScope);
+        }
+        if (!map.isEmpty()) {
+            for (Map.Entry<String, List<DataScope>> stringListEntry : map.entrySet()) {
+                DataObject dataObject = iDataObjectService.getById(stringListEntry.getKey());
+                combine(r,dataObject,stringListEntry.getValue());
+
             }
         }
+
         return r;
     }
 

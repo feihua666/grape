@@ -6,6 +6,7 @@ import grape.common.AbstractLoginUser;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.form.BasePageForm;
+import grape.common.service.common.BaseDataConstraintHelper;
 import grape.common.service.common.ConstraintContent;
 import grape.common.service.common.IDataConstraintParseService;
 import grape.common.service.common.IDataObject;
@@ -30,7 +31,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
 
 
     @Autowired(required = false)
-    private IDataConstraintParseService<loginUser> iDataConstraintService;
+    private BaseDataConstraintHelper baseDataConstraintHelper;
 
     public BaseLoginUserController() {
     }
@@ -66,10 +67,10 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
     protected List<ConstraintContent> parseConstraint(String dataObjectCode){
-        if (iDataConstraintService == null) {
-            throw new RBaseException("iDataConstraintService is null,check config please");
+        if (baseDataConstraintHelper == null) {
+            throw new RBaseException("baseDataConstraintHelper is null,check config please");
         }
-        return iDataConstraintService.parseConstraint(dataObjectCode, getLoginUser());
+        return baseDataConstraintHelper.doParseConstraint(dataObjectCode, getLoginUser());
     }
 
     /**

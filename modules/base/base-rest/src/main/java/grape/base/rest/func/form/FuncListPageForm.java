@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper=false)
 
 @Accessors(chain = true)
-@ApiModel(value="FuncListPageForm分页查询条件对象", description="菜单功能表")
+@ApiModel(value="菜单功能分页查询条件对象")
 public class FuncListPageForm extends BasePageForm {
 
     private static final long serialVersionUID = 1L;

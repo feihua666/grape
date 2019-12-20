@@ -4,6 +4,8 @@ import grape.common.AbstractLoginUser;
 import grape.common.tools.ToolService;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 数据范围控制接口
@@ -22,6 +24,16 @@ public interface IDataConstraintParseService<user extends AbstractLoginUser> ext
     public static final String customeSqlTemplate = "id in ("+ insqlReplace +")";
 
     /**
+     * 可以自定义解析
+     * @param dataObject
+     * @return
+     */
+    default boolean support(IDataObject dataObject){
+        return support(dataObject.dataObjectCode());
+    }
+    public boolean support(String dataObject);
+
+    /**
      * 解析约束条件
      * @param dataObject
      * @param loginUser
@@ -37,4 +49,19 @@ public interface IDataConstraintParseService<user extends AbstractLoginUser> ext
      * @return
      */
     public List<ConstraintContent> parseConstraint(String dataObjectCode, user loginUser);
+
+
+    /**
+     * 组装insql内容片段
+     * @param dataIds
+     * @param constraintContent
+     * @return
+     */
+    default public ConstraintContent insql(Set<String> dataIds, String constraintContent){
+        String insql = dataIds.stream().map(str -> "'" + str + "'").collect(Collectors.joining(","));
+        if (isStrEmpty(constraintContent)) {
+            constraintContent = IDataConstraintParseService.customeSqlTemplate;
+        }
+        return new ConstraintContent(constraintContent.replace(IDataConstraintParseService.insqlReplace,insql));
+    }
 }

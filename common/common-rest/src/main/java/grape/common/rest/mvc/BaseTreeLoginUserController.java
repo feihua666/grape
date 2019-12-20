@@ -7,10 +7,7 @@ import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.form.BasePageForm;
 import grape.common.rest.vo.BaseTreeVo;
-import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.IBaseTreeService;
-import grape.common.service.common.IDataConstraintParseService;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.*;
 import grape.common.service.po.TreeBasePo;
 import grape.common.tools.ThreadContextTool;
 import lombok.Data;
@@ -33,7 +30,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
     private String  dataObjectCode;
 
     @Autowired(required = false)
-    private IDataConstraintParseService<loginUser> iDataConstraintService;
+    private BaseDataConstraintHelper baseDataConstraintHelper;
     public BaseTreeLoginUserController() {
     }
     public BaseTreeLoginUserController(String dataObjectCode) {
@@ -72,10 +69,10 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @return
      */
     protected List<ConstraintContent> parseConstraint(String dataObjectCode){
-        if (iDataConstraintService == null) {
-            throw new RBaseException("iDataConstraintService is null,check config please");
+        if (baseDataConstraintHelper == null) {
+            throw new RBaseException("baseDataConstraintHelper is null,check config please");
         }
-        return iDataConstraintService.parseConstraint(dataObjectCode, getLoginUser());
+        return baseDataConstraintHelper.doParseConstraint(dataObjectCode, getLoginUser());
     }
     /**
      * 解析数据范围约束,使用默认code

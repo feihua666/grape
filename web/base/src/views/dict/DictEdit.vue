@@ -28,7 +28,7 @@
                             inputSelectTree:{
                                 dataUrl:'/dict/tree'
                             },
-                            disabled: true,
+                            disable: true,
                             label: '父级'
                         }
                     },
@@ -38,7 +38,7 @@
                         },
                         element:{
                             label: '编码',
-                            disabled: true
+                            disable: true
                         }
                     },
                     {
@@ -57,7 +57,7 @@
                         element:{
                             type: 'switch',
                             label: '字典组',
-                            disabled: true
+                            disable: true
                         }
                     },
                     {
@@ -67,7 +67,7 @@
                         element:{
                             type: 'switch',
                             label: '系统字典',
-                            disabled: true
+                            disable: true
                         }
                     },
                     {
@@ -77,7 +77,7 @@
                         element:{
                             type: 'switch',
                             label: '公共字典',
-                            disabled: true
+                            disable: true
                         }
                     },
                     {

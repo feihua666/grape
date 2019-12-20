@@ -8,13 +8,10 @@ import grape.base.rest.func.form.FuncUpdateForm;
 import grape.base.rest.func.mapper.FuncWebMapper;
 import grape.base.rest.func.vo.FuncVo;
 import grape.base.service.BaseLoginUser;
-import grape.base.service.dict.api.IDictService;
 import grape.base.service.func.api.IFuncService;
 import grape.base.service.func.po.Func;
-import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
 import grape.common.service.common.DefaultDataObject;
@@ -27,8 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
+
 /**
  * <p>
  * 菜单功能 前端控制器
@@ -49,9 +46,6 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
     private FuncWebMapper funcWebMapper;
     @Autowired
     private IFuncService iFuncService;
-    @Autowired
-    private IDictService iDictService;
-
 
     /**
      * 开启全局
@@ -71,7 +65,6 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
     protected String defaultDataObjectCode() {
         return defaultDataObjectCode.dataObjectCode();
     }
-
 
     /**
      * 功能添加
@@ -224,26 +217,8 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
     @GetMapping("/tree/nav")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<FuncVo>> treeNav(String applicationId) {
-        BaseLoginUser loginUser = BaseLoginUser.getLoginUser();
-        List<Func> funcList;
-        List<Func.TypeDictItem> typeDictItems = newArrayList(Func.TypeDictItem.menu, Func.TypeDictItem.page);
-        // 超级管理员查全部的
-        if (loginUser.getIsSuperAdmin()) {
-            funcList = iFuncService.getByTypes(typeDictItems,new Func().setApplicationId(applicationId).setIsDisabled(false));
-        }else{
-            funcList = loginUser.getFuncs();
-        }
-        if (isEmpty(funcList)) {
-            throw ExceptionTools.dataNotExistRE("暂无数据");
-        }
-        List<FuncVo> result = new ArrayList<>();
-        for (Func func : funcList) {
-            FuncVo funcVo = getMapperConverter().poToVo(func);
-            funcVo = transVo(funcVo);
-            result.add(funcVo);
-        }
-
-        return super.listToTree(result);
+        List<FuncVo> funcList = super.list(new Func().setApplicationId(applicationId).setIsDisabled(false));
+        return super.listToTree(funcList);
     }
 
 }

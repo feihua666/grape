@@ -61,7 +61,7 @@
                     this.$set(this.buttonLoading,application.id,true)
                     setTimeout(()=>{
                         this.enter(application,false)
-                    },1500)
+                    },200)
                 }else {
                     this.$set(this.buttonLoading,application.id,true)
                     storage.set("currentApplication",application)

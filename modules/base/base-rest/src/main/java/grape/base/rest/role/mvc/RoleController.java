@@ -7,6 +7,7 @@ import grape.base.rest.role.form.RoleListPageForm;
 import grape.base.rest.role.form.RoleUpdateForm;
 import grape.base.rest.role.mapper.RoleWebMapper;
 import grape.base.rest.role.vo.RoleVo;
+import grape.base.rest.setting.dataconstraint.BaseDataConstraintServiceImpl;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.po.Role;
@@ -14,6 +15,7 @@ import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
+import grape.common.service.common.ConstraintContent;
 import grape.common.service.common.DefaultDataObject;
 import grape.common.service.common.IDataObject;
 import io.swagger.annotations.Api;
@@ -24,7 +26,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 角色表 前端控制器

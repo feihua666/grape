@@ -5,31 +5,38 @@ import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import grape.base.rest.dataconstraint.mvc.DataScopeController;
+import grape.base.rest.func.mvc.FuncController;
+import grape.base.rest.role.mvc.RoleController;
 import grape.base.service.BaseLoginUser;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
 import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
 import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dataconstraint.po.DataScopeCustomRel;
 import grape.common.service.common.ConstraintContent;
+import grape.common.service.common.IDataConstraintParseDefaultService;
 import grape.common.service.common.IDataConstraintParseService;
+import grape.common.service.common.IDataObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 数据约束优先级：用户分配的数据范围>用户使用角色分配的数据范围>用户岗位分配的数据范围>岗位分配的数据范围
+ * 默认的数据约束解析数据约束
  * Created by yangwei
  * Created at 2019/12/3 17:15
  */
 @Component
-public class BaseDataConstraintServiceImpl implements IDataConstraintParseService<BaseLoginUser> {
+public class BaseDataConstraintServiceImpl implements IDataConstraintParseDefaultService<BaseLoginUser> {
     @Autowired
     private IDataScopeCustomRelService iDataScopeCustomRelService;
     private TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig());
+    @Override
+    public boolean support(String dataObject) {
+        return false;
+    }
 
     @Override
     public List<ConstraintContent> parseConstraint(String dataObjectCode, BaseLoginUser loginUser) {
@@ -48,19 +55,14 @@ public class BaseDataConstraintServiceImpl implements IDataConstraintParseServic
                 for (DataScope dataScope : dataScopes) {
                     if (dataScope.getIsCustom()) {
                         List<DataScopeCustomRel> customRels = iDataScopeCustomRelService.getByDataScopeId(dataScope.getId());
-                        List<String> dataIds = customRels.stream().map(item -> item.getDataId()).collect(Collectors.toList());
-                        String insql = dataIds.stream().map(str -> "'" + str + "'").collect(Collectors.joining(","));
-                        String constraintContent = dataScope.getConstraintContent();
-                        if (isStrEmpty(constraintContent)) {
-                            constraintContent = IDataConstraintParseService.customeSqlTemplate;
-                        }
-                        constraintContents.add( new ConstraintContent(constraintContent.replace(IDataConstraintParseService.insqlReplace,insql)));
+                        Set<String> dataIds = customRels.stream().map(item -> item.getDataId()).collect(Collectors.toSet());
+
+                        constraintContents.add(insql(dataIds,dataScope.getConstraintContent()) );
                     }else {
                         // 解析内容
                         // 支持enjoy模板
                         Template template = engine.getTemplate(dataScope.getConstraintContent());
                         Map<String, Object> stringObjectMap = BeanUtil.beanToMap(loginUser);
-                        System.out.println(stringObjectMap);
                         String compiledSql = template.render(stringObjectMap);
                         constraintContents.add( new ConstraintContent(compiledSql));
                     }
@@ -74,4 +76,8 @@ public class BaseDataConstraintServiceImpl implements IDataConstraintParseServic
 
         return constraintContents;
     }
+
+
+
+
 }

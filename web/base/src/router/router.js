@@ -538,6 +538,58 @@ const router = new VueRouter({
                 titleCode:'',
                 title: '修改后端应用'
             }
+        },
+        // 组织树名称
+        {
+            path: '/orgName',
+            component: () => import('@/views/org/orgname/OrgName.vue'),
+            meta: {
+                titleCode:'',
+                title: '组织树名称管理',
+                root:true
+            }
+        },
+        {
+            path: '/orgName/orgNameAdd',
+            component: () => import('@/views/org/orgname/OrgNameAdd.vue'),
+            meta: {
+                titleCode:'',
+                title: '添加组织树名称'
+            }
+        },
+        {
+            path: '/orgName/orgNameEdit/:orgNameId',
+            component: () => import('@/views/org/orgname/OrgNameEdit.vue'),
+            meta: {
+                titleCode:'',
+                title: '修改组织树名称'
+            }
+        },
+        // 组织树
+        {
+            path: '/org',
+            component: () => import('@/views/org/Org.vue'),
+            meta: {
+                titleCode:'',
+                title: '组织树管理',
+                root:true
+            }
+        },
+        {
+            path: '/org/orgAdd',
+            component: () => import('@/views/org/OrgAdd.vue'),
+            meta: {
+                titleCode:'',
+                title: '添加组织树'
+            }
+        },
+        {
+            path: '/org/orgEdit/:orgId',
+            component: () => import('@/views/org/OrgEdit.vue'),
+            meta: {
+                titleCode:'',
+                title: '修改组织树'
+            }
         }
     ]
 })
