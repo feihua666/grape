@@ -3,19 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>grape</artifactId>
+        <artifactId>workflow</artifactId>
         <groupId>grape</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>modules</artifactId>
+    <artifactId>workflow-service</artifactId>
     <packaging>pom</packaging>
-    <description>所有业务模块的一个集合目录</description>
     <modules>
-        <module>base</module>
-        <module>mq</module>
-        <module>workflow</module>
+        <module>workflow-service-api</module>
+        <module>workflow-service-impl</module>
     </modules>
 
 
