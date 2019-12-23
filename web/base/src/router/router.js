@@ -590,6 +590,41 @@ const router = new VueRouter({
                 titleCode:'',
                 title: '修改组织树'
             }
+        },
+        // 职务
+        {
+            path: '/workCalendar',
+            component: () => import('@/views/workcalendar/WorkCalendar.vue'),
+            meta: {
+                titleCode:'',
+                title: '工作日历管理',
+                root:true
+            }
+        },
+        {
+            path: '/workCalendar/workCalendarAdd',
+            component: () => import('@/views/workcalendar/WorkCalendarAdd.vue'),
+            meta: {
+                titleCode:'',
+                title: '添加工作日历'
+            }
+        },
+        {
+            path: '/workCalendar/workCalendarEdit/:workCalendarId',
+            component: () => import('@/views/workcalendar/WorkCalendarEdit.vue'),
+            meta: {
+                titleCode:'',
+                title: '修改工作日历'
+            }
+        },
+        {
+            path: '/workCalendar/workCalendarView',
+            component: () => import('@/views/workcalendar/WorkCalendarView.vue'),
+            meta: {
+                titleCode:'',
+                title: '工作日历查看',
+                root:true
+            }
         }
     ]
 })
