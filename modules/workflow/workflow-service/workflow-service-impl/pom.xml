@@ -12,4 +12,20 @@
     <artifactId>workflow-service-impl</artifactId>
 
 
+    <dependencies>
+        <!-- 不再使用activiti 而选用flowable -->
+      <!-- <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring-boot-starter</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>workflow-service-api</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+    </dependencies>
 </project>

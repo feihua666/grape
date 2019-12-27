@@ -17,4 +17,12 @@
     </modules>
 
 
+
+    <dependencies>
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>common-service</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+    </dependencies>
 </project>

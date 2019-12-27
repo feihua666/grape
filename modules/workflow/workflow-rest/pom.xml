@@ -12,4 +12,11 @@
     <artifactId>workflow-rest</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>common-rest</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+    </dependencies>
 </project>

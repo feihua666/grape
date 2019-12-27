@@ -2,6 +2,7 @@ package grape.common.tools.calendar;
 
 import grape.common.pojo.BasePojo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * Created at 2018/9/20 15:17
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class CalendarInfo extends BasePojo {
     private Date date;
     private int year;

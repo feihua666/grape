@@ -13,6 +13,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.1.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>grape</groupId>
 	<artifactId>grape</artifactId>
@@ -21,8 +22,6 @@
 	<description>grape project for Spring Boot</description>
 
 	<properties>
-		<!-- 定义jdk版本 -->
-		<java.version>1.8</java.version>
 		<!-- 定义项目的版本和本pom一致，所有子项目间相互依赖请使用该变量版本 -->
 		<grape.version>${project.version}</grape.version>
 
@@ -53,7 +52,13 @@
 		<enjoy.verion>4.8</enjoy.verion>
 		<!-- activiti 工作流 -->
 		<!-- 官方推荐引用方式 https://github.com/Activiti/activiti-examples/blob/master/activiti-api-basic-task-example/pom.xml#L30 -->
+		<!-- spring 版本有冲突换下面的方式 -->
 		<activiti-dependencies.version>7.1.123</activiti-dependencies.version>
+		<!-- activiti 单独依赖 -->
+		<activiti-spring-boot-starter.version>7.1.123</activiti-spring-boot-starter.version>
+		<!-- 由于activiti的分歧，感觉新版本的（7.x）已经偏向云化，重新选用flowable -->
+		<flowable.version>6.4.1</flowable.version>
+
 	</properties>
 
 	<dependencyManagement>
@@ -63,12 +68,74 @@
 				<artifactId>mybatis-plus-boot-starter</artifactId>
 				<version>${mybatis-plus-boot-starter.version}</version>
 			</dependency>
-			<dependency>
+			<!-- 这种方式引入的spring有版本有冲突  -->
+			<!--<dependency>
 				<groupId>org.activiti.dependencies</groupId>
 				<artifactId>activiti-dependencies</artifactId>
 				<version>${activiti-dependencies.version}</version>
 				<scope>import</scope>
 				<type>pom</type>
+			</dependency>-->
+			<!--<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-spring-boot-starter</artifactId>
+				<version>${activiti-spring-boot-starter.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-context</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-expression</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-beans</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-jcl</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-tx</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-jdbc</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-orm</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-aop</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-test</artifactId>
+					</exclusion>
+
+					<exclusion>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>-->
+			<dependency>
+				<groupId>org.flowable</groupId>
+				<artifactId>flowable-spring-boot-starter</artifactId>
+				<version>${flowable.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -158,6 +225,15 @@
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
 		</repository>
+<!-- 主要依赖activiti -->
+<!--		<repository>
+			<id>alfresco</id>
+			<name>Activiti Releases</name>
+			<url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>-->
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -173,6 +249,7 @@
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
 		</pluginRepository>
+
 	</pluginRepositories>
 
 	<build>

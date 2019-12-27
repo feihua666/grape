@@ -12,11 +12,11 @@ import java.util.List;
  */
 @Component
 public class BaseDataConstraintHelper<user extends AbstractLoginUser> {
-    @Autowired
+    @Autowired(required = false)
     private List<IDataConstraintParseService<user>> iDataConstraintServices;
 
     // 默认的调用
-    @Autowired
+    @Autowired(required = false)
     private IDataConstraintParseDefaultService  baseDataConstraintService;
     
     public List<ConstraintContent> doParseConstraint(String dataObjectCode, user loginUser){
