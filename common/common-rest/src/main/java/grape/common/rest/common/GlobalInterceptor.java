@@ -1,13 +1,17 @@
 package grape.common.rest.common;
 
 import cn.hutool.core.annotation.AnnotationUtil;
+import cn.hutool.core.date.DateUtil;
 import grape.common.AbstractLoginUser;
+import grape.common.rest.shiro.JwtToken;
+import grape.common.rest.tools.JwtUtils;
 import grape.common.rest.tools.RequestTool;
 import grape.common.tools.RequestIdTool;
 import grape.common.tools.ThreadContextTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.util.ThreadContext;
 import org.springframework.validation.BindException;
@@ -31,17 +35,18 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (ThreadContext.getSecurityManager() != null) {
-            Object loginUser = SecurityUtils.getSubject().getSession().getAttribute(AbstractLoginUser.loginUserKey);
-            if (loginUser != null && loginUser instanceof AbstractLoginUser) {
-                AbstractLoginUser.setLoginUser((AbstractLoginUser) loginUser);
-            }
-        }
+
+
         // 初始化请求id
         String parentId = RequestIdTool.getRequestId();
         String requestId = RequestIdTool.initRequestId();
+
         long start = System.currentTimeMillis();
         ThreadContextTool.put(timeStartKey,start);
+        //
+        tryRestoreCurrentUser();
+        tryLoginWithJwtToken(request);
+
         AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
         String userId = null;
         String username = null;
@@ -87,5 +92,35 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
         ThreadContextTool.remove();
         super.afterCompletion(request, response, handler, ex);
+    }
+
+    /**
+     * 尝试恢复当前登录用户到线程变量
+     */
+    private void tryRestoreCurrentUser(){
+        // 初始化当前登录用户
+        if (ThreadContext.getSecurityManager() != null) {
+            Object loginUser = SecurityUtils.getSubject().getSession().getAttribute(AbstractLoginUser.loginUserKey);
+            if (loginUser != null && loginUser instanceof AbstractLoginUser) {
+                AbstractLoginUser.setLoginUser((AbstractLoginUser) loginUser);
+            }
+        }
+    }
+    private void tryLoginWithJwtToken(HttpServletRequest request){
+        // 如果当前登录用户没有设置成功，尝试jwt方式重新登录
+        if (AbstractLoginUser.getLoginUser() == null) {
+            log.debug("当前登录用户为空，尝试从header中获取jwtToken并登录，requestId=[{}],headerName=[{}]",RequestIdTool.getRequestId(),JwtToken.token_header_name);
+            String jwtToken = request.getHeader(JwtToken.token_header_name);
+            // token不为空，重新登录
+            if (StringUtils.isNotBlank(jwtToken)) {
+                if (JwtUtils.isTokenExpired(jwtToken)) {
+                    log.debug("jwtToken 已过期，requestId=[{}],token=[{}]",RequestIdTool.getRequestId(),jwtToken);
+                }else {
+                    SecurityUtils.getSubject().login(new JwtToken(jwtToken,SecurityUtils.getSubject().getSession().getHost()));
+                }
+            }else {
+                log.debug("未检测到jwtToken，requestId=[{}]",RequestIdTool.getRequestId());
+            }
+        }
     }
 }

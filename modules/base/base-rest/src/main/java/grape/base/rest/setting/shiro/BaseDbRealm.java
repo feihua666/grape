@@ -10,6 +10,7 @@ import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.base.service.user.po.UserIdentifier;
 import grape.base.service.user.po.UserPwd;
+import grape.common.AbstractLoginUser;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.exception.runtime.RDataNotExistException;
 import grape.common.rest.common.PasswordAndSalt;
@@ -44,8 +45,6 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
     private IUserPwdService iUserPwdService;
     @Autowired
     private IUserService iUserService;
-    @Autowired
-    private IFuncService iFuncService;
     /**
      * 认证回调函数,登录时调用.
      */
@@ -84,33 +83,23 @@ public class BaseDbRealm extends AuthorizingRealm implements ToolService {
         Object principal = SecurityUtils.getSubject().getPrincipal();
         log.debug("获取授权信息，requestId=[{}]", RequestIdTool.getRequestId());
         if(principal != null){
-            BaseLoginUser loginUser = BaseLoginUser.getLoginUser();
+            AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
             if (loginUser == null) {
                 return null;
             }
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             Set<String> stringPermissions = new HashSet<>();
             stringPermissions.add("user");
-            List<Func> funcs = loginUser.getFuncs();
-            if (!isEmpty(funcs)) {
-                for (Func func : funcs) {
-                    String permissions = func.getPermissions();
-                    if (!isStrEmpty(permissions)) {
-                        String permissionArray[] = permissions.split(",");
-                        for (String permission : permissionArray) {
-                            stringPermissions.add(permission);
-                        }
-                    }
-                }
+            Set<String> permissions = loginUser.permissions();
+            if (!isEmpty(permissions)) {
+                stringPermissions.addAll(permissions);
             }
             info.setStringPermissions(stringPermissions);
 
-            if (!isEmpty(loginUser.getRoles())) {
-                List<String> roleCodes = loginUser.getRoles().stream().map(role -> role.getCode()).collect(Collectors.toList());
-                info.setRoles(new HashSet<>(roleCodes));
+            Set<String> roles = loginUser.roles();
+            if (!isEmpty(roles)) {
+                info.setRoles(roles);
             }
-
-
             return info;
         }else {
             return null;

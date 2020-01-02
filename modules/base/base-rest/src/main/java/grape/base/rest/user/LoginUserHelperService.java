@@ -19,14 +19,17 @@ import grape.base.service.func.po.Func;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.po.Role;
 import grape.base.service.user.api.IUserIdentifierService;
+import grape.base.service.user.api.IUserPwdService;
 import grape.base.service.user.api.IUserService;
 import grape.base.service.user.po.User;
 import grape.base.service.user.po.UserIdentifier;
+import grape.base.service.user.po.UserPwd;
 import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.dto.UserPostInfo;
 import grape.base.service.userpost.po.UserPost;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.tools.ToolService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +40,7 @@ import java.util.stream.Collectors;
  * Created by yangwei
  * Created at 2019/12/18 14:22
  */
+@Slf4j
 @Component
 public class LoginUserHelperService implements ToolService {
     @Autowired
@@ -61,6 +65,8 @@ public class LoginUserHelperService implements ToolService {
     private IApplicationService iApplicationService;
     @Autowired
     private IFuncService iFuncService;
+    @Autowired
+    private IUserPwdService iUserPwdService;
     /**
      * 初始化当前登录用户信息用户信息
      * 一般登录成功后调用
@@ -160,6 +166,13 @@ public class LoginUserHelperService implements ToolService {
         setApplications(loginUser);
         // 设置数据范围约束
         setDataObjectAndScopes(loginUser);
+        // 设置salt
+        UserPwd userPwd = iUserPwdService.getByUserId(loginUser.getUserId());
+        if (userPwd != null) {
+            loginUser.setSalt(userPwd.getPwd() + userPwd.getSalt());
+        }else {
+            log.warn("初始化用户[{},{}]未设置密码，将不能使用jwt token",loginUser.getUserId(),loginUser.getNickname());
+        }
         return loginUser;
     }
 

@@ -1,6 +1,7 @@
 package grape.base.rest.user.vo;
 
 import grape.base.service.dict.api.IDictService;
+import grape.common.rest.shiro.TokenInject;
 import grape.common.rest.vo.BaseVo;
 import grape.common.service.trans.TransBy;
 import io.swagger.annotations.ApiModel;
@@ -21,7 +22,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper=false)
 @Accessors(chain = true)
 @ApiModel(value="登录数据响应对象")
-public class LoginVo extends BaseVo {
+public class LoginVo extends BaseVo implements TokenInject {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,4 +43,8 @@ public class LoginVo extends BaseVo {
     @ApiModelProperty(value = "授权字符串")
     private String token;
 
+    @Override
+    public void inject(String token) {
+        this.token = token;
+    }
 }

@@ -50,92 +50,31 @@
 		<pinyin4j.version>2.5.1</pinyin4j.version>
 		<!-- 模板引擎 添加的时候主要用在了数据范围约束解析-->
 		<enjoy.verion>4.8</enjoy.verion>
-		<!-- activiti 工作流 -->
-		<!-- 官方推荐引用方式 https://github.com/Activiti/activiti-examples/blob/master/activiti-api-basic-task-example/pom.xml#L30 -->
-		<!-- spring 版本有冲突换下面的方式 -->
-		<activiti-dependencies.version>7.1.123</activiti-dependencies.version>
-		<!-- activiti 单独依赖 -->
-		<activiti-spring-boot-starter.version>7.1.123</activiti-spring-boot-starter.version>
 		<!-- 由于activiti的分歧，感觉新版本的（7.x）已经偏向云化，重新选用flowable -->
 		<flowable.version>6.4.1</flowable.version>
+		<!-- jwt -->
+		<java-jwt.version>3.8.3</java-jwt.version>
 
+
+		<!-- Spring Settings -->
+		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+		<spring-cloud-alibaba.version>2.1.0.RELEASE</spring-cloud-alibaba.version>
 	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.baomidou</groupId>
-				<artifactId>mybatis-plus-boot-starter</artifactId>
-				<version>${mybatis-plus-boot-starter.version}</version>
-			</dependency>
-			<!-- 这种方式引入的spring有版本有冲突  -->
-			<!--<dependency>
-				<groupId>org.activiti.dependencies</groupId>
-				<artifactId>activiti-dependencies</artifactId>
-				<version>${activiti-dependencies.version}</version>
-				<scope>import</scope>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
 				<type>pom</type>
-			</dependency>-->
-			<!--<dependency>
-				<groupId>org.activiti</groupId>
-				<artifactId>activiti-spring-boot-starter</artifactId>
-				<version>${activiti-spring-boot-starter.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-context</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-core</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-expression</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-beans</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-jcl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-tx</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-jdbc</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-orm</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-aop</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-test</artifactId>
-					</exclusion>
-
-					<exclusion>
-						<groupId>com.h2database</groupId>
-						<artifactId>h2</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>-->
+				<scope>import</scope>
+			</dependency>
 			<dependency>
-				<groupId>org.flowable</groupId>
-				<artifactId>flowable-spring-boot-starter</artifactId>
-				<version>${flowable.version}</version>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
+				<version>${spring-cloud-alibaba.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

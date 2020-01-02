@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.Set;
+
 /**
  * 当前登录用户封装对象
  * Created by yangwei
@@ -30,6 +32,29 @@ public abstract class AbstractLoginUser extends BasePojo {
 
     public boolean superAdmin(){
         return false;
+    }
+
+    /**
+     * 权限信息
+     * @return
+     */
+    public Set<String> permissions(){
+        return null;
+    }
+    /**
+     * 权限信息
+     * @return
+     */
+    public Set<String> roles(){
+        return null;
+    }
+
+    /**
+     * 获取当前登录用户的密钥，主要是用来生成jwt token
+     * @return
+     */
+    public String salt(){
+        return null;
     }
 
     public static   AbstractLoginUser getLoginUser(){

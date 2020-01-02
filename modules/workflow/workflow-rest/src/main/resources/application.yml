@@ -7,8 +7,9 @@ logging:
   level:
     root: debug
 flowable:
-  idm:
+  async-executor-activate: false
+  modeler:
     app:
-      admin:
-        user-id: admin
-        password: test
+      rest-enabled: true
+server:
+  port: 7777

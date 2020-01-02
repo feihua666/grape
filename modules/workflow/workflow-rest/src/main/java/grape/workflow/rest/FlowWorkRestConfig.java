@@ -1,5 +1,7 @@
 package grape.workflow.rest;
 
+import grape.workflow.rest.flowable.ui.modeler.AppDispatcherServletConfiguration;
+import grape.workflow.rest.flowable.ui.modeler.ApplicationConfiguration;
 import io.swagger.annotations.Api;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.SimpleAccountRealm;
@@ -7,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -20,6 +23,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Created by yangwei
  * Created at 2019/7/25 9:04
  */
+/* 配置 ui modeler */
+@Import({
+        ApplicationConfiguration.class,
+        AppDispatcherServletConfiguration.class
+})
 @Configuration
 @ComponentScan
 @EnableSwagger2

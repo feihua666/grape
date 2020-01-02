@@ -16,8 +16,12 @@ import grape.base.service.userpostrolerel.po.UserPostRoleRel;
 import grape.common.AbstractLoginUser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 后台管理当前登录用户对象
@@ -63,5 +67,38 @@ public class BaseLoginUser extends AbstractLoginUser {
 
     public static BaseLoginUser getLoginUser(){
         return (BaseLoginUser) AbstractLoginUser.getLoginUser();
+    }
+
+    @Override
+    public Set<String> permissions() {
+        if (funcs !=null && !funcs.isEmpty()) {
+            Set<String> stringPermissions = new HashSet<>();
+            for (Func func : funcs) {
+                String permissions = func.getPermissions();
+                if (StringUtils.isNotEmpty(permissions)) {
+                    String permissionArray[] = permissions.split(",");
+                    for (String permission : permissionArray) {
+                        stringPermissions.add(permission);
+                    }
+                }
+            }
+            return stringPermissions;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<String> roles() {
+        if (roles != null && !roles.isEmpty()) {
+            Set<String> roleCodes = roles.stream().map(role -> role.getCode()).collect(Collectors.toSet());
+            return roleCodes;
+        }
+        return null;
+    }
+
+    private String salt;
+    @Override
+    public String salt() {
+        return salt;
     }
 }
