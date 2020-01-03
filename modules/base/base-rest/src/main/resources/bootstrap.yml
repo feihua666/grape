@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: base
+  cloud:
+    nacos:
+      config:
+        server-addr: 10.2.2.96:8848
+        file-extension: yaml
+        shared-dataids: dataSource.yaml

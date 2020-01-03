@@ -1,8 +1,14 @@
+public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJFe6ifhmL6pTd4wSfcwL5hxprIQEp4JpnWce4ss+kKjxHS0Pw+u61L/BFy8lZgtSa4A3DmSsqg/DJdmPKz8H9UCAwEAAQ==
 spring:
   datasource:
-    url: jdbc:mysql://39.104.146.45/grape_workflow?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://39.104.146.45/grape?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
-    password: jlks82lsUH@@
+    password: KT47fndyUcDZ+lbepS1akd1iC90jA5nRvN7CXrek0DLPz7dtFzCGydnNwKNsl86P3pPT9DS/I0KV3u2p13CbXg==
+    druid:
+      connection-properties: config.decrypt=true;config.decrypt.key=${public-key}
+      filter:
+        config:
+          enabled: true
 logging:
   level:
     root: debug

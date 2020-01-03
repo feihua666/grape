@@ -1,5 +1,6 @@
 package grape.mybatisplus.modules;
 
+import com.alibaba.druid.filter.config.ConfigTools;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import grape.mybatisplus.generator.SuperGenerator;
 import lombok.Data;
@@ -146,7 +147,12 @@ public class BaseGenerator extends SuperGenerator {
         dsc.setUrl("jdbc:mysql://39.104.146.45/grape?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("jlks82lsUH@@");
+        try {
+            dsc.setPassword(ConfigTools.decrypt("MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJFe6ifhmL6pTd4wSfcwL5hxprIQEp4JpnWce4ss+kKjxHS0Pw+u61L/BFy8lZgtSa4A3DmSsqg/DJdmPKz8H9UCAwEAAQ==",
+                    "KT47fndyUcDZ+lbepS1akd1iC90jA5nRvN7CXrek0DLPz7dtFzCGydnNwKNsl86P3pPT9DS/I0KV3u2p13CbXg=="));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return dsc;
     }
     private static String replace(String str){

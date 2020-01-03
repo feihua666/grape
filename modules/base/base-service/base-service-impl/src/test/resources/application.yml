@@ -11,7 +11,4 @@ spring:
           enabled: true
 logging:
   level:
-    root: trace
-baidu:
-  map:
-    ak: 69a5a1e7260cd2cd298c33666e436530
+    root: debug

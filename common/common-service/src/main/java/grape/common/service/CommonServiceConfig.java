@@ -1,17 +1,26 @@
 package grape.common.service;
 
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.alibaba.nacos.api.config.annotation.NacosConfigurationProperties;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
 
 /**
  * 自动配置通用类
  * Created by yangwei
  * Created at 2019/7/27 13:02
  */
+/*@Import({
+        CommonServiceDataSourceConfig.class
+})*/
 @Configuration
 @ComponentScan
 public class CommonServiceConfig {
