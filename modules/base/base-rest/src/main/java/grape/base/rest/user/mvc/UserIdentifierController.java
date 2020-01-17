@@ -7,20 +7,18 @@ import grape.base.rest.user.form.identifier.UserIdentifierListPageForm;
 import grape.base.rest.user.form.identifier.UserIdentifierUpdateForm;
 import grape.base.rest.user.mapper.UserIdentifierWebMapper;
 import grape.base.rest.user.vo.UserIdentifierVo;
-import grape.base.service.BaseLoginUser;
-import grape.base.service.dict.api.IDictService;
 import grape.base.service.user.api.IUserIdentifierService;
 import grape.base.service.user.po.UserIdentifier;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
+import grape.common.service.loginuser.LoginUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,7 +33,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/useridentifier")
 @Api(tags = "用户登录帐号相关接口")
-public class UserIdentifierController extends BaseLoginUserController<UserIdentifierVo, UserIdentifier, BaseLoginUser> {
+public class UserIdentifierController extends BaseLoginUserController<UserIdentifierVo, UserIdentifier, LoginUser> {
 
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeUserIdentifier");
@@ -65,7 +63,7 @@ public class UserIdentifierController extends BaseLoginUserController<UserIdenti
     }
 
      @ApiOperation(value = "添加登录帐号",notes = "添加可用来登录的用户标识，如：邮箱、帐号、手机号等")
-     @RequiresPermissions("useridentifier:single:create")
+     @PreAuthorize("hasAuthority('useridentifier:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserIdentifierVo create(@RequestBody @Valid UserIdentifierCreateForm cf) {
@@ -83,7 +81,7 @@ public class UserIdentifierController extends BaseLoginUserController<UserIdenti
      }
 
      @ApiOperation("根据id查询登录帐号")
-     @RequiresPermissions("useridentifier:single:queryById")
+     @PreAuthorize("hasAuthority('useridentifier:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public UserIdentifierVo queryById(@PathVariable String id) {
@@ -91,7 +89,7 @@ public class UserIdentifierController extends BaseLoginUserController<UserIdenti
      }
 
      @ApiOperation("根据ID删除用户登录帐号")
-     @RequiresPermissions("useridentifier:single:deleteById")
+     @PreAuthorize("hasAuthority('useridentifier:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -99,7 +97,7 @@ public class UserIdentifierController extends BaseLoginUserController<UserIdenti
      }
 
     @ApiOperation("根据ID更新用户登录帐号")
-    @RequiresPermissions("useridentifier:single:updateById")
+    @PreAuthorize("hasAuthority('useridentifier:single:updateById')")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public UserIdentifierVo update(@PathVariable String id,@RequestBody @Valid UserIdentifierUpdateForm uf) {
@@ -112,7 +110,7 @@ public class UserIdentifierController extends BaseLoginUserController<UserIdenti
         return super.update(userIdentifier);
     }
     @ApiOperation("分页查询登录帐号")
-    @RequiresPermissions("useridentifier:single:listPage")
+    @PreAuthorize("hasAuthority('useridentifier:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserIdentifierVo> listPage(UserIdentifierListPageForm listPageForm) {
@@ -127,7 +125,7 @@ public class UserIdentifierController extends BaseLoginUserController<UserIdenti
      * @return
      */
     @ApiOperation("启用或锁定")
-    @RequiresPermissions("useridentifier:single:enable")
+    @PreAuthorize("hasAuthority('useridentifier:single:enable')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public UserIdentifierVo enable(@PathVariable String id, @RequestBody @Valid UserIdentifierEnableForm form) {

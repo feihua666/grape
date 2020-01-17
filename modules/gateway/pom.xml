@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>modules</artifactId>
+        <groupId>grape</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gateway</artifactId>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>common-core</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <!-- nacos 客户端集成 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- 必须 服务注册发现的中间件的增强插件 -->
+        <!--<dependency>
+            <groupId>com.nepxion</groupId>
+            <artifactId>discovery-plugin-starter-nacos</artifactId>
+            <version>${discovery.version}</version>
+        </dependency>
+        &lt;!&ndash; 可选择 远程配置中心的中间件的扩展插件，如需要，请任选一个引入，或者也可以引入您自己的扩展 &ndash;&gt;
+        <dependency>
+            <groupId>com.nepxion</groupId>
+            <artifactId>discovery-plugin-config-center-starter-nacos</artifactId>
+            <version>${discovery.version}</version>
+        </dependency>
+        &lt;!&ndash; 路由策略，如需要，请引入 &ndash;&gt;
+        <dependency>
+            <groupId>com.nepxion</groupId>
+            <artifactId>discovery-plugin-strategy-starter-gateway</artifactId>
+            <version>${discovery.version}</version>
+        </dependency>-->
+    </dependencies>
+</project>

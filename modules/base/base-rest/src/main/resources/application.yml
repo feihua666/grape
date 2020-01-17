@@ -1,8 +1,14 @@
+# 注意应用启动请带nacos 命名空间参数,如果不带则是默认public 如： -Dspring.cloud.nacos.discovery.namespace=e793c472-1bf1-4edd-84c4-7c111cb10f3a
+# 应用端口 默认8080
+server:
+  port: 9101
 spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 10.2.2.96:8848
+        # nacos 注册中心地址 如：127.0.0.1:8848
+        server-addr: register.grape.com
+# 日志级别
 logging:
   level:
     root: info

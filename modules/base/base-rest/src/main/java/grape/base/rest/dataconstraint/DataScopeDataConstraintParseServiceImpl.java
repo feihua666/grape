@@ -1,10 +1,10 @@
 package grape.base.rest.dataconstraint;
 
 import grape.base.rest.dataconstraint.mvc.DataScopeController;
-import grape.base.service.BaseLoginUser;
-import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
-import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.IDataConstraintParseService;
+import grape.common.service.common.dataconstraint.ConstraintCompiledContent;
+import grape.common.service.common.dataconstraint.IDataConstraintParseService;
+import grape.common.service.common.dataconstraint.RawDataConstraint;
+import grape.common.service.loginuser.GrapeUserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,22 +18,22 @@ import java.util.stream.Collectors;
  * Created at 2019/12/20 11:55
  */
 @Component
-public class DataScopeDataConstraintParseServiceImpl implements IDataConstraintParseService<BaseLoginUser> {
+public class DataScopeDataConstraintParseServiceImpl implements IDataConstraintParseService<GrapeUserDetails> {
     @Override
     public boolean support(String dataObject) {
         return isEqual(dataObject, DataScopeController.defaultDataObjectCode.dataObjectCode());
     }
 
     @Override
-    public List<ConstraintContent> parseConstraint(String dataObjectCode, BaseLoginUser loginUser) {
-        List<ConstraintContent> constraintContents = new ArrayList<>();
-        if (loginUser.getIsSuperAdmin()) {
-            constraintContents.add(new ConstraintContent("true"));
+    public List<ConstraintCompiledContent> parseConstraint(String dataObjectCode, GrapeUserDetails loginUser) {
+        List<ConstraintCompiledContent> constraintContents = new ArrayList<>();
+        if (loginUser.superAdmin()) {
+            constraintContents.add(new ConstraintCompiledContent("true"));
         }else{
-            if (!isEmpty(loginUser.getDataObjectAndScopes())) {
+            if (!isEmpty(loginUser.rawDataConstraints())) {
                 dataScopeInsql(dataObjectCode, loginUser, constraintContents);
             }else {
-                constraintContents.add(new ConstraintContent("false"));
+                constraintContents.add(new ConstraintCompiledContent("false"));
             }
         }
         return constraintContents;
@@ -45,13 +45,13 @@ public class DataScopeDataConstraintParseServiceImpl implements IDataConstraintP
      * @param loginUser
      * @param constraintContents
      */
-    private void dataScopeInsql(String dataObjectCode, BaseLoginUser loginUser,List<ConstraintContent> constraintContents){
+    private void dataScopeInsql(String dataObjectCode, GrapeUserDetails loginUser,List<ConstraintCompiledContent> constraintContents){
         if (isEqual(dataObjectCode, DataScopeController.defaultDataObjectCode.dataObjectCode())) {
-            if (!isEmpty(loginUser.getDataObjectAndScopes())) {
+            if (!isEmpty(loginUser.rawDataConstraints())) {
                 Set<String> ids = new HashSet<>();
 
-                for (DataObjectAndScopeDto dataObjectAndScope : loginUser.getDataObjectAndScopes()) {
-                    Set<String> collect = dataObjectAndScope.getDataScopes().stream().map(dataScope -> dataScope.getId()).collect(Collectors.toSet());
+                for (RawDataConstraint dataObjectAndScope : loginUser.rawDataConstraints()) {
+                    Set<String> collect = dataObjectAndScope.getDataScopes().stream().map(dataScope -> dataScope.id()).collect(Collectors.toSet());
                     ids.addAll(collect);
                 }
 

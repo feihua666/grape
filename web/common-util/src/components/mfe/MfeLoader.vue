@@ -40,7 +40,7 @@ export default {
               let item = this.appList[i]
               // 支持String 类型
               if(typeof item.activeRule == 'string'){
-                  item.activeRule = genActiveRule(window.mfe_nav_router_base_path + item.activeRule)
+                  item.activeRule = genActiveRule(item.activeRule)
               }
               item.render = (mfeRenderProps)=>{
                   mfeRenderProps.appName = item.appName

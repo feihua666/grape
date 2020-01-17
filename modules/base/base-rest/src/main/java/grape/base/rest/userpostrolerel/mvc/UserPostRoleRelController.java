@@ -10,9 +10,10 @@ import grape.common.exception.ExceptionTools;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +40,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
 
 
     @ApiOperation("用户岗位分配角色")
-    @RequiresPermissions("userPostRoleRel:single:userPostAssignRole")
+    @PreAuthorize("hasAuthority('userPostRoleRel:single:userPostAssignRole')")
     @PostMapping("/userpost/assign/role")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean userPostAssignRole(@RequestBody @Valid UserPostAssignRoleForm cf) {
@@ -48,7 +49,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
     }
 
     @ApiOperation("根据用户岗位ID查询已分配的角色id")
-    @RequiresPermissions("userPostRoleRel:single:queryByUserPostId")
+    @PreAuthorize("hasAuthority('userPostRoleRel:single:queryByUserPostId')")
     @GetMapping("/userpost/{userPostId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByUserPostId(@PathVariable String userPostId) {
@@ -61,7 +62,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
     }
 
     @ApiOperation("清空用户岗位下的所有角色")
-    @RequiresPermissions("userPostRoleRel:single:deleteByUserPostId")
+    @PreAuthorize("hasAuthority('userPostRoleRel:single:deleteByUserPostId')")
     @DeleteMapping("/userpost/{userPostId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByUserPostId(@PathVariable String userPostId) {
@@ -74,7 +75,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
 
 
     @ApiOperation("角色分配用户岗位")
-    @RequiresPermissions("userPostRoleRel:single:roleAssignUserPost")
+    @PreAuthorize("hasAuthority('userPostRoleRel:single:roleAssignUserPost')")
     @PostMapping("/role/assign/userpost")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean roleAssignUserPost(@RequestBody @Valid RoleAssignUserPostForm cf) {
@@ -83,7 +84,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
     }
 
     @ApiOperation("根据角色id查询已分配的用户岗位id")
-    @RequiresPermissions("userPostRoleRel:single:queryByRoleId")
+    @PreAuthorize("hasAuthority('userPostRoleRel:single:queryByRoleId')")
     @GetMapping("/role/{roleId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByRoleId(@PathVariable String roleId) {
@@ -95,7 +96,7 @@ public class UserPostRoleRelController extends BaseController<UserPostRoleRelVo,
     }
 
     @ApiOperation("清空角色下的所有用户岗位")
-    @RequiresPermissions("userPostRoleRel:single:deleteByRoleId")
+    @PreAuthorize("hasAuthority('userPostRoleRel:single:deleteByRoleId')")
     @DeleteMapping("/role/{roleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByRoleId(@PathVariable String roleId) {

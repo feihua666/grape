@@ -3,24 +3,25 @@ package grape.base.rest.user.mvc;
 import grape.base.rest.user.form.pwd.UserPwdResetForm;
 import grape.base.rest.user.form.pwd.UserPwdUpdateForm;
 import grape.base.rest.user.vo.UserPwdVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.user.api.IUserPwdService;
 import grape.base.service.user.po.UserPwd;
 import grape.common.exception.runtime.BadRequestException;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.common.PasswordAndSalt;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.rest.mvc.SuperController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+
 /**
  * <p>
  * 用户密码 前端控制器
@@ -32,7 +33,12 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/userpwd")
 @Api(tags = "用户密码相关接口")
-public class UserPwdController extends BaseLoginUserController<UserPwdVo,UserPwd,BaseLoginUser> {
+public class UserPwdController extends BaseLoginUserController<UserPwdVo,UserPwd,LoginUser> {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeUserPwd");
 
@@ -59,7 +65,7 @@ public class UserPwdController extends BaseLoginUserController<UserPwdVo,UserPwd
     }
 
     @ApiOperation("重置用户密码")
-    @RequiresPermissions("userpwd:single:reset")
+    @PreAuthorize("hasAuthority('userpwd:single:reset')")
     @PutMapping("/resetPwd")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean resetPwd(@RequestBody @Valid UserPwdResetForm rf) {
@@ -69,9 +75,7 @@ public class UserPwdController extends BaseLoginUserController<UserPwdVo,UserPwd
             throw new RBaseException("该用户没有添加密码，不能重置");
         }
 
-        PasswordAndSalt newPs = PasswordAndSalt.entryptPassword(rf.getPwd());
-        userPwd.setPwd(newPs.getPassword());
-        userPwd.setSalt(newPs.getSalt());
+        userPwd.setPwd(passwordEncoder.encode(rf.getPwd()));
         userPwd.setPwdModifiedAt(System.currentTimeMillis());
         try {
             update(userPwd);
@@ -84,23 +88,17 @@ public class UserPwdController extends BaseLoginUserController<UserPwdVo,UserPwd
 
 
      @ApiOperation("用户自己修改密码")
-     @RequiresPermissions("user")
+     @PreAuthorize("hasAuthority('user')")
      @PutMapping("/update")
      @ResponseStatus(HttpStatus.CREATED)
      public Boolean update(@RequestBody @Valid UserPwdUpdateForm uf) {
 
-         BaseLoginUser loginUser = BaseLoginUser.getLoginUser();
-         UserPwd userPwd = iUserPwdService.getByUserId(loginUser.getUserId());
-         PasswordAndSalt passwordAndSalt = new PasswordAndSalt();
-         passwordAndSalt.setPassword(userPwd.getPwd());
-         passwordAndSalt.setSalt(userPwd.getSalt());
+         UserPwd userPwd = iUserPwdService.getByUserId(getLoginUserId());
 
-         if (!PasswordAndSalt.validatePassword(uf.getOldPassword(),passwordAndSalt)) {
+         if (!passwordEncoder.matches(uf.getOldPassword(),userPwd.getPwd())) {
              throw new BadRequestException("原密码不正确");
          }
-         PasswordAndSalt newPs = PasswordAndSalt.entryptPassword(uf.getNewPassword());
-         userPwd.setPwd(newPs.getPassword());
-         userPwd.setSalt(newPs.getSalt());
+         userPwd.setPwd(passwordEncoder.encode(uf.getNewPassword()));
          userPwd.setPwdModifiedAt(System.currentTimeMillis());
          if (!iUserPwdService.updateById(userPwd)) {
              throw new RBaseException("密码修改失败");

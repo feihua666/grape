@@ -6,32 +6,25 @@ import grape.base.rest.dept.form.DeptListPageForm;
 import grape.base.rest.dept.form.DeptUpdateForm;
 import grape.base.rest.dept.mapper.DeptWebMapper;
 import grape.base.rest.dept.vo.DeptVo;
-import grape.base.service.BaseLoginUser;
-import grape.base.service.comp.api.ICompService;
-import grape.base.service.comp.po.Comp;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dept.po.Dept;
-import grape.base.service.dict.api.IDictService;
-import grape.base.service.dict.po.Dict;
-import grape.base.service.user.api.IUserService;
-import grape.base.service.user.po.User;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -44,7 +37,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/dept")
 @Api(tags = "部门相关接口")
-public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, BaseLoginUser> {
+public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, LoginUser> {
 
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeDept");
@@ -74,7 +67,7 @@ public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, Ba
     }
 
      @ApiOperation("添加部门")
-     @RequiresPermissions("dept:single:create")
+     @PreAuthorize("hasAuthority('dept:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public DeptVo create(@RequestBody @Valid DeptCreateForm cf) {
@@ -94,7 +87,7 @@ public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, Ba
      }
 
      @ApiOperation("根据id查询部门")
-     @RequiresPermissions("dept:single:queryById")
+     @PreAuthorize("hasAuthority('dept:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public DeptVo queryById(@PathVariable String id) {
@@ -102,7 +95,7 @@ public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, Ba
      }
 
      @ApiOperation("删除部门")
-     @RequiresPermissions("dept:single:deleteById")
+     @PreAuthorize("hasAuthority('dept:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -110,7 +103,7 @@ public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, Ba
      }
 
      @ApiOperation("更新部门")
-     @RequiresPermissions("dept:single:updateById")
+     @PreAuthorize("hasAuthority('dept:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public DeptVo update(@PathVariable String id,@RequestBody @Valid DeptUpdateForm uf) {
@@ -127,7 +120,7 @@ public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, Ba
      }
 
     @ApiOperation("分页查询部门")
-    @RequiresPermissions("dept:single:listPage")
+    @PreAuthorize("hasAuthority('dept:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<DeptVo> listPage(DeptListPageForm listPageForm) {
@@ -139,7 +132,7 @@ public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, Ba
      * @return
      */
     @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
-    @RequiresPermissions("dept:single:checkTreeStruct")
+    @PreAuthorize("hasAuthority('dept:single:checkTreeStruct')")
     @GetMapping("/tree/check/struct")
     @ResponseStatus(HttpStatus.OK)
     public boolean checkTreeStruct() {
@@ -147,7 +140,7 @@ public class DeptController extends BaseTreeLoginUserController<DeptVo, Dept, Ba
     }
 
     @ApiOperation("部门树")
-    @RequiresPermissions("dept:single:getByParentId")
+    @PreAuthorize("hasAuthority('dept:single:getByParentId')")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<DeptVo>> tree(String parentId,String compId) {

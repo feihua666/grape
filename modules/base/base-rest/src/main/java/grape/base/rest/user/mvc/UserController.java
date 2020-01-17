@@ -1,45 +1,39 @@
 package grape.base.rest.user.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.application.mapper.ApplicationWebMapper;
 import grape.base.rest.comp.mapper.CompWebMapper;
 import grape.base.rest.dept.mapper.DeptWebMapper;
+import grape.base.rest.func.mapper.FuncWebMapper;
 import grape.base.rest.post.mapper.PostWebMapper;
-import grape.base.rest.post.vo.PostVo;
 import grape.base.rest.role.mapper.RoleWebMapper;
-import grape.base.rest.role.vo.RoleVo;
-import grape.base.rest.setting.shiro.IdentifierPasswordToken;
 import grape.base.rest.user.form.*;
-import grape.base.rest.user.form.login.LoginForm;
 import grape.base.rest.user.mapper.UserWebMapper;
 import grape.base.rest.user.vo.CurrentUserinfoVo;
-import grape.base.rest.user.vo.LoginVo;
 import grape.base.rest.user.vo.UserVo;
-import grape.base.service.BaseLoginUser;
+import grape.base.rest.userpost.mapper.UserPostWebMapper;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.dept.api.IDeptService;
 import grape.base.service.dict.api.IDictService;
-import grape.base.service.dict.po.Dict;
 import grape.base.service.post.api.IPostService;
 import grape.base.service.user.api.IUserService;
 import grape.base.service.user.dto.UserCreateParam;
 import grape.base.service.user.po.User;
-import grape.common.exception.ExceptionTools;
-import grape.common.rest.common.PasswordAndSalt;
-import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
+import grape.common.service.loginuser.LoginUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 /**
  * <p>
@@ -52,11 +46,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户相关接口")
-public class UserController extends BaseLoginUserController<UserVo, User,BaseLoginUser> {
+public class UserController extends BaseLoginUserController<UserVo, User, LoginUser> {
 
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeUser");
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private IUserService iUserService;
 
@@ -79,6 +74,12 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
     private ICompService iCompService;
     @Autowired
     private IPostService iPostService;
+    @Autowired
+    private ApplicationWebMapper applicationWebMapper;
+    @Autowired
+    private FuncWebMapper funcWebMapper;
+    @Autowired
+    private UserPostWebMapper userPostWebMapper;
 
     /**
      * 开启全局
@@ -100,21 +101,18 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
     }
 
      @ApiOperation(value = "添加用户",notes = "添加用户的基本信息")
-     @RequiresPermissions("user:single:create")
+     @PreAuthorize("hasAuthority('user:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserVo create(@RequestBody @Valid UserCreateForm cf) {
-         PasswordAndSalt newPs = PasswordAndSalt.entryptPassword(cf.getPwd());
          UserCreateParam param =  userWebMapper.formToParam(cf);
-         param.setPassword(newPs.getPassword());
-         param.setSalt(newPs.getSalt());
-
+         param.setPassword(passwordEncoder.encode(cf.getPwd()));
          UserVo vo = userWebMapper.poToVo(iUserService.createUser(param));
          return transVo(vo);
      }
 
      @ApiOperation(value = "查询用户",notes = "根据id查询用户")
-     @RequiresPermissions("user:single:queryById")
+     @PreAuthorize("hasAuthority('user:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public UserVo queryById(@PathVariable String id) {
@@ -122,7 +120,7 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
      }
 
      @ApiOperation(value = "更新用户",notes = "更新用户基本信息")
-     @RequiresPermissions("user:single:updateById")
+     @PreAuthorize("hasAuthority('user:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public UserVo update(@PathVariable String id,@RequestBody @Valid UserUpdateForm uf) {
@@ -132,7 +130,7 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
      }
 
     @ApiOperation("分页查询用户")
-    @RequiresPermissions("user:single:listPage")
+    @PreAuthorize("hasAuthority('user:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserVo> listPage(UserListPageForm listPageForm) {
@@ -146,7 +144,7 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
      * @return
      */
     @ApiOperation(value = "不分页查询用户")
-    @RequiresPermissions("user:single:list")
+    @PreAuthorize("hasAuthority('user:single:list')")
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<UserVo> list(UserListForm listForm) {
@@ -160,7 +158,7 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
      * @return
      */
     @ApiOperation("启用或锁定")
-    @RequiresPermissions("user:single:enable")
+    @PreAuthorize("hasAuthority('user:single:enable')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public UserVo enable(@PathVariable String id, @RequestBody @Valid UserEnableForm form) {
@@ -170,5 +168,23 @@ public class UserController extends BaseLoginUserController<UserVo, User,BaseLog
         user.setVersion(form.getVersion());
         user.setLockReason(form.getLockReason());
         return super.update(user);
+    }
+
+    /**
+     * 后台管理用户登录成功后获取当前登录用户信息
+     * @return
+     */
+    @ApiOperation("当前登录用户信息")
+    @PreAuthorize("hasAuthority('user')")
+    @GetMapping("/userinfo/current")
+    @ResponseStatus(HttpStatus.OK)
+    public CurrentUserinfoVo currentUserinfo() {
+
+        LoginUser loginUser = getLoginUser();
+
+        CurrentUserinfoVo currentUserinfoVo = new CurrentUserinfoVo();
+        // 基本信息
+        currentUserinfoVo.setId(loginUser.getUserId());
+        return currentUserinfoVo;
     }
 }

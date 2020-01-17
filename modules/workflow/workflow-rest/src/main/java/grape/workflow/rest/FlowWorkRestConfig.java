@@ -3,9 +3,6 @@ package grape.workflow.rest;
 import grape.workflow.rest.flowable.ui.modeler.AppDispatcherServletConfiguration;
 import grape.workflow.rest.flowable.ui.modeler.ApplicationConfiguration;
 import io.swagger.annotations.Api;
-import org.apache.shiro.realm.Realm;
-import org.apache.shiro.realm.SimpleAccountRealm;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -49,14 +46,5 @@ public class FlowWorkRestConfig {
                 //自定义信息可按需求填写
                 .title("Grape Swagger 接口文档")
                 .build();
-    }
-
-    /*
-    * 由于引入了common-rest 需要注入一个点位bean*/
-    @Bean
-    @ConditionalOnMissingBean
-    public Realm baseDbRealm() {
-        Realm realm = new SimpleAccountRealm();
-        return realm;
     }
 }

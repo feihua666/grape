@@ -7,22 +7,22 @@ import grape.base.rest.dict.form.DictListPageForm;
 import grape.base.rest.dict.form.DictUpdateForm;
 import grape.base.rest.dict.mapper.DictWebMapper;
 import grape.base.rest.dict.vo.DictVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.comp.api.ICompService;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +39,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/dict")
 @Api(tags = "字典相关接口")
-public class DictController extends BaseTreeLoginUserController<DictVo, Dict, BaseLoginUser> {
+public class DictController extends BaseTreeLoginUserController<DictVo, Dict, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeDict");
 
@@ -76,8 +76,8 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      */
     @ApiOperation("根据字典组编码查询字典项")
     // 注释掉，一般字段的权限都有，如果要细粒度控制建议打开并在功能权限字符串中配置
-    //@RequiresPermissions("dict:items:queryItemsByGroupCode")
-    @RequiresPermissions("user")
+    //@PreAuthorize("hasAuthority('dict:items:queryItemsByGroupCode')")
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/items/{groupCode}")
     @ResponseStatus(HttpStatus.OK)
     public List<DictVo> queryItemsByGroupCode(@PathVariable String groupCode) {
@@ -95,7 +95,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      * @return
      */
      @ApiOperation("添加字典")
-     @RequiresPermissions("dict:single:create")
+     @PreAuthorize("hasAuthority('dict:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public DictVo create(@RequestBody @Valid DictCreateForm cf) {
@@ -129,7 +129,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      }
 
      @ApiOperation(value = "根据id查询字典",notes = "主要用于字典更新")
-     @RequiresPermissions("dict:single:queryById")
+     @PreAuthorize("hasAuthority('dict:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public DictVo queryById(@PathVariable String id) {
@@ -137,7 +137,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      }
 
      @ApiOperation(value = "字典删除",notes = "字典下有子节点不能删除")
-     @RequiresPermissions("dict:single:deleteById")
+     @PreAuthorize("hasAuthority('dict:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -145,7 +145,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      }
 
      @ApiOperation("字典更新")
-     @RequiresPermissions("dict:single:updateById")
+     @PreAuthorize("hasAuthority('dict:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public DictVo update(@PathVariable String id,@RequestBody @Valid DictUpdateForm uf) {
@@ -155,7 +155,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      }
 
     @ApiOperation("分页查询字典")
-    @RequiresPermissions("dict:single:listPage")
+    @PreAuthorize("hasAuthority('dict:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<DictVo> listPage(DictListPageForm listPageForm) {
@@ -168,7 +168,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      * @return
      */
     @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
-    @RequiresPermissions("dict:single:checkTreeStruct")
+    @PreAuthorize("hasAuthority('dict:single:checkTreeStruct')")
     @GetMapping("/tree/check/struct")
     @ResponseStatus(HttpStatus.OK)
     public boolean checkTreeStruct() {
@@ -180,7 +180,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      * @return
      */
     @ApiOperation(value = "功能树",notes = "主要用于选择上级")
-    @RequiresPermissions("dict:single:getByParentId")
+    @PreAuthorize("hasAuthority('dict:single:getByParentId')")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<DictVo>> tree(String parentId) {
@@ -194,7 +194,7 @@ public class DictController extends BaseTreeLoginUserController<DictVo, Dict, Ba
      * @return
      */
     @ApiOperation("启用或禁用")
-    @RequiresPermissions("dict:single:enable")
+    @PreAuthorize("hasAuthority('dict:single:enable')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public DictVo enable(@PathVariable String id, @RequestBody @Valid DictEnableForm form) {

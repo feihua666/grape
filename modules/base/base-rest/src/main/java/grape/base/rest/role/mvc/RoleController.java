@@ -7,29 +7,24 @@ import grape.base.rest.role.form.RoleListPageForm;
 import grape.base.rest.role.form.RoleUpdateForm;
 import grape.base.rest.role.mapper.RoleWebMapper;
 import grape.base.rest.role.vo.RoleVo;
-import grape.base.rest.setting.dataconstraint.BaseDataConstraintServiceImpl;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.role.api.IRoleService;
 import grape.base.service.role.po.Role;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseTreeController;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
-import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -42,7 +37,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/role")
 @Api(tags = "角色相关接口")
-public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, BaseLoginUser> {
+public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeRole");
 
@@ -71,7 +66,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
     }
 
      @ApiOperation("添加角色")
-     @RequiresPermissions("role:single:create")
+     @PreAuthorize("hasAuthority('role:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public RoleVo create(@RequestBody @Valid RoleCreateForm cf) {
@@ -84,7 +79,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
      }
 
      @ApiOperation("根据ID查询角色")
-     @RequiresPermissions("role:single:queryById")
+     @PreAuthorize("hasAuthority('role:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public RoleVo queryById(@PathVariable String id) {
@@ -92,7 +87,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
      }
 
      @ApiOperation("删除角色")
-     @RequiresPermissions("role:single:deleteById")
+     @PreAuthorize("hasAuthority('role:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -100,7 +95,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
      }
 
      @ApiOperation("更新角色")
-     @RequiresPermissions("role:single:updateById")
+     @PreAuthorize("hasAuthority('role:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public RoleVo update(@PathVariable String id,@RequestBody @Valid RoleUpdateForm uf) {
@@ -110,7 +105,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
      }
 
     @ApiOperation("分页查询角色")
-    @RequiresPermissions("role:single:listPage")
+    @PreAuthorize("hasAuthority('role:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<RoleVo> listPage(RoleListPageForm listPageForm) {
@@ -122,7 +117,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
      * @return
      */
     @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
-    @RequiresPermissions("role:single:checkTreeStruct")
+    @PreAuthorize("hasAuthority('role:single:checkTreeStruct')")
     @GetMapping("/tree/check/struct")
     @ResponseStatus(HttpStatus.OK)
     public boolean checkTreeStruct() {
@@ -136,7 +131,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
      * @return
      */
     @ApiOperation("启用或禁用")
-    @RequiresPermissions("role:single:enable")
+    @PreAuthorize("hasAuthority('role:single:enable')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public RoleVo enable(@PathVariable String id, @RequestBody @Valid RoleEnableForm form) {
@@ -148,7 +143,7 @@ public class RoleController extends BaseTreeLoginUserController<RoleVo, Role, Ba
         return super.update(role);
     }
     @ApiOperation("角色树")
-    @RequiresPermissions("role:single:getByParentId")
+    @PreAuthorize("hasAuthority('role:single:getByParentId')")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<RoleVo>> tree(String parentId) {

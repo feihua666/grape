@@ -1,11 +1,15 @@
 package grape.common.rest;
 
 import grape.common.rest.common.GlobalInterceptor;
-import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
-import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+import grape.common.rest.security.UserDetailsPlaceholderServiceImpl;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.*;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -18,18 +22,14 @@ import javax.servlet.Filter;
  * Created by yangwei
  * Created at 2019/7/27 13:44
  */
+@EnableFeignClients
 @EnableAspectJAutoProxy
 @Configuration
 @ComponentScan
 public class CommonRestConfig implements WebMvcConfigurer {
 
+
     @Bean
-    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
-        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
-        return chainDefinition;
-    }
-    @Bean
-    @DependsOn({"lifecycleBeanPostProcessor"})
     public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator(){
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator=new DefaultAdvisorAutoProxyCreator();
         defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
@@ -82,4 +82,11 @@ public class CommonRestConfig implements WebMvcConfigurer {
         bean.setOrder(0);
         return bean;
     }
+
+    @Bean
+    @ConditionalOnMissingBean(PasswordEncoder.class)
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }

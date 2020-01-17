@@ -3,7 +3,7 @@
     <el-dropdown class=" g-flex-align-v-center g-color-fff" style="padding: 0 5px;" @command="applicationSwitch"  :v-loading="userinfoLoading"  element-loading-spinner="el-icon-loading">
         <span class="g-pointer" title="切换应用"> {{currentApplication.name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
         <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(app,index) in currentUserinfo.applications" :command="app" :key="index"
+            <el-dropdown-item v-for="(app,index) in applications" :command="app" :key="index"
                               :disabled="currentApplication.id == app.id"
             >{{app.name}}</el-dropdown-item>
         </el-dropdown-menu>
@@ -19,10 +19,10 @@
                 type:Boolean,
                 default: false
             },
-            currentUserinfo:{
-                type:Object,
+            applications:{
+                type: Array,
                 default: function () {
-                    return {}
+                    return []
                 }
             }
         },

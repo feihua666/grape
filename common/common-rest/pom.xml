@@ -43,11 +43,11 @@
             <version>${springfox-swagger-ui.version}</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-web-starter</artifactId>
             <version>${shiro-spring-boot-web-starter.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- 以下两个包重新引入另一个版本 -->
         <dependency>
             <groupId>io.swagger</groupId>
@@ -70,7 +70,13 @@
             <artifactId>java-jwt</artifactId>
             <version>${java-jwt.version}</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>-->
     </dependencies>
 </project>

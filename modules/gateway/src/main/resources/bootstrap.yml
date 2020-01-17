@@ -1,0 +1,12 @@
+# 注意应用启动请带nacos 命名空间参数，如果有加可能会拉取不到配置 如： -Dspring.cloud.nacos.config.namespace=e793c472-1bf1-4edd-84c4-7c111cb10f3a
+spring:
+  application:
+    # 应用名称
+    name: grape-gateway
+  cloud:
+    nacos:
+      config:
+        # 配置中心地址 如：127.0.0.1:8848
+        server-addr: config.grape.com
+        # 声明配置中心采用yaml格式配置，nacos dataId必须以.yaml结尾
+        file-extension: yaml

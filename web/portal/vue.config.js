@@ -12,11 +12,12 @@ module.exports = {
             },
             // 接口请求代理，，以防止跨域，api是在axios定义的时候设置的baseUrl参考main.js 中的axios.defaults.baseURL = '/api'
             '/api': {
-                target:  'http://localhost:8080',
+                target:  'http://localhost:9100',
                 pathRewrite:{
                     '^/api':''
                 }
             }
-        }
+        },
+        disableHostCheck: true
     }
 }

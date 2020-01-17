@@ -1,9 +1,12 @@
 import VueRouter from 'vue-router'
 
-
+let base = '/portal'
+if(window.mfe){
+    window.mfe_nav_router_base_path.portal = base
+}
 const router = new VueRouter({
     mode: 'history',
-    //base: '/common-nav',
+    base: base,
     routes:[
         // 登录页面
         {
@@ -23,5 +26,8 @@ const router = new VueRouter({
         }
     ]
 })
-
+// 路由守卫
+router.beforeEach((to, from, next) => {
+    next()
+})
 export default router

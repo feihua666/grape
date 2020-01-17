@@ -126,7 +126,7 @@ public class TransHelper implements ToolService {
                     Object transValue = transService.trans(type,fieldValue);
                     ReflectUtil.setFieldValue(body,targetFieldName,transValue);
                 }else {
-                    log.warn("全局翻译doTrans未获取到值，requestId=[{}],class=[{}],fieldName=[{}]",
+                    log.debug("全局翻译doTrans未获取到值，requestId=[{}],class=[{}],fieldName=[{}]",
                             RequestIdTool.getRequestId(),body.getClass().getName(),currentFieldName);
                 }
                 break;

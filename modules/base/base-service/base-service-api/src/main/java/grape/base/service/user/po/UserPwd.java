@@ -47,11 +47,6 @@ public class UserPwd extends NormalBasePo<UserPwd> {
     private String pwd;
 
     /**
-     * 授权类型,字典id
-     */
-    private String salt;
-
-    /**
      * 密码状态，字典
      */
     private String pwdStatusDictId;

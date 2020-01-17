@@ -17,7 +17,6 @@ public class UserCreateParam extends BaseDto {
 
     private String password;
 
-    private String salt;
 
     private String nickname;
 

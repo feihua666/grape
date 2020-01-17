@@ -13,17 +13,17 @@ import grape.common.tools.RequestIdTool;
 import grape.common.tools.ThreadContextTool;
 import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -166,42 +166,43 @@ public class GlobalExceptionAdvice implements ToolService {
     }
 
     /**
-     * shiro 异常没有权限的异常
+     *  异常没有权限的异常
      *
      * @param request
      * @param ex
      * @return
      */
-    @ExceptionHandler(AuthorizationException.class)
+    @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResultMessage handleAuthorizationException(HttpServletRequest request, AuthorizationException ex) {
+    public ResultMessage handleAuthorizationException(HttpServletRequest request, AccessDeniedException ex) {
 
         return createRM(ExceptionCode.unAuthorized, null, request.getRequestURI(), ex);
     }
 
+
     /**
-     * shiro 用户未登录异常
+     *  用户未登录异常
      *
      * @param request
      * @param ex
      * @return
      */
-    @ExceptionHandler(UnauthenticatedException.class)
+    @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResultMessage handleUnauthenticatedException(HttpServletRequest request, UnauthenticatedException ex) {
+    public ResultMessage handleUnauthenticatedException(HttpServletRequest request, AuthenticationException ex) {
         return createRM(ExceptionCode.notLogin, ExceptionCode.notLogin.getMsg(), request.getRequestURI(), ex);
     }
 
     /**
-     * shiro 登录帐号未知异常
+     *  登录帐号未知异常
      *
      * @param request
      * @param ex
      * @return
      */
-    @ExceptionHandler(UnknownAccountException.class)
+    @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResultMessage handleUnknownAccountException(HttpServletRequest request, UnknownAccountException ex) {
+    public ResultMessage handleUnknownAccountException(HttpServletRequest request, UsernameNotFoundException ex) {
         return createRM(ExceptionCode.fail, "帐号不正确", request.getRequestURI(), ex);
     }
 
@@ -212,22 +213,22 @@ public class GlobalExceptionAdvice implements ToolService {
      * @param ex
      * @return
      */
-    @ExceptionHandler(IncorrectCredentialsException.class)
+    @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResultMessage handleIncorrectCredentialsException(HttpServletRequest request, IncorrectCredentialsException ex) {
+    public ResultMessage handleIncorrectCredentialsException(HttpServletRequest request, BadCredentialsException ex) {
         return createRM(ExceptionCode.fail, "密码不正确", request.getRequestURI(), ex);
     }
 
     /**
-     * shiro 登录帐号已被锁定
+     *  登录帐号已被锁定
      *
      * @param request
      * @param ex
      * @return
      */
-    @ExceptionHandler(LockedAccountException.class)
+    @ExceptionHandler(LockedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResultMessage handleLockedAccountException(HttpServletRequest request, LockedAccountException ex) {
+    public ResultMessage handleLockedAccountException(HttpServletRequest request, LockedException ex) {
         return createRM(ExceptionCode.fail, "帐号已被锁定", request.getRequestURI(), ex);
     }
 
@@ -281,7 +282,7 @@ public class GlobalExceptionAdvice implements ToolService {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultMessage handleHttpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException ex) {
-        return createRM(ExceptionCode.fail, "没有可用参数", request.getRequestURI(), ex);
+        return createRM(ExceptionCode.fail, "没有可用参数或参数格式不正确", request.getRequestURI(), ex);
     }
 
     /**

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-
+    import StorageTools from 'common-util/src/tools/StorageTools'
     export default {
         props:{
             userinfoLoading:{
@@ -53,7 +53,11 @@
                         break
                     }
                     case 'logout':{
-                        this.axios.post('/user/logout').then(res=>{
+                        StorageTools.remove('token')
+                        this.axios.post('/user/logout',{},{baseURL:this.$baseURL.auth}).then(res=>{
+
+
+                        }).finally(()=>{
                             if (window.mfe) {
                                 // 该事件是在portal项目app.vue中监听
                                 window.mfe_vue_bus.$emit('toLogin')
@@ -61,7 +65,6 @@
                                 // 如果不是向前端
                                 this.$router.replace('/login')
                             }
-
                         })
                         break
                     }

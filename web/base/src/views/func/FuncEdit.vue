@@ -109,7 +109,6 @@
                             label: '地址',
                             placeholder: '页面类型必填，路由地址',
                             required:(form)=>{
-                                console.log(form.typeDictId__code);
                                 return form.typeDictId__code == 'page'
                             }
                         }

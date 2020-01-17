@@ -2,18 +2,18 @@ package grape.base.rest.orgname.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.orgname.form.OrgNameListForm;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.org.api.IOrgService;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import javax.validation.Valid;
 import grape.base.rest.orgname.form.OrgNameCreateForm;
 import grape.base.rest.orgname.form.OrgNameUpdateForm;
@@ -22,7 +22,6 @@ import grape.base.rest.orgname.vo.OrgNameVo;
 import grape.base.rest.orgname.mapper.OrgNameWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
 import grape.base.service.orgname.po.OrgName;
 import grape.base.service.orgname.api.IOrgNameService;
 import java.util.List;
@@ -37,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/orgname")
 @Api(tags = "组织树名称相关接口")
-public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgName, BaseLoginUser> {
+public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgName, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeOrgName");
 
@@ -70,7 +69,7 @@ public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgNam
 
 
      @ApiOperation("添加组织树名称")
-     @RequiresPermissions("orgname:single:create")
+     @PreAuthorize("hasAuthority('orgname:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public OrgNameVo create(@RequestBody @Valid OrgNameCreateForm cf) {
@@ -83,7 +82,7 @@ public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgNam
      }
 
      @ApiOperation("根据ID查询组织树名称")
-     @RequiresPermissions("orgname:single:queryById")
+     @PreAuthorize("hasAuthority('orgname:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public OrgNameVo queryById(@PathVariable String id) {
@@ -91,7 +90,7 @@ public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgNam
      }
 
      @ApiOperation("删除组织树名称")
-     @RequiresPermissions("orgname:single:deleteById")
+     @PreAuthorize("hasAuthority('orgname:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -104,7 +103,7 @@ public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgNam
      }
 
      @ApiOperation("更新组织树名称")
-     @RequiresPermissions("orgname:single:updateById")
+     @PreAuthorize("hasAuthority('orgname:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public OrgNameVo update(@PathVariable String id,@RequestBody @Valid OrgNameUpdateForm uf) {
@@ -114,7 +113,7 @@ public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgNam
      }
 
     @ApiOperation("分页查询组织树名称")
-    @RequiresPermissions("orgname:single:listPage")
+    @PreAuthorize("hasAuthority('orgname:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<OrgNameVo> listPage(OrgNameListPageForm listPageForm) {
@@ -127,7 +126,7 @@ public class OrgNameController extends BaseLoginUserController<OrgNameVo, OrgNam
      * @return
      */
     @ApiOperation(value = "不分页查询组织树名称",notes = "可用于添加组织树做下拉或下拉搜索")
-    @RequiresPermissions("orgname:single:list")
+    @PreAuthorize("hasAuthority('orgname:single:list')")
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<OrgNameVo> list(OrgNameListForm listForm) {

@@ -10,9 +10,10 @@ import grape.common.exception.ExceptionTools;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +40,7 @@ public class UserFuncRelController extends BaseController<UserFuncRelVo, UserFun
 
 
     @ApiOperation("用户分配功能")
-    @RequiresPermissions("userFuncRel:single:userAssignFunc")
+    @PreAuthorize("hasAuthority('userFuncRel:single:userAssignFunc')")
     @PostMapping("/user/assign/func")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean userAssignFunc(@RequestBody @Valid UserAssignFuncForm cf) {
@@ -48,7 +49,7 @@ public class UserFuncRelController extends BaseController<UserFuncRelVo, UserFun
     }
 
     @ApiOperation("根据用户ID查询已分配的功能id")
-    @RequiresPermissions("userFuncRel:single:queryByUserId")
+    @PreAuthorize("hasAuthority('userFuncRel:single:queryByUserId')")
     @GetMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByUserId(@PathVariable String userId) {
@@ -61,7 +62,7 @@ public class UserFuncRelController extends BaseController<UserFuncRelVo, UserFun
     }
 
     @ApiOperation("清空用户下的所有功能")
-    @RequiresPermissions("userFuncRel:single:deleteByUserId")
+    @PreAuthorize("hasAuthority('userFuncRel:single:deleteByUserId')")
     @DeleteMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByUserId(@PathVariable String userId) {
@@ -74,7 +75,7 @@ public class UserFuncRelController extends BaseController<UserFuncRelVo, UserFun
 
 
     @ApiOperation("功能分配用户")
-    @RequiresPermissions("userFuncRel:single:funcAssignUser")
+    @PreAuthorize("hasAuthority('userFuncRel:single:funcAssignUser')")
     @PostMapping("/func/assign/user")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean funcAssignUser(@RequestBody @Valid FuncAssignUserForm cf) {
@@ -83,7 +84,7 @@ public class UserFuncRelController extends BaseController<UserFuncRelVo, UserFun
     }
 
     @ApiOperation("根据功能ID查询已分配的功能id")
-    @RequiresPermissions("userFuncRel:single:queryByFuncId")
+    @PreAuthorize("hasAuthority('userFuncRel:single:queryByFuncId')")
     @GetMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByFuncId(@PathVariable String funcId) {
@@ -95,7 +96,7 @@ public class UserFuncRelController extends BaseController<UserFuncRelVo, UserFun
     }
 
     @ApiOperation("清空功能下的所有用户")
-    @RequiresPermissions("userFuncRel:single:deleteByFuncId")
+    @PreAuthorize("hasAuthority('userFuncRel:single:deleteByFuncId')")
     @DeleteMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByFuncId(@PathVariable String funcId) {

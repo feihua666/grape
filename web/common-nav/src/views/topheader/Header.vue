@@ -6,7 +6,7 @@
         <el-main class="g-color-fff g-padding0">
             <el-row type="flex" class="g-height100" justify="space-between">
                 <el-col class="g-height100 g-flex-align-v-center">
-                    <ApplicationSwitch  :current-userinfo="currentUserinfo" :userinfo-loading="userinfoLoading"></ApplicationSwitch>
+                    <ApplicationSwitch  :applications="applications" :userinfo-loading="applicationsLoading"></ApplicationSwitch>
                 </el-col>
                 <el-col class="g-height100 g-flex-align-v-center g-flex-align-h-end">
                     <!-- 右侧 头像和用户名 -->
@@ -31,19 +31,35 @@
             return {
                 roleChangePopShow: false,
                 postChangePopShow: false,
+                applications:[],
+                applicationsLoading:false,
                 userinfoLoading: false,
                 currentUserinfo:{}
             }
         },
         mounted(){
+            this.getApplications()
             this.getUserinfo()
         },
         methods:{
+            getApplications(){
+                this.applicationsLoading = true
+                this.axios.get('/application/list/current/user').then(res => {
+                    this.applications = res.data.data
+                }).catch((error) => {
+                    if(error.response){
+                        if(error.response.status != 401){
+                            this.$message.error(error.response.data.msg)
+                        }
+                    }
+                }).finally(()=>{
+                    this.applicationsLoading = false
+                })
+            },
             getUserinfo(){
                 this.userinfoLoading = true
                 this.axios.get('/user/userinfo/current').then(res => {
                     this.currentUserinfo = res.data.data
-                    //this.$set('currentUserinfo',res.data.data)
                 }).catch((error) => {
                     if(error.response){
                         if(error.response.status != 401){

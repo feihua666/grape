@@ -7,6 +7,9 @@
   </div>
 </template>
 <script>
+    import {installMfe} from 'common-util/src/components/mfe/index'
+    // 放在这里会最先执行优先于main.js
+    installMfe(true)
     export default {
         name: 'app',
         created () {

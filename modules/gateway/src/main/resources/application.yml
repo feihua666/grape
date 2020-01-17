@@ -1,0 +1,45 @@
+# 注意应用启动请带nacos 命名空间参数,如果不带则是默认public 如： -Dspring.cloud.nacos.discovery.namespace=e793c472-1bf1-4edd-84c4-7c111cb10f3a
+# 应用启动端口 如果不写默认8080
+server:
+  port: 9100
+spring:
+  cloud:
+    nacos:
+      discovery:
+        # nacos 注册中心地址 如：127.0.0.1:8848
+        server-addr: register.grape.com
+    gateway:
+      discovery:
+        locator:
+          # 启用调用与应用名称融合，如果不启动则不能通过lb://grape-base调用
+          enabled: true
+          # 启用小写服务id
+          lower-case-service-id: true
+      # 开启跨域访问支持
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+      # 网关路由规则
+      routes:
+      - id: grape-base-route
+        uri: lb://grape-base
+        filters:
+        - StripPrefix=1
+        # 自定义的全局 filter
+        - Global
+        predicates:
+        - Path= /base/**
+      - id: grape-auth-route
+        uri: lb://grape-auth
+        filters:
+          - StripPrefix=1
+          # 自定义的全局 filter
+          - Global
+        predicates:
+          - Path= /auth/**
+# 日志级别
+logging:
+  level:
+    root: info

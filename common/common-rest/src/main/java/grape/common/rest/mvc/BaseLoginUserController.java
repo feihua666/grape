@@ -6,10 +6,10 @@ import grape.common.AbstractLoginUser;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.form.BasePageForm;
-import grape.common.service.common.BaseDataConstraintHelper;
-import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.IDataConstraintParseService;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.BaseDataConstraintHelper;
+import grape.common.service.common.dataconstraint.ConstraintCompiledContent;
+import grape.common.service.common.dataconstraint.IDataObject;
+import grape.common.service.loginuser.GrapeUserDetails;
 import grape.common.service.po.IDBasePo;
 import grape.common.tools.ThreadContextTool;
 import lombok.Data;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginUser extends AbstractLoginUser> extends BaseController<Vo,Po> {
+public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginUser extends GrapeUserDetails> extends BaseController<Vo,Po> {
 
     public static final String enableDefaultDataObjectKey = "enableDefaultDataObjectKey";
 
@@ -48,8 +48,8 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
     protected String getLoginUserId(){
-        AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
-        return loginUser == null? null:loginUser.getUserId();
+        GrapeUserDetails loginUser = AbstractLoginUser.getLoginUser();
+        return loginUser == null? null:loginUser.userId();
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
     protected boolean getLoginUserSuperAdmin(){
-        AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
+        GrapeUserDetails loginUser = AbstractLoginUser.getLoginUser();
         return loginUser == null? false:loginUser.superAdmin();
     }
 
@@ -66,7 +66,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param dataObjectCode
      * @return
      */
-    protected List<ConstraintContent> parseConstraint(String dataObjectCode){
+    protected List<ConstraintCompiledContent> parseConstraint(String dataObjectCode){
         if (baseDataConstraintHelper == null) {
             throw new RBaseException("baseDataConstraintHelper is null,check config please");
         }
@@ -78,7 +78,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param dataObjectCode
      * @return
      */
-    protected List<ConstraintContent> parseConstraint(IDataObject dataObjectCode){
+    protected List<ConstraintCompiledContent> parseConstraint(IDataObject dataObjectCode){
         return parseConstraint(dataObjectCode.dataObjectCode());
     }
     /**
@@ -117,7 +117,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
 
-    public Vo update(Po poQuery,List<ConstraintContent> constraintContent){
+    public Vo update(Po poQuery,List<ConstraintCompiledContent> constraintContent){
         boolean r = getService().updateById(poQuery,constraintContent);
         if (!r) {
             throw ExceptionTools.failRE("更新失败，请刷新数据后再试");
@@ -164,7 +164,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
 
-    public boolean deleteById(String id,List<ConstraintContent> constraintContent){
+    public boolean deleteById(String id,List<ConstraintCompiledContent> constraintContent){
 
         boolean r = getService().removeById(id,constraintContent);
         if (!r) {
@@ -209,7 +209,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @return
      */
 
-    public Vo queryById(String id,List<ConstraintContent> constraintContent){
+    public Vo queryById(String id,List<ConstraintCompiledContent> constraintContent){
         Po dbPo = getService().getById(id,constraintContent);
         Vo vo = getMapperConverter().poToVo(dbPo);
         if (vo == null) {
@@ -257,7 +257,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param pageForm
      * @return
      */
-    public IPage<Vo> listPage(Po poQuery, BasePageForm pageForm,List<ConstraintContent> constraintContent){
+    public IPage<Vo> listPage(Po poQuery, BasePageForm pageForm,List<ConstraintCompiledContent> constraintContent){
         assertNotNull(constraintContent,"约束内容不能为空");
         IPage<Po> page = getService().page(new Page(pageForm.getCurrent(),pageForm.getSize()),poQuery,constraintContent);
         if (page.getTotal() == 0) {
@@ -300,7 +300,7 @@ public abstract class BaseLoginUserController<Vo,Po extends IDBasePo<?,?>,loginU
      * @param poQuery
      * @return
      */
-    public List<Vo> list(Po poQuery,List<ConstraintContent> constraintContent){
+    public List<Vo> list(Po poQuery,List<ConstraintCompiledContent> constraintContent){
         assertNotNull(constraintContent,"约束内容不能为空");
         List list = getService().list(poQuery,constraintContent);
         return posToVos(list);

@@ -193,6 +193,7 @@ public class RequestTool {
      * @return
      */
     public static String getWebappRealPath(HttpServletRequest request) {
-        return request.getSession().getServletContext().getRealPath("");
+
+        return request.getServletContext().getRealPath("");
     }
 }

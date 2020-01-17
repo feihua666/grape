@@ -33,9 +33,6 @@ public class CurrentUserinfoVo extends BaseVo {
     @ApiModelProperty(value = "头像地址，绝对地址")
     private String avatar;
 
-    @ApiModelProperty(value = "超级管理员")
-    private Boolean isSuperAdmin;
-
     @ApiModelProperty(value = "所属公司id")
     private String compId;
     @ApiModelProperty(value = "所属公司名称")
@@ -45,22 +42,4 @@ public class CurrentUserinfoVo extends BaseVo {
     private String deptId;
     @ApiModelProperty(value = "所属部门名称")
     private String deptName;
-
-    @TransField
-    @ApiModelProperty(value = "直接分配的角色")
-    private List<RoleVo> roles;
-
-
-    @TransField
-    @ApiModelProperty(value = "分配的岗位")
-    private List<UserPostVo> userPosts;
-
-    @TransField
-    @ApiModelProperty(value = "可用的应用们")
-    private List<ApplicationVo> applications;
-
-    @TransField
-    @ApiModelProperty(value = "可用功能")
-    private List<FuncVo> funcs;
-
 }

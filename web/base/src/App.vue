@@ -45,7 +45,7 @@
     watch:{
       $route(to,from){
           if(this.breadcrumbs.length > 0){
-              if('/' == from.path || from.meta.reset){
+              if(window.mfe_nav_router_base_path.commonNav =='/' == from.path || '/' == from.path || from.meta.reset){
                   // 清空数组
                   this.breadcrumbs.splice(0)
               }else{

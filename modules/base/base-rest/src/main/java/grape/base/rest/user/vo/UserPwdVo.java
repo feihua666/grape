@@ -30,9 +30,6 @@ public class UserPwdVo extends BaseVo {
     @ApiModelProperty(value = "密码")
     private String pwd;
 
-    @ApiModelProperty(value = "盐")
-    private String salt;
-
     @ApiModelProperty(value = "密码状态，字典")
     private String pwdStatusDictId;
 

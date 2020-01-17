@@ -4,24 +4,22 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import grape.base.rest.post.form.*;
 import grape.base.rest.post.mapper.PostWebMapper;
 import grape.base.rest.post.vo.PostVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.dept.api.IDeptService;
-import grape.base.service.dept.po.Dept;
 import grape.base.service.dict.api.IDictService;
-import grape.base.service.dict.po.Dict;
 import grape.base.service.post.api.IPostService;
 import grape.base.service.post.dto.PostListQuery;
 import grape.base.service.post.po.Post;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @Api(tags = "岗位相关接口")
-public class PostController extends BaseLoginUserController<PostVo, Post, BaseLoginUser> {
+public class PostController extends BaseLoginUserController<PostVo, Post, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodePost");
 
@@ -72,7 +70,7 @@ public class PostController extends BaseLoginUserController<PostVo, Post, BaseLo
     }
 
      @ApiOperation("添加岗位")
-     @RequiresPermissions("post:single:create")
+     @PreAuthorize("hasAuthority('post:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public PostVo create(@RequestBody @Valid PostCreateForm cf) {
@@ -86,7 +84,7 @@ public class PostController extends BaseLoginUserController<PostVo, Post, BaseLo
      }
 
      @ApiOperation("根据id查询岗位")
-     @RequiresPermissions("post:single:queryById")
+     @PreAuthorize("hasAuthority('post:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public PostVo queryById(@PathVariable String id) {
@@ -94,7 +92,7 @@ public class PostController extends BaseLoginUserController<PostVo, Post, BaseLo
      }
 
      @ApiOperation("删除岗位")
-     @RequiresPermissions("post:single:deleteById")
+     @PreAuthorize("hasAuthority('post:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -102,7 +100,7 @@ public class PostController extends BaseLoginUserController<PostVo, Post, BaseLo
      }
 
      @ApiOperation("更新岗位")
-     @RequiresPermissions("post:single:updateById")
+     @PreAuthorize("hasAuthority('post:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public PostVo update(@PathVariable String id,@RequestBody @Valid PostUpdateForm uf) {
@@ -112,7 +110,7 @@ public class PostController extends BaseLoginUserController<PostVo, Post, BaseLo
      }
 
     @ApiOperation("分页查询岗位")
-    @RequiresPermissions("post:single:listPage")
+    @PreAuthorize("hasAuthority('post:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<PostVo> listPage(PostListPageForm listPageForm) {
@@ -125,7 +123,7 @@ public class PostController extends BaseLoginUserController<PostVo, Post, BaseLo
      * @return
      */
     @ApiOperation(value = "不分页查询岗位",notes = "可用于添加岗位做下拉或下拉搜索")
-    @RequiresPermissions("post:single:list")
+    @PreAuthorize("hasAuthority('post:single:list')")
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<PostVo> list(PostListForm listForm) {
@@ -139,7 +137,7 @@ public class PostController extends BaseLoginUserController<PostVo, Post, BaseLo
      * @return
      */
     @ApiOperation("启用或禁用")
-    @RequiresPermissions("post:single:enable")
+    @PreAuthorize("hasAuthority('post:single:enable')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public PostVo enable(@PathVariable String id, @RequestBody @Valid PostEnableForm form) {

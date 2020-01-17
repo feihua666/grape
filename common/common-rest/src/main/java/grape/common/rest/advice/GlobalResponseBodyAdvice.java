@@ -2,14 +2,8 @@ package grape.common.rest.advice;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import grape.common.AbstractLoginUser;
 import grape.common.rest.common.ControllerTools;
-import grape.common.rest.shiro.JwtToken;
-import grape.common.rest.shiro.TokenInject;
-import grape.common.rest.tools.JwtUtils;
-import grape.common.rest.tools.RequestTool;
 import grape.common.service.trans.TransHelper;
-import grape.common.tools.RequestIdTool;
 import grape.common.tools.ToolService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,21 +65,7 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice, ToolService
             return JSONUtil.toJsonStr(new JSONObject(ControllerTools.newRm(body),false));
         }
         body = transHelper.trans(body);
-        // 注入token
-        if(body instanceof TokenInject){
-            AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
-            if (loginUser != null) {
-                log.debug("requestId=[{}],注入token",RequestIdTool.getRequestId());
-                String token = JwtUtils.createToken(loginUser.getUserId(), loginUser.getNickname(), loginUser.salt(), 2 * 60 * 60 * 1000);
-                ((TokenInject) body).inject(token);
-                if (response != null) {
-                    response.getHeaders().add(JwtToken.token_header_name,token);
-                }
-            }else{
-                log.warn("requestId=[{}],[{}]实现了TokenInject接口，但未获取到当前用户信息，未能注入jwt token", RequestIdTool.getRequestId(),body.getClass().getName());
-            }
 
-        }
         // 设置允许跨域
         fillCorsHeader(request, response);
         return ControllerTools.newRm(body);

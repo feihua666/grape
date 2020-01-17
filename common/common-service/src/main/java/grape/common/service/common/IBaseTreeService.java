@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import grape.common.exception.CBaseException;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.InvalidParamsException;
+import grape.common.service.common.dataconstraint.ConstraintCompiledContent;
 import grape.common.service.po.IDBasePo;
 import grape.common.service.po.TreeBasePo;
 
@@ -42,14 +43,14 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      * 查询第一级，带数据约束
      * @return
      */
-    default List<Po> getRoot(List<ConstraintContent> constraintContents){
+    default List<Po> getRoot(List<ConstraintCompiledContent> constraintContents){
         return list(Wrappers.<Po>query()
                 .eq(TreeBasePo.COLUMN_LEVEL,INIT_LEVEL)
                 .isNull(TreeBasePo.COLUMN_PARENT_ID)
                 .and(wq->
                         {
                             //wq.apply(sqlSegment);
-                            for (ConstraintContent constraintContent : constraintContents) {
+                            for (ConstraintCompiledContent constraintContent : constraintContents) {
                                 wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
                             }
                             return wq;
@@ -94,12 +95,12 @@ public interface IBaseTreeService<Po extends TreeBasePo<Po>> extends IBaseServic
      * @param parentId
      * @return
      */
-    default List<Po> getChildren(String parentId,List<ConstraintContent> constraintContents){
+    default List<Po> getChildren(String parentId,List<ConstraintCompiledContent> constraintContents){
         assertParamNotEmpty(parentId,"parentId不能为空");
         return list(Wrappers.<Po>query().eq(TreeBasePo.COLUMN_PARENT_ID,parentId).and(wq->
                 {
                     //wq.apply(sqlSegment);
-                    for (ConstraintContent constraintContent : constraintContents) {
+                    for (ConstraintCompiledContent constraintContent : constraintContents) {
                         wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
                     }
                     return wq;

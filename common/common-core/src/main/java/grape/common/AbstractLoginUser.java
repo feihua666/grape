@@ -22,48 +22,14 @@ public abstract class AbstractLoginUser extends BasePojo {
     // 超级管理员编码，一般根角色编码匹配
     public static final String superadminCode = "superadmin";
 
-    // 用户id
-    private String userId;
-
-    private String nickname;
-
-    // 头像
-    private String avatar;
-
-    public boolean superAdmin(){
-        return false;
+    public static <T>  T getLoginUser(){
+         T loginUser = (T) ThreadContextTool.get(loginUserKey);
+         return loginUser;
     }
-
-    /**
-     * 权限信息
-     * @return
-     */
-    public Set<String> permissions(){
-        return null;
+    public static   <T>  T removeLoginUser(){
+        return (T) ThreadContextTool.remove(loginUserKey);
     }
-    /**
-     * 权限信息
-     * @return
-     */
-    public Set<String> roles(){
-        return null;
-    }
-
-    /**
-     * 获取当前登录用户的密钥，主要是用来生成jwt token
-     * @return
-     */
-    public String salt(){
-        return null;
-    }
-
-    public static   AbstractLoginUser getLoginUser(){
-        return (AbstractLoginUser) ThreadContextTool.get(loginUserKey);
-    }
-    public static   AbstractLoginUser removeLoginUser(){
-        return (AbstractLoginUser) ThreadContextTool.remove(loginUserKey);
-    }
-    public static void setLoginUser(AbstractLoginUser loginUser){
+    public static <T>  void setLoginUser(T loginUser){
         ThreadContextTool.put(loginUserKey,loginUser);
     }
 }

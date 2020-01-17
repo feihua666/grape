@@ -16,6 +16,8 @@
         <module>base</module>
         <module>mq</module>
         <module>workflow</module>
+        <module>gateway</module>
+        <module>auth</module>
     </modules>
 
 

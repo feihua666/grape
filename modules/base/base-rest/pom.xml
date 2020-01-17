@@ -27,6 +27,7 @@
             <artifactId>mq-service-impl</artifactId>
             <version>${grape.version}</version>
         </dependency>
+        <!-- nacos 客户端集成 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>

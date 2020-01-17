@@ -1,6 +1,7 @@
 package grape.common.tools;
 
 import cn.hutool.core.util.IdUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by yangwei
@@ -9,7 +10,8 @@ import cn.hutool.core.util.IdUtil;
 public class RequestIdTool {
 
     private static final String requestIdKey = "requestIdKey";
-
+    // 请求id，从header中获取
+    public static final String reqeustIdKey = "request-id";
     /**
      * 初始化请求id
      * @return
@@ -20,6 +22,18 @@ public class RequestIdTool {
         return fastSimpleUUID;
     }
 
+    /**
+     *
+     * @param requestId
+     * @return
+     */
+    public static String initRequestId(String requestId){
+        if (StringUtils.isNotBlank(requestId)) {
+            restoreRequestId(requestId);
+            return requestId;
+        }
+        return initRequestId();
+    }
     /**
      * 获取请求id
      * @return

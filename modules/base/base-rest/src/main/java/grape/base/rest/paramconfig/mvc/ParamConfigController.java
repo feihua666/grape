@@ -9,21 +9,21 @@ import grape.base.rest.paramconfig.form.ParamConfigListPageForm;
 import grape.base.rest.paramconfig.form.ParamConfigUpdateForm;
 import grape.base.rest.paramconfig.mapper.ParamConfigWebMapper;
 import grape.base.rest.paramconfig.vo.ParamConfigVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.dict.api.IDictService;
 import grape.base.service.dict.po.Dict;
 import grape.base.service.paramconfig.api.IParamConfigService;
 import grape.base.service.paramconfig.po.ParamConfig;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,7 +38,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/paramconfig")
 @Api(tags = "参数配置相关接口")
-public class ParamConfigController extends BaseLoginUserController<ParamConfigVo, ParamConfig, BaseLoginUser> {
+public class ParamConfigController extends BaseLoginUserController<ParamConfigVo, ParamConfig, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeParamConfig");
 
@@ -68,7 +68,7 @@ public class ParamConfigController extends BaseLoginUserController<ParamConfigVo
     }
 
      @ApiOperation("添加参数配置")
-     @RequiresPermissions("paramConfig:single:create")
+     @PreAuthorize("hasAuthority('paramConfig:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public ParamConfigVo create(@RequestBody @Valid ParamConfigCreateForm cf) {
@@ -100,7 +100,7 @@ public class ParamConfigController extends BaseLoginUserController<ParamConfigVo
         }
     }
      @ApiOperation("根据ID查询参数配置")
-     @RequiresPermissions("paramConfig:single:queryById")
+     @PreAuthorize("hasAuthority('paramConfig:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public ParamConfigVo queryById(@PathVariable String id) {
@@ -108,7 +108,7 @@ public class ParamConfigController extends BaseLoginUserController<ParamConfigVo
      }
 
      @ApiOperation("删除参数配置")
-     @RequiresPermissions("paramConfig:single:deleteById")
+     @PreAuthorize("hasAuthority('paramConfig:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -116,7 +116,7 @@ public class ParamConfigController extends BaseLoginUserController<ParamConfigVo
      }
 
      @ApiOperation("更新参数配置")
-     @RequiresPermissions("paramConfig:single:updateById")
+     @PreAuthorize("hasAuthority('paramConfig:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public ParamConfigVo update(@PathVariable String id,@RequestBody @Valid ParamConfigUpdateForm uf) {
@@ -129,7 +129,7 @@ public class ParamConfigController extends BaseLoginUserController<ParamConfigVo
      }
 
     @ApiOperation("分页查询参数配置")
-    @RequiresPermissions("paramConfig:single:listPage")
+    @PreAuthorize("hasAuthority('paramConfig:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<ParamConfigVo> listPage(ParamConfigListPageForm listPageForm) {
@@ -143,7 +143,7 @@ public class ParamConfigController extends BaseLoginUserController<ParamConfigVo
      * @return
      */
     @ApiOperation("启用或禁用")
-    @RequiresPermissions("paramConfig:single:enable")
+    @PreAuthorize("hasAuthority('paramConfig:single:enable')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public ParamConfigVo enable(@PathVariable String id, @RequestBody @Valid ParamConfigEnableForm form) {

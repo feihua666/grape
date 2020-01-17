@@ -1,17 +1,17 @@
 package grape.base.rest.org.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import javax.validation.Valid;
 import grape.base.rest.org.form.OrgCreateForm;
 import grape.base.rest.org.form.OrgUpdateForm;
@@ -20,7 +20,6 @@ import grape.base.rest.org.vo.OrgVo;
 import grape.base.rest.org.mapper.OrgWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import grape.common.rest.mvc.BaseController;
 import grape.base.service.org.po.Org;
 import grape.base.service.org.api.IOrgService;
 import java.util.List;
@@ -36,7 +35,7 @@ import grape.common.rest.vo.TreeNodeVo;
 @RestController
 @RequestMapping("/org")
 @Api(tags = "组织树相关接口")
-public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, BaseLoginUser> {
+public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, LoginUser> {
 
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeOrg");
@@ -67,7 +66,7 @@ public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, BaseL
 
 
      @ApiOperation("添加组织树")
-     @RequiresPermissions("org:single:create")
+     @PreAuthorize("hasAuthority('org:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public OrgVo create(@RequestBody @Valid OrgCreateForm cf) {
@@ -76,7 +75,7 @@ public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, BaseL
      }
 
      @ApiOperation("根据ID查询组织树")
-     @RequiresPermissions("org:single:queryById")
+     @PreAuthorize("hasAuthority('org:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public OrgVo queryById(@PathVariable String id) {
@@ -84,7 +83,7 @@ public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, BaseL
      }
 
      @ApiOperation("删除组织树")
-     @RequiresPermissions("org:single:deleteById")
+     @PreAuthorize("hasAuthority('org:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -92,7 +91,7 @@ public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, BaseL
      }
 
      @ApiOperation("更新组织树")
-     @RequiresPermissions("org:single:updateById")
+     @PreAuthorize("hasAuthority('org:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public OrgVo update(@PathVariable String id,@RequestBody @Valid OrgUpdateForm uf) {
@@ -106,7 +105,7 @@ public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, BaseL
      }
 
     @ApiOperation("分页查询组织树")
-    @RequiresPermissions("org:single:listPage")
+    @PreAuthorize("hasAuthority('org:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<OrgVo> listPage(OrgListPageForm listPageForm) {
@@ -115,7 +114,7 @@ public class OrgController extends BaseTreeLoginUserController<OrgVo, Org, BaseL
      }
 
     @ApiOperation("组织树树")
-    @RequiresPermissions("org:single:tree")
+    @PreAuthorize("hasAuthority('org:single:tree')")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<OrgVo>> tree( String parentId) {

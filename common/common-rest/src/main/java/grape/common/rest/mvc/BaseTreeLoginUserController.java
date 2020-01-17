@@ -7,7 +7,11 @@ import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.form.BasePageForm;
 import grape.common.rest.vo.BaseTreeVo;
-import grape.common.service.common.*;
+import grape.common.service.common.IBaseTreeService;
+import grape.common.service.common.dataconstraint.BaseDataConstraintHelper;
+import grape.common.service.common.dataconstraint.ConstraintCompiledContent;
+import grape.common.service.common.dataconstraint.IDataObject;
+import grape.common.service.loginuser.GrapeUserDetails;
 import grape.common.service.po.TreeBasePo;
 import grape.common.tools.ThreadContextTool;
 import lombok.Data;
@@ -25,7 +29,7 @@ import static grape.common.rest.mvc.BaseLoginUserController.enableDefaultDataObj
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po extends TreeBasePo<Po>,loginUser extends AbstractLoginUser> extends BaseTreeController<Vo,Po> {
+public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po extends TreeBasePo<Po>,loginUser extends GrapeUserDetails> extends BaseTreeController<Vo,Po> {
 
     private String  dataObjectCode;
 
@@ -50,8 +54,8 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @return
      */
     protected String getLoginUserId(){
-        AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
-        return loginUser == null? null:loginUser.getUserId();
+        GrapeUserDetails loginUser = AbstractLoginUser.getLoginUser();
+        return loginUser == null? null:loginUser.userId();
     }
 
     /**
@@ -59,7 +63,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @return
      */
     protected boolean getLoginUserSuperAdmin(){
-        AbstractLoginUser loginUser = AbstractLoginUser.getLoginUser();
+        GrapeUserDetails loginUser = AbstractLoginUser.getLoginUser();
         return loginUser == null? false:loginUser.superAdmin();
     }
 
@@ -68,7 +72,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @param dataObjectCode
      * @return
      */
-    protected List<ConstraintContent> parseConstraint(String dataObjectCode){
+    protected List<ConstraintCompiledContent> parseConstraint(String dataObjectCode){
         if (baseDataConstraintHelper == null) {
             throw new RBaseException("baseDataConstraintHelper is null,check config please");
         }
@@ -78,7 +82,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * 解析数据范围约束,使用默认code
      * @return
      */
-    protected List<ConstraintContent> parseConstraint(){
+    protected List<ConstraintCompiledContent> parseConstraint(){
         return parseConstraint(this.dataObjectCode);
     }
     /**
@@ -86,7 +90,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @param dataObject
      * @return
      */
-    protected List<ConstraintContent> parseConstraint(IDataObject dataObject){
+    protected List<ConstraintCompiledContent> parseConstraint(IDataObject dataObject){
         return parseConstraint(dataObject.dataObjectCode());
     }
     /**
@@ -125,7 +129,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @return
      */
 
-    public Vo update(Po poQuery,List<ConstraintContent> constraintContent){
+    public Vo update(Po poQuery,List<ConstraintCompiledContent> constraintContent){
         poQuery = beforUpdate(poQuery);
         boolean r = getService().updateById(poQuery,constraintContent);
         if (!r) {
@@ -172,7 +176,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @return
      */
 
-    public boolean deleteById(String id,List<ConstraintContent> constraintContent){
+    public boolean deleteById(String id,List<ConstraintCompiledContent> constraintContent){
         if (getService().getChildrenCount(id) > 0) {
             throw ExceptionTools.failRE("删除失败,当前节点下还有子节点");
         }
@@ -218,7 +222,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @return
      */
 
-    public Vo queryById(String id,List<ConstraintContent> constraintContent){
+    public Vo queryById(String id,List<ConstraintCompiledContent> constraintContent){
         Po dbPo = getService().getById(id,constraintContent);
         Vo vo = getMapperConverter().poToVo(dbPo);
         if (vo == null) {
@@ -259,7 +263,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @param parentId
      * @return
      */
-    public List<Vo> getByParentId(String parentId,List<ConstraintContent> constraintContent){
+    public List<Vo> getByParentId(String parentId,List<ConstraintCompiledContent> constraintContent){
         List<Po> r;
         if (parentId == null) {
             r = ((IBaseTreeService) getService()).getRoot(constraintContent);
@@ -306,7 +310,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @param pageForm
      * @return
      */
-    public IPage<Vo> listPage(Po poQuery, BasePageForm pageForm,List<ConstraintContent> constraintContent){
+    public IPage<Vo> listPage(Po poQuery, BasePageForm pageForm,List<ConstraintCompiledContent> constraintContent){
         assertNotNull(constraintContent,"约束内容不能为空");
         IPage<Po> page = getService().page(new Page(pageForm.getCurrent(),pageForm.getSize()),poQuery,constraintContent);
         if (page.getTotal() == 0) {
@@ -348,7 +352,7 @@ public abstract class BaseTreeLoginUserController<Vo extends BaseTreeVo,Po exten
      * @param poQuery
      * @return
      */
-    public List<Vo> list(Po poQuery,List<ConstraintContent> constraintContent){
+    public List<Vo> list(Po poQuery,List<ConstraintCompiledContent> constraintContent){
         assertNotNull(constraintContent,"约束内容不能为空");
         List list = getService().list(poQuery,constraintContent);
         return posToVos(list);

@@ -204,12 +204,12 @@ class FuncServiceImplTest implements ToolService {
                 if(isEqual("添加",str)){
                     funcInsert.setName(str + namecn);
                     funcInsert.setCode(getPinyin(funcInsert.getName()).getFull());
-                    funcInsert.setPermissions(permissionPre + ":single:create");
+                    funcInsert.setPermissions(permissionPre + ":single:create')");
                 }
                 if(isEqual("修改",str)){
                     funcInsert.setName(str + namecn);
                     funcInsert.setCode(getPinyin(funcInsert.getName()).getFull());
-                    funcInsert.setPermissions(permissionPre + ":single:updateById" + "," + permissionPre + ":single:queryById");
+                    funcInsert.setPermissions(permissionPre + ":single:updateById" + "," + permissionPre + ":single:queryById')");
                 }
                 if(isEqual("删除",str)){
                     funcInsert.setName(str + namecn);

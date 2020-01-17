@@ -3,16 +3,16 @@ package grape.base.rest.dataconstraint.mvc;
 import grape.base.rest.dataconstraint.form.DataScopeAssignDataForm;
 import grape.base.rest.dataconstraint.mapper.DataScopeCustomRelWebMapper;
 import grape.base.rest.dataconstraint.vo.DataScopeCustomRelVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
 import grape.base.service.dataconstraint.po.DataScopeCustomRel;
 import grape.common.exception.ExceptionTools;
 import grape.common.rest.mvc.BaseLoginUserController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/datascopecustomrel")
 @Api(tags = "数据范围约束自定义相关接口")
-public class DataScopeCustomRelController extends BaseLoginUserController<DataScopeCustomRelVo, DataScopeCustomRel, BaseLoginUser> {
+public class DataScopeCustomRelController extends BaseLoginUserController<DataScopeCustomRelVo, DataScopeCustomRel, LoginUser> {
 
     @Autowired
     private DataScopeCustomRelWebMapper currentWebMapper;
@@ -39,7 +39,7 @@ public class DataScopeCustomRelController extends BaseLoginUserController<DataSc
 
 
     @ApiOperation("数据范围分配数据")
-    @RequiresPermissions("datascopecustomrel:single:dataScopeAssignData")
+    @PreAuthorize("hasAuthority('datascopecustomrel:single:dataScopeAssignData')")
     @PostMapping("/datascope/assign/data")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean dataScopeAssignData(@RequestBody @Valid DataScopeAssignDataForm cf) {
@@ -48,7 +48,7 @@ public class DataScopeCustomRelController extends BaseLoginUserController<DataSc
     }
 
     @ApiOperation("根据数据范围ID查询已分配的数据id")
-    @RequiresPermissions("datascopecustomrel:single:queryByDataScopeId")
+    @PreAuthorize("hasAuthority('datascopecustomrel:single:queryByDataScopeId')")
     @GetMapping("/datascope/{dataScopeId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByDataScopeId(@PathVariable String dataScopeId) {
@@ -61,7 +61,7 @@ public class DataScopeCustomRelController extends BaseLoginUserController<DataSc
     }
 
     @ApiOperation("清空数据范围下的所有数据")
-    @RequiresPermissions("datascopecustomrel:single:deleteByDataScopeId")
+    @PreAuthorize("hasAuthority('datascopecustomrel:single:deleteByDataScopeId')")
     @DeleteMapping("/datascope/{dataScopeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByDataScopeId(@PathVariable String dataScopeId) {

@@ -1,9 +1,9 @@
 import VueRouter from 'vue-router'
 let base = '/base'
 if(window.mfe){
-    base = window.mfe_nav_router_base_path + base
+    base = (window.mfe_nav_router_base_path.commonNav || '') + base
+    window.mfe_nav_router_base_path.base = base
 }
-
 const router = new VueRouter({
     mode: 'history',
     base: base,
@@ -629,4 +629,7 @@ const router = new VueRouter({
     ]
 })
 
+router.beforeEach((to, from, next) => {
+    next()
+})
 export default router

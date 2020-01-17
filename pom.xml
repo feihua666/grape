@@ -56,9 +56,12 @@
 		<java-jwt.version>3.8.3</java-jwt.version>
 
 
-		<!-- Spring Settings -->
+		<!-- Spring cloud -->
 		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+		<!-- spring cloud alibaba -->
 		<spring-cloud-alibaba.version>2.1.1.RELEASE</spring-cloud-alibaba.version>
+		<!-- 灰度发布中间件 https://github.com/Nepxion/Discovery -->
+		<discovery.version>5.5.10</discovery.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

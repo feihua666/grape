@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>grape</groupId>
+            <artifactId>common-core</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus-boot-starter.version}</version>
@@ -30,10 +35,11 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid-spring-boot-starter.version}</version>
         </dependency>
+        <!-- 原则上service 不涉及前端的东西 -->
         <dependency>
-            <groupId>grape</groupId>
-            <artifactId>common-core</artifactId>
-            <version>${grape.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <scope>provided</scope>
         </dependency>
 
 
@@ -42,6 +48,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
+        <!--  -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>

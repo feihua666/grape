@@ -7,26 +7,24 @@ import grape.base.rest.joblevel.form.JobLevelListPageForm;
 import grape.base.rest.joblevel.form.JobLevelUpdateForm;
 import grape.base.rest.joblevel.mapper.JobLevelWebMapper;
 import grape.base.rest.joblevel.vo.JobLevelVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.job.api.IJobService;
-import grape.base.service.job.po.Job;
 import grape.base.service.joblevel.api.IJobLevelService;
 import grape.base.service.joblevel.po.JobLevel;
 import grape.common.exception.runtime.RBaseException;
-import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -39,7 +37,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/joblevel")
 @Api(tags = "职务级别相关接口")
-public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobLevel, BaseLoginUser> {
+public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobLevel, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeJobLevel");
 
@@ -74,7 +72,7 @@ public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobL
 
 
     @ApiOperation("添加职务级别")
-     @RequiresPermissions("jobLevel:single:create")
+     @PreAuthorize("hasAuthority('jobLevel:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public JobLevelVo create(@RequestBody @Valid JobLevelCreateForm cf) {
@@ -88,7 +86,7 @@ public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobL
      }
 
      @ApiOperation("根据ID查询职务级别")
-     @RequiresPermissions("jobLevel:single:queryById")
+     @PreAuthorize("hasAuthority('jobLevel:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public JobLevelVo queryById(@PathVariable String id) {
@@ -96,7 +94,7 @@ public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobL
      }
 
      @ApiOperation("删除职务级别")
-     @RequiresPermissions("jobLevel:single:deleteById")
+     @PreAuthorize("hasAuthority('jobLevel:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -104,7 +102,7 @@ public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobL
      }
 
      @ApiOperation("更新职务级别")
-     @RequiresPermissions("jobLevel:single:updateById")
+     @PreAuthorize("hasAuthority('jobLevel:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public JobLevelVo update(@PathVariable String id,@RequestBody @Valid JobLevelUpdateForm uf) {
@@ -114,7 +112,7 @@ public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobL
      }
 
     @ApiOperation("分页查询职务级别")
-    @RequiresPermissions("jobLevel:single:listPage")
+    @PreAuthorize("hasAuthority('jobLevel:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<JobLevelVo> listPage(JobLevelListPageForm listPageForm) {
@@ -128,7 +126,7 @@ public class JobLevelController extends BaseLoginUserController<JobLevelVo, JobL
      * @return
      */
     @ApiOperation(value = "不分页查询职务级别",notes = "可用于下拉搜索")
-    @RequiresPermissions("jobLevel:single:list")
+    @PreAuthorize("hasAuthority('jobLevel:single:list')")
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<JobLevelVo> list(JobLevelListForm listForm) {

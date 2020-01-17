@@ -13,6 +13,7 @@
 </template>
 
 <script>
+    import StorageTools from '../../tools/StorageTools'
     export default {
         name: "Login",
         props: {
@@ -41,8 +42,9 @@
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
                         self.logining = true
-                        self.axios.post('/user/login',self.form).then(res => {
+                        self.axios.post('/user/login',self.form,{baseURL:self.$baseURL.auth}).then(res => {
                             self.$message.success('登录成功')
+                            StorageTools.set('token',res.data.data.token)
                             self.$emit('success')
                         }).catch(error => {
                             if (error.response) {

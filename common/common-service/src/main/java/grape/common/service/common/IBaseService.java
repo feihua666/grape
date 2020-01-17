@@ -3,12 +3,12 @@ package grape.common.service.common;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
+import grape.common.service.common.dataconstraint.ConstraintCompiledContent;
 import grape.common.service.po.IDBasePo;
 import grape.common.tools.ToolService;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -67,11 +67,11 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @param constraintContents 能直接使用的约束sql
      * @return
      */
-    default IPage<Po> page(IPage<Po> page, Po query,List<ConstraintContent> constraintContents){
+    default IPage<Po> page(IPage<Po> page, Po query,List<ConstraintCompiledContent> constraintContents){
         return page(page, Wrappers.query(query).and(wq->
                 {
                     //wq.apply(sqlSegment);
-                    for (ConstraintContent constraintContent : constraintContents) {
+                    for (ConstraintCompiledContent constraintContent : constraintContents) {
                         wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
                     }
                     return wq;
@@ -92,11 +92,11 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @param constraintContents 能直接使用的约束sql
      * @return
      */
-    default List<Po> list(Po query,List<ConstraintContent> constraintContents){
+    default List<Po> list(Po query,List<ConstraintCompiledContent> constraintContents){
         return list(Wrappers.query(query).and(wq->
                 {
                     //wq.apply(sqlSegment);
-                    for (ConstraintContent constraintContent : constraintContents) {
+                    for (ConstraintCompiledContent constraintContent : constraintContents) {
                         wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
                     }
                     return wq;
@@ -110,11 +110,11 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @param constraintContents
      * @return
      */
-    default boolean removeById(String id,List<ConstraintContent> constraintContents){
+    default boolean removeById(String id,List<ConstraintCompiledContent> constraintContents){
         return remove(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).and(wq->
                 {
                     //wq.apply(sqlSegment);
-                    for (ConstraintContent constraintContent : constraintContents) {
+                    for (ConstraintCompiledContent constraintContent : constraintContents) {
                         wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
                     }
                     return wq;
@@ -128,11 +128,11 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @param constraintContents
      * @return
      */
-    default Po getById(String id,List<ConstraintContent> constraintContents){
+    default Po getById(String id,List<ConstraintCompiledContent> constraintContents){
         return getOne(Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, id).and(wq->
                 {
                     //wq.apply(sqlSegment);
-                    for (ConstraintContent constraintContent : constraintContents) {
+                    for (ConstraintCompiledContent constraintContent : constraintContents) {
                         wq.or(wqq -> wqq.apply(constraintContent.getCompiledSqlContent()));
                     }
                     return wq;
@@ -146,7 +146,7 @@ public interface IBaseService<Po extends IDBasePo<?,?>> extends IService<Po>, To
      * @param constraintContent
      * @return
      */
-    default boolean updateById(Po po,List<ConstraintContent> constraintContent){
+    default boolean updateById(Po po,List<ConstraintCompiledContent> constraintContent){
         return update(po, Wrappers.<Po>query().eq(IDBasePo.COLUMN_ID, po.getId()));
     }
 

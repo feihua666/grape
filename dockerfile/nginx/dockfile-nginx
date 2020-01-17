@@ -1,0 +1,4 @@
+# 从基础nginx创建镜像
+FROM nginx
+# 添加配置
+COPY conf/nacos/nacos.conf /etc/nginx/conf.d/

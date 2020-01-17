@@ -13,9 +13,10 @@ import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,7 +46,7 @@ public class RoleDataScopeRelController extends BaseController<RoleDataScopeRelV
     private IDataScopeService iDataScopeService;
 
     @ApiOperation("角色分配数据范围")
-    @RequiresPermissions("roleDataScopeRel:single:roleAssignDataScope")
+    @PreAuthorize("hasAuthority('roleDataScopeRel:single:roleAssignDataScope')")
     @PostMapping("/role/assign/datascope")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean roleAssignDataScope(@RequestBody @Valid RoleAssignDataScopeForm cf) {
@@ -54,7 +55,7 @@ public class RoleDataScopeRelController extends BaseController<RoleDataScopeRelV
     }
 
     @ApiOperation("根据角色ID查询已分配的数据范围id")
-    @RequiresPermissions("roleDataScopeRel:single:queryByRoleId")
+    @PreAuthorize("hasAuthority('roleDataScopeRel:single:queryByRoleId')")
     @GetMapping("/role/{roleId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByRoleId(@PathVariable String roleId) {
@@ -67,7 +68,7 @@ public class RoleDataScopeRelController extends BaseController<RoleDataScopeRelV
     }
 
     @ApiOperation("清空角色下的所有数据范围")
-    @RequiresPermissions("roleDataScopeRel:single:deleteByRoleId")
+    @PreAuthorize("hasAuthority('roleDataScopeRel:single:deleteByRoleId')")
     @DeleteMapping("/role/{roleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByRoleId(@PathVariable String roleId) {
@@ -80,7 +81,7 @@ public class RoleDataScopeRelController extends BaseController<RoleDataScopeRelV
 
 
     @ApiOperation("数据范围分配角色")
-    @RequiresPermissions("roleDataScopeRel:single:dataScopeAssignRole")
+    @PreAuthorize("hasAuthority('roleDataScopeRel:single:dataScopeAssignRole')")
     @PostMapping("/datascope/assign/role")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean dataScopeAssignRole(@RequestBody @Valid DataScopeAssignRoleForm cf) {
@@ -89,7 +90,7 @@ public class RoleDataScopeRelController extends BaseController<RoleDataScopeRelV
     }
 
     @ApiOperation("根据数据范围ID查询已分配的数据范围id")
-    @RequiresPermissions("roleDataScopeRel:single:queryByDataScopeId")
+    @PreAuthorize("hasAuthority('roleDataScopeRel:single:queryByDataScopeId')")
     @GetMapping("/datascope/{dataScopeId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByDataScopeId(@PathVariable String dataScopeId) {
@@ -101,7 +102,7 @@ public class RoleDataScopeRelController extends BaseController<RoleDataScopeRelV
     }
 
     @ApiOperation("清空数据范围下的所有角色")
-    @RequiresPermissions("roleDataScopeRel:single:deleteByDataScopeId")
+    @PreAuthorize("hasAuthority('roleDataScopeRel:single:deleteByDataScopeId')")
     @DeleteMapping("/datascope/{dataScopeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByDataScopeId(@PathVariable String dataScopeId) {

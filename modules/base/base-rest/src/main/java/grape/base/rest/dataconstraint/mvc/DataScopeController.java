@@ -1,39 +1,36 @@
 package grape.base.rest.dataconstraint.mvc;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import grape.base.rest.dataconstraint.form.DataScopeCreateForm;
+import grape.base.rest.dataconstraint.form.DataScopeListPageForm;
+import grape.base.rest.dataconstraint.form.DataScopeUpdateForm;
+import grape.base.rest.dataconstraint.mapper.DataScopeWebMapper;
 import grape.base.rest.dataconstraint.vo.DataScopeVirtualTreeNodeVo;
-import grape.base.rest.setting.dataconstraint.BaseDataConstraintServiceImpl;
-import grape.base.service.BaseLoginUser;
+import grape.base.rest.dataconstraint.vo.DataScopeVo;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
-import grape.base.service.dataconstraint.dto.DataConstraintDto;
-import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
+import grape.base.service.dataconstraint.api.IDataScopeService;
 import grape.base.service.dataconstraint.po.DataObject;
+import grape.base.service.dataconstraint.po.DataScope;
 import grape.common.exception.ExceptionTools;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
-import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import javax.validation.Valid;
-import grape.base.rest.dataconstraint.form.DataScopeCreateForm;
-import grape.base.rest.dataconstraint.form.DataScopeUpdateForm;
-import grape.base.rest.dataconstraint.form.DataScopeListPageForm;
-import grape.base.rest.dataconstraint.vo.DataScopeVo;
-import grape.base.rest.dataconstraint.mapper.DataScopeWebMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import grape.base.service.dataconstraint.po.DataScope;
-import grape.base.service.dataconstraint.api.IDataScopeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -46,7 +43,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/datascope")
 @Api(tags = "数据范围相关接口")
-public class DataScopeController extends BaseLoginUserController<DataScopeVo, DataScope, BaseLoginUser> {
+public class DataScopeController extends BaseLoginUserController<DataScopeVo, DataScope, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeDataScope");
 
@@ -79,7 +76,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
     }
 
      @ApiOperation("添加数据范围")
-     @RequiresPermissions("datascope:single:create")
+     @PreAuthorize("hasAuthority('datascope:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public DataScopeVo create(@RequestBody @Valid DataScopeCreateForm cf) {
@@ -92,7 +89,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
      }
 
      @ApiOperation("根据ID查询数据范围")
-     @RequiresPermissions("datascope:single:queryById")
+     @PreAuthorize("hasAuthority('datascope:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public DataScopeVo queryById(@PathVariable String id) {
@@ -100,7 +97,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
      }
 
      @ApiOperation("删除数据范围")
-     @RequiresPermissions("datascope:single:deleteById")
+     @PreAuthorize("hasAuthority('datascope:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -108,7 +105,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
      }
 
      @ApiOperation("更新数据范围")
-     @RequiresPermissions("datascope:single:updateById")
+     @PreAuthorize("hasAuthority('datascope:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public DataScopeVo update(@PathVariable String id,@RequestBody @Valid DataScopeUpdateForm uf) {
@@ -124,7 +121,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
      }
 
     @ApiOperation("分页查询数据范围")
-    @RequiresPermissions("datascope:single:listPage")
+    @PreAuthorize("hasAuthority('datascope:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<DataScopeVo> listPage(DataScopeListPageForm listPageForm) {
@@ -137,7 +134,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
      * @return
      */
     @ApiOperation(value = "数据范围树",notes = "数据对象和数据范围组成一个树,一次性加载所有数据")
-    @RequiresPermissions("datascope:tree")
+    @PreAuthorize("hasAuthority('datascope:tree')")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<DataScopeVirtualTreeNodeVo>> treeAll() {

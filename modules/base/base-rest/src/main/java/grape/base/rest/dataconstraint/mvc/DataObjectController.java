@@ -7,7 +7,7 @@ import grape.base.rest.dataconstraint.form.DataObjectListPageForm;
 import grape.base.rest.dataconstraint.form.DataObjectUpdateForm;
 import grape.base.rest.dataconstraint.mapper.DataObjectWebMapper;
 import grape.base.rest.dataconstraint.vo.DataObjectVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.api.IDataScopeService;
 import grape.base.service.dataconstraint.po.DataObject;
@@ -17,9 +17,9 @@ import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseLoginUserController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,7 +37,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/dataobject")
 @Api(tags = "数据对象表相关接口")
-public class DataObjectController extends BaseLoginUserController<DataObjectVo, DataObject, BaseLoginUser> {
+public class DataObjectController extends BaseLoginUserController<DataObjectVo, DataObject, LoginUser> {
 
     @Autowired
     private DataObjectWebMapper currentWebMapper;
@@ -49,7 +49,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
 
 
      @ApiOperation("添加数据对象")
-     @RequiresPermissions("dataobject:single:create")
+     @PreAuthorize("hasAuthority('dataobject:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public DataObjectVo create(@RequestBody @Valid DataObjectCreateForm cf) {
@@ -62,7 +62,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
      }
 
      @ApiOperation("根据ID查询数据对象")
-     @RequiresPermissions("dataobject:single:queryById")
+     @PreAuthorize("hasAuthority('dataobject:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public DataObjectVo queryById(@PathVariable String id) {
@@ -70,7 +70,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
      }
 
      @ApiOperation("删除数据对象")
-     @RequiresPermissions("dataobject:single:deleteById")
+     @PreAuthorize("hasAuthority('dataobject:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -82,7 +82,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
      }
 
      @ApiOperation("更新数据对象")
-     @RequiresPermissions("dataobject:single:updateById")
+     @PreAuthorize("hasAuthority('dataobject:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public DataObjectVo update(@PathVariable String id,@RequestBody @Valid DataObjectUpdateForm uf) {
@@ -92,7 +92,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
      }
 
     @ApiOperation("分页查询数据对象")
-    @RequiresPermissions("dataobject:single:listPage")
+    @PreAuthorize("hasAuthority('dataobject:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<DataObjectVo> listPage(DataObjectListPageForm listPageForm) {
@@ -105,7 +105,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
      * @return
      */
     @ApiOperation(value = "不分页查询数据对象",notes = "可用于添加职级做下拉或下拉搜索")
-    @RequiresPermissions("dataobject:single:list")
+    @PreAuthorize("hasAuthority('dataobject:single:list')")
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<DataObjectVo> list(DataObjectListForm listForm) {
@@ -114,7 +114,7 @@ public class DataObjectController extends BaseLoginUserController<DataObjectVo, 
     }
 
     @ApiOperation(value = "数据范围id查询数据对象",notes = "主要用于自定义数据范围参数判断")
-    @RequiresPermissions("dataobject:single:queryByDataScopeId")
+    @PreAuthorize("hasAuthority('dataobject:single:queryByDataScopeId')")
     @GetMapping("/dataobject/{dataScopeId}")
     @ResponseStatus(HttpStatus.OK)
     public DataObjectVo queryByDataScopeId(@PathVariable String dataScopeId) {

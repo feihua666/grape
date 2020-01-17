@@ -1,12 +1,19 @@
 import Vue from 'vue'
 //自定义一些微前端属性
 // 主应用中使用
-export function installMfe() {
+// force 强制安装
+export function installMfe(force) {
+
     if(window.mfe){
         return
+    }else {
+        if (!force) {
+            return
+        }
     }
 // 设置微前端模式
     window.mfe = true
+
 // 微前端事件总线
     window.mfe_vue_bus = new Vue()
     window.mfe_mount_delay = 10
@@ -14,7 +21,8 @@ export function installMfe() {
     // 使用方式就是在子应用的路由中拼接上这个路径，作为路径的基础路径
     // 默认portal项目和导航项目都设置为根路径，这里默认空
     // 如果要修改该值，请在调用方法后再次赋值
-    window.mfe_nav_router_base_path = ''
+    // 属性为每个项目的key对应的base path 如：{portal:'/portal',commonNav:'/common-nav'}
+    window.mfe_nav_router_base_path = {}
 }
 // 子应用激活的规则，当前只支持history模式
 // 子应用中使用

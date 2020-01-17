@@ -7,26 +7,14 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'common-util/src/css/global.css'
-import {installMfe} from 'common-util/src/components/mfe/index'
-
+import axiosConfig from 'common-util/src/http/AxiosConfig.js'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
+axiosConfig(axios,Vue)
+axios.defaults.baseURL = Vue.prototype.$baseURL.base
 
-axios.defaults.baseURL = '/api'
-// 添加响应拦截器
-axios.interceptors.response.use(function (response) {
-    // 对响应数据做点什么
-    return response
-}, function (error) {
-
-    return Promise.reject(error)
-})
-// 路由守卫
-router.beforeEach((to, from, next) => {
-    next()
-})
 Vue.use(VueAxios, axios)
 // 该id定义在public/index.html中挂载app的容器标识
 let containerId = 'app-common-nav'
@@ -36,7 +24,6 @@ let containerId = 'app-common-nav'
 if (!window.mfe) {
     getInstance().$mount('#' + containerId)
 }
-installMfe()
 let instance = null;
 function getInstance() {
     let instance = new Vue({

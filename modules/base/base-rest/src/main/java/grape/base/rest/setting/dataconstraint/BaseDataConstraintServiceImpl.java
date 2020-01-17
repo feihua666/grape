@@ -5,22 +5,17 @@ import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
-import grape.base.rest.dataconstraint.mvc.DataScopeController;
-import grape.base.rest.func.mvc.FuncController;
-import grape.base.rest.role.mvc.RoleController;
-import grape.base.service.BaseLoginUser;
 import grape.base.service.dataconstraint.api.IDataScopeCustomRelService;
-import grape.base.service.dataconstraint.dto.DataObjectAndScopeDto;
-import grape.base.service.dataconstraint.po.DataScope;
 import grape.base.service.dataconstraint.po.DataScopeCustomRel;
-import grape.common.service.common.ConstraintContent;
-import grape.common.service.common.IDataConstraintParseDefaultService;
-import grape.common.service.common.IDataConstraintParseService;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.*;
+import grape.common.service.loginuser.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +24,7 @@ import java.util.stream.Collectors;
  * Created at 2019/12/3 17:15
  */
 @Component
-public class BaseDataConstraintServiceImpl implements IDataConstraintParseDefaultService<BaseLoginUser> {
+public class BaseDataConstraintServiceImpl implements IDataConstraintParseDefaultService<LoginUser> {
     @Autowired
     private IDataScopeCustomRelService iDataScopeCustomRelService;
     private TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig());
@@ -39,40 +34,45 @@ public class BaseDataConstraintServiceImpl implements IDataConstraintParseDefaul
     }
 
     @Override
-    public List<ConstraintContent> parseConstraint(String dataObjectCode, BaseLoginUser loginUser) {
+    public List<ConstraintCompiledContent> parseConstraint(String dataObjectCode, LoginUser loginUser) {
 
-        List<ConstraintContent> constraintContents = new ArrayList<>();
-        if (loginUser.getIsSuperAdmin()) {
-            // 超级管理员没有约束
-            constraintContents.add(new ConstraintContent("true"));
+        List<ConstraintCompiledContent> constraintContents = new ArrayList<>();
+
+        if (loginUser == null) {
+            // 没有数据
+            constraintContents.add(new ConstraintCompiledContent("false"));
             return constraintContents;
-        }else {
+        }
 
-            if(!isEmpty(loginUser.getDataObjectAndScopes())){
-                DataObjectAndScopeDto first = loginUser.getDataObjectAndScopes().stream().filter(item -> isEqual(item.getDataObject().getCode(), dataObjectCode)).findFirst().get();
+        if (loginUser.superAdmin()) {
+            // 超级管理员没有约束
+            constraintContents.add(new ConstraintCompiledContent("true"));
+            return constraintContents;
+        }
+        if(!isEmpty(loginUser.rawDataConstraints())){
+            RawDataConstraint first = loginUser.rawDataConstraints().stream().filter(item -> isEqual(item.getDataObject().dataObjectCode(), dataObjectCode)).findFirst().get();
 
-                List<DataScope> dataScopes = first.getDataScopes();
-                for (DataScope dataScope : dataScopes) {
-                    if (dataScope.getIsCustom()) {
-                        List<DataScopeCustomRel> customRels = iDataScopeCustomRelService.getByDataScopeId(dataScope.getId());
-                        Set<String> dataIds = customRels.stream().map(item -> item.getDataId()).collect(Collectors.toSet());
+            List<DefaultDataScope> dataScopes = first.getDataScopes();
+            for (DefaultDataScope dataScope : dataScopes) {
+                if (dataScope.isCustom()) {
+                    List<DataScopeCustomRel> customRels = iDataScopeCustomRelService.getByDataScopeId(dataScope.id());
+                    Set<String> dataIds = customRels.stream().map(item -> item.getDataId()).collect(Collectors.toSet());
 
-                        constraintContents.add(insql(dataIds,dataScope.getConstraintContent()) );
-                    }else {
-                        // 解析内容
-                        // 支持enjoy模板
-                        Template template = engine.getTemplate(dataScope.getConstraintContent());
-                        Map<String, Object> stringObjectMap = BeanUtil.beanToMap(loginUser);
-                        String compiledSql = template.render(stringObjectMap);
-                        constraintContents.add( new ConstraintContent(compiledSql));
-                    }
+                    constraintContents.add(insql(dataIds,dataScope.constraintContent()) );
+                }else {
+                    // 解析内容
+                    // 支持enjoy模板
+                    Template template = engine.getTemplate(dataScope.constraintContent());
+                    Map<String, Object> stringObjectMap = BeanUtil.beanToMap(loginUser);
+                    String compiledSql = template.render(stringObjectMap);
+                    constraintContents.add( new ConstraintCompiledContent(compiledSql));
                 }
-                return constraintContents;
-
             }
+            return constraintContents;
+
         }
         // 没有数据
-        constraintContents.add(new ConstraintContent("false"));
+        constraintContents.add(new ConstraintCompiledContent("false"));
 
         return constraintContents;
     }

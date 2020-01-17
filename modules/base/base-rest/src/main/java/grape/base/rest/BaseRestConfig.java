@@ -1,9 +1,6 @@
 package grape.base.rest;
 
-import grape.base.rest.setting.shiro.BaseDbRealm;
 import io.swagger.annotations.Api;
-import org.apache.shiro.realm.Realm;
-import org.apache.shiro.realm.SimpleAccountRealm;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -42,9 +39,5 @@ public class BaseRestConfig {
                 .title("Grape Swagger 接口文档")
                 .build();
     }
-    @Bean
-    public Realm baseDbRealm() {
-        Realm realm = new BaseDbRealm();
-        return realm;
-    }
+
 }

@@ -13,9 +13,10 @@ import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,7 +46,7 @@ public class UserPostDataScopeRelController extends BaseController<UserPostDataS
     private IDataScopeService iDataScopeService;
 
     @ApiOperation("角色分配数据范围")
-    @RequiresPermissions("userPostDataScopeRel:single:userPostAssignDataScope")
+    @PreAuthorize("hasAuthority('userPostDataScopeRel:single:userPostAssignDataScope')")
     @PostMapping("/userpost/assign/datascope")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean userPostAssignDataScope(@RequestBody @Valid UserPostAssignDataScopeForm cf) {
@@ -54,7 +55,7 @@ public class UserPostDataScopeRelController extends BaseController<UserPostDataS
     }
 
     @ApiOperation("根据角色ID查询已分配的数据范围id")
-    @RequiresPermissions("userPostDataScopeRel:single:queryByUserPostId")
+    @PreAuthorize("hasAuthority('userPostDataScopeRel:single:queryByUserPostId')")
     @GetMapping("/userpost/{userPostId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByUserPostId(@PathVariable String userPostId) {
@@ -67,7 +68,7 @@ public class UserPostDataScopeRelController extends BaseController<UserPostDataS
     }
 
     @ApiOperation("清空角色下的所有数据范围")
-    @RequiresPermissions("userPostDataScopeRel:single:deleteByUserPostId")
+    @PreAuthorize("hasAuthority('userPostDataScopeRel:single:deleteByUserPostId')")
     @DeleteMapping("/userpost/{userPostId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByUserPostId(@PathVariable String userPostId) {
@@ -80,7 +81,7 @@ public class UserPostDataScopeRelController extends BaseController<UserPostDataS
 
 
     @ApiOperation("数据范围分配角色")
-    @RequiresPermissions("userPostDataScopeRel:single:dataScopeAssignUserPost")
+    @PreAuthorize("hasAuthority('userPostDataScopeRel:single:dataScopeAssignUserPost')")
     @PostMapping("/datascope/assign/userpost")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean dataScopeAssignUserPost(@RequestBody @Valid DataScopeAssignUserPostForm cf) {
@@ -89,7 +90,7 @@ public class UserPostDataScopeRelController extends BaseController<UserPostDataS
     }
 
     @ApiOperation("根据数据范围ID查询已分配的数据范围id")
-    @RequiresPermissions("userPostDataScopeRel:single:queryByDataScopeId")
+    @PreAuthorize("hasAuthority('userPostDataScopeRel:single:queryByDataScopeId')")
     @GetMapping("/datascope/{dataScopeId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByDataScopeId(@PathVariable String dataScopeId) {
@@ -101,7 +102,7 @@ public class UserPostDataScopeRelController extends BaseController<UserPostDataS
     }
 
     @ApiOperation("清空数据范围下的所有角色")
-    @RequiresPermissions("userPostDataScopeRel:single:deleteByDataScopeId")
+    @PreAuthorize("hasAuthority('userPostDataScopeRel:single:deleteByDataScopeId')")
     @DeleteMapping("/datascope/{dataScopeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByDataScopeId(@PathVariable String dataScopeId) {

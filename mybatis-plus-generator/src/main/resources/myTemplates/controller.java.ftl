@@ -60,7 +60,7 @@ public class ${table.controllerName} {
 
 
      @ApiOperation("添加${table.comment!}")
-     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:create")
+     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public ${entity}Vo create(@RequestBody @Valid ${entity}CreateForm cf) {
@@ -69,7 +69,7 @@ public class ${table.controllerName} {
      }
 
      @ApiOperation("根据ID查询${table.comment!}")
-     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:queryById")
+     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public ${entity}Vo queryById(@PathVariable String id) {
@@ -85,7 +85,7 @@ public class ${table.controllerName} {
      }
 
      @ApiOperation("更新${table.comment!}")
-     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:updateById")
+     @RequiresPermissions("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public ${entity}Vo update(@PathVariable String id,@RequestBody @Valid ${entity}UpdateForm uf) {

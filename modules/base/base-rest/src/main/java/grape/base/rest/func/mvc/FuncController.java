@@ -7,20 +7,21 @@ import grape.base.rest.func.form.FuncListPageForm;
 import grape.base.rest.func.form.FuncUpdateForm;
 import grape.base.rest.func.mapper.FuncWebMapper;
 import grape.base.rest.func.vo.FuncVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.func.api.IFuncService;
 import grape.base.service.func.po.Func;
 import grape.common.exception.runtime.InvalidParamsException;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,7 +38,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/func")
 @Api(tags = "功能相关接口")
-public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,BaseLoginUser> {
+public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,LoginUser> {
 
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeFunc");
@@ -72,7 +73,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
      @ApiOperation("添加功能")
-     @RequiresPermissions("func:single:create")
+     @PreAuthorize("hasAuthority('func:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public FuncVo create(@RequestBody @Valid FuncCreateForm cf) {
@@ -98,7 +99,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
      @ApiOperation(value = "根据id查询功能",notes = "用于更新初始化值或查看详情")
-     @RequiresPermissions("func:single:queryById")
+     @PreAuthorize("hasAuthority('func:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public FuncVo queryById(@PathVariable String id) {
@@ -111,7 +112,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
      @ApiOperation("删除功能")
-     @RequiresPermissions("func:single:deleteById")
+     @PreAuthorize("hasAuthority('func:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -125,7 +126,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
      @ApiOperation("更新功能")
-     @RequiresPermissions("func:single:updateById")
+     @PreAuthorize("hasAuthority('func:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public FuncVo update(@PathVariable String id,@RequestBody @Valid FuncUpdateForm uf) {
@@ -158,7 +159,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
     @ApiOperation("启用或禁用功能")
-    @RequiresPermissions("func:single:enable")
+    @PreAuthorize("hasAuthority('func:single:enable')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public FuncVo enable(@PathVariable String id, @RequestBody @Valid FuncEnableForm form) {
@@ -175,7 +176,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
     @ApiOperation("分页查询功能")
-    @RequiresPermissions("func:single:listPage")
+    @PreAuthorize("hasAuthority('func:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<FuncVo> listPage(FuncListPageForm listPageForm) {
@@ -188,7 +189,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
     @ApiOperation(value = "检查树结构是否完整",notes = "主要用于检查树结构的完整性")
-    @RequiresPermissions("func:single:checkTreeStruct")
+    @PreAuthorize("hasAuthority('func:single:checkTreeStruct')")
     @GetMapping("/tree/check/struct")
     @ResponseStatus(HttpStatus.OK)
     public boolean checkTreeStruct() {
@@ -200,7 +201,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
     @ApiOperation(value = "功能树",notes = "主要用于选择上级")
-    @RequiresPermissions("func:single:getByParentId")
+    @PreAuthorize("hasAuthority('func:single:getByParentId')")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<FuncVo>> tree(String parentId) {
@@ -213,7 +214,7 @@ public class FuncController extends BaseTreeLoginUserController<FuncVo, Func,Bas
      * @return
      */
     @ApiOperation(value = "导航功能树",notes = "查询当前登录用户可用的功能")
-    @RequiresPermissions("user")
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/tree/nav")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<FuncVo>> treeNav(String applicationId) {

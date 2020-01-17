@@ -10,9 +10,10 @@ import grape.common.exception.ExceptionTools;
 import grape.common.rest.mvc.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,7 +41,7 @@ public class PostFuncRelController extends BaseController<PostFuncRelVo, PostFun
 
 
     @ApiOperation("岗位分配功能")
-    @RequiresPermissions("postFuncRel:single:postAssignFunc")
+    @PreAuthorize("hasAuthority('postFuncRel:single:postAssignFunc')")
     @PostMapping("/post/assign/func")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean postAssignFunc(@RequestBody @Valid PostAssignFuncForm cf) {
@@ -49,7 +50,7 @@ public class PostFuncRelController extends BaseController<PostFuncRelVo, PostFun
     }
 
     @ApiOperation("根据岗位ID查询已分配的功能id")
-    @RequiresPermissions("postFuncRel:single:queryByPostId")
+    @PreAuthorize("hasAuthority('postFuncRel:single:queryByPostId')")
     @GetMapping("/post/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByPostId(@PathVariable String postId) {
@@ -62,7 +63,7 @@ public class PostFuncRelController extends BaseController<PostFuncRelVo, PostFun
     }
 
     @ApiOperation("清空岗位下的所有功能")
-    @RequiresPermissions("postFuncRel:single:deleteByPostId")
+    @PreAuthorize("hasAuthority('postFuncRel:single:deleteByPostId')")
     @DeleteMapping("/post/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByPostId(@PathVariable String postId) {
@@ -75,7 +76,7 @@ public class PostFuncRelController extends BaseController<PostFuncRelVo, PostFun
 
 
     @ApiOperation("功能分配岗位")
-    @RequiresPermissions("postFuncRel:single:funcAssignPost")
+    @PreAuthorize("hasAuthority('postFuncRel:single:funcAssignPost')")
     @PostMapping("/func/assign/post")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean funcAssignPost(@RequestBody @Valid FuncAssignPostForm cf) {
@@ -84,7 +85,7 @@ public class PostFuncRelController extends BaseController<PostFuncRelVo, PostFun
     }
 
     @ApiOperation("根据功能ID查询已分配的功能id")
-    @RequiresPermissions("postFuncRel:single:queryByFuncId")
+    @PreAuthorize("hasAuthority('postFuncRel:single:queryByFuncId')")
     @GetMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByFuncId(@PathVariable String funcId) {
@@ -96,7 +97,7 @@ public class PostFuncRelController extends BaseController<PostFuncRelVo, PostFun
     }
 
     @ApiOperation("清空功能下的所有岗位")
-    @RequiresPermissions("postFuncRel:single:deleteByFuncId")
+    @PreAuthorize("hasAuthority('postFuncRel:single:deleteByFuncId')")
     @DeleteMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByFuncId(@PathVariable String funcId) {

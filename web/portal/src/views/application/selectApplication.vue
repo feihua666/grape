@@ -5,7 +5,7 @@
                 <span>选择要进入的应用</span>
                 <el-avatar icon="el-icon-user-solid" :src="currentUserinfo.avatar"></el-avatar>
             </div>
-                <el-button type="primary" v-for="(app,index) in currentUserinfo.applications" :key="index" style="margin:10px;" class="g-pointer" @click="enter(app)" :loading="buttonLoading[app.id]">{{app.name}}</el-button>
+                <el-button type="primary" v-for="(app,index) in applications" :key="index" style="margin:10px;" class="g-pointer" @click="enter(app)" :loading="buttonLoading[app.id]">{{app.name}}</el-button>
         </el-card>
 
     </div>
@@ -19,6 +19,7 @@
         data (){
             return {
                 userinfoLoading: false,
+                applications:[],
                 currentUserinfo:{
                 },
                 buttonLoading:{}
@@ -30,15 +31,18 @@
         methods:{
             getUserinfo(){
                 this.userinfoLoading = true
-                this.axios.get('/user/userinfo/current').then(res => {
-                    this.currentUserinfo = res.data.data
+                this.axios.get('/application/list/current/user').then(res => {
+                    let applications = res.data.data
+                    this.applications = applications
                     // 如果只有一个系统直接进入
-                    if(this.currentUserinfo.applications.length == 1){
-                        this.enter(this.currentUserinfo.applications[0],true)
+                    if(applications.length == 1){
+                        this.$nextTick(()=>{
+                            this.enter(applications[0],true)
+                        })
                     }
                     // 添加混合模式
-                    if(this.currentUserinfo.applications.length>1){
-                        this.currentUserinfo.applications.push({
+                    if(applications.length>1){
+                        applications.push({
                             name:'混合模式',
                             id:'mixmode'
                         })
@@ -70,7 +74,7 @@
                     // 所以子项目应该会加载不出来，暂时两种解决方法，一种是mfe组件页面加keepAlive包裹（这种方式不会触发子项目的生命周期钩子函数，只有一个berforeRouteUpdate方法会监测到路由的改变）,另一种是直接直接浏览器地址刷新重新加载
                     // 暂时用刷新的方式 todo
                      //this.$router.replace('/')
-                    window.location.href=window.location.href.replace('selectApplication','')
+                    window.location.href=window.location.href.replace('selectApplication','common-nav')
                 }
 
             }

@@ -6,15 +6,15 @@ import grape.base.rest.area.form.AreaListPageForm;
 import grape.base.rest.area.form.AreaUpdateForm;
 import grape.base.rest.area.mapper.AreaWebMapper;
 import grape.base.rest.area.vo.AreaVo;
-import grape.base.service.BaseLoginUser;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.area.api.IAreaService;
 import grape.base.service.area.po.Area;
 import grape.base.service.dict.api.IDictService;
 import grape.common.exception.runtime.RBaseException;
 import grape.common.rest.mvc.BaseTreeLoginUserController;
 import grape.common.rest.vo.TreeNodeVo;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import grape.common.tools.PinyinDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,9 +22,9 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,7 +43,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/area")
 @Api(tags = "区域相关接口")
-public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, BaseLoginUser> {
+public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, LoginUser> {
 
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject("dataObjectCodeArea");
@@ -81,7 +81,7 @@ public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, Ba
      * @return
      */
      @ApiOperation("添加区域")
-     @RequiresPermissions("area:single:create")
+     @PreAuthorize("hasAuthority('area:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public AreaVo create(@RequestBody @Valid AreaCreateForm cf) {
@@ -115,7 +115,7 @@ public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, Ba
      * @return
      */
      @ApiOperation("根据区域id查询区域")
-     @RequiresPermissions("area:single:queryById")
+     @PreAuthorize("hasAuthority('area:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public AreaVo queryById(@PathVariable String id) {
@@ -128,7 +128,7 @@ public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, Ba
      * @return
      */
     @ApiOperation("根据区域id删除区域")
-    @RequiresPermissions("area:single:deleteById")
+    @PreAuthorize("hasAuthority('area:single:deleteById')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteById(@PathVariable String id) {
@@ -142,7 +142,7 @@ public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, Ba
      * @return
      */
      @ApiOperation("更新区域")
-     @RequiresPermissions("area:single:updateById")
+     @PreAuthorize("hasAuthority('area:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public AreaVo update(@PathVariable String id,@RequestBody @Valid AreaUpdateForm uf) {
@@ -158,7 +158,7 @@ public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, Ba
      * @return
      */
     @ApiOperation("区域分页查询")
-    @RequiresPermissions("area:single:listPage")
+    @PreAuthorize("hasAuthority('area:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<AreaVo> listPage(AreaListPageForm listForm) {
@@ -175,7 +175,7 @@ public class AreaController extends BaseTreeLoginUserController<AreaVo, Area, Ba
     @ApiImplicitParams({
             @ApiImplicitParam(value = "父级id,不传获取根节点",name = "parentId")
     })
-    @RequiresPermissions("area:single:getByParentId")
+    @PreAuthorize("hasAuthority('area:single:getByParentId')")
     @GetMapping("/tree")
     @ResponseStatus(HttpStatus.OK)
     public List<TreeNodeVo<AreaVo>> tree(String parentId) {

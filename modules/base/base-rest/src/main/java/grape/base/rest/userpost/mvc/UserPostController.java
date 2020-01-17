@@ -7,31 +7,19 @@ import grape.base.rest.userpost.form.UserPostListPageForm;
 import grape.base.rest.userpost.form.UserPostUpdateForm;
 import grape.base.rest.userpost.mapper.UserPostWebMapper;
 import grape.base.rest.userpost.vo.UserPostVo;
-import grape.base.service.BaseLoginUser;
-import grape.base.service.comp.api.ICompService;
-import grape.base.service.comp.po.Comp;
-import grape.base.service.dept.api.IDeptService;
-import grape.base.service.dept.po.Dept;
-import grape.base.service.job.api.IJobService;
-import grape.base.service.job.po.Job;
-import grape.base.service.joblevel.api.IJobLevelService;
-import grape.base.service.joblevel.po.JobLevel;
-import grape.base.service.post.api.IPostService;
-import grape.base.service.post.po.Post;
-import grape.base.service.user.api.IUserService;
-import grape.base.service.user.po.User;
+import grape.common.service.loginuser.LoginUser;
 import grape.base.service.userpost.api.IUserPostService;
 import grape.base.service.userpost.po.UserPost;
 import grape.common.exception.ExceptionTools;
-import grape.common.rest.mvc.BaseController;
 import grape.common.rest.mvc.BaseLoginUserController;
-import grape.common.service.common.DefaultDataObject;
-import grape.common.service.common.IDataObject;
+import grape.common.service.common.dataconstraint.DefaultDataObject;
+import grape.common.service.common.dataconstraint.IDataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -46,7 +34,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/userpost")
 @Api(tags = "用户岗位信息相关接口")
-public class UserPostController extends BaseLoginUserController<UserPostVo, UserPost, BaseLoginUser> {
+public class UserPostController extends BaseLoginUserController<UserPostVo, UserPost, LoginUser> {
     // 默认的数据对象编码
     public static final IDataObject<?> defaultDataObjectCode = new DefaultDataObject( "dataObjectCodeUserPost");
 
@@ -74,7 +62,7 @@ public class UserPostController extends BaseLoginUserController<UserPostVo, User
     }
 
      @ApiOperation("添加用户岗位")
-     @RequiresPermissions("userPost:single:create")
+     @PreAuthorize("hasAuthority('userPost:single:create')")
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostVo create(@RequestBody @Valid UserPostCreateForm cf) {
@@ -90,7 +78,7 @@ public class UserPostController extends BaseLoginUserController<UserPostVo, User
      }
 
      @ApiOperation("根据id查询用户岗位")
-     @RequiresPermissions("userPost:single:queryById")
+     @PreAuthorize("hasAuthority('userPost:single:queryById')")
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      public UserPostVo queryById(@PathVariable String id) {
@@ -98,7 +86,7 @@ public class UserPostController extends BaseLoginUserController<UserPostVo, User
      }
 
      @ApiOperation("根据id删除用户岗位")
-     @RequiresPermissions("userPost:single:deleteById")
+     @PreAuthorize("hasAuthority('userPost:single:deleteById')")
      @DeleteMapping("/{id}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public boolean deleteById(@PathVariable String id) {
@@ -106,7 +94,7 @@ public class UserPostController extends BaseLoginUserController<UserPostVo, User
      }
 
      @ApiOperation("根据id更新用户岗位")
-     @RequiresPermissions("userPost:single:updateById")
+     @PreAuthorize("hasAuthority('userPost:single:updateById')")
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.CREATED)
      public UserPostVo update(@PathVariable String id,@RequestBody @Valid UserPostUpdateForm uf) {
@@ -123,7 +111,7 @@ public class UserPostController extends BaseLoginUserController<UserPostVo, User
      }
 
     @ApiOperation("分页查询用户岗位信息")
-    @RequiresPermissions("userPost:single:listPage")
+    @PreAuthorize("hasAuthority('userPost:single:listPage')")
     @GetMapping("/listPage")
     @ResponseStatus(HttpStatus.OK)
     public IPage<UserPostVo> listPage(@Valid UserPostListPageForm listPageForm) {
@@ -138,7 +126,7 @@ public class UserPostController extends BaseLoginUserController<UserPostVo, User
      * @return
      */
     @ApiOperation("启用或禁用")
-    @RequiresPermissions("userPost:single:effect")
+    @PreAuthorize("hasAuthority('userPost:single:effect')")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public UserPostVo enable(@PathVariable String id, @RequestBody @Valid UserPostEffectForm form) {

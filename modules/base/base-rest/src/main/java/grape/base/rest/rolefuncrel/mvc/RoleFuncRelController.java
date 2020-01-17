@@ -3,10 +3,11 @@ package grape.base.rest.rolefuncrel.mvc;
 import grape.base.rest.rolefuncrel.form.*;
 import grape.common.exception.ExceptionTools;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import javax.validation.Valid;
 
 import grape.base.rest.rolefuncrel.vo.RoleFuncRelVo;
@@ -38,7 +39,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
     private IRoleFuncRelService currentService;
 
      @ApiOperation("角色分配功能")
-     @RequiresPermissions("roleFuncRel:single:roleAssignFunc")
+     @PreAuthorize("hasAuthority('roleFuncRel:single:roleAssignFunc')")
      @PostMapping("/role/assign/func")
      @ResponseStatus(HttpStatus.CREATED)
      public Boolean roleAssignFunc(@RequestBody @Valid RoleAssignFuncForm cf) {
@@ -47,7 +48,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
      }
 
      @ApiOperation("根据角色ID查询已分配的功能id")
-     @RequiresPermissions("roleFuncRel:single:queryByRoleId")
+     @PreAuthorize("hasAuthority('roleFuncRel:single:queryByRoleId')")
      @GetMapping("/role/{roleId}")
      @ResponseStatus(HttpStatus.OK)
      public List<String> queryByRoleId(@PathVariable String roleId) {
@@ -60,7 +61,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
      }
 
      @ApiOperation("清空角色下的所有功能")
-     @RequiresPermissions("roleFuncRel:single:deleteByRoleId")
+     @PreAuthorize("hasAuthority('roleFuncRel:single:deleteByRoleId')")
      @DeleteMapping("/role/{roleId}")
      @ResponseStatus(HttpStatus.NO_CONTENT)
      public Boolean deleteByRoleId(@PathVariable String roleId) {
@@ -73,7 +74,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
 
 
     @ApiOperation("功能分配角色")
-    @RequiresPermissions("roleFuncRel:single:funcAssignRole")
+    @PreAuthorize("hasAuthority('roleFuncRel:single:funcAssignRole')")
     @PostMapping("/func/assign/role")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean funcAssignRole(@RequestBody @Valid FuncAssignRoleForm cf) {
@@ -82,7 +83,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
     }
 
     @ApiOperation("根据功能ID查询已分配的功能id")
-    @RequiresPermissions("roleFuncRel:single:queryByFuncId")
+    @PreAuthorize("hasAuthority('roleFuncRel:single:queryByFuncId')")
     @GetMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.OK)
     public List<String> queryByFuncId(@PathVariable String funcId) {
@@ -94,7 +95,7 @@ public class RoleFuncRelController extends BaseController<RoleFuncRelVo, RoleFun
     }
 
     @ApiOperation("清空功能下的所有角色")
-    @RequiresPermissions("roleFuncRel:single:deleteByFuncId")
+    @PreAuthorize("hasAuthority('roleFuncRel:single:deleteByFuncId')")
     @DeleteMapping("/func/{funcId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteByFuncId(@PathVariable String funcId) {
