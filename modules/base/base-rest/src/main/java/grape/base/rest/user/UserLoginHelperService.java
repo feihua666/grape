@@ -1,4 +1,4 @@
-package grape.auth.rest.user;
+package grape.base.rest.user;
 
 import grape.base.service.application.api.IApplicationService;
 import grape.base.service.application.po.Application;

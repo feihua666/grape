@@ -83,10 +83,4 @@ public class CommonRestConfig implements WebMvcConfigurer {
         return bean;
     }
 
-    @Bean
-    @ConditionalOnMissingBean(PasswordEncoder.class)
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

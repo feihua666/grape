@@ -11,4 +11,6 @@ spring:
         # 声明配置中心采用yaml格式配置，nacos dataId必须以.yaml结尾
         file-extension: yaml
         # 公共配置 nacos 官方提供三种共享配置方式，这里采用第二种
-        shared-dataids: dataSource.yaml,jwttoken.yaml
+        shared-dataids: jwttoken.yaml
+        ext-config:
+          - data-id: authDataSource.yaml

@@ -55,7 +55,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
         long start = System.currentTimeMillis();
         ThreadContextTool.put(timeStartKey,start);
 
-        tryLoginWithJwtToken(request);
+        //tryLoginWithJwtToken(request);
         // 重组当前登录用户
         tryRestoreCurrentUser(request);
 
@@ -112,10 +112,11 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
         // 该属性是在登录成功之前设置的
         Object _loginUser = null;
 
+
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             _loginUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }
-
+        // 必须禁用匿名登录，这不然会有类型转换异常
         if (_loginUser != null) {
             AbstractLoginUser.setLoginUser(_loginUser);
         }

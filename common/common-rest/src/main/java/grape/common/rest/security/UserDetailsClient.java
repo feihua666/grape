@@ -16,7 +16,7 @@ import java.util.List;
  * Created at 2020/1/16 10:13
  */
 @Component
-@FeignClient(name = "grape-auth")
+@FeignClient(name = "grape-base")
 public interface UserDetailsClient {
 
     @GetMapping(value = "/user/inner/dataScopes")

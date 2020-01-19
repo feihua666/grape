@@ -1,8 +1,6 @@
-package grape.auth.rest.user.mvc;
+package grape.base.rest.user.mvc;
 
-import grape.auth.rest.user.UserLoginHelperService;
-import grape.auth.rest.user.form.login.LoginForm;
-import grape.auth.rest.user.vo.LoginVo;
+import grape.base.rest.user.UserLoginHelperService;
 import grape.base.service.dataconstraint.api.IDataObjectService;
 import grape.base.service.dataconstraint.po.DataObject;
 import grape.base.service.dataconstraint.po.DataScope;
@@ -19,82 +17,41 @@ import grape.common.rest.security.JwtHelper;
 import grape.common.service.common.dataconstraint.DefaultDataObject;
 import grape.common.service.common.dataconstraint.DefaultDataScope;
 import grape.common.service.common.dataconstraint.RawDataConstraint;
-import grape.common.service.loginuser.LoginUser;
+import grape.common.tools.ToolService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 /**
+ * 仅供内部微服务调用
  * Created by yangwei
- * Created at 2019/11/28 14:22
+ * Created at 2020/1/19 17:19
  */
 @RestController
 @RequestMapping("/user")
-@Api(tags = "用户登录及当前登录用户相关接口")
-public class UserLoginController extends SuperController {
+@Api(tags = "仅供内部微服务调用")
+public class UserInnerController extends SuperController implements ToolService {
 
     @Autowired
     private UserLoginHelperService loginUserHelperService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
     @Autowired
     private IDataObjectService dataObjectService;
 
     @Autowired
     private IUserPwdService userPwdService;
 
-    @Autowired
-    private JwtHelper jwtHelper;
 
     @Autowired
     private IUserIdentifierService userIdentifierService;
-
-    /**
-     * 后台管理用户登录入口
-     * @param loginForm
-     * @return
-     */
-    @ApiOperation(value = "登陆",notes = "后台管理用户登陆入口")
-    @PostMapping(value = "login")
-    @ResponseStatus(HttpStatus.OK)
-    public LoginVo login(@RequestBody @Valid LoginForm loginForm, HttpServletRequest request) {
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
-        Authentication authentication =  authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        LoginVo loginVo = new LoginVo();
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String jwtToken = jwtHelper.createTokenWithUserId(loginUser.getUserId());
-        loginVo.setToken(jwtToken);
-        return loginVo;
-    }
-
-    /**
-     * 后台管理用户退出登陆
-     * @return
-     */
-    @ApiOperation(value = "退出登陆",notes = "后台管理用户退出登陆")
-    @PostMapping(value = "logout")
-    @ResponseStatus(HttpStatus.OK)
-    public Boolean logout() {
-        SecurityContextHolder.clearContext();
-        return true;
-    }
 
     /**
      * 内部调用接口获取用户的角色
