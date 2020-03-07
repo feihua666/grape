@@ -13,6 +13,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.security.oauth2.provider.endpoint.CheckTokenEndpoint;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import springfox.documentation.swagger.web.ApiResourceController;
@@ -42,7 +43,8 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice, ToolService
     private static final Class[] disabledGRM = {
             DisableGRM.class,
             ApiResourceController.class, // swagger的controller 这里不拦截
-            Swagger2Controller.class // swagger的controller 这里不拦截
+            Swagger2Controller.class, // swagger的controller 这里不拦截
+            CheckTokenEndpoint.class // token 检查的接口仅服务内调用，不需要包装
     };
 
     @Override

@@ -1,7 +1,7 @@
 package grape.auth.rest.service.impl;
 
+import grape.base.rest.client.user.UserClient;
 import grape.common.AbstractLoginUser;
-import grape.common.rest.security.UserDetailsClient;
 import grape.common.service.loginuser.LoginUser;
 import grape.common.tools.ToolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,15 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService , ToolService {
 
     @Autowired
-    private UserDetailsClient userDetailsClient;
+    private UserClient userClient;
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         boolean superAdmin = false;
         Set<String> authority = new HashSet<>();
         authority.add("user");
-        List<String> roles = userDetailsClient.getRolesCodeByUserId(userId);
+        List<String> roles = userClient.getRolesCodeByUserId(userId);
         roles.add("empty");
-        List<String> funcs = userDetailsClient.getFuncsCodeByUserId(userId);
+        List<String> funcs = userClient.getFuncsCodeByUserId(userId);
         funcs.add("empty");
         if (!isEmpty(roles)) {
             for (String role : roles) {
@@ -47,13 +47,13 @@ public class UserDetailsServiceImpl implements UserDetailsService , ToolService 
             authority.addAll(funcs);
         }
         LoginUser loginUser = new LoginUser(userId,
-                userDetailsClient.getPwdByUserId(userId),
+                userClient.getPwdByUserId(userId),
                 true,
                 true,
                 true,
                 true,
                 AuthorityUtils.createAuthorityList(authority.toArray(new String[0])),
-                userDetailsClient.getDataScopesByUserId(userId)
+                userClient.getDataScopesByUserId(userId)
         );
         loginUser.setUserId(userId);
         loginUser.setSuperAdmin(superAdmin);

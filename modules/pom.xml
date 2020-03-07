@@ -18,6 +18,8 @@
         <module>workflow</module>
         <module>gateway</module>
         <module>auth</module>
+        <module>base/base-rest-client</module>
+        <module>auth/auth-rest-client</module>
     </modules>
 
 

@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 /**
+ * 超级管理员投票器，如果是超级管理员角色则通过
  * Created by yangwei
  * Created at 2020/1/14 9:52
  */

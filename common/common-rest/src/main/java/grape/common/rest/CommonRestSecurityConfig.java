@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class CommonRestSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
+
     @Qualifier("userDetailsService")
     @Autowired(required = false)
     private UserDetailsService userDetailsService;
@@ -30,7 +31,7 @@ public class CommonRestSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                //禁用baisc和form认证，在Controller中自己实现认证逻辑
+                //禁用baisc和form认证
                 .httpBasic().disable()
                 //.formLogin().disable()
                 .anonymous().disable()
@@ -39,7 +40,12 @@ public class CommonRestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
-    //注入authenticationManager
+
+    /**
+     * 注入authenticationManager
+     * @return
+     * @throws Exception
+     */
     @Override
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
@@ -55,12 +61,19 @@ public class CommonRestSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    // 注入一个点位 userDetailService，因为如果依赖了common-rest项目可能不用这块东西
+    /**
+     * 注入一个占位 userDetailService，因为如果依赖了common-rest项目可能不用这块东西
+     * @return
+     */
     @Bean
     public UserDetailsService userDetailsPlaceholderService(){
         return new UserDetailsPlaceholderServiceImpl();
     }
-    // 密码加解密处理，用户添加的时候也会用到
+
+    /**
+     * 密码加解密处理，用户添加的时候也会用到
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean(PasswordEncoder.class)
     public PasswordEncoder passwordEncoder() {

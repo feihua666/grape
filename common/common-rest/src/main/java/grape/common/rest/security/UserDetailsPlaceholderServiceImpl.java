@@ -12,6 +12,6 @@ public class UserDetailsPlaceholderServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        throw new RuntimeException("你调用了一个占位实现，请自己实现");
+        throw new RuntimeException("你调用了一个占位实现，请自己实现，并注入到spring上下文中，bean的名字参见：grape.common.rest.CommonRestSecurityConfig.userDetailsService 的注释 @Qualifier");
     }
 }

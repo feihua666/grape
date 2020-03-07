@@ -8,7 +8,7 @@
         <module>mybatis-plus-generator</module>
         <module>modules</module>
 		<module>main</module>
-	</modules>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

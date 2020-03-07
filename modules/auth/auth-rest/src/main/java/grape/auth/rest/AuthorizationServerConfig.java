@@ -34,6 +34,9 @@ import java.util.List;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    /**
+     *  该 bean 是在这里注入的 common-rest 项目 grape.common.rest.CommonRestSecurityConfig.authenticationManager
+     */
     @Autowired
     private AuthenticationManager authenticationManager;
 

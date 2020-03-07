@@ -3,9 +3,6 @@ package grape.common.rest.common;
 import cn.hutool.core.annotation.AnnotationUtil;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import grape.common.AbstractLoginUser;
-import grape.common.rest.security.JwtAuthenticationToken;
-import grape.common.rest.security.JwtHelper;
-import grape.common.rest.security.UserDetailsClient;
 import grape.common.rest.tools.RequestTool;
 import grape.common.service.loginuser.GrapeUserDetails;
 import grape.common.tools.RequestIdTool;
@@ -40,11 +37,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtHelper jwtHelper;
 
-    @Autowired
-    private UserDetailsClient userDetailsClient;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -54,11 +47,6 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
         long start = System.currentTimeMillis();
         ThreadContextTool.put(timeStartKey,start);
-
-        //tryLoginWithJwtToken(request);
-        // 重组当前登录用户
-        tryRestoreCurrentUser(request);
-
         GrapeUserDetails loginUser = AbstractLoginUser.getLoginUser();
         String userId = null;
         String username = null;
@@ -102,55 +90,5 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
         ThreadContextTool.remove();
         super.afterCompletion(request, response, handler, ex);
-    }
-
-    /**
-     * 尝试恢复当前登录用户到线程变量
-     */
-    private void tryRestoreCurrentUser(HttpServletRequest request){
-        // 初始化当前登录用户
-        // 该属性是在登录成功之前设置的
-        Object _loginUser = null;
-
-
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            _loginUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        }
-        // 必须禁用匿名登录，这不然会有类型转换异常
-        if (_loginUser != null) {
-            AbstractLoginUser.setLoginUser(_loginUser);
-        }
-
-    }
-    private void tryLoginWithJwtToken(HttpServletRequest request){
-        // 如果当前登录用户没有设置成功，尝试jwt方式重新登录
-        if (AbstractLoginUser.getLoginUser() == null) {
-            log.debug("当前登录用户为空，尝试从header中获取jwtToken并登录，requestId=[{}],headerName=[{}]",RequestIdTool.getRequestId(),jwtHelper.getHeaderName());
-            String jwtToken = request.getHeader(jwtHelper.getHeaderName());
-            // token不为空，重新登录
-            if (StringUtils.isNotBlank(jwtToken)) {
-                if (jwtHelper.isTokenExpired(jwtToken)) {
-                    log.debug("jwtToken 已过期，requestId=[{}],token=[{}]",RequestIdTool.getRequestId(),jwtToken);
-                } else {
-                    boolean isValid = false;
-                    try {
-                        isValid = jwtHelper.verifyToken(jwtToken);
-                    } catch (JWTVerificationException e) {
-                        log.debug("jwtToken 验证失败，requestId=[{}],token=[{}]",RequestIdTool.getRequestId(),jwtToken);
-                    }
-                    if (isValid) {
-                        log.debug("开始进行token登录，requestId=[{}],token=[{}]",RequestIdTool.getRequestId(),jwtToken);
-
-                        String userId = jwtHelper.getUserId(jwtToken);
-                        JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(userId, null);
-                        Authentication authenticate = authenticationManager.authenticate(jwtAuthenticationToken);
-                        SecurityContextHolder.getContext().setAuthentication(authenticate);
-                    }
-
-                }
-            }else {
-                log.debug("未检测到jwtToken，requestId=[{}]",RequestIdTool.getRequestId());
-            }
-        }
     }
 }

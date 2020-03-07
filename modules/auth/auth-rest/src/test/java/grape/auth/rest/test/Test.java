@@ -12,5 +12,6 @@ public class Test {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         String encode = bCryptPasswordEncoder.encode("123456");
         System.out.println(encode);
+        //org.springframework.security.jwt.JwtHelper.decodeAndVerify();
     }
 }

@@ -7,8 +7,8 @@ import grape.base.rest.application.form.ApplicationListPageForm;
 import grape.base.rest.application.form.ApplicationUpdateForm;
 import grape.base.rest.application.mapper.ApplicationWebMapper;
 import grape.base.rest.application.vo.ApplicationVo;
+import grape.base.rest.user.UserLoginHelperService;
 import grape.common.exception.runtime.RDataNotExistException;
-import grape.common.rest.security.UserDetailsClient;
 import grape.common.service.loginuser.LoginUser;
 import grape.base.service.application.api.IApplicationService;
 import grape.base.service.application.po.Application;
@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 应用表 前端控制器
@@ -51,7 +53,8 @@ public class ApplicationController extends BaseLoginUserController<ApplicationVo
 
     @Autowired
     private IFuncService iFuncService;
-
+    @Autowired
+    private UserLoginHelperService loginUserHelperService;
     /**
      * 开启全局
      * @return
@@ -137,9 +140,6 @@ public class ApplicationController extends BaseLoginUserController<ApplicationVo
         return super.list(po);
     }
 
-
-    @Autowired
-    private UserDetailsClient userDetailsClient;
     /**
      * 当前登录用户的应用
      * @return
@@ -153,7 +153,11 @@ public class ApplicationController extends BaseLoginUserController<ApplicationVo
         if (loginUser.superAdmin()) {
             return super.posToVos((List<Application>) currentService.list());
         }
-        List<String> applicationIds = userDetailsClient.getApplicationIdsByUserId(getLoginUserId());
+        List<Func> funcList = loginUserHelperService.getFuncsByUserId(getLoginUserId());
+        List<String> applicationIds = null;
+        if (!isEmpty(funcList)) {
+            applicationIds = funcList.stream().map(func -> func.getApplicationId()).collect(Collectors.toList());
+        }
         if (isEmpty(applicationIds)) {
             throw new RDataNotExistException("数据不存在");
         }

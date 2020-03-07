@@ -13,7 +13,6 @@ import grape.base.service.user.po.UserPwd;
 import grape.common.rest.advice.DisableGRB;
 import grape.common.rest.advice.DisableGRM;
 import grape.common.rest.mvc.SuperController;
-import grape.common.rest.security.JwtHelper;
 import grape.common.service.common.dataconstraint.DefaultDataObject;
 import grape.common.service.common.dataconstraint.DefaultDataScope;
 import grape.common.service.common.dataconstraint.RawDataConstraint;

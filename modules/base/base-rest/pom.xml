@@ -22,11 +22,11 @@
             <artifactId>base-service-impl</artifactId>
             <version>${grape.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>grape</groupId>
             <artifactId>mq-service-impl</artifactId>
             <version>${grape.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- nacos 客户端集成 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
