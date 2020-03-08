@@ -7,7 +7,7 @@ spring:
     nacos:
       discovery:
         # nacos 注册中心地址 如：127.0.0.1:8848
-        server-addr: register.grape.com
+        server-addr: register.grape.com:80
 # 日志级别
 logging:
   level:

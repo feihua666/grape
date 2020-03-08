@@ -28,6 +28,10 @@ public interface UserClient {
     @GetMapping(value = "/user/inner/pwd/userid")
     public String getPwdByUserId(@RequestParam String userId);
 
+    @GetMapping(value = "/user/inner/userid/identifier")
+    public String getUserIdByIdentifier(@RequestParam String identifier);
+
+
     @GetMapping(value = "/user/inner/pwd/identifier")
     public String getPwdByIdentifier(@RequestParam String identifier);
 

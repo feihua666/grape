@@ -23,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/user")
+@ApiIgnore
 @Api(tags = "仅供内部微服务调用")
 public class UserInnerController extends SuperController implements ToolService {
 
@@ -166,7 +168,22 @@ public class UserInnerController extends SuperController implements ToolService 
         }
         return pwd;
     }
-
+    /**
+     * 内部调用接口获取用户密码
+     * @param identifier
+     * @return
+     */
+    @DisableGRM
+    @DisableGRB
+    @GetMapping(value = "inner/userid/identifier")
+    public String getUserIdByIdentifier(String identifier){
+        String userId = "";
+        UserIdentifier userIdentifier = userIdentifierService.getByIdentifier(identifier);
+        if (userIdentifier != null) {
+            userId = userIdentifier.getUserId();
+        }
+        return userId;
+    }
     /**
      * 内部调用接口获取用户密码
      * @param identifierId

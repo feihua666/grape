@@ -1,14 +1,15 @@
-package grape.auth.rest.client.authentication;
+package grape.auth.rest.client.auth;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
 @Component
 @FeignClient(name = "grape-auth")
-public interface AuthenticationClient {
+public interface AuthClient {
 
 
     /**
@@ -39,6 +40,6 @@ public interface AuthenticationClient {
      * }
      */
     @PostMapping(value = "/oauth/check_token")
-    public Map<String, ?> checkToken(String token);
+    public Map<String, ?> checkToken(@RequestParam String token);
 
 }

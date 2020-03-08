@@ -13,6 +13,16 @@
     <description>提供基础公共rest所有模块的依赖</description>
     <dependencies>
         <dependency>
+            <groupId>grape</groupId>
+            <artifactId>base-rest-client</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>grape</groupId>
+            <artifactId>auth-rest-client</artifactId>
+            <version>${grape.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>

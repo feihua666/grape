@@ -18,12 +18,6 @@
             <artifactId>common-core</artifactId>
             <version>${grape.version}</version>
         </dependency>
-        <!-- 认证服务远程调用客户端 -->
-        <dependency>
-            <groupId>grape</groupId>
-            <artifactId>auth-rest-client</artifactId>
-            <version>${grape.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>

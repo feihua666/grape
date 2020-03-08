@@ -1,5 +1,6 @@
 package grape.common.rest;
 
+import grape.common.rest.security.AccessTokenAuthenticationProvider;
 import grape.common.rest.security.UserDetailsPlaceholderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +28,8 @@ public class CommonRestSecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("userDetailsService")
     @Autowired(required = false)
     private UserDetailsService userDetailsService;
+    @Autowired
+    private AccessTokenAuthenticationProvider accessTokenAuthenticationProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -54,11 +57,14 @@ public class CommonRestSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // 默认全书配置
         UserDetailsService userDetailsService = this.userDetailsService;
         if (userDetailsService == null) {
             userDetailsService = (userDetailsPlaceholderService());
         }
+
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(accessTokenAuthenticationProvider);
     }
 
     /**

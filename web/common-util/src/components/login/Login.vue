@@ -14,6 +14,7 @@
 
 <script>
     import StorageTools from '../../tools/StorageTools'
+    import qs from 'qs'
     export default {
         name: "Login",
         props: {
@@ -42,9 +43,17 @@
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
                         self.logining = true
-                        self.axios.post('/user/login',self.form,{baseURL:self.$baseURL.auth}).then(res => {
+                        self.axios.post('/oauth/token?scope=read&grant_type=password',
+                            qs.stringify(self.form),
+                            {
+                                baseURL:self.$baseURL.auth,
+                                headers:{
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    Authorization: 'Basic dGVzdF9jbGllbnQ6dGVzdF9zZWNyZXQ='
+                                }
+                            }).then(res => {
                             self.$message.success('登录成功')
-                            StorageTools.set('token',res.data.data.token)
+                            StorageTools.set('token',res.data.data.access_token)
                             self.$emit('success')
                         }).catch(error => {
                             if (error.response) {

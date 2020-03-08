@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -18,7 +19,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * 全局异常处理，当异常被@ControllerAdvice时不会走到这个处理类，没被处理时会走到这里
  *
  */
-@RestController
+//@RestController
 @ApiIgnore
 @Slf4j
 public class GolablExceptionEndpoint implements ErrorController {
@@ -51,8 +52,8 @@ public class GolablExceptionEndpoint implements ErrorController {
      * @return
      */
     private void handlerError(HttpServletRequest request, boolean includeStackTrace) throws Throwable {
-        RequestAttributes requestAttributes = new ServletRequestAttributes(request);
-        Throwable e = errorAttributes.getError((WebRequest) requestAttributes);
+        WebRequest webRequest = new ServletWebRequest(request);
+        Throwable e = errorAttributes.getError((WebRequest) webRequest);
 
         throw e;
     }

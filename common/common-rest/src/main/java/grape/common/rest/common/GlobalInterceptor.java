@@ -1,16 +1,17 @@
 package grape.common.rest.common;
 
 import cn.hutool.core.annotation.AnnotationUtil;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import grape.common.AbstractLoginUser;
+import grape.common.rest.security.AccessTokenAuthenticationToken;
 import grape.common.rest.tools.RequestTool;
 import grape.common.service.loginuser.GrapeUserDetails;
 import grape.common.tools.RequestIdTool;
 import grape.common.tools.ThreadContextTool;
+import grape.common.tools.ToolService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +20,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  * 全局拦截
@@ -28,16 +27,18 @@ import java.util.List;
  * Created at 2019/9/27 15:46
  */
 @Slf4j
-public class GlobalInterceptor extends HandlerInterceptorAdapter {
+public class GlobalInterceptor extends HandlerInterceptorAdapter implements ToolService {
 
     // 计时器key
     public static final String timeStartKey = "timeStartKey";
     // 记录是否有异常key
     public static final String hasExceptionKey = "hasExceptionKey";
-
+    /**
+     * Authorization认证开头是"bearer "
+     */
+    private static final String BEARER = "Bearer ";
     @Autowired
     private AuthenticationManager authenticationManager;
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -47,6 +48,10 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
         long start = System.currentTimeMillis();
         ThreadContextTool.put(timeStartKey,start);
+        // 尝试认证用户
+        tryAuthentication(request, response);
+
+
         GrapeUserDetails loginUser = AbstractLoginUser.getLoginUser();
         String userId = null;
         String username = null;
@@ -90,5 +95,35 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter {
 
         ThreadContextTool.remove();
         super.afterCompletion(request, response, handler, ex);
+    }
+
+    /**
+     *
+     * @param request
+     * @param response
+     */
+    private void tryAuthentication(HttpServletRequest request, HttpServletResponse response){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            // 如果没有被认证，尝试认证
+            if (authentication == null || !authentication.isAuthenticated()) {
+                String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
+                if(!isStrEmpty(headerAuth)){
+                    log.info("尝试认证：requestId=[{}],headerAuth=[{}]",RequestIdTool.getRequestId(),headerAuth);
+
+                    if(isStrStart(headerAuth,BEARER)){
+                        String accessToken = headerAuth.substring(BEARER.length());
+                        AccessTokenAuthenticationToken accessTokenAuthenticationToken = new AccessTokenAuthenticationToken(accessToken, "N/A");
+                        authenticationManager.authenticate(accessTokenAuthenticationToken);
+                       //AbstractLoginUser.setLoginUser(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+                    }
+                }
+            }
+        }catch (Exception e){
+            log.error("尝试认证失败: requestId=[{}]",
+                    RequestIdTool.getRequestId(), e);
+        }
+
     }
 }

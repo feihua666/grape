@@ -33,7 +33,7 @@
                         name: 'base',// 应用的标识，自定义
                         appName:'基础应用',// 该自定义属性主要用来加载子应用loading展示
                         //entry: '//localhost:9002/base',// 子应用（导航项目）的首页地址，自动提取导致的子应用挂载函数，这个common-nav是随便写的好像不无关，暂时没弄明白
-                        entry: 'http://yw.ngrok.ahbdz.com/app-base-public',// 子应用（导航项目）的首页地址，自动提取导致的子应用挂载函数，这个common-nav是随便写的好像不无关，暂时没弄明白
+                        entry: 'http://localhost:9002/app-base-public',// 子应用（导航项目）的首页地址，自动提取导致的子应用挂载函数，这个common-nav是随便写的好像不无关，暂时没弄明白
                         //activeRule: '/base'  // 导航项目必须一直渲染不能卸载，否则导致其它子项目挂载不上
                         // base  路径来自 base项目的路由配置
                         activeRule: (window.mfe_nav_router_base_path.commonNav || '') + '/base'

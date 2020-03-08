@@ -7,7 +7,7 @@ export default function axiosConfig(axios,vue){
     axios.interceptors.request.use(
         config => {
             if (StorageTools.get('token')) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-                config.headers.Authorization = StorageTools.get('token')  //请求头加上token
+                config.headers.Authorization = 'Bearer ' + StorageTools.get('token')  //请求头加上token
             }
             return config
         },

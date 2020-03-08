@@ -26,8 +26,12 @@ public class UserDetailsServiceImpl implements UserDetailsService , ToolService 
     @Autowired
     private UserClient userClient;
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
         boolean superAdmin = false;
+        String userId = userClient.getUserIdByIdentifier(identifier);
+        if (isStrEmpty(userId)) {
+            throw  new UsernameNotFoundException("identifier=["+ identifier +"],未获取到用户id");
+        }
         Set<String> authority = new HashSet<>();
         authority.add("user");
         List<String> roles = userClient.getRolesCodeByUserId(userId);
