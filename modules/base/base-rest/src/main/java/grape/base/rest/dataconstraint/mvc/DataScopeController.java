@@ -148,7 +148,7 @@ public class DataScopeController extends BaseLoginUserController<DataScopeVo, Da
         Map<String, List<DataScope>> map = new HashMap<>();
         for (DataScope dataScope : list) {
             List<DataScope> dataScopes = map.get(dataScope.getDataObjectId());
-            if (dataScope == null) {
+            if (dataScopes == null) {
                 dataScopes = new ArrayList<>();
                 map.put(dataScope.getDataObjectId(), dataScopes);
             }
